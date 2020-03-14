@@ -2,7 +2,7 @@
 layout: post
 title:  "Slf4j: MDC Kullanarak Log Takibini Kolaylaştırma"
 date:   2019-02-14 01:49:00 +0300
-categories: Java Programlama
+categories: [Java, Programlama]
 author: Serdar Kuzucu
 permalink: /slf4j-mdc-kullanarak-log-takibini-kolaylastirma
 ---

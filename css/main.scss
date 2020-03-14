@@ -53,3 +53,9 @@ $on-laptop:        800px;
 ;
 
 @import 'bootstrap/scss/bootstrap';
+
+.sk-logo img {
+  width: 60px;
+  height: 30px;
+  object-fit: cover;
+}
