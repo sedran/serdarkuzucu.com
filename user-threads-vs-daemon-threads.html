@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>User Threads vs Daemon Threads</title>
+  <meta name="description" content="Java’da birden fazla görevi eş zamanlı gerçekleştirmek istediğimizde Thread‘lerden faydalanırız. Yeni bir Thread nesnesi oluşturur, constructor argümanı olar...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="https://sedran.github.io/user-threads-vs-daemon-threads">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://sedran.github.io/feed.xml">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="https://serdarkuzucu.com/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0" method="GET" action="https://serdarkuzucu.com/">
+        <div class="input-group">
+          <input type="search" class="form-control border-primary" name="s" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+<!--<header class="site-header">-->
+
+<!--  <div class="wrapper">-->
+
+<!--    <a class="site-title" href=""></a>-->
+
+<!--    <nav class="site-nav">-->
+
+<!--      <div class="trigger">-->
+<!--        -->
+<!--          -->
+<!--          <a class="page-link" href="/about/">About</a>-->
+<!--          -->
+<!--        -->
+<!--          -->
+<!--        -->
+<!--          -->
+<!--        -->
+<!--          -->
+<!--        -->
+<!--          -->
+<!--        -->
+<!--          -->
+<!--        -->
+<!--          -->
+<!--        -->
+<!--      </div>-->
+<!--    </nav>-->
+
+<!--  </div>-->
+
+<!--</header>-->
+
+
+    <div class="container">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">User Threads vs Daemon Threads</h1>
+    <p class="post-meta"><time datetime="2019-02-11T23:37:00+00:00" itemprop="datePublished">Feb 11, 2019</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">Serdar Kuzucu</span></span></p>
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Java’da birden fazla görevi eş zamanlı gerçekleştirmek istediğimizde 
+<code class="highlighter-rouge">Thread</code>‘lerden faydalanırız. 
+Yeni bir <code class="highlighter-rouge">Thread</code> nesnesi oluşturur, 
+constructor argümanı olarak bir <code>Runnable</code> geçeriz veya 
+<code>Thread</code> sınıfını extend eder, 
+<code>void run()</code> methodunu override ederiz. 
+Bunları daha önce yaptıysanız belki <code>Thread</code> sınıfının üzerindeki 
+<code>setDaemon(boolean on)</code> methodunu da farketmişsinizdir. 
+Peki kimdir bu daemon?</p>
+
+<!--more-->
+
+<blockquote class="blockquote">
+<p class="mb-0">In multitasking computer operating systems, a daemon is a computer program that runs as a background process, rather than being under the direct control of an interactive user.</p>
+<footer class="blockquote-footer"><a href="https://en.wikipedia.org/wiki/Daemon_(computing)" target="_blank" rel="nofollow">Wikipedia, <cite title="Daemon">Daemon (Computing)</cite></a></footer>
+</blockquote>
+
+<h2 id="user-threads-vs-daemon-threads">User Threads vs Daemon Threads</h2>
+
+<p>Java iki adet Thread türü tanımlar:</p>
+
+<ol>
+  <li><strong>User Threads:</strong> Bu tip Thread’ler bitmeden JVM kapanmaz. Eğer <code class="highlighter-rouge">System.exit</code> çağırmadıysanız.</li>
+  <li><strong>Daemon Threads:</strong> Tüm User Thread’leri sonlandığında JVM bu Thread’leri gözünün yaşına bakmadan sonlandırır.</li>
+</ol>
+
+<p>Bu türler ile ilgili sahip olduğum bilgiler şu şekilde:</p>
+
+<ul>
+  <li>JVM’in kendi kendine sonlanması için tüm User Thread tipindeki Thread’ler sonlanmış olmalıdır.</li>
+  <li>Thread’ler daemon olma/olmama durumunu kendilerini yaratan Thread’den alırlar.</li>
+  <li>JVM’e ait çoğu Thread daemon tipindedir. 
+Örneğin Garbage Collection Thread’leri. 
+JVM sonlanmak için çalışmakta olan bir Garbage Collection işleminin tamamlanmasını beklemez.</li>
+  <li>Bir Thread <code class="highlighter-rouge">start()</code> edilmeden önce daemon olup olmadığına karar verilmelidir. 
+Eğer çalışmakta olan bir <code class="highlighter-rouge">Thread</code> üzerinde <code class="highlighter-rouge">setDaemon(boolean)</code> 
+çağırırsanız <code class="highlighter-rouge">IllegalThreadStateException</code> alırsınız.</li>
+  <li>I/O benzeri kritik işler için daemon thread kullanımı kesinlikle tavsiye edilmez. 
+Çünkü JVM kapanırken daemon thread’leri <code class="highlighter-rouge">finally</code> bloklarını bile çalıştırmadan öldürür.</li>
+</ul>
+
+<p>Bu konular ile ilgili sık duyduğum birkaç yanlış bilginin doğrularını yazayım:</p>
+
+<ul>
+  <li>Daemon thread kendisini yaratan thread sonlandığında değil, 
+tüm user thread’ler sonlandığında JVM ile birlikte sonlanır.</li>
+  <li>JVM sonlandıktan sonra hiçbir thread hayatta kalmaz. 
+JVM bir process’dir ve onu öldürdüğünüz zaman thread’ler, heap, 
+stack, database bağlantıları, network bağlantıları, açılmış dosyalara 
+olan referanslar gibi birçok şey de yok olur.</li>
+</ul>
+
+<p>Şimdi çok küçük bir örnek kod paylaşayım ve nasıl çalıştığını görelim.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.serdarkuzucu.daemonthreads</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserVsDaemonThreads</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">LOG_FORMAT</span> <span class="o">=</span> <span class="s">"%7s : %s\n"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">LOG_FORMAT_ITERATION</span> <span class="o">=</span> <span class="s">"%7s : %d : %s\n"</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">THREAD_MAIN</span> <span class="o">=</span> <span class="s">"MAIN"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">THREAD_USER</span> <span class="o">=</span> <span class="s">"USER"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">THREAD_DAEMON</span> <span class="o">=</span> <span class="s">"DAEMON"</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="no">LOG_FORMAT</span><span class="o">,</span> <span class="no">THREAD_MAIN</span><span class="o">,</span> <span class="s">"thread is started"</span><span class="o">);</span>
+
+        <span class="kd">final</span> <span class="nc">Thread</span> <span class="n">daemonThread</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span><span class="k">new</span> <span class="nc">SleepIteratingRunnable</span><span class="o">(</span><span class="no">THREAD_DAEMON</span><span class="o">,</span> <span class="mi">20</span><span class="o">));</span>
+        <span class="n">daemonThread</span><span class="o">.</span><span class="na">setDaemon</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+        <span class="n">daemonThread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+
+        <span class="kd">final</span> <span class="nc">Thread</span> <span class="n">userThread</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span><span class="k">new</span> <span class="nc">SleepIteratingRunnable</span><span class="o">(</span><span class="no">THREAD_USER</span><span class="o">,</span> <span class="mi">5</span><span class="o">));</span>
+        <span class="n">userThread</span><span class="o">.</span><span class="na">setDaemon</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+        <span class="n">userThread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+
+        <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="no">LOG_FORMAT</span><span class="o">,</span> <span class="no">THREAD_MAIN</span><span class="o">,</span> <span class="s">"thread is finished"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">SleepIteratingRunnable</span> <span class="kd">implements</span> <span class="nc">Runnable</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="kd">final</span> <span class="nc">String</span> <span class="n">threadName</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">iterations</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">currentIteration</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+
+        <span class="nc">SleepIteratingRunnable</span><span class="o">(</span><span class="nc">String</span> <span class="n">threadName</span><span class="o">,</span> <span class="kt">int</span> <span class="n">iterations</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">threadName</span> <span class="o">=</span> <span class="n">threadName</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">iterations</span> <span class="o">=</span> <span class="n">iterations</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">while</span> <span class="o">(!</span><span class="nc">Thread</span><span class="o">.</span><span class="na">interrupted</span><span class="o">()</span> <span class="o">&amp;&amp;</span> <span class="n">iterations</span> <span class="o">&gt;=</span> <span class="n">currentIteration</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="no">LOG_FORMAT_ITERATION</span><span class="o">,</span> <span class="n">threadName</span><span class="o">,</span> <span class="n">currentIteration</span><span class="o">,</span> <span class="s">"Sleeping."</span><span class="o">);</span>
+
+                    <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">250</span><span class="o">);</span>
+
+                    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="no">LOG_FORMAT_ITERATION</span><span class="o">,</span> <span class="n">threadName</span><span class="o">,</span> <span class="n">currentIteration</span><span class="o">,</span> <span class="s">"Woke up."</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="no">LOG_FORMAT_ITERATION</span><span class="o">,</span> <span class="n">threadName</span><span class="o">,</span> <span class="n">currentIteration</span><span class="o">,</span> <span class="s">"InterruptedException caught."</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+                    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="no">LOG_FORMAT_ITERATION</span><span class="o">,</span> <span class="n">threadName</span><span class="o">,</span> <span class="n">currentIteration</span><span class="o">,</span> <span class="s">"Finally executed."</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="n">currentIteration</span><span class="o">++;</span>
+            <span class="o">}</span>
+
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="no">LOG_FORMAT</span><span class="o">,</span> <span class="n">threadName</span><span class="o">,</span> <span class="s">"While loop finished"</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Örnek kod, istenilen sayıda iterasyon yapan ve her iterasyonda konsola 
+çeşitli bilgiler bırakıp 250 milisaniye uyuyan <code>SleepIteratingRunnable</code> 
+isimli <code>Runnable</code> sınıfını kullanıyor. 
+Bu sınıfın içerisinde özellikle run methodunun sonuna, catch ve finally bloklarının 
+içlerine konsol loglaması yaptım ki hangi Thread hangi aşamada öldü görebilelim.</p>
+
+<p>Tüm kod <code>public static void main</code> methodunu içeren bir dosyada bulunuyor. 
+main method içeren bir java programı çalıştırıldığında önce bir main thread yaratılır 
+ve kodumuz main thread içinde koşmaya başlar. main thread de bir user thread’dir.</p>
+
+<p>Yukarıdaki kodun 14, 15 ve 16. satırlarında bir adet daemon thread yaratıyoruz 
+ve ona verdiğimiz <code>SleepIteratingRunnable</code>‘a 20 iterasyon yapmasını söylüyoruz.</p>
+
+<p>18, 19 ve 20. satırlarda ise bir adet user thread yaratıyoruz 
+ve bu thread’de çalışan <code>SleepIteratingRunnable</code>‘a 5 iterasyon yapmasını söylüyoruz.</p>
+
+<ol>
+  <li>satırda ise main thread’i 1 saniye sleep ediyoruz.</li>
+</ol>
+
+<p>Bu noktadan sonra olacaklar şu şekilde:</p>
+
+<p>main thread 1 saniye sonra uykudan uyanır ve “thread is finished” yazıp sonlanır.</p>
+
+<p>Bu 1 saniyelik süre içerisinde yarattığımız user thread ve daemon thread bir miktar 
+iterasyon yapacaklar. (3 veya 4 iterasyon)</p>
+
+<p>5 iterasyon ile sınırladığımız user thread 5. iterasyondan sonra sonlanır.</p>
+
+<p>20 iterasyon ile sınırladığımız daemon thread’in işini tamamlamasını beklemeden JVM sonlanır. 
+JVM burada finally, interrupt, catch gibi aksiyonlara hiç girmeden daemon thread’i de 
+kendisiyle birlikte sonlandırır.</p>
+
+<p>Programın çıktısı şu şekilde:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   MAIN : thread is started
+ DAEMON : 1 : Sleeping.
+   USER : 1 : Sleeping.
+ DAEMON : 1 : Woke up.
+ DAEMON : 1 : Finally executed.
+ DAEMON : 2 : Sleeping.
+   USER : 1 : Woke up.
+   USER : 1 : Finally executed.
+   USER : 2 : Sleeping.
+ DAEMON : 2 : Woke up.
+ DAEMON : 2 : Finally executed.
+ DAEMON : 3 : Sleeping.
+   USER : 2 : Woke up.
+   USER : 2 : Finally executed.
+   USER : 3 : Sleeping.
+ DAEMON : 3 : Woke up.
+ DAEMON : 3 : Finally executed.
+ DAEMON : 4 : Sleeping.
+   USER : 3 : Woke up.
+   USER : 3 : Finally executed.
+   USER : 4 : Sleeping.
+   MAIN : thread is finished
+ DAEMON : 4 : Woke up.
+ DAEMON : 4 : Finally executed.
+ DAEMON : 5 : Sleeping.
+   USER : 4 : Woke up.
+   USER : 4 : Finally executed.
+   USER : 5 : Sleeping.
+ DAEMON : 5 : Woke up.
+ DAEMON : 5 : Finally executed.
+ DAEMON : 6 : Sleeping.
+   USER : 5 : Woke up.
+   USER : 5 : Finally executed.
+   USER : While loop finished
+</code></pre></div></div>
+
+<p>Çıktıda gördüğümüz gibi daemon thread’in yaptığı son iş uykuya dalmak oldu. 
+JVM onu uykudan uyandırmadı, interrupt etmedi veya bir şekilde finally bloğuna düşürmedi. 
+User thread sonlandığında doğrudan aşağı indirdi.</p>
+
+<p>Bu gecelik bu kadar dostlar. Artık uyumalıyım.</p>
+
+<p>İyi geceler.</p>
+
+  </div>
+
+</article>
+
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Serdar Kuzucu</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li>Serdar Kuzucu</li>
+          <li><a href="mailto:serdar.kuzucu@gmail.com">serdar.kuzucu@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/sedran"><span class="icon icon--github"><svg viewBox="0 0 16 16"><path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/></svg>
+</span><span class="username">sedran</span></a>
+
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/sedran"><span class="icon icon--twitter"><svg viewBox="0 0 16 16"><path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/></svg>
+</span><span class="username">sedran</span></a>
+
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  </body>
+</html>
