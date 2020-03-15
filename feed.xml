@@ -6,8 +6,8 @@
 </description>
     <link>https://sedran.github.io/</link>
     <atom:link href="https://sedran.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 15 Mar 2020 21:27:35 +0000</pubDate>
-    <lastBuildDate>Sun, 15 Mar 2020 21:27:35 +0000</lastBuildDate>
+    <pubDate>Sun, 15 Mar 2020 22:27:08 +0000</pubDate>
+    <lastBuildDate>Sun, 15 Mar 2020 22:27:08 +0000</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
     
       <item>
@@ -1304,6 +1304,199 @@ Sunuculara yapılan otomatikleştirilmiş saldırıların çoğu root kullanıc�
         <category>Wordpress</category>
         
         <category>nginx</category>
+        
+      </item>
+    
+      <item>
+        <title>Java'da Swing ile Basit Bir Pencere Yapalım</title>
+        <description>&lt;p&gt;O kadar java gördük belki birilerine bi faydamız dokunur. 
+Haydi java’da &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/package-summary.html&quot;&gt;swing kütüphanesinin&lt;/a&gt; 
+ögelerini kullanarak basit bi pencere yapalım.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;Bu yazıda, &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JFrame.html&quot;&gt;JFrame&lt;/a&gt; sınıfından birkaç method kullanmayı, &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt; ile oluşturulan pencereye 
+&lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JLabel.html&quot;&gt;JLabel&lt;/a&gt; ve &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JButton.html&quot;&gt;JButton&lt;/a&gt; eklemeyi, &lt;code class=&quot;highlighter-rouge&quot;&gt;JLabel&lt;/code&gt; ögesinin font özelliklerini ayarlamayı ve &lt;code class=&quot;highlighter-rouge&quot;&gt;JButton&lt;/code&gt; ögesine 
+&lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/event/ActionListener.html&quot;&gt;ActionListener&lt;/a&gt; objesini eklemeyi göreceğiz. 
+Layout olarak da &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/BorderLayout.html&quot;&gt;BorderLayout&lt;/a&gt; objesinden biraz bahsedeceğim.&lt;/p&gt;
+
+&lt;p&gt;Çoğu swing objesini java apisinden öğrenmiş birisi olarak ilk tavsiyem yukarda verdiğim linklere de tıklayıp 
+bi ne var ne yok bakmanız.&lt;/p&gt;
+
+&lt;p&gt;Önce kodlarımızı yazalım. Sonra konuşuruz üstünde.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;com.asosyalbebe.swing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.awt.BorderLayout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.awt.Font&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.awt.event.ActionEvent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.awt.event.ActionListener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;javax.swing.JButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;javax.swing.JFrame&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;javax.swing.JLabel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Pencere&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;Pencere&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nc&quot;&gt;JFrame&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JFrame&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Basit Bir Pencere Yapıyoruz&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;300&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setDefaultCloseOperation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;JFrame&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;EXIT_ON_CLOSE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getContentPane&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setLayout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BorderLayout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+
+        &lt;span class=&quot;nc&quot;&gt;JLabel&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;metin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JLabel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;İlk penceremizi yaptık.&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;metin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setFont&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Font&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Serif&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Font&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;BOLD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;25&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;North&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;metin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+        &lt;span class=&quot;nc&quot;&gt;JButton&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buton&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Çıkış&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;buton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addActionListener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ActionListener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;actionPerformed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ActionEvent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;South&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+        &lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setVisible&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;İlk olarak import kısmından bahsedeyim. Bu kısımda sadece şu üç satırı yazarak da kurtulabilirdiniz:&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.awt.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.awt.event.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;javax.swing.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Fakat hem neyin hangi paketin içinde olduğunu görmek açısından, 
+hem de programın gereksiz import yapıp yavaşlamaması açısından bu şekilde daha faydalıymış, 
+burada böyle yaptım. Yoksa ben de yıldızlı yöntemi kullanıyorum :)&lt;/p&gt;
+
+&lt;p&gt;Ana methoda(public static void main) bakacak olursak, içerisinde Pencere objesini çağırdığımızı görüyoruz. 
+Diğer elemanları neden main’in içinde değil de constructor’un içinde yarattığımın şu anda pek bir önemi yok, 
+fakat ileri düzeyde programlar yazmaya çalışırken böyle olması daha müsait oluyor diyelim, 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt; methodun &lt;code class=&quot;highlighter-rouge&quot;&gt;static&lt;/code&gt; olması nedeniyle çeşitli yerlerde istenmedik problemler çıkıyor :)&lt;/p&gt;
+
+&lt;p&gt;Gelelim Pencere isimli sınıfımızın constructor’ına. 
+Burada ilk olarak bir pencere yaratmamız gerekiyor. 
+Bunu &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt; nesnesi ile sağlıyoruz. 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt; nesnesini tanımlarken ona penceremizin başlık çubuğunda görüntülenecek olan 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;‘i parametre olarak gönderiyoruz. 
+Bu uygulamada başlık çubuğumuzda “Basit Bir Pencere Yapıyoruz” metni görünecek.&lt;/p&gt;
+
+&lt;p&gt;Daha sonra &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt; nesnemize verdiğimiz ismi kullanarak onun özelliklerini tanımlıyoruz. 
+Ben pencere ismini vermiştim. 
+Öyle devam edelim.&lt;/p&gt;
+
+&lt;p&gt;Penceremizin boyutunu ayarlamak için &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt;‘in bize sunduğu &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/Component.html#setSize(int,%20int)&quot;&gt;setSize&lt;/a&gt; methodunu kullanıyoruz. 
+Parametre olarak iki tane tamsayıyı sırasıyla genişlik ve yükseklik olarak giriyoruz.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;height&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Penceremizin sağ üst köşesindeki çarpı tuşuna tıklandığında gerçekleşecek olan eylemi ayarlamak için &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt;‘in 
+&lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JFrame.html#setDefaultCloseOperation(int)&quot;&gt;setDefaultCloseOperation&lt;/a&gt; methodunu kullanıyoruz. 
+Bu methoda parametre olarak &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame.EXIT_ON_CLOSE&lt;/code&gt; sabit değerini atadık. 
+Bu sayede çarpı butonuna tıklandığında program kapatılacak. 
+Bunu ayarlamayı unutursanız eğer, pencereniz kapatmaya çalıştığınızda kapanmak yerine gizlenir, 
+arkaplanda çalışmaya devam eder.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setDefaultCloseOperation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;JFrame&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;EXIT_ON_CLOSE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Şimdi geldik penceremize layout ayarlamaya. 
+Bunun için &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt;‘in &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JFrame.html#getContentPane()&quot;&gt;getContentPane()&lt;/a&gt; methodunu 
+kullanarak bize bir &lt;code class=&quot;highlighter-rouge&quot;&gt;Container&lt;/code&gt; nesnesi return etmesini sağlayacak, daha sonra da o 
+&lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/Container.html&quot;&gt;Container&lt;/a&gt; nesnesinin &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JFrame.html#setLayout(java.awt.LayoutManager)&quot;&gt;setLayout&lt;/a&gt; methodunu kullanıp ona bir layout atayacağız. 
+Ben burada &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/BorderLayout.html&quot;&gt;BorderLayout&lt;/a&gt; kullandım. 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;BorderLayout&lt;/code&gt; nedir diye merak edenler &lt;a href=&quot;https://docs.oracle.com/javase/tutorial/uiswing/layout/border.html&quot;&gt;şuradan&lt;/a&gt; detaylı anlatımına bakabilir. 
+Ben kısaca bahsedecek olursam, efenim şimdi, &lt;code class=&quot;highlighter-rouge&quot;&gt;BorderLayout&lt;/code&gt; ekranı 5 parçaya böler. 
+Bu parçalara “North”, “South”, “Center”, “East”, ve “West” isimlerini verir. 
+BorderLayout ile şekillendirilmiş bir alana bir element ekleyeceğimiz zaman hangi alanına ekleyeceğimizi 
+parametre olarak belirtmemiz gerekir. 
+Şimdi penceremizi BorderLayout ile şekillendirelim bakalım.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getContentPane&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setLayout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BorderLayout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Şimdi oluşturduğumuz penceremize bir yazı yazalım. 
+Bunun için bir &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JLabel.html&quot;&gt;JLabel&lt;/a&gt; nesnesi yaratacağız 
+ve yaratırken kullandığımız parametre onun içeriğindeki metin olacak.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nc&quot;&gt;JLabel&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;metin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JLabel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;İlk penceremizi yaptık.&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Yarattığımız &lt;code class=&quot;highlighter-rouge&quot;&gt;JLabel&lt;/code&gt; nesnesini metin isimli değişkene verdiğimize göre, şimdi onun üzerinde bir iki oynama yapabiliriz. 
+Şimdi yazı tipiyle biraz oynamak istiyorum ben. 
+Bunun için &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/Font.html&quot;&gt;Font&lt;/a&gt; nesnesini ve &lt;code class=&quot;highlighter-rouge&quot;&gt;JLabel&lt;/code&gt; nesnesinin &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JComponent.html#setFont(java.awt.Font)&quot;&gt;setFont&lt;/a&gt; methodunu kullanacağız.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;metin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setFont&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Font&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Serif&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Font&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;BOLD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;25&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JLabel&lt;/code&gt; nesnemiz üzerindeki düzenlemelerimiz bittiğine göre, şimdi onu penceremize ekleyebiliriz. 
+Bunun için &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt; içindeki &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/Container.html#add(java.awt.Component)&quot;&gt;add&lt;/a&gt; methodunu kullanacağız. 
+Ben bu &lt;code class=&quot;highlighter-rouge&quot;&gt;JLabel&lt;/code&gt; ögesini pencerenin üst kısmına eklemeyi uygun gördüm, siz değiştirebilirsiniz tabi ki :)&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;North&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;metin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Şimdi bir buton oluşturalım ve üzerinde çıkış yazsın. 
+Tıklanıldığı zaman da program kapansın. 
+Gelişmiş butonlar oluşturabilmemiz için swing kütüphanemiz bize &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JButton.html&quot;&gt;JButton&lt;/a&gt; nesnesini sunar. 
+Bir &lt;code class=&quot;highlighter-rouge&quot;&gt;JButton&lt;/code&gt; nesnesi yaratırken kullandığımız parametre onun üzerindeki metni belirler. 
+Şimdi üzerinde çıkış yazan bir &lt;code class=&quot;highlighter-rouge&quot;&gt;JButton&lt;/code&gt; nesnesi yaratıp onu buton isimli değişkenimize verelim.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nc&quot;&gt;JButton&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buton&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Çıkış&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Şimdi bu butonumuza &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/AbstractButton.html#addActionListener(java.awt.event.ActionListener)&quot;&gt;addActionListener&lt;/a&gt; methodunu ve &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/event/ActionListener.html&quot;&gt;ActionListener&lt;/a&gt; 
+sınıfını kullanarak bir dinleyici ekleyelim. 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;ActionListener&lt;/code&gt; methodundaki &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/event/ActionListener.html#actionPerformed(java.awt.event.ActionEvent)&quot;&gt;actionPerformed&lt;/a&gt; methodu, bir action gerçekleştiği zaman bir 
+&lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/event/ActionEvent.html&quot;&gt;ActionEvent&lt;/a&gt; parametresi ile çağırılır. 
+Biz de &lt;code class=&quot;highlighter-rouge&quot;&gt;actionPerformed&lt;/code&gt; methodunun içerisine butona tıklandığında gerçekleşecek olan eylemleri kodlayacağız. 
+Ben burada &lt;code class=&quot;highlighter-rouge&quot;&gt;System.exit(1);&lt;/code&gt; komutu ile programı kapatmayı tercih ettim, basit bir şey olsun diye.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;buton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addActionListener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ActionListener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;actionPerformed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ActionEvent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Butonumuzu da ayarladığımıza göre, onu da penceremize ekleyebiliriz. 
+Yine aynı işlem, fakat bunu pencerenin aşağı kısmına ekliyoruz.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;South&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Ve en son olarak da penceremizin görünür olması için &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt; nesnesinin 
+&lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/Component.html#setVisible(boolean)&quot;&gt;setVisible&lt;/a&gt; methodunu kullanacağız. 
+Bunu penceremize bütün eklemeleri yaptıktan sonra çalıştırmamızda fayda varmış. 
+Hiç çalıştırmazsak da penceremiz görünmüyor.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setVisible&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Penceremizin son halini de koyalım buraya tam olsun:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/java-swng-300x100.png&quot; alt=&quot;java swing window frame&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Bu yazının sonuna geldik. 
+Umarım faydalı bir iş çıkarmışımdır swing’e yeni başlayanlar için. 
+Başka bir yazıda görüşmek üzere, yorumlarınızı beklerim :)&lt;/p&gt;
+
+</description>
+        <pubDate>Thu, 03 Feb 2011 00:18:00 +0000</pubDate>
+        <link>https://sedran.github.io/javada-swing-ile-basit-bir-pencere-yapalim</link>
+        <guid isPermaLink="true">https://sedran.github.io/javada-swing-ile-basit-bir-pencere-yapalim</guid>
+        
+        
+        <category>Java</category>
+        
+        <category>Programlama</category>
         
       </item>
     
