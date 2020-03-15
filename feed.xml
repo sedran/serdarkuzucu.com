@@ -6,8 +6,8 @@
 </description>
     <link>https://sedran.github.io/</link>
     <atom:link href="https://sedran.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 15 Mar 2020 19:20:26 +0000</pubDate>
-    <lastBuildDate>Sun, 15 Mar 2020 19:20:26 +0000</lastBuildDate>
+    <pubDate>Sun, 15 Mar 2020 20:36:15 +0000</pubDate>
+    <lastBuildDate>Sun, 15 Mar 2020 20:36:15 +0000</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
     
       <item>
@@ -553,6 +553,267 @@ User thread sonlandığında doğrudan aşağı indirdi.&lt;/p&gt;
         <category>Java</category>
         
         <category>Programlama</category>
+        
+      </item>
+    
+      <item>
+        <title>Bootstrap 4 - Grid Sistemi</title>
+        <description>&lt;p&gt;Çoğunlukla yazılımcılar için ön yüz geliştirmek bir baş belası haline gelir. 
+Asıl işimiz bu olmadığı için bir türlü derinlemesine öğrenmeyiz.&lt;/p&gt;
+
+&lt;p&gt;Eğer üzerinde çalışmakta olduğumuz proje geniş bir kitleye hitap etmiyorsa, arayüzünün başkalarından farklı ve daha şık 
+olmaya ihtiyacı yoksa, önemli olan kullanılabilirlikse; ben genellikle &lt;a href=&quot;https://getbootstrap.com/&quot;&gt;Bootstrap&lt;/a&gt; üzerine 
+geliştirilmiş ücretsiz bir tema bulup özelliklerimizi onun üzerine entegre ediyorum. Böylece ön yüz geliştirmedeki 
+zamandan ettiğimiz tasarruf ile daha sağlam bir backend geliştirebiliyoruz.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;div class=&quot;alert alert-info&quot;&gt;
+
+  &lt;p&gt;Ücretsiz Bootstrap temalarına &lt;a href=&quot;https://startbootstrap.com/themes/&quot;&gt;buraya&lt;/a&gt; 
+veya &lt;a href=&quot;https://bootstrapmade.com/&quot;&gt;buraya&lt;/a&gt; tıklayarak göz atabilirsiniz.&lt;/p&gt;
+
+  &lt;p&gt;Ücretli tasarımları incelemek isterseniz &lt;a href=&quot;https://wrapbootstrap.com/themes&quot;&gt;buraya tıklayın&lt;/a&gt;.&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Bootstrap kütüphanesini web sayfanıza eklediğiniz anda bazı özellikler siz kullanmasanız bile çalışıyor. 
+Bu özellikler Bootstrap’in sitesinde &lt;a href=&quot;https://getbootstrap.com/docs/4.2/content/reboot/&quot;&gt;Content&lt;/a&gt; başlığı altında anlatılmış. 
+Bunu yapmasının amacı siz web sitenizde hiçbir CSS kodu yazmasanız bile kullandığınız HMTL taglerinin farklı tarayıcı 
+ve işletim sistemlerinde aynı görüntüyü vermesini sağlamaktır. 
+Örneğin siz bir &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;h1&amp;gt;&amp;lt;/h1&amp;gt;&lt;/code&gt; tagi kullandığınız zaman Bootstrap kullanmazsanız bu bütün tarayıcılarda farklı görünecektir. 
+Bunu sağlamak için eskiden &lt;a href=&quot;https://meyerweb.com/eric/tools/css/reset/&quot;&gt;Eric Mayer’in CSS Reset&lt;/a&gt; yöntemini kullanırdık. 
+Artık Bootstrap kullanarak da default HTML stilini tüm tarayıcılarda aynı görünecek şekilde konfigüre edebiliyoruz.&lt;/p&gt;
+
+&lt;p&gt;CSS reset dışında kullanabileceğiniz birçok güzel özellik ile donatılmış Bootstrap kütüphanesini bu blogun arayüzünü 
+geliştirirken bolca kullandım. Bu yazıda Bootstrap kütüphanesinde kullanmaktan en çok zevk aldığım özellik olan 
+&lt;a href=&quot;https://getbootstrap.com/docs/4.2/layout/grid/&quot;&gt;Grid yapısını&lt;/a&gt; ele alacağım.&lt;/p&gt;
+
+&lt;div class=&quot;card mb-2&quot;&gt;
+  &lt;div class=&quot;card-body&quot;&gt;
+    &lt;blockquote class=&quot;blockquote mb-0&quot;&gt;
+&lt;h5&gt;Grid system&lt;/h5&gt;
+&lt;p class=&quot;mb-0&quot;&gt;Use our powerful mobile-first flexbox grid to build layouts of all shapes and sizes thanks to a twelve column system, five default responsive tiers, Sass variables and mixins, and dozens of predefined classes.&lt;/p&gt;
+&lt;footer class=&quot;blockquote-footer&quot;&gt;
+&lt;cite title=&quot;Bootstrap Grid System&quot;&gt;&lt;a href=&quot;https://getbootstrap.com/docs/4.2/layout/grid/&quot; target=&quot;_blank&quot; rel=&quot;nofollow&quot;&gt;Bootstrap Grid System&lt;/a&gt;&lt;/cite&gt;
+&lt;/footer&gt;
+&lt;/blockquote&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Grid yapısında en beğendiğim özelliklerden birisi mobile-first mottosuyla geliştirilmiş olması ve bize 5 adet 
+responsive kırılım sunması. Bu kırılımların 4 tanesinin kendi isimleri varken, en küçük ekranlar için kullanacağımız 
+kırılımın bir ismi bulunmamakta. Yani herhangi bir kırılımı ismiyle çağırmadığımız sürece en küçük ekranlar için 
+tasarlıyoruz diye düşüneceğiz. En küçük ekran için tasarımı belirledikten sonra eğer sitemiz daha büyük ekranlarda 
+farklı görünsün istiyorsak, tek tek bu kırılımları belirteceğiz. Öncelikle bu 5 kırılımı ve kısaltmalarını şöyle 
+bir tanıyalım:&lt;/p&gt;
+
+&lt;table class=&quot;table table-bordered&quot;&gt;
+&lt;thead class=&quot;thead-dark&quot;&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;Extra Small&lt;/th&gt;
+&lt;th&gt;Small&lt;/th&gt;
+&lt;th&gt;Medium&lt;/th&gt;
+&lt;th&gt;Large&lt;/th&gt;
+&lt;th&gt;Extra Large&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;th class=&quot;table-dark&quot;&gt;Kısaltma&lt;/th&gt;
+&lt;td&gt;Yok&lt;/td&gt;
+&lt;td&gt;sm&lt;/td&gt;
+&lt;td&gt;md&lt;/td&gt;
+&lt;td&gt;lg&lt;/td&gt;
+&lt;td&gt;xl&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;th class=&quot;table-dark&quot;&gt;Ekran Genişliği&lt;/th&gt;
+&lt;td&gt;&amp;lt;576px&lt;/td&gt;
+&lt;td&gt;≥576px&lt;/td&gt;
+&lt;td&gt;≥768px&lt;/td&gt;
+&lt;td&gt;≥992px&lt;/td&gt;
+&lt;td&gt;≥1200px&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;th class=&quot;table-dark&quot;&gt;.container Genişliği&lt;/th&gt;
+&lt;td&gt;%100 (auto)&lt;/td&gt;
+&lt;td&gt;540px&lt;/td&gt;
+&lt;td&gt;720px&lt;/td&gt;
+&lt;td&gt;960px&lt;/td&gt;
+&lt;td&gt;1140px&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;container-nedir&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;.container&lt;/code&gt; Nedir?&lt;/h3&gt;
+
+&lt;p&gt;Eğer sitemizin yatay olarak tüm ekrana yayılmasını istemiyorsak tüm HTML kodumuzu 
+aşağıdaki gibi &lt;code class=&quot;highlighter-rouge&quot;&gt;class&lt;/code&gt; özelliği &lt;code class=&quot;highlighter-rouge&quot;&gt;container&lt;/code&gt; olan bir &lt;code class=&quot;highlighter-rouge&quot;&gt;div&lt;/code&gt;‘in içine alabiliriz.&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;container&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    Geri kalan her şey buraya 
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Container içeriğin sayfanın ortasında olmasını sağlar ve genişliğini sınırlar. 
+Yukarıdaki tabloda farklı ekran genişliklerinde container boyutunun ne kadar olduğunu görebilirsiniz. 
+Örneğin, 576 pikselden küçük ekranlarda container ekranın tamamını kaplarken, 
+genişliği 576 piksel ile 768 piksel arasındaki bir ekranda container 540 piksel alan 
+kaplayıp sayfanın tam ortasında yer alacaktır.&lt;/p&gt;
+
+&lt;p&gt;Eğer içerik her zaman sayfanın tüm genişliğini kapsasın istiyorsanız, &lt;code class=&quot;highlighter-rouge&quot;&gt;container&lt;/code&gt; yerine 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;container-fluid&lt;/code&gt; sınıfını kullanmanız yeterli.&lt;/p&gt;
+
+&lt;h3 id=&quot;satır-ve-sütunlar&quot;&gt;Satır ve Sütunlar&lt;/h3&gt;
+
+&lt;p&gt;Grid system satır ve sütunlardan oluşur.&lt;/p&gt;
+
+&lt;p&gt;Satırlar &lt;code class=&quot;highlighter-rouge&quot;&gt;row&lt;/code&gt; sınıfı ile oluşturulur ve sayfada alt alta görünürler. 
+Sütunlar dışında içerik barındırmamalıdır.&lt;/p&gt;
+
+&lt;p&gt;Satırların içerisine doğrudan sütunlar gelir. 
+Sütunlar responsive kullanım tarzınıza bağlı olarak yan yana veya alt alta gelebilirler. 
+Sütun oluşturmak için &lt;code class=&quot;highlighter-rouge&quot;&gt;col&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;col-{boyut}&lt;/code&gt; veya &lt;code class=&quot;highlighter-rouge&quot;&gt;col-{kırılım}-{boyut}&lt;/code&gt; sınıflarını kullanırız.&lt;/p&gt;
+
+&lt;p&gt;Bootstrap grid sistemini kullandığınız alanı 12 eşit parçaya böler. 
+Bu parçaları birleştirerek kullanarak sütunlarımızın genişliklerini belirleriz. 
+Satırdaki sütunlarımızın genişliklerinin toplamı 12 olursa satırda boş alan bırakmamış oluruz.&lt;/p&gt;
+
+&lt;p&gt;Örneğin satırımızın solunda 4 parça genişliğinde bir sütun olsun 
+ve sağında da 8 parça genişliğinde bir sütun olsun istersek aşağıdaki gibi yazabiliriz:&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;row&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-4&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sol&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-8&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sağ&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Bu şekilde yazdığımızda en küçük ekrandan en büyük ekrana kadar tüm ekranlarda sayfanın 
+genişliğinin 4/12 kadarı sol tarafına, 8/12 kadarı sağ tarafına ayrılır.&lt;/p&gt;
+
+&lt;p&gt;Eğer extra small ve small ekranlarda sütunlar alt alta görünsün ve 100% genişlikte olsun, 
+medium ekranlardan itibaren 4 ve 8 parça boyutlarında yan yana olsun istiyorsak, 
+sütunları boyutlarını belirterek aşağıdaki gibi ayırabiliriz:&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;row&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-md-4&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sol&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-md-8&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sağ&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Tüm sütunlar eşit genişlikte olsun istiyorsak, güzel haber, 
+sütunların boyutlarını belirtmek zorunda değiliz. Aşağıdaki gibi yazabiliriz:&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Yan yana eşit genişlikte iki sütun --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;row&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sol&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sağ&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Yan yana eşit genişlikte üç sütun --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;row&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sol&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Orta&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sağ&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Yine tüm sütunlar eşit genişlikte olsun fakat sadece medium ve daha büyük ekranlarda böyle olsun istiyorsanız, 
+aşağıdaki gibi sütunları kırılım belirterek yazabilirsiniz. 
+Bu sayede medium boyutundan daha küçük ekranlarda sütunlar alt alta gözükürler.&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Medium ve daha geniş ekranlarda yan yana eşit genişlikte iki sütun --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Small ve Extra Small ekranlarda alt alta iki div --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;row&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-md&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sol&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-md&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sağ&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Medium ve daha geniş ekranlarda yan yana eşit genişlikte üç sütun --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Small ve Extra Small ekranlarda alt alta üç div --&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;row&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-md&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sol&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-md&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Orta&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-md&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sağ&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Farklı kırılımları bir arada kullanabiliyoruz. 
+Sütunumuzun her ekran boyutunda farklı bir genişliğe sahip olmasını sağlayabiliriz. 
+Aşağıdaki örnekte soldaki sütun her ekran boyutunda farklı genişlikte olacak 
+ve sağdaki sütun da satırda geri kalan alanı dolduracak şekilde konumlandırıldı.&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;row&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Her çözünürlükte farklı bir genişlik tayin edildi --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Ekstra Small: 5 parça --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Small: 4 parça --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Medium: 3 parça --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Large: 2 parça --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Ekstra Large: 1 parça --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-5 col-sm-4 col-md-3 col-lg-2 col-xl-1&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sol&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Satırda geri kalan boş alanın tamamını kaplar --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sağ&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Sadece bir sütunun genişliğini belirtip gerisine sadece &lt;code class=&quot;highlighter-rouge&quot;&gt;col&lt;/code&gt; sınıfını verirsek, 
+genişliği belirtilmemiş olan sütunlar kendilerine kalan alanı eşit ölçülerde paylaşırlar.&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;row&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Extra small &amp;amp; small: (12 - 6) / 2 = 3 parça --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Medium &amp;amp; large &amp;amp; extra large: (12 - 8) / 2 = 2 parça --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sol&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Extra small &amp;amp; small: 6 parça --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Medium &amp;amp; large &amp;amp; extra large: 8 parça --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-6 col-md-8&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Orta&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Extra small &amp;amp; small: (12 - 6) / 2 = 3 parça --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Medium &amp;amp; large &amp;amp; extra large: (12 - 8) / 2 = 2 parça --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sağ&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Eğer bir sütunun genişliğine sütunun içeriği karar versin istiyorsak, 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;col-auto&lt;/code&gt; veya &lt;code class=&quot;highlighter-rouge&quot;&gt;col-{kırılım}-auto&lt;/code&gt; sınıfını kullanabiliriz. 
+Örneğin 200 pixel genişliğinde bir içeriği tutan sütuna &lt;code class=&quot;highlighter-rouge&quot;&gt;col-auto&lt;/code&gt; sınıfını verirsek 
+bu sütun 200 pixel genişliğinde olur. 
+Aynı satırda &lt;code class=&quot;highlighter-rouge&quot;&gt;col&lt;/code&gt; sınıfına sahip bir sütun varsa o sütun da geri kalan tüm alanı doldurur.&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;row&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Solda içeriğinin genişliği (200px) kadar yer kaplayan sütun --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-auto&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;style=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;width:200px;&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sol&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Ortada 2 parça genişliğinde sütun --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col-2&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Orta&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Sağda kalan alanın tamamını kaplayan sütun --&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;col&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Sağ&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;bitirirken&quot;&gt;Bitirirken&lt;/h3&gt;
+
+&lt;p&gt;Bootstrap’in grid sistemi ile ilgili önemli gördüğüm birçok noktaya parmak bastığımı düşünüyorum. 
+Bootstrap birçok faydalı bileşen barındıran büyük bir kütüphane. 
+Birçok bileşenini kullanmasanız da sadece grid sistemi için bile kullanılabilir.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 10 Feb 2019 18:03:00 +0000</pubDate>
+        <link>https://sedran.github.io/bootstrap-4-grid-system</link>
+        <guid isPermaLink="true">https://sedran.github.io/bootstrap-4-grid-system</guid>
+        
+        
+        <category>Bootstrap</category>
+        
+        <category>Frontend</category>
+        
+        <category>HTML</category>
         
       </item>
     
