@@ -6,8 +6,8 @@
 </description>
     <link>https://sedran.github.io/</link>
     <atom:link href="https://sedran.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 15 Mar 2020 20:36:15 +0000</pubDate>
-    <lastBuildDate>Sun, 15 Mar 2020 20:36:15 +0000</lastBuildDate>
+    <pubDate>Sun, 15 Mar 2020 21:27:35 +0000</pubDate>
+    <lastBuildDate>Sun, 15 Mar 2020 21:27:35 +0000</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
     
       <item>
@@ -814,6 +814,496 @@ Birçok bileşenini kullanmasanız da sadece grid sistemi için bile kullanılab
         <category>Frontend</category>
         
         <category>HTML</category>
+        
+      </item>
+    
+      <item>
+        <title>Docker ile WordPress Kurulumu ve Https</title>
+        <description>&lt;p&gt;Yakın zamanda blogumda bir takım radikal değişiklikler yaptım. 
+Bunlardan en önemlisi wordpress altyapısına geçmem oldu. 
+Yaklaşık 12-13 yıldır kullandığım Blogger hizmetinden ayrılmanın burukluğu ile bu kadar özgür olduğum bir 
+platformda blog yazmanın sevinci birbirine karıştı. 
+Hem wordpress ile yazı yazmaya elim alışsın hem de wordpress’e geçiş tecrübelerimi paylaşayım amacıyla 
+bu yazıyı yazıyorum.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&quot;1-giriş&quot;&gt;1. Giriş&lt;/h2&gt;
+
+&lt;p&gt;Blogumu wordpress altyapısına taşırken, elimdeki sunucuyu her an değiştirme gereksinimi duyabilme ihtimalimi 
+ve bu değişikliği en iyi nasıl yönetirim sorusunu ön planda tuttum. 
+Bu problemi çözebilmek için elimdeki sunucuya minimum bağımlılığımın bulunması gerekiyordu. 
+İhtiyacım olan her yazılımı ve konfigürasyonu doğrudan sunucuya kurarsam taşınmam gerektiğinde neyin nerede olduğunu 
+hatırlamam ve bir sürü şeyi tekrar yapmam gerekir. Aynı zamanda farklı farklı yazılımlar aynı ortama kurulduğunda 
+birbirlerini konfigüratif olarak etkileyebilirler. Kurduğumuz her yazılım da kapatmamız gereken fakat güvenlik uzmanı 
+olmadığımız için varlığından haberimiz olmayacak güvenlik zafiyetleri getirebilecektir.&lt;/p&gt;
+
+&lt;p&gt;Bu sebeplerden dolayı sunucuya sadece docker yükleme ve gereken diğer tüm yazılımları kendine has docker container’lar 
+üzerinde çalıştırma çözümü üzerinde kendimle mutabık oldum. 
+Aşağıdaki PowerPoint ile çizilmiş resimde tasarladığım mimariyi görselleştirdim.&lt;/p&gt;
+
+&lt;h2 id=&quot;2-mimari&quot;&gt;2. Mimari&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/wp-docker-blog-architecture.png&quot; alt=&quot;Mimari&quot; title=&quot;Mimari&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Bu mimarinin bileşenleri şu şekilde:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Docker:&lt;/strong&gt; Tüm sistemi ayakta tutan platform. Docker üzerinde çalıştırdığımız her bir container ana makinadan izole 
+sanal bir makina gibidir fakat bir sanal makinadan çok daha hafif ve temizdir. Docker ile ilgili daha fazla bilgi 
+edinmek için resmi sitesine &lt;a href=&quot;https://docs.docker.com&quot;&gt;buraya tıklayarak&lt;/a&gt; ulaşabilirsiniz.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Docker Compose:&lt;/strong&gt; Birden fazla docker container’ını bir arada tanımlamamıza, konfigüre etmemize ve aynı anda 
+başlatıp kapatabilmemizi sağlayan araç.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;nginx:&lt;/strong&gt; İnternet üzerinden sunucumuzdaki 80 (http) ve 443 (https) portlarına gelen trafiği karşılayıp, 
+wordpress container’ındaki 80 portuna reverse-proxy yöntemiyle iletecek olan web server.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;letsencrypt:&lt;/strong&gt; HTTPS protokolü kullanmak istiyorsanız ve sertifikaya para vermek istemiyorsanız; ücretsiz ve 
+güvenli bir SSL sertifikası oluşturabilmenizi sağlayan kuruluş. 
+İncelemek isterseniz &lt;a href=&quot;https://letsencrypt.org/&quot;&gt;buraya tıklayabilirsiniz&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;apache:&lt;/strong&gt; Wordpress kurulumunu çalıştıracak olan web server.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;mysql:&lt;/strong&gt; Wordpress’in ihtiyaç duyduğu veritabanı.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;wordpress:&lt;/strong&gt; Açık kaynak kodlu, PHP diliyle geliştirilmiş, özelleştirmeye açık meşhur blog 
+ve içerik yönetim sistemimiz.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;3-hazırlık&quot;&gt;3. Hazırlık&lt;/h2&gt;
+
+&lt;h3 id=&quot;31-sunucunun-alınması&quot;&gt;3.1. Sunucunun Alınması&lt;/h3&gt;
+
+&lt;p&gt;Yazıyı daha az hatayla yazabilmek için &lt;a href=&quot;https://www.digitalocean.com/&quot;&gt;DigitalOcean&lt;/a&gt; üzerinden ucuz bir makina aldım.&lt;/p&gt;
+
+&lt;p&gt;İşletim sistemi olarak CentOS 7.5 seçtim.&lt;/p&gt;
+
+&lt;p&gt;DigitalOcean yeni sunucuma IP adresi olarak 188.166.59.76 atadı. 
+Sunucunuzun IP adresini kaybetmeyin, sık sık lazım olacaktır. 
+Kişisel bilgisayarımızda kullandığımız işletim sistemine göre kendimize bir SSH programı buluyoruz 
+ve sunucumuza ssh ile giriş yapıyoruz.&lt;/p&gt;
+
+&lt;p&gt;Örneğin ben linux kullandığım için doğrudan terminalden aşağıdaki şekilde sunucuma ulaşabildim:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ssh root@188.166.59.76
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;32-dns-yönlendirmesi&quot;&gt;3.2. DNS Yönlendirmesi&lt;/h3&gt;
+
+&lt;p&gt;Kullanacağımız domain için, domain’imizi satın aldığımız şirketin arayüzünden DNS ayarlarımızı güncelliyoruz 
+ve yeni almış olduğumuz IP adresimiz için bir adet 
+&lt;a href=&quot;https://support.dnsimple.com/articles/a-record/#whats-an-a-record&quot;&gt;A kaydı&lt;/a&gt; oluşturuyoruz. 
+&lt;strong&gt;A kaydı&lt;/strong&gt; spesifik bir domain adresine gelen bir isteğin belirli bir IP adresine iletilmesini sağlar. 
+Ben de &lt;strong&gt;demoblog.serdarkuzucu.com&lt;/strong&gt; alt alan adını &lt;strong&gt;188.166.59.76&lt;/strong&gt; IP adresine yönlendiren A kaydını oluşturdum.&lt;/p&gt;
+
+&lt;h3 id=&quot;33-docker-ve-docker-compose-kurulumu&quot;&gt;3.3. Docker ve Docker Compose Kurulumu&lt;/h3&gt;
+
+&lt;p&gt;Tüm sistemin çalışabilmesi için sunucumuza kurmamız gereken yegane araçlar docker ve docker-compose. 
+Aşağıya adımları yazıyorum fakat ilerleyen zamanlarda docker kurulumunda değişiklikler yapılır ihtimaline karşı 
+dökümantasyon linklerini de ekliyorum:
+&lt;a href=&quot;https://docs.docker.com/install/linux/docker-ce/centos/&quot;&gt;docker&lt;/a&gt;,
+&lt;a href=&quot;https://docs.docker.com/compose/install/&quot;&gt;docker-compose&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Aşağıdaki komut ile önce docker kurmak için gereken diğer araçları kuruyoruz:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;yum &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; yum-utils &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  device-mapper-persistent-data &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  lvm2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Aşağıdaki komut ile docker yazılımının indirileceği repository’yi sistemimize tanıtıyoruz:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;yum-config-manager &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;--add-repo&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    https://download.docker.com/linux/centos/docker-ce.repo
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Ve aşağıdaki komut ile docker sunucumuza kuruluyor:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;yum &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;docker-ce docker-ce-cli containerd.io
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Docker kuruldu fakat henüz ayakta değil. Ayağa kaldırmak için şu komutu çalıştırıyoruz:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;systemctl start docker
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Aşağıdaki komut da sunucu yeniden başladığında docker da otomatik olarak ayağa kalksın amacıyla kullanılıyor. 
+Bunu da çalıştıralım.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;systemctl &lt;span class=&quot;nb&quot;&gt;enable &lt;/span&gt;docker
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Şimdi sıra docker-compose kurmaya geldi. Aşağıdaki komut ile başlıyoruz:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;curl &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;-L&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;https://github.com/docker/compose/releases/download/1.23.2/docker-compose-&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;uname&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-s&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;uname&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; /usr/local/bin/docker-compose
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Daha sonra indirdiğimiz dosyaya aşağıdaki komutla gerekli yetkileri veriyoruz:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo chmod&lt;/span&gt; +x /usr/local/bin/docker-compose
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Bu yazıda anlattığım mimari docker swarm modunda çalışmaktadır. 
+Bu sebeple aşağıdaki komutu çalıştırarak docker kurulumunu swarm moduna geçirmemiz gerekiyor. 
+Komuttaki IP adresine sunucumuzun IP adresini yazmayı unutmayalım.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker swarm init &lt;span class=&quot;nt&quot;&gt;--advertise-addr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;188.166.59.76
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;34-data-dizinlerinin-oluşturulması&quot;&gt;3.4. Data Dizinlerinin Oluşturulması&lt;/h3&gt;
+
+&lt;p&gt;Docker container’lar host makinadan izole şekilde çalışır. 
+Her container datasını kendine özel volume adı verilen alanlarda tutar. 
+Bu sebeple bir docker container silinirse veri kaybına uğrayabiliriz. 
+Bunu engellemek için container oluştururken container’ların içinde önemli verilerin tutulduğu dizinleri 
+host makinadaki uygun bir dizin ile eşleştiriyoruz. 
+Böylece container silinip tekrar aynı dizini görecek şekilde yeni container oluşturulursa veriler korunmuş olur. 
+Aynı zamanda yerini iyi bildiğimiz bu dizinleri başka bir sunucuya geçmek istediğimizde sıkıştırıp 
+kolayca taşıyabiliriz.&lt;/p&gt;
+
+&lt;p&gt;Bu mimaride 3 adet container kullanacağız. 
+Tüm data bir arada bulunsun amacıyla sunucunun root dizininde &lt;code class=&quot;highlighter-rouge&quot;&gt;/docker-storage&lt;/code&gt; isminde bir dizin oluşturacağım 
+ve her container için bu dizinin altında ekstra dizinler açacağım. 
+Dikkatinizi çekerim, &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-storage&lt;/code&gt; özel bir isim değil, ben uydurdum. 
+Siz başka bir dizin de kullanabilirsiniz.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; /docker-storage/nginx
+&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; /docker-storage/wordpress
+&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; /docker-storage/mysql
+&lt;span class=&quot;nb&quot;&gt;chmod&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-R&lt;/span&gt; 777 /docker-storage
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Dizin yetkilendirmesi için 777 kötü bir parametre fakat sistem uzmanı olmadığımdan dolayı 
+kurulum kolaylığı için şimdilik görmezden gelelim.&lt;/p&gt;
+
+&lt;h2 id=&quot;4-mimarinin-yaml-formatında-hazırlanışı&quot;&gt;4. Mimarinin YAML Formatında Hazırlanışı&lt;/h2&gt;
+
+&lt;p&gt;Yavaş yavaş sunucumuzu ısıtmaya başlıyoruz. 
+Öncelikle sunucumuzun uygun bir dizininde &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; dosyasını barındıracak olan bir dizin yaratıyoruz. 
+Ben root user ile girdiğim için home dizinim &lt;code class=&quot;highlighter-rouge&quot;&gt;/root&lt;/code&gt; olarak tayin edilmiş. 
+Bu dizine gidiyor ve &lt;code class=&quot;highlighter-rouge&quot;&gt;demoblog&lt;/code&gt; isminde bir dizin oluşturuyorum ve içerisinde &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; isminde 
+bir boş dosya yaratıyorum.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; /root/demoblog
+&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /root/demoblog
+&lt;span class=&quot;nb&quot;&gt;touch &lt;/span&gt;docker-compose.yml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Daha sonra favori text editörümüz ile (nano, vi, vs) &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; dosyasını açıp aşağıdaki içeriği yapıştıralım.&lt;/p&gt;
+
+&lt;p&gt;Bu dosyanın sizin için çalışır hale gelmesi için sadece &lt;code class=&quot;highlighter-rouge&quot;&gt;EMAIL=demoblog@serdarkuzucu.com&lt;/code&gt; 
+ve &lt;code class=&quot;highlighter-rouge&quot;&gt;URL=demoblog.serdarkuzucu.com&lt;/code&gt; alanlarını değiştirmeniz yeterli olacaktır.&lt;/p&gt;
+
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3.6&quot;&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;services&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;db&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;mysql:5.7&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;bind&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;source&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/docker-storage/mysql&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/var/lib/mysql&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;restart&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;always&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;MYSQL_ROOT_PASSWORD&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;43C61277714C73D141646AEB5F134B51&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;MYSQL_DATABASE&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;wordpress&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;MYSQL_USER&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;wordpress&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;MYSQL_PASSWORD&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;43C61277714C73D141646AEB5F134B51&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;blognet&lt;/span&gt;
+
+  &lt;span class=&quot;na&quot;&gt;wordpress&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;depends_on&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;db&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;wordpress:latest&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;bind&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;source&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/docker-storage/wordpress&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/var/www/html&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;restart&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;always&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;WORDPRESS_DB_HOST&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;db:3306&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;WORDPRESS_DB_USER&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;wordpress&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;WORDPRESS_DB_PASSWORD&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;43C61277714C73D141646AEB5F134B51&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;blognet&lt;/span&gt;
+
+  &lt;span class=&quot;na&quot;&gt;nginx&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;linuxserver/letsencrypt&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;80:80&quot;&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;443:443&quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;blognet&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;restart&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;always&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;PGID=1001&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;PUID=1001&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;EMAIL=demoblog@serdarkuzucu.com&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;URL=demoblog.serdarkuzucu.com&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;VALIDATION=http&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;TZ=Europe/Istanbul&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;bind&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;source&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/docker-storage/nginx&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/config&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;cap_add&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;NET_ADMIN&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;networks&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;blognet&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;overlay&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;5-i̇lk-çalıştırma&quot;&gt;5. İlk Çalıştırma&lt;/h2&gt;
+
+&lt;p&gt;Gerekli docker imajlarının docker-hub’dan indirilmesi ve sistemin ilk çalışması için &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; 
+dosyasının bulunduğu dizine gidip &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose up&lt;/code&gt; komutunu çalıştırıyoruz:&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /root/demoblog
+docker-compose up
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Önce aşağıdakine benzer loglar göreceksiniz konsolda. 
+Bu loglar ilgili imajların sunucunuza download edilmesi ve container’ların yaratılmasını gösteriyor:&lt;/p&gt;
+
+&lt;div class=&quot;language-text highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;WARNING: The Docker Engine you're using is running in swarm mode.
+
+Compose does not use swarm mode to deploy services to multiple nodes in a swarm. All containers will be scheduled on the current node.
+
+To deploy your application across the swarm, use `docker stack deploy`.
+
+Creating network &quot;demoblog_blognet&quot; with driver &quot;overlay&quot;
+Pulling db (mysql:5.7)...
+5.7: Pulling from library/mysql
+5e6ec7f28fb7: Pull complete
+4140e62498e1: Pull complete
+e7bc612618a0: Pull complete
+1af808cf1124: Pull complete
+ff72a74ebb66: Pull complete
+3a28cb03e3dc: Pull complete
+2b52dda3bd7d: Pull complete
+dd1e5bc08c44: Pull complete
+2cbf322d346d: Pull complete
+7193a395fe03: Pull complete
+d177f9940737: Pull complete
+Pulling wordpress (wordpress:latest)...
+latest: Pulling from library/wordpress
+5e6ec7f28fb7: Already exists
+cf165947b5b7: Pull complete
+7bd37682846d: Pull complete
+99daf8e838e1: Pull complete
+ae320713efba: Pull complete
+ebcb99c48d8c: Pull complete
+9867e71b4ab6: Pull complete
+936eb418164a: Pull complete
+5d9617dfb66b: Pull complete
+8dd7afaae109: Pull complete
+8f207844da7e: Pull complete
+adb3ae5e4987: Pull complete
+44d7d07029db: Pull complete
+fb91064652b0: Pull complete
+82c9b5a8edaa: Pull complete
+e4dd0c780baf: Pull complete
+7fffc6e7f6c5: Pull complete
+f0ae5fa697b5: Pull complete
+97328ab7f1f4: Pull complete
+Pulling nginx (linuxserver/letsencrypt:)...
+latest: Pulling from linuxserver/letsencrypt
+238a51429c53: Pull complete
+0683a10793b6: Pull complete
+de3626289736: Pull complete
+95c6c6a9162f: Pull complete
+d406f0fb0060: Pull complete
+acf94a921b10: Pull complete
+66ea58380f91: Pull complete
+Creating demoblog_db_1    ... done
+Creating demoblog_nginx_1     ... done
+Creating demoblog_wordpress_1 ... done
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Daha sonra container’ların logları görülecek. 
+5-6 dakika gibi uzunca bir süre beklemeniz gerekebilir çünkü nginx container’ının letsencrypt.org’dan 
+sertifika oluşturması biraz zaman alıyor.&lt;/p&gt;
+
+&lt;p&gt;Tüm container’lar ayağa kalktığında en son şu logu göreceksiniz:&lt;/p&gt;
+
+&lt;div class=&quot;language-text highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;nginx_1      | [services.d] done.
+nginx_1      | Server ready
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Bu aşamadan sonra tarayıcımızda blog adresimize https şemasıyla gidersek aşağıdaki gibi bir sayfa göreceğiz:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/nginx-is-up-https.png&quot; alt=&quot;nginx is up&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Adres çubuğundaki yeşil kilit simgesi ne de güzel parlıyor değil mi? 
+Bu letsencrypt üzerinden aldığımız sertifikanın başarıyla alan adımıza kurulduğunu gösteriyor.&lt;/p&gt;
+
+&lt;p&gt;Peki şimdiye kadar ne elde ettik? Bir bakalım:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Geçerli bir ssl sertifikası ile https üzerinden iletişim kurabildiğimiz bir nginx sunucumuz var 
+fakat wordpress ile iletişim halinde değil.&lt;/li&gt;
+  &lt;li&gt;Eğer https yerine http ile blogumuza erişmek istersek nginx’in http portunu dinlemediğini göreceğiz. 
+Bu da adresinizi ezbere bilen okuyucularınızın yanlışlıkla http adrese girdiklerinde blogunuza 
+ulaşamamasına sebep olacaktır.&lt;/li&gt;
+  &lt;li&gt;Bir wordpress/apache kurulumumuz var fakat dışarıya açmadığımız için tarayıcımızdan erişemiyoruz.&lt;/li&gt;
+  &lt;li&gt;Wordpress tarafından okunabilen bir mysql sunucumuz var, bunu da dışarıya açmadığımız için 
+kendi hallerinde takılıyorlar.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Yazının devamında bu eksiklikleri gidereceğiz.&lt;/p&gt;
+
+&lt;h2 id=&quot;6-reverse-proxy-ve-http-https-yönlendirme&quot;&gt;6. Reverse Proxy ve Http-&amp;gt;Https Yönlendirme&lt;/h2&gt;
+
+&lt;p&gt;Öncelikle yukarıdaki adımlarda geldiğimiz son noktada &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose up&lt;/code&gt; demiştik 
+ve terminalimizde hala bu işlem açık durumda bekliyor. Klavyemizdeki &lt;code class=&quot;highlighter-rouge&quot;&gt;CTRL + C&lt;/code&gt; tuşlarına birlikte 
+basarak bu işlemi sonlandırıyoruz. 
+Böylece açık olan uygulamalarımız da kapanmış oluyor.&lt;/p&gt;
+
+&lt;p&gt;Öncelikle Wordpress’in https reverse-proxy üzerinden gelen isteklerde sapıtmaması için &lt;code class=&quot;highlighter-rouge&quot;&gt;wp-config.php&lt;/code&gt; dosyasında 
+aşağıdaki satırları buluyoruz. &lt;code class=&quot;highlighter-rouge&quot;&gt;wp-config.php&lt;/code&gt; dosyası şurada: &lt;code class=&quot;highlighter-rouge&quot;&gt;/docker-storage/wordpress/wp-config.php&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cd&quot;&gt;/** Sets up WordPress vars and included files. */&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;require_once&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ABSPATH&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'wp-settings.php'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Bulduğumuz bu satırların hemen &lt;strong&gt;üzerine&lt;/strong&gt; aşağıdaki kodu yapıştırıyoruz. Aman URL’leri değiştirmeyi unutmayın.&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Begin: Modified by hand for https reverse-proxy&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HTTP_X_FORWARDED_PROTO'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'https'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HTTPS'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'on'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;isset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HTTP_X_FORWARDED_HOST'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HTTP_HOST'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HTTP_X_FORWARDED_HOST'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;isset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HTTP_X_FORWARDED_FOR'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;explode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;','&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HTTP_X_FORWARDED_FOR'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'REMOTE_ADDR'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;define&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'WP_HOME'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'https://demoblog.serdarkuzucu.com'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;define&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'WP_SITEURL'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'https://demoblog.serdarkuzucu.com'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;define&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'FORCE_SSL_ADMIN'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# End: Modified&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;wp-config.php&lt;/code&gt; dosyasıyla işimiz bu kadar. Kaydedip dosyayı kapatabilirsiniz.&lt;/p&gt;
+
+&lt;p&gt;Şimdi sıra nginx konfigürasyonunu düzeltmeye geldi. 
+Şu dosyayı favori text editörümüzle açalım: &lt;code class=&quot;highlighter-rouge&quot;&gt;/docker-storage/nginx/nginx/site-confs/default&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;İçindeki her şeyi silip aşağıdaki kodu yapıştıralım. 
+Adresleri yine değiştirmeyi unutmayın aman diyeyim.&lt;/p&gt;
+
+&lt;div class=&quot;language-nginx highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Redirect all http:80 requests to https!&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;server&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kn&quot;&gt;listen&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;80&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;default_server&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kn&quot;&gt;listen&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;[::]:80&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;default_server&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kn&quot;&gt;server_name&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kn&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;301&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$host$request_uri&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Default Server will redirect us to demoblog.serdarkuzucu.com&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;server&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kn&quot;&gt;listen&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;443&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ssl&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;default_server&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kn&quot;&gt;server_name&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# all ssl related config moved to ssl.conf&lt;/span&gt;
+        &lt;span class=&quot;kn&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;/config/nginx/ssl.conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kn&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;301&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;https://demoblog.serdarkuzucu.com&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Blog Reverse Proxy&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;server&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kn&quot;&gt;listen&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;443&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ssl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;kn&quot;&gt;server_name&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;demoblog.serdarkuzucu.com&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;c1&quot;&gt;# all ssl related config moved to ssl.conf&lt;/span&gt;
+        &lt;span class=&quot;kn&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;/config/nginx/ssl.conf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;kn&quot;&gt;client_max_body_size&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;kn&quot;&gt;location&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;kn&quot;&gt;proxy_set_header&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Host&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;kn&quot;&gt;proxy_set_header&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;X-Real-IP&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$remote_addr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;kn&quot;&gt;proxy_set_header&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;X-Forwarded-For&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$proxy_add_x_forwarded_for&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;kn&quot;&gt;proxy_set_header&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;X-Forwarded-Host&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;kn&quot;&gt;proxy_set_header&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;X-Forwarded-Proto&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$scheme&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;kn&quot;&gt;proxy_pass&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://wordpress:80&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Bu dosyayı da kaydedip kapatalım. Şimdi sistemi ayağa kaldırma vakti. 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; dosyamızı koyduğumuz yeri unutmadınız değil mi? 
+O dizine &lt;code class=&quot;highlighter-rouge&quot;&gt;cd /root/demoblog&lt;/code&gt; komutuyla geri dönüyoruz ve aşağıdaki komutla sistemi başlatıyoruz. 
+Bu sefer tüm logları terminalde görmeyeceğiz çünkü detached modda başlatıyoruz.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker-compose up &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Terminalde sadece şu logları göreceğiz, sonra komut terminal oturumumuzu özgür bırakacak:&lt;/p&gt;
+
+&lt;div class=&quot;language-text highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;WARNING: The Docker Engine you're using is running in swarm mode.
+
+Compose does not use swarm mode to deploy services to multiple nodes in a swarm. All containers will be scheduled on the current node.
+
+To deploy your application across the swarm, use `docker stack deploy`.
+
+Starting demoblog_nginx_1 ... done
+Starting demoblog_db_1    ... done
+Starting demoblog_wordpress_1 ... done
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Bir süre container’lar açılsın diye bekledikten sonra blog adresimizi tarayıcımızda açarsak artık nginx 
+hata sayfası yerine wordpress kurulum ekranının açıldığını göreceğiz.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/wp-is-up-https.png&quot; alt=&quot;Worpress is up&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Wordpress kurulumunda bundan sonrasını siz halledersiniz. Gerisi next, next, next :)&lt;/p&gt;
+
+&lt;p&gt;Eğer aynı adrese http şemasıyla girersek, 
+nginx’e yaptığımız konfigürasyon sayesinde sitenin https’e yönlendirdiğini görebiliriz.&lt;/p&gt;
+
+&lt;p&gt;Biraz daha ileri gidip, &lt;code class=&quot;highlighter-rouge&quot;&gt;reboot&lt;/code&gt; komutu ile sunucuyu yeniden başlattım. 
+Sunucu tekrar açıldığında tüm container’ların da açılmış olduğunu 
+ve sistemin çalışır vaziyette olduğunu test etmiş oldum.&lt;/p&gt;
+
+&lt;h2 id=&quot;7-bitirirken&quot;&gt;7. Bitirirken&lt;/h2&gt;
+
+&lt;p&gt;Pek çok teknolojiyi detaylarına pek az hakim olarak bir arada çalıştırdık. 
+Ufak tefek birkaç not düşüp konuyu artık daha fazla uzatmayacağım.&lt;/p&gt;
+
+&lt;p&gt;Mysql container’ından hiçbir portu dışarıya açmadık. 
+Bu doğrudan veritabanınıza gelebilecek saldırıları engeller.&lt;/p&gt;
+
+&lt;p&gt;Wordpress/Apache container’ının üzerinden de hiç bir portu dışarıya açmadık. 
+Böylece IP:PORT şeklinde sunucunuzdaki apache’ye doğrudan saldırganların gelmesini engellemiş olduk.&lt;/p&gt;
+
+&lt;p&gt;Letsencrypt üzerinden oluşturulan sertifikaların geçerlilik tarihi 90 gündür. 
+nginx container’ını oluştururken kullandığımız &lt;code class=&quot;highlighter-rouge&quot;&gt;linuxserver/letsencrypt&lt;/code&gt; imajını oldukça başarılı hazırlamışlar, 
+sertifika bitiş tarihi gelirken otomatik olarak sertifikayı yeniliyor. 
+Böylece sertifika yenileme ile de uğraşmamış oluyoruz.&lt;/p&gt;
+
+&lt;p&gt;Sunucunuzu yeni aldığınızda root kullanıcısı dışında sudo yetkisi olan başka bir kullanıcı oluşturun 
+ve mümkünse root kullanıcısını ssh ile login olmaya kapatın. 
+Sunuculara yapılan otomatikleştirilmiş saldırıların çoğu root kullanıcısına gelir.&lt;/p&gt;
+
+&lt;p&gt;Bu gecelik söyleyeceklerim veya söylemeyi planladıklarımdan hatırlayabildiklerim bu kadar. Kodlu geceler.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 04 Feb 2019 22:42:00 +0000</pubDate>
+        <link>https://sedran.github.io/docker-wordpress-https-nginx-letsencrypt</link>
+        <guid isPermaLink="true">https://sedran.github.io/docker-wordpress-https-nginx-letsencrypt</guid>
+        
+        
+        <category>Docker</category>
+        
+        <category>Wordpress</category>
+        
+        <category>nginx</category>
         
       </item>
     

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>https://sedran.github.io/docker-wordpress-https-nginx-letsencrypt</loc>
+<lastmod>2019-02-04T22:42:00+00:00</lastmod>
+</url>
+<url>
 <loc>https://sedran.github.io/bootstrap-4-grid-system</loc>
 <lastmod>2019-02-10T18:03:00+00:00</lastmod>
 </url>
@@ -17,6 +21,15 @@
 </url>
 <url>
 <loc>https://sedran.github.io/</loc>
+</url>
+<url>
+<loc>https://sedran.github.io/category/docker/</loc>
+</url>
+<url>
+<loc>https://sedran.github.io/category/wordpress/</loc>
+</url>
+<url>
+<loc>https://sedran.github.io/category/nginx/</loc>
 </url>
 <url>
 <loc>https://sedran.github.io/category/bootstrap/</loc>
