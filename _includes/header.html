@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
   <div class="container">
     <a class="navbar-brand sk-logo" href="{{ site.baseurl }}/">
       <img src="/assets/main/logo-white.png" alt="{{ site.title }}">
@@ -10,8 +10,19 @@
 
     <div class="collapse navbar-collapse" id="topNavbar">
       <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for category in site.categories %}
+            <a href="/category/{{ category[0] | slugify }}" class="dropdown-item">{{ category[0] }} ({{ category[1].size }})</a>
+            {% endfor %}
+          </div>
+        </li>
+
         <li class="nav-item">
-          <a class="nav-link" href="https://serdarkuzucu.com/about"><i class="fa fa-user"></i> Hakkımda</a>
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
         </li>
       </ul>
       <form class="form-inline my-2 my-lg-0" method="GET" action="https://serdarkuzucu.com/">
@@ -25,25 +36,3 @@
     </div>
   </div>
 </nav>
-
-
-<!--<header class="site-header">-->
-
-<!--  <div class="wrapper">-->
-
-<!--    <a class="site-title" href=""></a>-->
-
-<!--    <nav class="site-nav">-->
-
-<!--      <div class="trigger">-->
-<!--        {% for my_page in site.pages %}-->
-<!--          {% if my_page.title %}-->
-<!--          <a class="page-link" href="{{ my_page.url | prepend: site.baseurl }}">{{ my_page.title }}</a>-->
-<!--          {% endif %}-->
-<!--        {% endfor %}-->
-<!--      </div>-->
-<!--    </nav>-->
-
-<!--  </div>-->
-
-<!--</header>-->

@@ -5,6 +5,10 @@ date:   2019-02-12 02:37:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
 permalink: /user-threads-vs-daemon-threads
+author: Serdar Kuzucu
+comments: true
+post_identifier: user-threads-vs-daemon-threads
+featured_image: /assets/posts/java-threads.jpg
 ---
 
 Java'da birden fazla görevi eş zamanlı gerçekleştirmek istediğimizde 

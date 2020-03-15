@@ -53,9 +53,116 @@ $on-laptop:        800px;
 ;
 
 @import 'bootstrap/scss/bootstrap';
+@import 'fontawesome/scss/fontawesome';
+@import 'fontawesome/scss/regular';
+@import 'fontawesome/scss/solid';
+@import 'fontawesome/scss/brands';
+
+html {
+  position: relative;
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 100%;
+  background-color: #ffffff;
+}
+
+.blog-content {
+  flex: 1 0 auto; /* 2 */
+  padding: 0;
+  width: 100%;
+}
+
+.blog-content::after {
+  content: '\00a0'; /* &nbsp; */
+  display: block;
+  margin-top: 0;
+  height: 0;
+  visibility: hidden;
+}
 
 .sk-logo img {
   width: 60px;
   height: 30px;
   object-fit: cover;
+}
+
+.home .post-featured-image {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  margin: 0 20px 0 0;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.about-social {
+  width: 30px;
+  height: 30px;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  background-color: #0A246A;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 12px;
+  line-height: 29px;
+  color: #FFFFFF;
+  margin-right: 5px;
+}
+
+.blog-footer .about-social {
+  width: 30px;
+  height: 30px;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+@media (min-width: 576px) {
+  .blog-footer .about-social {
+    width: 40px;
+    height: 40px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    font-size: 25px;
+    line-height: 40px;
+  }
+}
+
+.about-social:hover, .about-social:visited {
+  color: #FFFFFF;
+}
+
+.about-social-fb {
+  background-color: #3f51b5 !important;
+}
+
+.about-social-tw {
+  background-color: #2196F3 !important;
+}
+
+.about-social-in {
+  background-color: #1565C0 !important;
+}
+
+.about-social-so {
+  background-color: #DD792E !important;
+}
+
+.about-social-rss {
+  background-color: #ee802f !important;
+}
+
+.about-social-gh {
+  background-color: #ffffff !important;
+  color: #24292e !important;
 }

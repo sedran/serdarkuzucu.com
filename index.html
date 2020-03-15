@@ -3,20 +3,29 @@ layout: default
 ---
 
 <div class="home">
-
-  <h1 class="page-heading">Posts</h1>
-
-  <ul class="post-list">
+  <div class="post-list">
     {% for post in site.posts %}
-      <li>
+    <div class="media mb-5">
+      <img class="post-featured-image mr-3" src="{{ post.featured_image }}" alt="{{ post.title }}">
+      <div class="media-body">
+        <h5 class="mt-0">
+          <a class="text-dark" href="{{ post.url | prepend: site.baseurl }}" rel="bookmark">
+            <u>{{ post.title }}</u>
+          </a>
+        </h5>
         <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
-
-        <h2>
-          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-        </h2>
-      </li>
+        {% if post.categories %}
+        <div>
+          {% for category in post.categories %}
+          <a class="btn btn-outline-dark btn-sm" href="/category/{{ category | slugify }}">{{ category }}</a>
+          {% endfor %}
+        </div>
+        {% endif %}
+        <p>{{ post.excerpt }}</p>
+      </div>
+    </div>
     {% endfor %}
-  </ul>
+  </div>
 
   <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
 

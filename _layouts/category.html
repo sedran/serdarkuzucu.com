@@ -1,0 +1,16 @@
+---
+layout: default
+---
+
+<h1>{{ page.title }} Kategorisinde {{ page.posts.size }} Yazı Mevcuttur</h1>
+
+{% for post in page.posts %}
+
+<div>
+    <h4><a href="{{ post.url | prepend: site.baseurl }}"><u>{{ post.title }}</u></a></h4>
+    <p>
+        <time datetime="2020-03-03T00:00:00+00:00"> {{ post.date | date: "%d %b %Y" }} </time>
+    </p>
+</div>
+
+{% endfor %}
