@@ -25,9 +25,11 @@
           <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0" method="GET" action="https://serdarkuzucu.com/">
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="{{ site.google_search_url }}">
+        <input type="hidden" name="sitesearch" value="{{ site.url }}" />
         <div class="input-group">
-          <input type="search" class="form-control border-primary" name="s" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
           <div class="input-group-append">
             <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
           </div>

@@ -21,6 +21,8 @@ facebook_link: https://www.facebook.com/srdrkzc
 github_link: https://github.com/sedran
 excerpt_separator: <!--more-->
 
+google_search_url: http://www.google.com/search
+
 # Build settings
 markdown: kramdown
 
