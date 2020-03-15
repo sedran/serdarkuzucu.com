@@ -5,7 +5,6 @@ date:   2019-02-05 01:42:00 +0300
 categories: [Docker, Wordpress, nginx]
 author: Serdar Kuzucu
 permalink: /docker-wordpress-https-nginx-letsencrypt
-author: Serdar Kuzucu
 comments: true
 post_identifier: docker-wordpress-https-nginx-letsencrypt
 featured_image: /assets/posts/docker-group-wp.png

@@ -5,7 +5,6 @@ date:   2019-02-14 01:49:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
 permalink: /slf4j-mdc-kullanarak-log-takibini-kolaylastirma
-author: Serdar Kuzucu
 comments: true
 post_identifier: slf4j-mdc-kullanarak-log-takibini-kolaylastirma
 featured_image: /assets/posts/logging-wood.jpg
