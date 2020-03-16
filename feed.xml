@@ -4,10 +4,10 @@
     <title>Serdar Kuzucu</title>
     <description>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
 </description>
-    <link>https://sedran.github.io/</link>
-    <atom:link href="https://sedran.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 16 Mar 2020 22:10:13 +0000</pubDate>
-    <lastBuildDate>Mon, 16 Mar 2020 22:10:13 +0000</lastBuildDate>
+    <link>http://demo.serdarkuzucu.com/</link>
+    <atom:link href="http://demo.serdarkuzucu.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Mon, 16 Mar 2020 22:16:18 +0000</pubDate>
+    <lastBuildDate>Mon, 16 Mar 2020 22:16:18 +0000</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
     
       <item>
@@ -341,8 +341,8 @@ Sorularınız olursa aşağıdaki yorum formunu dilediğiniz gibi doldurabilirsi
 Sizin de MDC ile ilgili farklı kullanım senaryolarınız varsa duymak isterim.&lt;/p&gt;
 </description>
         <pubDate>Wed, 13 Feb 2019 22:49:00 +0000</pubDate>
-        <link>https://sedran.github.io/slf4j-mdc-kullanarak-log-takibini-kolaylastirma</link>
-        <guid isPermaLink="true">https://sedran.github.io/slf4j-mdc-kullanarak-log-takibini-kolaylastirma</guid>
+        <link>http://demo.serdarkuzucu.com/slf4j-mdc-kullanarak-log-takibini-kolaylastirma</link>
+        <guid isPermaLink="true">http://demo.serdarkuzucu.com/slf4j-mdc-kullanarak-log-takibini-kolaylastirma</guid>
         
         
         <category>Java</category>
@@ -546,8 +546,8 @@ User thread sonlandığında doğrudan aşağı indirdi.&lt;/p&gt;
 &lt;p&gt;İyi geceler.&lt;/p&gt;
 </description>
         <pubDate>Mon, 11 Feb 2019 23:37:00 +0000</pubDate>
-        <link>https://sedran.github.io/user-threads-vs-daemon-threads</link>
-        <guid isPermaLink="true">https://sedran.github.io/user-threads-vs-daemon-threads</guid>
+        <link>http://demo.serdarkuzucu.com/user-threads-vs-daemon-threads</link>
+        <guid isPermaLink="true">http://demo.serdarkuzucu.com/user-threads-vs-daemon-threads</guid>
         
         
         <category>Java</category>
@@ -805,8 +805,8 @@ Bootstrap birçok faydalı bileşen barındıran büyük bir kütüphane.
 Birçok bileşenini kullanmasanız da sadece grid sistemi için bile kullanılabilir.&lt;/p&gt;
 </description>
         <pubDate>Sun, 10 Feb 2019 18:03:00 +0000</pubDate>
-        <link>https://sedran.github.io/bootstrap-4-grid-system</link>
-        <guid isPermaLink="true">https://sedran.github.io/bootstrap-4-grid-system</guid>
+        <link>http://demo.serdarkuzucu.com/bootstrap-4-grid-system</link>
+        <guid isPermaLink="true">http://demo.serdarkuzucu.com/bootstrap-4-grid-system</guid>
         
         
         <category>Bootstrap</category>
@@ -1295,8 +1295,8 @@ Sunuculara yapılan otomatikleştirilmiş saldırıların çoğu root kullanıc�
 &lt;p&gt;Bu gecelik söyleyeceklerim veya söylemeyi planladıklarımdan hatırlayabildiklerim bu kadar. Kodlu geceler.&lt;/p&gt;
 </description>
         <pubDate>Mon, 04 Feb 2019 22:42:00 +0000</pubDate>
-        <link>https://sedran.github.io/docker-wordpress-https-nginx-letsencrypt</link>
-        <guid isPermaLink="true">https://sedran.github.io/docker-wordpress-https-nginx-letsencrypt</guid>
+        <link>http://demo.serdarkuzucu.com/docker-wordpress-https-nginx-letsencrypt</link>
+        <guid isPermaLink="true">http://demo.serdarkuzucu.com/docker-wordpress-https-nginx-letsencrypt</guid>
         
         
         <category>Docker</category>
@@ -1620,8 +1620,8 @@ Böyle durumlarda yorumlarınız ile beni düzeltmekten geri kalmayın.&lt;/p&gt
 
 </description>
         <pubDate>Mon, 05 Jun 2017 07:59:00 +0000</pubDate>
-        <link>https://sedran.github.io/data-abstraction-nedir-nerede-bulunur</link>
-        <guid isPermaLink="true">https://sedran.github.io/data-abstraction-nedir-nerede-bulunur</guid>
+        <link>http://demo.serdarkuzucu.com/data-abstraction-nedir-nerede-bulunur</link>
+        <guid isPermaLink="true">http://demo.serdarkuzucu.com/data-abstraction-nedir-nerede-bulunur</guid>
         
         
         <category>Java</category>
@@ -2000,8 +2000,8 @@ elime geçmesini sabırsızlıkla bekliyorum.&lt;/p&gt;
 
 </description>
         <pubDate>Sun, 28 May 2017 02:12:00 +0000</pubDate>
-        <link>https://sedran.github.io/visitor-design-pattern</link>
-        <guid isPermaLink="true">https://sedran.github.io/visitor-design-pattern</guid>
+        <link>http://demo.serdarkuzucu.com/visitor-design-pattern</link>
+        <guid isPermaLink="true">http://demo.serdarkuzucu.com/visitor-design-pattern</guid>
         
         
         <category>Java</category>
@@ -2193,8 +2193,8 @@ Başka bir yazıda görüşmek üzere, yorumlarınızı beklerim :)&lt;/p&gt;
 
 </description>
         <pubDate>Thu, 03 Feb 2011 00:18:00 +0000</pubDate>
-        <link>https://sedran.github.io/javada-swing-ile-basit-bir-pencere-yapalim</link>
-        <guid isPermaLink="true">https://sedran.github.io/javada-swing-ile-basit-bir-pencere-yapalim</guid>
+        <link>http://demo.serdarkuzucu.com/javada-swing-ile-basit-bir-pencere-yapalim</link>
+        <guid isPermaLink="true">http://demo.serdarkuzucu.com/javada-swing-ile-basit-bir-pencere-yapalim</guid>
         
         
         <category>Java</category>

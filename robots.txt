@@ -1,1 +1,1 @@
-Sitemap: https://sedran.github.io/sitemap.xml
+Sitemap: http://demo.serdarkuzucu.com/sitemap.xml
