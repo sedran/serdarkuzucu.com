@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Shell Scripts: Case Komutu</title>
+  <meta name="description" content="Linux Shell Script Geliştirmek diye başladığım yazı dizisinin bir diğer yazısında daha birlikteyiz. if/elif/else komutlarını sık sık kullanmaya başladığınızd...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://demo.serdarkuzucu.com/shell-scripts-case-komutu">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="http://demo.serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/java" class="dropdown-item">Java (7)</a>
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (8)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (1)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (1)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="http://demo.serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Shell Scripts: Case Komutu</h1>
+    <p class="post-meta">
+      <time datetime="2015-07-07T23:41:00+00:00" itemprop="datePublished">Jul 7, 2015</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/bash">Bash</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/linux">Linux</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p><a href="/linux-shell-script-gelistirmek">Linux Shell Script Geliştirmek</a> diye başladığım yazı dizisinin 
+bir diğer yazısında daha birlikteyiz. <code class="highlighter-rouge">if/elif/else</code> komutlarını sık sık kullanmaya başladığınızda farkedeceksiniz ki, 
+bir çok zaman tek bir değişkenin değerini kontrol ediyoruz. 
+Örneğin komut satırından gelen parametrenin değeri 1 ise şunu yap, 2 ise bunu yap, 3 ise başka birşey yap. 
+Böyle tek bir değişkeni kontrol etmemiz gerektiğinde <code class="highlighter-rouge">if/elif/else</code> yazmak çok sıkıcı bir hale dönüşebiliyor. 
+Peki değişkenin ismini sadece bir kere yazsak ve alabileceği her değer için sadece çalışacak kodları söylesek?</p>
+
+<!--more-->
+
+<p>Bu gibi durumlarda işimizi kolaylaştırması için <code class="highlighter-rouge">case</code> adında hoş bir kontrol komutumuz var. 
+Örneğin komut satırından geçilen bir parametrenin değeri “disk” ise disk istatistiklerini, 
+“memory” ise bellek istatistiklerini göstermek istiyorsunuz.
+Şu şekilde yazabilirsiniz bu programı:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c"># HelloWorld Application 7</span>
+<span class="c"># case</span>
+
+<span class="k">case</span> <span class="nv">$1</span> <span class="k">in
+    </span>disk   <span class="p">)</span> <span class="nb">df</span> <span class="p">;;</span>
+    memory <span class="p">)</span> free <span class="p">;;</span>
+    <span class="k">*</span>      <span class="p">)</span> <span class="nb">echo</span> <span class="s2">"Please enter disk or memory"</span> <span class="p">;;</span>
+<span class="k">esac</span>
+</code></pre></div></div>
+
+<p>Bu programı case ismiyle kaydedip daha sonra <code class="highlighter-rouge">./case disk</code> diye çalıştırırsak, <code class="highlighter-rouge">df</code> komutu çalışacak. 
+<code class="highlighter-rouge">./case memory</code> şeklinde çalıştırırsak, <code class="highlighter-rouge">free</code> komutu çalışacak.</p>
+
+<p>Eğer başka bir parametre ile çağırırsak, hata mesajı gösterilecek. 
+En sonraki “*” anahtar kelimesi, disk ve memory dışındaki herşeyle eşleşiyor.</p>
+
+<p>Aşağıdaki şekilde uzun uzun yazmak da mümkün. 
+Her bir durum için birden fazla komut girilebilir.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c"># HelloWorld Application 8</span>
+<span class="c"># case</span>
+
+<span class="k">case</span> <span class="nv">$1</span> <span class="k">in
+    </span>disk <span class="p">)</span>
+        <span class="nb">echo</span> <span class="s2">"Disk stats will be printed."</span>
+        <span class="nb">df 
+        echo</span> <span class="s2">"Disk stats were printed."</span>
+        <span class="p">;;</span>
+    memory <span class="p">)</span>
+        <span class="nb">echo</span> <span class="s2">"Memory stats were printed."</span>
+        free
+        <span class="nb">echo</span> <span class="s2">"Memory stats were printed."</span>
+        <span class="p">;;</span>
+    <span class="k">*</span> <span class="p">)</span>
+        <span class="nb">echo</span> <span class="s2">"Please enter disk or memory"</span>
+        <span class="p">;;</span>
+<span class="k">esac</span>
+</code></pre></div></div>
+
+<p>Örneğin komut satırından alacağımız 5 tane parametre olsun fakat bu parametrelerin sırası bizi hiç ilgilendirmesin. 
+Mesela bilgisayarımızda o anda çalışan işlemlerin kaydını bir dosyaya yazalım.</p>
+
+<ul>
+  <li>Programımızın ismi processes olsun</li>
+  <li><code class="highlighter-rouge">-f filename</code> parametresi geçilirse kullanıcının girdiği isimde bir dosya yaratılsın ve output oraya kaydedilsin.</li>
+  <li>Dosya ismi parametre geçilmezse, şu anki tarih ve saat ile bir dosya yaratalım.</li>
+  <li><code class="highlighter-rouge">-z</code> parametresi geçilirse outputu kaydettiğimiz dosyayı gzip ile zipleyelim.</li>
+  <li><code class="highlighter-rouge">-p</code> parametresi geçilirse outputu ekrana da yazdıralım.</li>
+  <li><code class="highlighter-rouge">-q searchString</code> parametresi girilirse, içinde sadece aranan keyword geçen processlerin outputu alalım.</li>
+  <li><code class="highlighter-rouge">--help</code> parametresi girilirse, programın nasıl kullanılacağını anlatan bir metin gösterip diğer parametreleri yoksayacağız.</li>
+</ul>
+
+<p>Anlayacağınız üzere, komut satırından birkaç tane parametre gelişigüzel girilecek. 
+Girilip girilmemeleri ve hangi sırayla girilecekleri tamamen kullanıcıya kalmış.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c"># Learning case/esac</span>
+
+<span class="nv">DATE</span><span class="o">=</span><span class="si">$(</span><span class="nb">date</span> +<span class="s2">"%Y_%m_%d-%H_%M_%S"</span><span class="si">)</span>
+<span class="nv">output_file</span><span class="o">=</span><span class="s2">"proc_</span><span class="nv">$DATE</span><span class="s2">"</span>
+
+<span class="nv">useGzip</span><span class="o">=</span><span class="s2">"false"</span>
+<span class="nv">printOutput</span><span class="o">=</span><span class="s2">"false"</span>
+<span class="nv">searchText</span><span class="o">=</span><span class="s2">""</span>
+
+<span class="c"># Read all parameters</span>
+<span class="k">until</span> <span class="o">[[</span> <span class="s2">"$#"</span> <span class="o">=</span> <span class="s2">"0"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">do
+    case</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="k">in</span>
+        <span class="nt">-f</span> <span class="p">)</span>
+            <span class="nb">shift
+            </span><span class="nv">output_file</span><span class="o">=</span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span>
+            <span class="p">;;</span>
+        <span class="nt">-z</span> <span class="p">)</span>
+            <span class="nv">useGzip</span><span class="o">=</span><span class="s2">"true"</span>
+            <span class="p">;;</span>
+        <span class="nt">-p</span> <span class="p">)</span>
+            <span class="nv">printOutput</span><span class="o">=</span><span class="s2">"true"</span>
+            <span class="p">;;</span>
+        <span class="nt">-q</span> <span class="p">)</span>
+            <span class="nb">shift
+            </span><span class="nv">searchText</span><span class="o">=</span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span>
+            <span class="p">;;</span>
+        <span class="nt">--help</span><span class="p">|</span><span class="k">*</span> <span class="p">)</span>
+            <span class="nb">echo</span> <span class="s2">"Welcome to our little processes program"</span>
+            <span class="nb">echo</span> <span class="s2">"Here are some options you may like:"</span>
+            <span class="nb">echo</span> <span class="s2">"    -f &lt;filename&gt;  : change the name of output file"</span>
+            <span class="nb">echo</span> <span class="s2">"    -z             : gzip the output file"</span>
+            <span class="nb">echo</span> <span class="s2">"    -p             : print the output to the console"</span>
+            <span class="nb">echo</span> <span class="s2">"    -q &lt;searchTxt&gt; : show lines only containing searchTxt"</span>
+            <span class="nb">echo</span> <span class="s2">"    --help         : prints this help message"</span>
+            <span class="nb">exit</span>
+            <span class="p">;;</span>
+    <span class="k">esac</span>
+    
+    <span class="nb">shift
+</span><span class="k">done
+
+</span><span class="nv">processes</span><span class="o">=</span><span class="s2">""</span>
+
+<span class="c"># Does user want filtering the output?</span>
+<span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$searchText</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">""</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="c"># No filtering</span>
+    <span class="nv">processes</span><span class="o">=</span><span class="si">$(</span>ps <span class="nt">-ef</span><span class="si">)</span>
+<span class="k">else</span>
+    <span class="c"># Filter lines using grep and searchText</span>
+    <span class="nv">processes</span><span class="o">=</span><span class="si">$(</span>ps <span class="nt">-ef</span> | <span class="nb">grep</span> <span class="s2">"</span><span class="nv">$searchText</span><span class="s2">"</span><span class="si">)</span>
+<span class="k">fi</span>
+
+<span class="c"># Should I print output to console?</span>
+<span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$printOutput</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">"true"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$processes</span><span class="s2">"</span>
+<span class="k">fi</span>
+
+<span class="c"># Write output to the file</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="nv">$processes</span><span class="s2">"</span> <span class="o">&gt;</span> <span class="s2">"</span><span class="nv">$output_file</span><span class="s2">"</span>
+
+<span class="c"># Should I use gzip?</span>
+<span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$useGzip</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">"true"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="c"># Gzip the output file</span>
+    <span class="nb">gzip</span> <span class="s2">"</span><span class="nv">$output_file</span><span class="s2">"</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>Döngü ile parametreleri okuyup parametreleri <code class="highlighter-rouge">shift</code> komutuyla kaydırmayı 
+<a href="/shell-scripts-while-ve-until-donguleri">While ve Until Döngüleri</a> isimli yazımda yazmıştım. 
+Yukarıdaki until döngüsü de aynı şekilde shift yöntemi ile tüm parametreleri okuyor 
+ve parametrelerin değerini kontrol etmek için <code class="highlighter-rouge">case</code> komutunu kullanıyor. 
+Parametrelerin değerlerini kontrol ettikten sonra uygun değişkenlerin değerlerini değiştiriyoruz. 
+Örneğin <code class="highlighter-rouge">-p</code> parametresini gördüğümüzde, <code class="highlighter-rouge">printOutput</code> isimli değişkenin değerini <code class="highlighter-rouge">true</code> yapıyoruz. 
+Programın ilerleyen kısımlarında bu değişkeni kontrol ediyoruz ve değeri <code class="highlighter-rouge">true</code> ise çıktıyı ekrana yazdırıyoruz.</p>
+
+<p>Nasıl buldunuz <code class="highlighter-rouge">case</code> komutunu?
+Parametreleri bu şekilde okuduğumuzda hem kullanıcıyı parametreleri belli bir sırayla girmek zorunda bırakmıyoruz, 
+hem de kodumuz daha şık görünüyor. 
+Bu programı aşağıdaki kombinasyonlarla kullanabilirsiniz:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./processes -f myoutput.txt
+./processes -z -p
+./processes -q java -p -f javaprocesses.out
+./processes --help
+./processes -p -f somefile.log -z -q chrome
+</code></pre></div></div>
+
+<p>Eğer aynı bir işlemi birden fazla değerle yapmak istiyorsanız, 
+bunu da pipe(<code class="highlighter-rouge">|</code>) işareti kullanarak belirtebiliyorsunuz. 
+Mesela yukarıdaki kodda bazı alternatifler ekleyebiliriz. 
+Aşağıdaki gibi, parametre seçeneklerimize eşanlamlı seçenekler ekleyelim:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">-f</code> yerine <code class="highlighter-rouge">--file</code> kullanılabilsin.</li>
+  <li><code class="highlighter-rouge">-p</code> yerine <code class="highlighter-rouge">--print</code> kullanılabilsin.</li>
+  <li><code class="highlighter-rouge">-q</code> yerine <code class="highlighter-rouge">--query</code> kullanılabilsin.</li>
+  <li><code class="highlighter-rouge">-z</code> yerine <code class="highlighter-rouge">--zip</code> kullanılabilsin.</li>
+</ul>
+
+<p>Bu durumda yukarıdaki kodun <code class="highlighter-rouge">case</code> kısmı aşağıdaki gibi şekillenecek:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">case</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="k">in</span>
+    <span class="nt">-f</span><span class="p">|</span><span class="nt">--file</span> <span class="p">)</span>
+        <span class="nb">shift
+        </span><span class="nv">output_file</span><span class="o">=</span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span>
+        <span class="p">;;</span>
+    <span class="nt">-z</span><span class="p">|</span><span class="nt">--zip</span> <span class="p">)</span>
+        <span class="nv">useGzip</span><span class="o">=</span><span class="s2">"true"</span>
+        <span class="p">;;</span>
+    <span class="nt">-p</span><span class="p">|</span><span class="nt">--print</span> <span class="p">)</span>
+        <span class="nv">printOutput</span><span class="o">=</span><span class="s2">"true"</span>
+        <span class="p">;;</span>
+    <span class="nt">-q</span><span class="p">|</span><span class="nt">--query</span> <span class="p">)</span>
+        <span class="nb">shift
+        </span><span class="nv">searchText</span><span class="o">=</span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span>
+        <span class="p">;;</span>
+    <span class="nt">--help</span><span class="p">|</span><span class="k">*</span> <span class="p">)</span>
+        <span class="nb">echo</span> <span class="s2">"Welcome to our little processes program"</span>
+        <span class="nb">echo</span> <span class="s2">"Here are some options you may like:"</span>
+        <span class="nb">echo</span> <span class="s2">"    -f | --file &lt;filename&gt;    : change the name of output file"</span>
+        <span class="nb">echo</span> <span class="s2">"    -z | --zip                : gzip the output file"</span>
+        <span class="nb">echo</span> <span class="s2">"    -p | --print              : print the output to the console"</span>
+        <span class="nb">echo</span> <span class="s2">"    -q | --query &lt;searchTxt&gt;  : show lines only containing searchTxt"</span>
+        <span class="nb">echo</span> <span class="s2">"    --help                    : prints this help message"</span>
+        <span class="nb">exit</span>
+        <span class="p">;;</span>
+<span class="k">esac</span>
+</code></pre></div></div>
+
+<p>Ve bu programı aşağıdaki şekillerde de kullanabiliyoruz artık:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./processes --file myoutput.txt
+./processes --zip --print
+./processes --query java --print --file javaprocesses.out
+./processes --help
+./processes --print -f somefile.log -z --query chrome
+</code></pre></div></div>
+
+<p>Bu gecelik anlatmak istediklerim de bu kadar sayın seyirciler. 
+Umarım işlerinizi çılgınca hızlandırabilecek Shell Script’ler yazabilirsiniz.</p>
+
+  </div>
+
+</article>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'http://demo.serdarkuzucu.com/shell-scripts-case-komutu';
+        this.page.identifier = 'shell-scripts-case-komutu';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>

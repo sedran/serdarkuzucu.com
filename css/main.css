@@ -288,7 +288,7 @@ mark, .mark { padding: 0.2em; background-color: #fcf8e3; }
 
 .initialism { font-size: 90%; text-transform: uppercase; }
 
-.blockquote { margin-bottom: 1rem; font-size: 1.25rem; }
+.blockquote, blockquote { margin-bottom: 1rem; font-size: 1.25rem; }
 
 .blockquote-footer { display: block; font-size: 0.875rem; color: #6c757d; }
 

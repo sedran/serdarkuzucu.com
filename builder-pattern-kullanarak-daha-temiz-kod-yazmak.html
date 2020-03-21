@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Builder Pattern Kullanarak Daha Temiz Kod Yazmak</title>
+  <meta name="description" content="Yazılım geliştirirken sık sık onlarca parametre alan metodlar geliştirmek zorunda kalmışsınızdır. Eğer temiz kod yazma konusunda özen sahibiyseniz bu tarz me...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://demo.serdarkuzucu.com/builder-pattern-kullanarak-daha-temiz-kod-yazmak">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="http://demo.serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/java" class="dropdown-item">Java (7)</a>
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (8)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (1)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (1)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="http://demo.serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Builder Pattern Kullanarak Daha Temiz Kod Yazmak</h1>
+    <p class="post-meta">
+      <time datetime="2017-05-06T20:18:00+00:00" itemprop="datePublished">May 6, 2017</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    
+<p>Yazılım geliştirirken sık sık onlarca parametre alan metodlar geliştirmek zorunda kalmışsınızdır. 
+Eğer temiz kod yazma konusunda özen sahibiyseniz bu tarz metodlar yazmak sizi oldukça rahatsız etmiş 
+ve zamanla çeşitli alternatif çözüm yolları edinmişsinizdir.</p>
+
+<p>Bu yazıda bu soruna “<a href="https://en.wikipedia.org/wiki/Builder_pattern">Builder Pattern</a>” kullanarak bir çözüm bulmaya çalışacağız. 
+Bu yazıyı yazarken <em>Uzi Landsmann</em>‘ın <a href="http://blog.jayway.com/">blogunda</a> yazdığı 
+<a href="https://blog.jayway.com/2012/02/07/builder-pattern-with-a-twist/">“Builder pattern with a twist”</a> yazısından esinlendim. 
+İngilizce ile aranız iyiyse o yazıyı da okumanızı tavsiye ederim.</p>
+
+<!--more-->
+
+<p>Diyelim ki ücretli servisleriniz olan bir sistemde müşterilere aylık/haftalık abonelikler yaratıyorsunuz 
+ve bu abonelikleri aşağıdaki <code class="highlighter-rouge">Subscription</code> sınıfı ile temsil ediyorsunuz.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.builderpattern</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Subscription</span> <span class="o">{</span>
+  <span class="kd">private</span> <span class="nc">Long</span> <span class="n">id</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="nc">Long</span> <span class="n">serviceId</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="nc">Long</span> <span class="n">customerId</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="nc">Date</span> <span class="n">createDate</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="nc">Date</span> <span class="n">startDate</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="nc">Date</span> <span class="n">endDate</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="nc">Date</span> <span class="n">lastRenewalDate</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="nc">Date</span> <span class="n">nextRenewalDate</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">renewalCount</span><span class="o">;</span>
+  <span class="kd">private</span> <span class="nc">SubscriptionStatus</span> <span class="n">status</span><span class="o">;</span>
+
+  <span class="cm">/* Getters and Setters */</span>
+
+  <span class="kd">public</span> <span class="kd">enum</span> <span class="nc">SubscriptionStatus</span> <span class="o">{</span>
+    <span class="no">ACTIVE</span><span class="o">,</span> <span class="no">INACTIVE</span><span class="o">,</span> <span class="no">SUSPENDED</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Abonelikleri yarattınız, sistem tıkır tıkır işliyor. 
+Derken pazarlama ekibinden bir arkadaş geldi ve her zamanki gibi “benim rapor almam lazım” diyerek 
+aşağıdaki tasarıma uygun bir sayfa yapmanızı, abonelikleri belirtilen kriterlere uygun olarak listelemenizi 
+ve sayfa başına 20 abonelik göstermenizi istedi.</p>
+
+<p><img src="/assets/posts/builder-blog-image-1.png" alt="Builder Pattern" /></p>
+
+<p>Pazarlama ekipleri genellikle bundan daha fazlasını isterler 
+ama biz de bununla idare edin deriz. 
+Hatta şu alana göre rapor almak istiyorum bu alana göre rapor almak istiyorum diye 
+tüm alanları ekrana koydururlar ve herşeyi ekranda görünce de 
+bu çok karışık biz bunu anlamıyoruz derler. :)</p>
+
+<p>Bu sayfayı beslemek için, bu ekrandaki tüm parametreleri alan bir metoda ihtiyacımız var. 
+Parametreler iki üç tane olsaydı aşağıdaki gibi hepsini bir metoda doldurabilirdik.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.builderpattern</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.asosyalbebe.blog.builderpattern.Subscription.SubscriptionStatus</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">SubscriptionService</span> <span class="o">{</span>
+  <span class="nc">SearchResult</span><span class="o">&lt;</span><span class="nc">Subscription</span><span class="o">&gt;</span> <span class="nf">searchSubscriptions</span><span class="o">(</span>
+      <span class="nc">Long</span> <span class="n">id</span><span class="o">,</span> <span class="nc">Long</span> <span class="n">serviceId</span><span class="o">,</span> <span class="nc">Long</span> <span class="n">customerId</span><span class="o">,</span> <span class="nc">Date</span> <span class="n">createDateAfter</span><span class="o">,</span> <span class="nc">Date</span> <span class="n">createDateBefore</span><span class="o">,</span>
+      <span class="nc">Date</span> <span class="n">endDateBefore</span><span class="o">,</span> <span class="nc">Date</span> <span class="n">lastRenewalDateAfter</span><span class="o">,</span> <span class="nc">Date</span> <span class="n">lastRenewalDateBefore</span><span class="o">,</span> <span class="nc">Date</span> <span class="n">nextRenewalDateAfter</span><span class="o">,</span>
+      <span class="nc">Date</span> <span class="n">nextRenewalDateBefore</span><span class="o">,</span> <span class="nc">Integer</span> <span class="n">renewedMoreThan</span><span class="o">,</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">SubscriptionStatus</span><span class="o">&gt;</span> <span class="n">status</span><span class="o">,</span> 
+      <span class="kt">int</span> <span class="n">offset</span><span class="o">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Ama malesef burada tamı tamına 14 tane parametre var. 
+Bu methodu çağırana da yazık, ileride metodu refactor edip yeni parametre ekleyecek olana da yazık. 
+Özellikle metoda ileride yeni bir parametre ekleneceğinde, 
+birisinin bu metodu çağıran tüm sınıfları dolaşıp her yere 
+o parametreyi de eklemesi gerekecek ve ofiste ortalık kan gölüne dönecek.</p>
+
+<p>Bu gibi durumlarda çözüm olarak genellikle böyle metodlara 
+tüm bu alanları kapsayan bir nesnenin parametre olarak geçilmesi yöntemi kullanılıyor. 
+Yani önce aşağıdaki gibi bir sınıf tanımlanıyor:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.builderpattern</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.asosyalbebe.blog.builderpattern.Subscription.SubscriptionStatus</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SubscriptionSearchQuery</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">serviceId</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">customerId</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">createDateAfter</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">createDateBefore</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">endDateBefore</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">lastRenewalDateAfter</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">lastRenewalDateBefore</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">nextRenewalDateAfter</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">nextRenewalDateBefore</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">renewedMoreThan</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">SubscriptionStatus</span><span class="o">&gt;</span> <span class="n">status</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">offset</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">;</span>
+
+    <span class="cm">/* Getters and Setters */</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Daha sonra sorguyu yapacak olan metoda parametre olarak bu sınıfın bir nesnesi geçiliyor:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.builderpattern</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">SubscriptionService</span> <span class="o">{</span>
+    <span class="nc">SearchResult</span><span class="o">&lt;</span><span class="nc">Subscription</span><span class="o">&gt;</span> <span class="nf">searchSubscriptions</span><span class="o">(</span><span class="nc">SubscriptionSearchQuery</span> <span class="n">query</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Gördüğünüz gibi metodun imzası nasıl da rahatladı, nasıl da küçüldü. 
+Sıradaki problem, <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfından bir nesne nasıl yaratılacak 
+ve üzerindeki bu 14 alan nasıl doldurulacak? 
+Aşağıda (bana göre) kötüden iyiye bu tarz durumlarda uygulanan çeşitli yöntemleri sıralamış bulundum.</p>
+
+<h3 id="1-tüm-parametreleri-constructor-ile-almak">1. Tüm Parametreleri <code class="highlighter-rouge">constructor</code> ile Almak</h3>
+
+<p>Bildiğim en kötü yöntem bu. 
+14 parametreli bir <code class="highlighter-rouge">constructor</code> yazmanın, listeleme yapan metodun 14 parametreye sahip olmasından hiçbir farkı yok. 
+Aşağıda gözünüzü tırmalaması için örneğini de utanmadan gösteriyorum.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">SubscriptionSearchQuery</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SubscriptionSearchQuery</span><span class="o">(</span><span class="mi">123312L</span><span class="o">,</span> <span class="mi">3178236L</span><span class="o">,</span> <span class="mi">572734L</span><span class="o">,</span>
+    <span class="n">createDateAfter</span><span class="o">,</span> <span class="n">createDateBefore</span><span class="o">,</span> <span class="n">endDateBefore</span><span class="o">,</span> <span class="n">lastRenewalDateAfter</span><span class="o">,</span>
+    <span class="n">lastRenewalDateBefore</span><span class="o">,</span> <span class="n">nextRenewalDateAfter</span><span class="o">,</span> <span class="n">nextRenewalDateBefore</span><span class="o">,</span> <span class="mi">12</span><span class="o">,</span>
+    <span class="nc">Sets</span><span class="o">.</span><span class="na">newHashSet</span><span class="o">(</span><span class="nc">SubscriptionStatus</span><span class="o">.</span><span class="na">ACTIVE</span><span class="o">,</span> <span class="nc">SubscriptionStatus</span><span class="o">.</span><span class="na">SUSPENDED</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">20</span><span class="o">);</span>
+
+<span class="nc">SearchResult</span><span class="o">&lt;</span><span class="nc">Subscription</span><span class="o">&gt;</span> <span class="n">subscriptions</span> <span class="o">=</span> <span class="n">subscriptionService</span>
+    <span class="o">.</span><span class="na">searchSubscriptions</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>Yazarken parmaklarım ağladı vallahi.</p>
+
+<h3 id="2-tüm-parametreleri-setter-ile-doldurmak">2. Tüm Parametreleri <code class="highlighter-rouge">Setter</code> ile Doldurmak</h3>
+
+<p>Yukarıdakine göre nispeten daha çok kullanılan bir yöntem. 
+Nesne türetilirken <code class="highlighter-rouge">constructor</code> hiç parametre almaz. 
+Nesne türetildikten sonra tüm alanlar <code class="highlighter-rouge">setter</code> metodlar kullanılarak doldurulur. 
+Bu yöntemin kötü tarafı basit bir nesneyi oluşturup doldurmak için 15 satır kod yazıyor olmak bence. 
+Yazılım geliştirme esnasında böyle bir kod bloğu ile karşılaştığımda genellikle 
+durup bu durumu nasıl düzeltebileceğimi düşünürüm. 
+Düzeltmek çok efor gerektiriyorsa, kodu ilk yazanın arkasından okkalı bir küfür edip geçerim.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">SubscriptionSearchQuery</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SubscriptionSearchQuery</span><span class="o">();</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="mi">123312L</span><span class="o">);</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setCustomerId</span><span class="o">(</span><span class="mi">3178236L</span><span class="o">);</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setServiceId</span><span class="o">(</span><span class="mi">572734L</span><span class="o">);</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setCreateDateAfter</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">());</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setCreateDateBefore</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">());</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setEndDateBefore</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">());</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setLastRenewalDateAfter</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">());</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setLastRenewalDateBefore</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">());</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setNextRenewalDateAfter</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">());</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setNextRenewalDateBefore</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">());</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setRenewedMoreThan</span><span class="o">(</span><span class="mi">12</span><span class="o">);</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setStatus</span><span class="o">(</span><span class="nc">Sets</span><span class="o">.</span><span class="na">newHashSet</span><span class="o">(</span><span class="nc">SubscriptionStatus</span><span class="o">.</span><span class="na">ACTIVE</span><span class="o">,</span> <span class="nc">SubscriptionStatus</span><span class="o">.</span><span class="na">SUSPENDED</span><span class="o">));</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setOffset</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setLimit</span><span class="o">(</span><span class="mi">20</span><span class="o">);</span>
+
+<span class="nc">SearchResult</span><span class="o">&lt;</span><span class="nc">Subscription</span><span class="o">&gt;</span> <span class="n">subscriptions</span> <span class="o">=</span> <span class="n">subscriptionService</span>
+    <span class="o">.</span><span class="na">searchSubscriptions</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+</code></pre></div></div>
+
+<h3 id="3-zorunlu-parametreleri-constructor-ile-almak-ve-gerisini-setter-ile-doldurmak">3. Zorunlu Parametreleri <code class="highlighter-rouge">constructor</code> ile Almak ve Gerisini <code class="highlighter-rouge">Setter</code> ile Doldurmak</h3>
+
+<p>Diyelim ki kullandığımız veritabanının limitasyonları nedeniyle 
+aboneliklerin oluşturma tarihini sorgularda mutlaka kullanmamız gerekiyor. 
+Bu durumda sayfa tasarımında da bu alanları zorunlu yaptık, 
+sayfayı kullananlar bu alanları doldurmadan abonelik listeleyemiyorlar. 
+Bu alanları <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfımızda da zorunlu alan yapabiliriz 
+ve bunun için <code class="highlighter-rouge">constructor</code> kullanabiliriz. 
+Ayrıca sayfalama için kullandığımız <code class="highlighter-rouge">offset</code> ve <code class="highlighter-rouge">limit</code> parametrelerini de 
+zorunlu alan varsayıp <code class="highlighter-rouge">constructor</code>‘a koyabiliriz. 
+Geri kalan tüm alanları da zorunlu olmadıkları için <code class="highlighter-rouge">setter</code> metodlar yardımıyla doldururuz. 
+Aşağıdaki gibi bir kod ortaya çıkar. 
+Ard arda bu kadar çok <code class="highlighter-rouge">setter</code> çağrısı görmek, 
+birçok kişinin kodu okurken kodun yaptığı esas işe odaklanmasını zorlaştıracaktır.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">SubscriptionSearchQuery</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SubscriptionSearchQuery</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">20</span><span class="o">,</span> <span class="n">createDateBegin</span><span class="o">,</span> <span class="n">createDateEnd</span><span class="o">);</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="mi">123312L</span><span class="o">);</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setCustomerId</span><span class="o">(</span><span class="mi">3178236L</span><span class="o">);</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setServiceId</span><span class="o">(</span><span class="mi">572734L</span><span class="o">);</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setEndDateBefore</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">());</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setLastRenewalDateAfter</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">());</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setLastRenewalDateBefore</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">());</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setNextRenewalDateAfter</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">());</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setNextRenewalDateBefore</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">());</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setRenewedMoreThan</span><span class="o">(</span><span class="mi">12</span><span class="o">);</span>
+<span class="n">query</span><span class="o">.</span><span class="na">setStatus</span><span class="o">(</span><span class="nc">Sets</span><span class="o">.</span><span class="na">newHashSet</span><span class="o">(</span><span class="nc">SubscriptionStatus</span><span class="o">.</span><span class="na">ACTIVE</span><span class="o">,</span> <span class="nc">SubscriptionStatus</span><span class="o">.</span><span class="na">SUSPENDED</span><span class="o">));</span>
+
+<span class="nc">SearchResult</span><span class="o">&lt;</span><span class="nc">Subscription</span><span class="o">&gt;</span> <span class="n">subscriptions</span> <span class="o">=</span> <span class="n">subscriptionService</span>
+    <span class="o">.</span><span class="na">searchSubscriptions</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+</code></pre></div></div>
+
+<h3 id="4-builder-pattern-kullanarak-nesneyi-oluşturmak">4. <code class="highlighter-rouge">Builder Pattern</code> Kullanarak Nesneyi Oluşturmak</h3>
+
+<p><code class="highlighter-rouge">Builder Pattern</code>, builder adında ikinci bir sınıf tanımlayarak esas nesnenin oluşturulma işini bu sınıfa bırakmaktır. 
+Builder sınıfları genellikle <code class="highlighter-rouge">Method Chaining</code> kurgusuna uygun tasarlanmaktadır. 
+Yani builder sınıfındaki bir setter method çağırıldığında, bu method üzerinde bulunduğu builder nesnesini döner. 
+Böylelikle setter metodları ard arda dizebiliriz. 
+Böylece hiçbir zaman builder sınıfının türünde bir değişken tutmak zorunda kalmıyoruz.</p>
+
+<p>Konumuzdan bağımsız olarak, kodun güzel görünecek olmasının yanında, 
+builder design pattern kullanmanın önemli avantajlarından bir tanesi de oluşturmaya çalıştığımız objenin 
+oluşturma süreci tamamlanıncaya kadar elimizde olmamasıdır. 
+Yani Builder sınıfının nesnesi ile işimiz bitinceye kadar alanları henüz tamamlanmamış, 
+yarım yamalak bir objeye asla sahip olmuyoruz.</p>
+
+<p><code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfı için bir builder sınıfı nasıl tanımlanmış, 
+aşağıdaki kodda hep birlikte inceleyelim.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.builderpattern</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.asosyalbebe.blog.builderpattern.Subscription.SubscriptionStatus</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SubscriptionSearchQuery</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">serviceId</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">customerId</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">createDateAfter</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">createDateBefore</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">endDateBefore</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">lastRenewalDateAfter</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">lastRenewalDateBefore</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">nextRenewalDateAfter</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">nextRenewalDateBefore</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">renewedMoreThan</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">SubscriptionStatus</span><span class="o">&gt;</span> <span class="n">status</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">offset</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nf">SubscriptionSearchQuery</span><span class="o">(</span><span class="nc">Builder</span> <span class="n">builder</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">id</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">serviceId</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">serviceId</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">customerId</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">customerId</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">createDateAfter</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">createDateAfter</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">createDateBefore</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">createDateBefore</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">endDateBefore</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">endDateBefore</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">lastRenewalDateAfter</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">lastRenewalDateAfter</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">lastRenewalDateBefore</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">lastRenewalDateBefore</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">nextRenewalDateAfter</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">nextRenewalDateAfter</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">nextRenewalDateBefore</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">nextRenewalDateBefore</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">renewedMoreThan</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">renewedMoreThan</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">status</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">status</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">offset</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">offset</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">limit</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">limit</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Builder</span> <span class="nf">builder</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">Builder</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="cm">/* Getters */</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Builder</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="nc">Long</span> <span class="n">id</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Long</span> <span class="n">serviceId</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Long</span> <span class="n">customerId</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Date</span> <span class="n">createDateAfter</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Date</span> <span class="n">createDateBefore</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Date</span> <span class="n">endDateBefore</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Date</span> <span class="n">lastRenewalDateAfter</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Date</span> <span class="n">lastRenewalDateBefore</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Date</span> <span class="n">nextRenewalDateAfter</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Date</span> <span class="n">nextRenewalDateBefore</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">renewedMoreThan</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">SubscriptionStatus</span><span class="o">&gt;</span> <span class="n">status</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">offset</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">;</span>
+
+        <span class="kd">private</span> <span class="nf">Builder</span><span class="o">()</span> <span class="o">{</span>
+            <span class="c1">// Hide constructor from outside of SubscriptionSearchQuery</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">Builder</span> <span class="nf">subscriptionId</span><span class="o">(</span><span class="nc">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">Builder</span> <span class="nf">serviceId</span><span class="o">(</span><span class="nc">Long</span> <span class="n">serviceId</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">serviceId</span> <span class="o">=</span> <span class="n">serviceId</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">Builder</span> <span class="nf">customerId</span><span class="o">(</span><span class="nc">Long</span> <span class="n">customerId</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">customerId</span> <span class="o">=</span> <span class="n">customerId</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">Builder</span> <span class="nf">createDateAfter</span><span class="o">(</span><span class="nc">Date</span> <span class="n">createDateAfter</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">createDateAfter</span> <span class="o">=</span> <span class="n">createDateAfter</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">Builder</span> <span class="nf">createDateBefore</span><span class="o">(</span><span class="nc">Date</span> <span class="n">createDateBefore</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">createDateBefore</span> <span class="o">=</span> <span class="n">createDateBefore</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">Builder</span> <span class="nf">endDateBefore</span><span class="o">(</span><span class="nc">Date</span> <span class="n">endDateBefore</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">endDateBefore</span> <span class="o">=</span> <span class="n">endDateBefore</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">Builder</span> <span class="nf">lastRenewalDateAfter</span><span class="o">(</span><span class="nc">Date</span> <span class="n">lastRenewalDateAfter</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">lastRenewalDateAfter</span> <span class="o">=</span> <span class="n">lastRenewalDateAfter</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">Builder</span> <span class="nf">lastRenewalDateBefore</span><span class="o">(</span><span class="nc">Date</span> <span class="n">lastRenewalDateBefore</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">lastRenewalDateBefore</span> <span class="o">=</span> <span class="n">lastRenewalDateBefore</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">Builder</span> <span class="nf">nextRenewalDateAfter</span><span class="o">(</span><span class="nc">Date</span> <span class="n">nextRenewalDateAfter</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">nextRenewalDateAfter</span> <span class="o">=</span> <span class="n">nextRenewalDateAfter</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">Builder</span> <span class="nf">nextRenewalDateBefore</span><span class="o">(</span><span class="nc">Date</span> <span class="n">nextRenewalDateBefore</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">nextRenewalDateBefore</span> <span class="o">=</span> <span class="n">nextRenewalDateBefore</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">Builder</span> <span class="nf">renewedMoreThan</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">renewedMoreThan</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">renewedMoreThan</span> <span class="o">=</span> <span class="n">renewedMoreThan</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">Builder</span> <span class="nf">status</span><span class="o">(</span><span class="nc">Set</span><span class="o">&lt;</span><span class="nc">SubscriptionStatus</span><span class="o">&gt;</span> <span class="n">status</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">status</span> <span class="o">=</span> <span class="n">status</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">Builder</span> <span class="nf">offset</span><span class="o">(</span><span class="kt">int</span> <span class="n">offset</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">offset</span> <span class="o">=</span> <span class="n">offset</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">Builder</span> <span class="nf">limit</span><span class="o">(</span><span class="kt">int</span> <span class="n">limit</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">limit</span> <span class="o">=</span> <span class="n">limit</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">SubscriptionSearchQuery</span> <span class="nf">build</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">SubscriptionSearchQuery</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Öncelikle <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfının içerisinde <code class="highlighter-rouge">static</code> bir <code class="highlighter-rouge">Builder</code> sınıfı tanımladık 
+ve <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfındaki tüm alanları bu sınıfın içerisine de yazdık. 
+Tüm alanları kopyalama işlemi sizi rahatsız ettiyse normal. 
+İlerleyen kısımlarda bu kısımları da refactor edeceğiz.</p>
+
+<p><code class="highlighter-rouge">Builder</code> sınıfında ilk dikkatinizi çekmesi gereken nokta, <code class="highlighter-rouge">private constructor</code> sahibi olması. 
+Yani <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfının dışından <code class="highlighter-rouge">new</code> anahtar kelimesi ile bu sınıfın nesnesi türetilemez. 
+Onun yerine, <code class="highlighter-rouge">SubscriptionSearchQuery</code> içerisindeki <code class="highlighter-rouge">builder()</code> <code class="highlighter-rouge">static</code> metodu ile 
+istenilen yerden bir <code class="highlighter-rouge">Builder</code> nesnesi alabileceğiz.</p>
+
+<p>İkinci önemli nokta ise <code class="highlighter-rouge">Builder</code> sınıfının tüm setter metodlarının dönüş tipinin <code class="highlighter-rouge">Builder</code> olması 
+ve her metodun <code class="highlighter-rouge">Builder</code> nesnesi dönmesi. 
+Bu da <code class="highlighter-rouge">Builder</code>‘ı kullanarak <code class="highlighter-rouge">SubscriptionSearchQuery</code> nesnesi üretmeye çalışan kişinin çok işine yarayacak.</p>
+
+<p>Üçüncü önemli nokta, <code class="highlighter-rouge">Builder</code> sınıfının içindeki <code class="highlighter-rouge">build()</code> metodu. 
+Bu metod artık <code class="highlighter-rouge">Builder</code> sınıfı ile işimiz bittiğinde 
+ve <code class="highlighter-rouge">SubscriptionSearchQuery</code> nesnesini oluşturmak istediğimizde çağıracağımız metod.</p>
+
+<p>Son önemli nokta da <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfındaki <code class="highlighter-rouge">constructor</code>‘ı <code class="highlighter-rouge">private</code> yapmış olmamız. 
+Böylece <code class="highlighter-rouge">Builder</code> sınıfının <code class="highlighter-rouge">build()</code> metodu dışında kimse <code class="highlighter-rouge">SubscriptionSearchQuery</code> nesnesi türetemeyecek. 
+Bu <code class="highlighter-rouge">constructor</code> kısaca bir <code class="highlighter-rouge">Builder</code> nesnesini parametre olarak alıyor 
+ve üzerindeki tüm alanları kendisine kopyalıyor.</p>
+
+<p>Aşağıdaki kod bu <code class="highlighter-rouge">Builder</code> sınıfının nasıl kullanıldığını göstermektedir.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">SubscriptionSearchQuery</span> <span class="n">query</span> <span class="o">=</span> <span class="nc">SubscriptionSearchQuery</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">subscriptionId</span><span class="o">(</span><span class="mi">1231231L</span><span class="o">).</span><span class="na">serviceId</span><span class="o">(</span><span class="mi">123123L</span><span class="o">).</span><span class="na">customerId</span><span class="o">(</span><span class="mi">123123L</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">createDateAfter</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">()).</span><span class="na">createDateBefore</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">endDateBefore</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">lastRenewalDateAfter</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">()).</span><span class="na">lastRenewalDateBefore</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">nextRenewalDateAfter</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">()).</span><span class="na">nextRenewalDateBefore</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">renewedMoreThan</span><span class="o">(</span><span class="mi">12</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">status</span><span class="o">(</span><span class="nc">Sets</span><span class="o">.</span><span class="na">newHashSet</span><span class="o">(</span><span class="nc">SubscriptionStatus</span><span class="o">.</span><span class="na">ACTIVE</span><span class="o">,</span> <span class="nc">SubscriptionStatus</span><span class="o">.</span><span class="na">SUSPENDED</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">offset</span><span class="o">(</span><span class="mi">0</span><span class="o">).</span><span class="na">limit</span><span class="o">(</span><span class="mi">20</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+
+<span class="nc">SearchResult</span><span class="o">&lt;</span><span class="nc">Subscription</span><span class="o">&gt;</span> <span class="n">subscriptions</span> <span class="o">=</span> <span class="n">subscriptionService</span><span class="o">.</span><span class="na">searchSubscriptions</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>Önce <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfının <code class="highlighter-rouge">static</code> bir metodu olan 
+<code class="highlighter-rouge">builder()</code> metodunu çağırarak bir <code class="highlighter-rouge">Builder</code> nesnesi türettik. 
+Daha sonra <code class="highlighter-rouge">Builder</code> nesnesi üzerindeki tüm setter metodları çağırdık 
+ve en sonunda da <code class="highlighter-rouge">Builder</code> sınıfının <code class="highlighter-rouge">build()</code> metodunu çağırarak verdiğimiz değerler ile 
+<code class="highlighter-rouge">SubscriptionSearchQuery</code> nesnesi oluşmasını sağladık.</p>
+
+<h3 id="5-builder-pattern-ile-zorunlu-parametrelerin-ayrılması">5. <code class="highlighter-rouge">Builder Pattern</code> ile Zorunlu Parametrelerin Ayrılması</h3>
+
+<p>Yukarıdaki çirkin örneklerden birisinde kurguladığımız zorunlu parametreler senaryosunu düşünelim. 
+Örneğin <code class="highlighter-rouge">offset</code>, <code class="highlighter-rouge">limit</code>, <code class="highlighter-rouge">createDateAfter</code> ve <code class="highlighter-rouge">createDateBefore</code> parametreleri yine zorunlu olsun. 
+Yani bu alanlara ait setter metodlar <code class="highlighter-rouge">Builder</code> nesnesi üzerinde çağırılmak zorunda. 
+Bunu basitçe <code class="highlighter-rouge">SubscriptionSearchQuery.builder()</code> metoduna bu parametreleri yazarak yapabiliriz 
+ama böyle yapmak istemiyoruz. 
+Setter metodlarımız olsun ama çağırılmadıklarında build metodundan <code class="highlighter-rouge">Exception</code> fırlatalım? 
+Bu da güzel bir karar değil. 
+Yazının girişinde referans verdiğim <code class="highlighter-rouge">"Builder pattern with a twist"</code> yazısı 
+tam olarak içine düştüğümüz bu duruma değiniyor.</p>
+
+<p>Önce <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfını nasıl değiştirdiğimizi bir görelim. 
+Sonra kodu birlikte inceleyelim.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.builderpattern</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.asosyalbebe.blog.builderpattern.Subscription.SubscriptionStatus</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SubscriptionSearchQuery</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">serviceId</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">customerId</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">createDateAfter</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">createDateBefore</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">endDateBefore</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">lastRenewalDateAfter</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">lastRenewalDateBefore</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">nextRenewalDateAfter</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">nextRenewalDateBefore</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">renewedMoreThan</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">SubscriptionStatus</span><span class="o">&gt;</span> <span class="n">status</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">offset</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nf">SubscriptionSearchQuery</span><span class="o">(</span><span class="nc">Builder</span> <span class="n">builder</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">id</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">serviceId</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">serviceId</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">customerId</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">customerId</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">createDateAfter</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">createDateAfter</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">createDateBefore</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">createDateBefore</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">endDateBefore</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">endDateBefore</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">lastRenewalDateAfter</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">lastRenewalDateAfter</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">lastRenewalDateBefore</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">lastRenewalDateBefore</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">nextRenewalDateAfter</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">nextRenewalDateAfter</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">nextRenewalDateBefore</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">nextRenewalDateBefore</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">renewedMoreThan</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">renewedMoreThan</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">status</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">status</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">offset</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">offset</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">limit</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">limit</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Pagination</span> <span class="nf">builder</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">Builder</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="cm">/* Getters */</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Builder</span> <span class="kd">implements</span> <span class="nc">CreateDateInterval</span><span class="o">,</span> <span class="nc">Pagination</span><span class="o">,</span> <span class="nc">OptionalParameters</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="nc">Long</span> <span class="n">id</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Long</span> <span class="n">serviceId</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Long</span> <span class="n">customerId</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Date</span> <span class="n">createDateAfter</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Date</span> <span class="n">createDateBefore</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Date</span> <span class="n">endDateBefore</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Date</span> <span class="n">lastRenewalDateAfter</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Date</span> <span class="n">lastRenewalDateBefore</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Date</span> <span class="n">nextRenewalDateAfter</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Date</span> <span class="n">nextRenewalDateBefore</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">renewedMoreThan</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">SubscriptionStatus</span><span class="o">&gt;</span> <span class="n">status</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">offset</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">;</span>
+
+        <span class="kd">private</span> <span class="nf">Builder</span><span class="o">()</span> <span class="o">{</span>
+            <span class="c1">// Hide constructor from outside of SubscriptionSearchQuery</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">subscriptionId</span><span class="o">(</span><span class="nc">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">serviceId</span><span class="o">(</span><span class="nc">Long</span> <span class="n">serviceId</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">serviceId</span> <span class="o">=</span> <span class="n">serviceId</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">customerId</span><span class="o">(</span><span class="nc">Long</span> <span class="n">customerId</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">customerId</span> <span class="o">=</span> <span class="n">customerId</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">endDateBefore</span><span class="o">(</span><span class="nc">Date</span> <span class="n">endDateBefore</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">endDateBefore</span> <span class="o">=</span> <span class="n">endDateBefore</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">lastRenewalDateAfter</span><span class="o">(</span><span class="nc">Date</span> <span class="n">lastRenewalDateAfter</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">lastRenewalDateAfter</span> <span class="o">=</span> <span class="n">lastRenewalDateAfter</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">lastRenewalDateBefore</span><span class="o">(</span><span class="nc">Date</span> <span class="n">lastRenewalDateBefore</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">lastRenewalDateBefore</span> <span class="o">=</span> <span class="n">lastRenewalDateBefore</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">nextRenewalDateAfter</span><span class="o">(</span><span class="nc">Date</span> <span class="n">nextRenewalDateAfter</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">nextRenewalDateAfter</span> <span class="o">=</span> <span class="n">nextRenewalDateAfter</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">nextRenewalDateBefore</span><span class="o">(</span><span class="nc">Date</span> <span class="n">nextRenewalDateBefore</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">nextRenewalDateBefore</span> <span class="o">=</span> <span class="n">nextRenewalDateBefore</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">renewedMoreThan</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">renewedMoreThan</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">renewedMoreThan</span> <span class="o">=</span> <span class="n">renewedMoreThan</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">status</span><span class="o">(</span><span class="nc">Set</span><span class="o">&lt;</span><span class="nc">SubscriptionStatus</span><span class="o">&gt;</span> <span class="n">status</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">status</span> <span class="o">=</span> <span class="n">status</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">CreateDateInterval</span> <span class="nf">pagination</span><span class="o">(</span><span class="kt">int</span> <span class="n">offset</span><span class="o">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">offset</span> <span class="o">=</span> <span class="n">offset</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">limit</span> <span class="o">=</span> <span class="n">limit</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">createDate</span><span class="o">(</span><span class="nc">Date</span> <span class="n">after</span><span class="o">,</span> <span class="nc">Date</span> <span class="n">before</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">createDateAfter</span> <span class="o">=</span> <span class="n">after</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">createDateBefore</span> <span class="o">=</span> <span class="n">before</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">SubscriptionSearchQuery</span> <span class="nf">build</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">SubscriptionSearchQuery</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Pagination</span> <span class="o">{</span>
+        <span class="nc">CreateDateInterval</span> <span class="nf">pagination</span><span class="o">(</span><span class="kt">int</span> <span class="n">offset</span><span class="o">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">CreateDateInterval</span> <span class="o">{</span>
+        <span class="nc">OptionalParameters</span> <span class="nf">createDate</span><span class="o">(</span><span class="nc">Date</span> <span class="n">after</span><span class="o">,</span> <span class="nc">Date</span> <span class="n">before</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">OptionalParameters</span> <span class="o">{</span>
+        <span class="nc">OptionalParameters</span> <span class="nf">subscriptionId</span><span class="o">(</span><span class="nc">Long</span> <span class="n">id</span><span class="o">);</span>
+
+        <span class="nc">OptionalParameters</span> <span class="nf">serviceId</span><span class="o">(</span><span class="nc">Long</span> <span class="n">serviceId</span><span class="o">);</span>
+
+        <span class="nc">OptionalParameters</span> <span class="nf">customerId</span><span class="o">(</span><span class="nc">Long</span> <span class="n">customerId</span><span class="o">);</span>
+
+        <span class="nc">OptionalParameters</span> <span class="nf">endDateBefore</span><span class="o">(</span><span class="nc">Date</span> <span class="n">endDateBefore</span><span class="o">);</span>
+
+        <span class="nc">OptionalParameters</span> <span class="nf">lastRenewalDateAfter</span><span class="o">(</span><span class="nc">Date</span> <span class="n">lastRenewalDateAfter</span><span class="o">);</span>
+
+        <span class="nc">OptionalParameters</span> <span class="nf">lastRenewalDateBefore</span><span class="o">(</span><span class="nc">Date</span> <span class="n">lastRenewalDateBefore</span><span class="o">);</span>
+
+        <span class="nc">OptionalParameters</span> <span class="nf">nextRenewalDateAfter</span><span class="o">(</span><span class="nc">Date</span> <span class="n">nextRenewalDateAfter</span><span class="o">);</span>
+
+        <span class="nc">OptionalParameters</span> <span class="nf">nextRenewalDateBefore</span><span class="o">(</span><span class="nc">Date</span> <span class="n">nextRenewalDateBefore</span><span class="o">);</span>
+
+        <span class="nc">OptionalParameters</span> <span class="nf">renewedMoreThan</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">renewedMoreThan</span><span class="o">);</span>
+
+        <span class="nc">OptionalParameters</span> <span class="nf">status</span><span class="o">(</span><span class="nc">Set</span><span class="o">&lt;</span><span class="nc">SubscriptionStatus</span><span class="o">&gt;</span> <span class="n">status</span><span class="o">);</span>
+
+        <span class="nc">SubscriptionSearchQuery</span> <span class="nf">build</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Builder sınıfından sonra <code class="highlighter-rouge">Pagination</code>, <code class="highlighter-rouge">CreateDateInterval</code> 
+ve <code class="highlighter-rouge">OptionalParameters</code> adında 3 adet <code class="highlighter-rouge">interface</code> tanımı yaptık. 
+Bu <code class="highlighter-rouge">interface</code>‘lerin hepsi <code class="highlighter-rouge">Builder</code> sınıfı tarafından <code class="highlighter-rouge">implement</code> ediliyor.</p>
+
+<p><code class="highlighter-rouge">SubscriptionSearchQuery.builder()</code> metodunun dönüş tipini <code class="highlighter-rouge">Pagination</code> yaptık. 
+Aslında yine <code class="highlighter-rouge">Builder</code> sınıfının bir nesnesini dönüyor 
+fakat metodu çağıran kişi kendisine <code class="highlighter-rouge">Pagination</code> nesnesi gelmiş gibi görüyor. 
+Bu sayede method chain yaparken elimize gelen ilk nesnenin üzerinde 
+sadece <code class="highlighter-rouge">pagination(int offset, int limit)</code> metodu bulunuyor. 
+Mecburen bu metodu çağırıyoruz, böylece <code class="highlighter-rouge">offset</code> ve <code class="highlighter-rouge">limiti</code> belirtmiş oluyoruz. 
+<code class="highlighter-rouge">pagination(int, int)</code> metodunun dönüş tipi ise <code class="highlighter-rouge">CreateDateInterval</code>. 
+Yani <code class="highlighter-rouge">offset</code> ve <code class="highlighter-rouge">limiti</code> belirttikten sonra bize dönen nesnede 
+sadece <code class="highlighter-rouge">createDate(Date after, Date before)</code> metodu var, 
+yani sadece aboneliğin oluşturulma tarih aralığını girebiliyoruz. 
+Bu <code class="highlighter-rouge">createDate(Date, Date)</code> metodunun dönüş tipi ise <code class="highlighter-rouge">OptionalParameters</code>. 
+Bu <code class="highlighter-rouge">interface</code> üzerindeki tüm metodlar <code class="highlighter-rouge">OptionalParameters</code> türünde dönüş yapıyor ta ki <code class="highlighter-rouge">build()</code> metoduna kadar.</p>
+
+<p>Kurduğumuz bu yapı sayesinde <code class="highlighter-rouge">Builder</code> üzerinde önce <code class="highlighter-rouge">offset</code> ve <code class="highlighter-rouge">limit</code>‘in, 
+sonra da <code class="highlighter-rouge">createDateAfter</code> ve <code class="highlighter-rouge">createDateBefore</code> parametrelerinin doldurulmasını sağlamış olduk. 
+Zorunlu olmayan parametrelerden ise istenildiği kadarı doldurulabilir.</p>
+
+<p>Bu yapının da kullanımı aşağıdaki gibi:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">SubscriptionSearchQuery</span> <span class="n">query</span> <span class="o">=</span> <span class="nc">SubscriptionSearchQuery</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">pagination</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">20</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">createDate</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">(),</span> <span class="k">new</span> <span class="nc">Date</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">subscriptionId</span><span class="o">(</span><span class="mi">1231231L</span><span class="o">).</span><span class="na">serviceId</span><span class="o">(</span><span class="mi">123123L</span><span class="o">).</span><span class="na">customerId</span><span class="o">(</span><span class="mi">123123L</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">endDateBefore</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">lastRenewalDateAfter</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">()).</span><span class="na">lastRenewalDateBefore</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">nextRenewalDateAfter</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">()).</span><span class="na">nextRenewalDateBefore</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">renewedMoreThan</span><span class="o">(</span><span class="mi">12</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">status</span><span class="o">(</span><span class="nc">Sets</span><span class="o">.</span><span class="na">newHashSet</span><span class="o">(</span><span class="nc">SubscriptionStatus</span><span class="o">.</span><span class="na">ACTIVE</span><span class="o">,</span> <span class="nc">SubscriptionStatus</span><span class="o">.</span><span class="na">SUSPENDED</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+
+<span class="nc">SearchResult</span><span class="o">&lt;</span><span class="nc">Subscription</span><span class="o">&gt;</span> <span class="n">subscriptions</span> <span class="o">=</span> <span class="n">subscriptionService</span><span class="o">.</span><span class="na">searchSubscriptions</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+</code></pre></div></div>
+
+<h3 id="6-refactoring">6. Refactoring</h3>
+
+<p><code class="highlighter-rouge">SubscriptionSearchQuery</code> nesnesi oluşturabilmek için güzele yakın bir arayüz tasarlamış olduk. 
+Bu blog yazısının amacı temiz kod yazımının özendirilmesi olduğu için, 
+yapılabilecek birkaç geliştirmeyi de es geçmek istemedim.</p>
+
+<p>Mesela zorunlu parametreleri alırken <code class="highlighter-rouge">offset</code> ve <code class="highlighter-rouge">limit</code> parametrelerinin 
+setter metodlarını bire düşürerek güzel bir iş yaptığımızı düşünüyorum. 
+<code class="highlighter-rouge">createDate(Date,Date)</code> metodunda ise abonelik oluşturma tarihi için 
+ayrı ayrı girmekte olduğumuz iki parametreyi birleştirdik. 
+Bunu tarih aralığı girilen diğer metodlara da uyarlayabiliriz. 
+Böylece <code class="highlighter-rouge">Builder</code> nesnesi üzerinden de fazladan iki metod atabiliriz.</p>
+
+<p>Ek olarak, her ne kadar <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfı <code class="highlighter-rouge">Set&lt;SubscriptionStatus&gt;</code> nesnesi tutuyor olsa da, 
+<code class="highlighter-rouge">Builder</code> sınıfının setter metodunda biz kullanıcıdan <code class="highlighter-rouge">Set</code> nesnesi beklemek zorunda değiliz. 
+Java’daki <code class="highlighter-rouge">varargs</code> yapısını kullanarak bu metodu istenildiği kadar 
+<code class="highlighter-rouge">SubscriptionStatus</code> geçilebilir hale getirebiliriz. 
+Metodu çağıran kişiyi de <code class="highlighter-rouge">Set</code> nesnesi oluşturmaya zorlamamış oluruz.</p>
+
+<p>Ayrıca <code class="highlighter-rouge">Builder</code> sınıfı üzerinde <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfının 
+tüm alanlarının kopyasını tuttuğumuzu hatırlarsınız. 
+Bazı sınıfların <code class="highlighter-rouge">Builder</code>‘larını tasarlarken bu şekilde yapmak zorunda kalabilirsiniz 
+ama <code class="highlighter-rouge">SubscriptionSearchQuery</code> çok basit bir sınıf olduğu için, burada <code class="highlighter-rouge">Builder</code> sınıfımızı da basitleştirebiliriz. 
+<code class="highlighter-rouge">Builder</code> sınıfının içinde <code class="highlighter-rouge">SubscriptionSearchQuery</code> nesnesi oluşturacağız 
+ve setter metodlar onun üzerinde işlem yapacaklar. 
+<code class="highlighter-rouge">build()</code> metodu da içerde tutulan <code class="highlighter-rouge">SubscriptionSearchQuery</code> nesnesini dönecek. 
+Bunun en büyük dezavantajı aynı <code class="highlighter-rouge">Builder</code> nesnesi ikinci defa kullanıldığında 
+yeni bir <code class="highlighter-rouge">SubscriptionSearchQuery</code> türetmek yerine aynı nesne referansını dönmesi, 
+yani aynı özelliklerde farklı nesneler üretmeye çalıştığınızda her seferinde yeniden <code class="highlighter-rouge">Builder</code> tanımlamanız gerekmesi. 
+Eğer bu sizin durumunuzda bir dezavantaj olmayacaksa, 
+kodun temiz olması açısından bunu şekilde yazmayı tercih edebilirsiniz.</p>
+
+<p>Anlattığım tüm bu işlemler aşağıdaki kodda mevcuttur.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.builderpattern</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.asosyalbebe.blog.builderpattern.Subscription.SubscriptionStatus</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.google.common.collect.Sets</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Set</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SubscriptionSearchQuery</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">id</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">serviceId</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Long</span> <span class="n">customerId</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">createDateAfter</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">createDateBefore</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">endDateBefore</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">lastRenewalDateAfter</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">lastRenewalDateBefore</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">nextRenewalDateAfter</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Date</span> <span class="n">nextRenewalDateBefore</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Integer</span> <span class="n">renewedMoreThan</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">Set</span><span class="o">&lt;</span><span class="nc">SubscriptionStatus</span><span class="o">&gt;</span> <span class="n">status</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">offset</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nf">SubscriptionSearchQuery</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// Prevent constructing without builder</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Pagination</span> <span class="nf">builder</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">Builder</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="cm">/* Getters */</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Builder</span> <span class="kd">implements</span> <span class="nc">CreateDateInterval</span><span class="o">,</span> <span class="nc">Pagination</span><span class="o">,</span> <span class="nc">OptionalParameters</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="nc">SubscriptionSearchQuery</span> <span class="n">delegate</span><span class="o">;</span>
+
+        <span class="kd">private</span> <span class="nf">Builder</span><span class="o">()</span> <span class="o">{</span>
+            <span class="c1">// Hide constructor from outside of SubscriptionSearchQuery</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">subscriptionId</span><span class="o">(</span><span class="nc">Long</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">delegate</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">serviceId</span><span class="o">(</span><span class="nc">Long</span> <span class="n">serviceId</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">delegate</span><span class="o">.</span><span class="na">serviceId</span> <span class="o">=</span> <span class="n">serviceId</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">customerId</span><span class="o">(</span><span class="nc">Long</span> <span class="n">customerId</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">delegate</span><span class="o">.</span><span class="na">customerId</span> <span class="o">=</span> <span class="n">customerId</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">endDateBefore</span><span class="o">(</span><span class="nc">Date</span> <span class="n">endDateBefore</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">delegate</span><span class="o">.</span><span class="na">endDateBefore</span> <span class="o">=</span> <span class="n">endDateBefore</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">lastRenewalDate</span><span class="o">(</span><span class="nc">Date</span> <span class="n">lastRenewalDateAfter</span><span class="o">,</span> <span class="nc">Date</span> <span class="n">lastRenewalDateBefore</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">delegate</span><span class="o">.</span><span class="na">lastRenewalDateAfter</span> <span class="o">=</span> <span class="n">lastRenewalDateAfter</span><span class="o">;</span>
+            <span class="n">delegate</span><span class="o">.</span><span class="na">lastRenewalDateBefore</span> <span class="o">=</span> <span class="n">lastRenewalDateBefore</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">nextRenewalDate</span><span class="o">(</span><span class="nc">Date</span> <span class="n">nextRenewalDateAfter</span><span class="o">,</span> <span class="nc">Date</span> <span class="n">nextRenewalDateBefore</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">delegate</span><span class="o">.</span><span class="na">nextRenewalDateAfter</span> <span class="o">=</span> <span class="n">nextRenewalDateAfter</span><span class="o">;</span>
+            <span class="n">delegate</span><span class="o">.</span><span class="na">nextRenewalDateBefore</span> <span class="o">=</span> <span class="n">nextRenewalDateBefore</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">renewedMoreThan</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">renewedMoreThan</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">delegate</span><span class="o">.</span><span class="na">renewedMoreThan</span> <span class="o">=</span> <span class="n">renewedMoreThan</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">status</span><span class="o">(</span><span class="nc">SubscriptionStatus</span><span class="o">...</span> <span class="n">statuses</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">delegate</span><span class="o">.</span><span class="na">status</span> <span class="o">=</span> <span class="nc">Sets</span><span class="o">.</span><span class="na">newHashSet</span><span class="o">(</span><span class="n">statuses</span><span class="o">);</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">CreateDateInterval</span> <span class="nf">pagination</span><span class="o">(</span><span class="kt">int</span> <span class="n">offset</span><span class="o">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">delegate</span><span class="o">.</span><span class="na">offset</span> <span class="o">=</span> <span class="n">offset</span><span class="o">;</span>
+            <span class="n">delegate</span><span class="o">.</span><span class="na">limit</span> <span class="o">=</span> <span class="n">limit</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">OptionalParameters</span> <span class="nf">createDate</span><span class="o">(</span><span class="nc">Date</span> <span class="n">after</span><span class="o">,</span> <span class="nc">Date</span> <span class="n">before</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">delegate</span><span class="o">.</span><span class="na">createDateAfter</span> <span class="o">=</span> <span class="n">after</span><span class="o">;</span>
+            <span class="n">delegate</span><span class="o">.</span><span class="na">createDateBefore</span> <span class="o">=</span> <span class="n">before</span><span class="o">;</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="nc">SubscriptionSearchQuery</span> <span class="nf">build</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">delegate</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Pagination</span> <span class="o">{</span>
+        <span class="nc">CreateDateInterval</span> <span class="nf">pagination</span><span class="o">(</span><span class="kt">int</span> <span class="n">offset</span><span class="o">,</span> <span class="kt">int</span> <span class="n">limit</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">CreateDateInterval</span> <span class="o">{</span>
+        <span class="nc">OptionalParameters</span> <span class="nf">createDate</span><span class="o">(</span><span class="nc">Date</span> <span class="n">after</span><span class="o">,</span> <span class="nc">Date</span> <span class="n">before</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">OptionalParameters</span> <span class="o">{</span>
+        <span class="nc">OptionalParameters</span> <span class="nf">subscriptionId</span><span class="o">(</span><span class="nc">Long</span> <span class="n">id</span><span class="o">);</span>
+
+        <span class="nc">OptionalParameters</span> <span class="nf">serviceId</span><span class="o">(</span><span class="nc">Long</span> <span class="n">serviceId</span><span class="o">);</span>
+
+        <span class="nc">OptionalParameters</span> <span class="nf">customerId</span><span class="o">(</span><span class="nc">Long</span> <span class="n">customerId</span><span class="o">);</span>
+
+        <span class="nc">OptionalParameters</span> <span class="nf">endDateBefore</span><span class="o">(</span><span class="nc">Date</span> <span class="n">endDateBefore</span><span class="o">);</span>
+
+        <span class="nc">OptionalParameters</span> <span class="nf">lastRenewalDate</span><span class="o">(</span><span class="nc">Date</span> <span class="n">lastRenewalDateAfter</span><span class="o">,</span> <span class="nc">Date</span> <span class="n">lastRenewalDateBefore</span><span class="o">);</span>
+
+        <span class="nc">OptionalParameters</span> <span class="nf">nextRenewalDate</span><span class="o">(</span><span class="nc">Date</span> <span class="n">nextRenewalDateAfter</span><span class="o">,</span> <span class="nc">Date</span> <span class="n">nextRenewalDateBefore</span><span class="o">);</span>
+
+        <span class="nc">OptionalParameters</span> <span class="nf">renewedMoreThan</span><span class="o">(</span><span class="nc">Integer</span> <span class="n">renewedMoreThan</span><span class="o">);</span>
+
+        <span class="nc">OptionalParameters</span> <span class="nf">status</span><span class="o">(</span><span class="nc">SubscriptionStatus</span><span class="o">...</span> <span class="n">status</span><span class="o">);</span>
+
+        <span class="nc">SubscriptionSearchQuery</span> <span class="nf">build</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Refactor edilmiş <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfının nesnesi de aşağıdaki gibi oluşturuluyor:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">SubscriptionSearchQuery</span> <span class="n">query</span> <span class="o">=</span> <span class="nc">SubscriptionSearchQuery</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">pagination</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">20</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">createDate</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">(),</span> <span class="k">new</span> <span class="nc">Date</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">subscriptionId</span><span class="o">(</span><span class="mi">1231231L</span><span class="o">).</span><span class="na">serviceId</span><span class="o">(</span><span class="mi">123123L</span><span class="o">).</span><span class="na">customerId</span><span class="o">(</span><span class="mi">123123L</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">endDateBefore</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">lastRenewalDate</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">(),</span> <span class="k">new</span> <span class="nc">Date</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">nextRenewalDate</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">(),</span> <span class="k">new</span> <span class="nc">Date</span><span class="o">())</span>
+        <span class="o">.</span><span class="na">renewedMoreThan</span><span class="o">(</span><span class="mi">12</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">status</span><span class="o">(</span><span class="nc">SubscriptionStatus</span><span class="o">.</span><span class="na">ACTIVE</span><span class="o">,</span> <span class="nc">SubscriptionStatus</span><span class="o">.</span><span class="na">SUSPENDED</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+
+<span class="nc">SearchResult</span><span class="o">&lt;</span><span class="nc">Subscription</span><span class="o">&gt;</span> <span class="n">subscriptions</span> <span class="o">=</span> <span class="n">subscriptionService</span><span class="o">.</span><span class="na">searchSubscriptions</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
+</code></pre></div></div>
+
+<h3 id="kapanış">Kapanış</h3>
+
+<p>2015 yılının Temmuz ayından beri bloga yazmadığımı farkettim ve sebebi düşününce belli. 
+Nişan ve evlilik sürecindeyim o vakitten beridir kendimi anca toparlayabildim. 
+Eskiden sene atladığım hiç olmamıştı fakat 2016 yılında hiçbir şey yazmayarak bir ilki başarmışım :)</p>
+
+<p>Bu yazıda birçok kod gördük birçok elementi tanıdık. 
+Hatamız olduysa affola. 
+Kelime/terim hatalarım varsa her zaman yorum yaparak beni düzeltebilirsiniz, lütfen düzeltin.</p>
+
+<p>İş hayatına başladığım 2012 yılından bu zamana geçirdiğim değişimlerden birisi de 
+artık temiz kod yazmaya çalışma takıntım var. 
+Bu sebeple artık benden bu tarz blog yazıları da görebilirsiniz ama bunun da sözünü veremiyorum, 
+yine 1 senelik bir ara vermek durumunda kalırsam, 1 sene sonraya kim öle kim kala :)</p>
+
+<p>Bir sonraki yazıma kadar kodlarınızı temiz yazın gözünüzü seveyim.</p>
+
+
+  </div>
+
+</article>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'http://demo.serdarkuzucu.com/builder-pattern-kullanarak-daha-temiz-kod-yazmak';
+        this.page.identifier = 'builder-pattern-kullanarak-daha-temiz-kod-yazmak';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>
