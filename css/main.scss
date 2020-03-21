@@ -166,3 +166,7 @@ body {
   background-color: #ffffff !important;
   color: #24292e !important;
 }
+
+blockquote {
+  @extend .blockquote;
+}
