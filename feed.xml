@@ -6,8 +6,8 @@
 </description>
     <link>http://demo.serdarkuzucu.com/</link>
     <atom:link href="http://demo.serdarkuzucu.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 21 Mar 2020 23:16:19 +0000</pubDate>
-    <lastBuildDate>Sat, 21 Mar 2020 23:16:19 +0000</lastBuildDate>
+    <pubDate>Sat, 21 Mar 2020 23:32:57 +0000</pubDate>
+    <lastBuildDate>Sat, 21 Mar 2020 23:32:57 +0000</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
     
       <item>
@@ -3403,195 +3403,260 @@ Umarım işlerinizi çılgınca hızlandırabilecek Shell Script’ler yazabilir
       </item>
     
       <item>
-        <title>Java'da Swing ile Basit Bir Pencere Yapalım</title>
-        <description>&lt;p&gt;O kadar java gördük belki birilerine bi faydamız dokunur. 
-Haydi java’da &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/package-summary.html&quot;&gt;swing kütüphanesinin&lt;/a&gt; 
-ögelerini kullanarak basit bi pencere yapalım.&lt;/p&gt;
+        <title>Bellek ve Disk İstatistiklerini Gösteren Shell Script Geliştirelim</title>
+        <description>&lt;p&gt;Merhaba arkadaşlar. 
+Bu yazıda, shell script yazma konusunda geliştirdiğimiz becerileri, 
+bir takım linux komutlarını ve özelliklerini kullanarak basit bir program yazacağız. 
+Bu program, format edilmiş bir şekilde bellekteki ve sabit disklerimizdeki boş alanı gösterecek. 
+Bu yazıyı bazı komutların üzerinde durmak istediğim için adım adım yazacağım. 
+Öncelikle kemerlerimizi bağlıyoruz.&lt;/p&gt;
 
 &lt;!--more--&gt;
 
-&lt;p&gt;Bu yazıda, &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JFrame.html&quot;&gt;JFrame&lt;/a&gt; sınıfından birkaç method kullanmayı, &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt; ile oluşturulan pencereye 
-&lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JLabel.html&quot;&gt;JLabel&lt;/a&gt; ve &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JButton.html&quot;&gt;JButton&lt;/a&gt; eklemeyi, &lt;code class=&quot;highlighter-rouge&quot;&gt;JLabel&lt;/code&gt; ögesinin font özelliklerini ayarlamayı ve &lt;code class=&quot;highlighter-rouge&quot;&gt;JButton&lt;/code&gt; ögesine 
-&lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/event/ActionListener.html&quot;&gt;ActionListener&lt;/a&gt; objesini eklemeyi göreceğiz. 
-Layout olarak da &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/BorderLayout.html&quot;&gt;BorderLayout&lt;/a&gt; objesinden biraz bahsedeceğim.&lt;/p&gt;
+&lt;h2 id=&quot;disk-kullanımını-görmek&quot;&gt;Disk Kullanımını Görmek&lt;/h2&gt;
 
-&lt;p&gt;Çoğu swing objesini java apisinden öğrenmiş birisi olarak ilk tavsiyem yukarda verdiğim linklere de tıklayıp 
-bi ne var ne yok bakmanız.&lt;/p&gt;
+&lt;p&gt;Öncelikle hard disklerimizi ve toplam/kullanılan/boş alanları nasıl görebileceğimize bakalım. 
+Ben bu işlem için linux’da varolan &lt;code class=&quot;highlighter-rouge&quot;&gt;df -h&lt;/code&gt; komutunu kullanıyorum. 
+Diskler çok büyük depolama alanları olduğu için, bu komuttan gigabyte değerinde ölçüm alıyoruz.&lt;/p&gt;
 
-&lt;p&gt;Önce kodlarımızı yazalım. Sonra konuşuruz üstünde.&lt;/p&gt;
+&lt;p&gt;Bir terminal açıp, &lt;code class=&quot;highlighter-rouge&quot;&gt;df -h&lt;/code&gt; komutunu yazdığınızda, aşağıdakine benzer bir output alacaksınız.&lt;/p&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;com.asosyalbebe.swing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;sedrik@localhost ~ $&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt;
+&lt;span class=&quot;go&quot;&gt;Filesystem      Size  Used Avail Use% Mounted on
+udev            5,9G     0  5,9G   0% /dev
+tmpfs           1,2G  9,4M  1,2G   1% /run
+/dev/sda1       129G   21G  102G  17% /
+tmpfs           5,9G  754M  5,1G  13% /dev/shm
+tmpfs           5,0M  4,0K  5,0M   1% /run/lock
+tmpfs           5,9G     0  5,9G   0% /sys/fs/cgroup
+/dev/sda6        90G   48G   38G  56% /appdata
+cgmfs           100K     0  100K   0% /run/cgmanager/fs
+tmpfs           1,2G     0  1,2G   0% /run/user/1001
+tmpfs           1,2G   56K  1,2G   1% /run/user/1000
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.awt.BorderLayout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.awt.Font&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.awt.event.ActionEvent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.awt.event.ActionListener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;p&gt;Ben diskimi iki partition’a bölmüştüm ve birinci partition’ı &lt;code class=&quot;highlighter-rouge&quot;&gt;/&lt;/code&gt; adresine mount etmiştim. 
+Bu yüzden &lt;code class=&quot;highlighter-rouge&quot;&gt;/dev/sda1&lt;/code&gt; satırındaki disk kullanımı, birinci partition’ıma ait.&lt;/p&gt;
 
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;javax.swing.JButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;javax.swing.JFrame&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;javax.swing.JLabel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;p&gt;İkinci partition’ımı da &lt;code class=&quot;highlighter-rouge&quot;&gt;/appdata&lt;/code&gt; adresine mount etmiştim. 
+Bu yüzden &lt;code class=&quot;highlighter-rouge&quot;&gt;/dev/sda6&lt;/code&gt; satırındaki disk kullanımı, ikinci partition’ıma ait. 
+Siz de diskinizi iyi tanımalı ve bu aşamada hangi partition’ların 
+kullanım istatistiklerini kontrol etmek istediğinize karar vermelisiniz.&lt;/p&gt;
 
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Pencere&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;Pencere&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;h2 id=&quot;bellek-kullanımını-görmek&quot;&gt;Bellek Kullanımını Görmek&lt;/h2&gt;
 
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;JFrame&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JFrame&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Basit Bir Pencere Yapıyoruz&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;300&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setDefaultCloseOperation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;JFrame&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;EXIT_ON_CLOSE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getContentPane&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setLayout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BorderLayout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;p&gt;Şimdi de bellekteki toplam/kullanılan/boş alanları nasıl öğrenebileceğimize bakalım. 
+Bu işlem için &lt;code class=&quot;highlighter-rouge&quot;&gt;free -m&lt;/code&gt; komutunu kullanıyorum ben. &lt;code class=&quot;highlighter-rouge&quot;&gt;-m&lt;/code&gt; seçeneğini kullandığımızda değerleri megabyte cinsinden veriyor. 
+Şimdi bir terminal açıp &lt;code class=&quot;highlighter-rouge&quot;&gt;free -m&lt;/code&gt; komutunu yazarsanız, aşağıdakine benzer bir output alabilirsiniz:&lt;/p&gt;
 
-        &lt;span class=&quot;nc&quot;&gt;JLabel&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;metin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JLabel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;İlk penceremizi yaptık.&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;metin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setFont&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Font&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Serif&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Font&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;BOLD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;25&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;North&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;metin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;sedrik@localhost ~ $&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;free &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt;
+&lt;span class=&quot;go&quot;&gt;             total       used       free     shared    buffers     cached
+Mem:         11922       9844       2078       1129        223       7111
+-/+ buffers/cache:       2509       9412
+Swap:         1951          0       1951
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-        &lt;span class=&quot;nc&quot;&gt;JButton&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buton&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Çıkış&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;buton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addActionListener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ActionListener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;actionPerformed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ActionEvent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-                &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;South&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;p&gt;Benim gibi siz de yanılabilirsiniz bu komutu kullandığınızda. 
+İlk satırdaki kullanılan ve boş bellek miktarı, aslında fiziksel olarak doğru değerler. 
+Fakat ubuntu, RAM’de boş yer bulduğunda işlemlerimizde zaman kazandırmak için disk cache yapıyor, 
+yani sabit diskimizdeki sık kullandığımız veya kullanma ihtimalimiz olan bilgileri RAM’e kopyalıyor. 
+Eğer RAM’e ihtiyacımız olursa aniden, bu yedeklediği bilgileri RAM’den siliyor. 
+Dolayısı ile bellek kullanımını monitör etmek istediğimizde, birinci satırdaki bilgileri değil, 
+ikinci satırdaki bilgileri kullanırsak daha doğru sonuç elde ediyoruz, içimiz kararmıyor. 
+İkinci satırda, disk cache için kullanılmış alanları da free sütununa ekleyerek gösteriyor.&lt;/p&gt;
 
-        &lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setVisible&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;h2 id=&quot;komut-sonuçlarından-i̇stenilen-bilgilerin-alınması&quot;&gt;Komut Sonuçlarından İstenilen Bilgilerin Alınması&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;df -h&lt;/code&gt; ve &lt;code class=&quot;highlighter-rouge&quot;&gt;free -m&lt;/code&gt; şeklinde iki komut gördük. 
+Uzun uzun sonuçlar veriyorlar, kafalarına göre formatlıyorlar. 
+Peki bu sonuçlardan nasıl istediğimiz bilgileri alıp değişkenlere aktarırız?&lt;/p&gt;
+
+&lt;p&gt;Öncelikle istediğimiz satırları alarak başlayalım. 
+Pipe (&lt;code class=&quot;highlighter-rouge&quot;&gt;|&lt;/code&gt;) karakteri, bir komuttan çıkan sonucu diğer komuta input olarak vermemizi sağlıyor. 
+Örneğin &lt;code class=&quot;highlighter-rouge&quot;&gt;df -h | grep &quot;/dev/sda1&quot;&lt;/code&gt; komutunu yazdığımızda, 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;df -h&lt;/code&gt; komutundan çıkan sonucu &lt;code class=&quot;highlighter-rouge&quot;&gt;grep&lt;/code&gt; komutuna vermiş oluyoruz. 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;grep&lt;/code&gt; komutu da, kendine gelen inputun içerisinden sadece 
+istediğimiz anahtar kelimeyi içeren satırları output olarak veriyor, diğerlerini eliyor.&lt;/p&gt;
+
+&lt;p&gt;Böylece istediğimiz sabit diske ait istatistikleri tek bir satır halinde bir değişkene aktarabiliyoruz. 
+Aşağıdaki kodda benim iki partition’ıma ait istatistikleri &lt;code class=&quot;highlighter-rouge&quot;&gt;DISK1&lt;/code&gt; ve &lt;code class=&quot;highlighter-rouge&quot;&gt;DISK2&lt;/code&gt; isimli değişkenlere aktarmış olduk.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Shows user friendly disk usage&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;DISK1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda1&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda6&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;İlk olarak import kısmından bahsedeyim. Bu kısımda sadece şu üç satırı yazarak da kurtulabilirdiniz:&lt;/p&gt;
+&lt;p&gt;Şimdi bu satırlardan toplam disk boyutu, kullanılan alan ve boş alan istatistiklerini ayıklayalım. 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;df -h&lt;/code&gt; komutunu çalıştırdığınızda farketmişsinizdir ki, toplam disk boyutu 2. sütunda yer alıyor. 
+Kullanılan disk boyutu 3. sütunda, diskteki boş alan da 4. sütunda yer alıyor. 
+Peki elimizdeki satırlardan sütunları nasıl ayıklıyoruz? &lt;code class=&quot;highlighter-rouge&quot;&gt;awk&lt;/code&gt; komutu ile!&lt;/p&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.awt.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.awt.event.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;javax.swing.*&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;p&gt;Bir programın outputunu pipe (&lt;code class=&quot;highlighter-rouge&quot;&gt;|&lt;/code&gt;) karakteri ile &lt;code class=&quot;highlighter-rouge&quot;&gt;awk '{print $1}'&lt;/code&gt; komutuna vermek, 
+ekrana o çıkıdaki birinci sütunun değerinin yazılmasını sağlıyor. 
+Biz ise 2. 3. ve 4. sütunlara ihtiyaç duyuyoruz, 
+o yüzden &lt;code class=&quot;highlighter-rouge&quot;&gt;awk&lt;/code&gt; komutumuzdaki print edilen sayıyı değiştirmemiz gerekiyor.&lt;/p&gt;
+
+&lt;p&gt;Aşağıdaki kod parçası, iki diskin de kullanım istatistiklerini TOTAL, USED ve FREE olmak üzere üçer değişkene bölüyor.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Shows user friendly disk usage&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;DISK1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda1&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda6&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;DISK1_TOTAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK1_USED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $3}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK1_FREE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $4}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;DISK2_TOTAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK2_USED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $3}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK2_FREE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $4}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Fakat hem neyin hangi paketin içinde olduğunu görmek açısından, 
-hem de programın gereksiz import yapıp yavaşlamaması açısından bu şekilde daha faydalıymış, 
-burada böyle yaptım. Yoksa ben de yıldızlı yöntemi kullanıyorum :)&lt;/p&gt;
+&lt;p&gt;Şimdi bellek ile ilgili istatistiklere bakalım. 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;free -m&lt;/code&gt; komutu ile bunu yapacağımızdan bahsetmiştik. 
+Toplam RAM boyutumuzu, &lt;code class=&quot;highlighter-rouge&quot;&gt;free -m&lt;/code&gt; komutunda içerisinde “Mem” anahtar kelimesi geçen satırın 2. sütunu söylüyor. 
+Bu yüzden bu bilgiyi &lt;code class=&quot;highlighter-rouge&quot;&gt;free -m | grep &quot;Mem&quot; | awk '{print $2}'&lt;/code&gt; şeklinde alacağız.&lt;/p&gt;
 
-&lt;p&gt;Ana methoda(public static void main) bakacak olursak, içerisinde Pencere objesini çağırdığımızı görüyoruz. 
-Diğer elemanları neden main’in içinde değil de constructor’un içinde yarattığımın şu anda pek bir önemi yok, 
-fakat ileri düzeyde programlar yazmaya çalışırken böyle olması daha müsait oluyor diyelim, 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;main&lt;/code&gt; methodun &lt;code class=&quot;highlighter-rouge&quot;&gt;static&lt;/code&gt; olması nedeniyle çeşitli yerlerde istenmedik problemler çıkıyor :)&lt;/p&gt;
+&lt;p&gt;Kullanılan ve boş alanları ise &lt;code class=&quot;highlighter-rouge&quot;&gt;free -m&lt;/code&gt; komutunun “buffers/cache” 
+anahtar kelimesi geçen satırının 3. ve 4. sütunları içeriyor. 
+Bu yüzden kullanılan RAM bilgisini &lt;code class=&quot;highlighter-rouge&quot;&gt;free -m | grep &quot;buffers/cache&quot; | awk '{print $3}'&lt;/code&gt; komutuyla öğrenirken, 
+boş RAM bilgisini de &lt;code class=&quot;highlighter-rouge&quot;&gt;free -m | grep &quot;buffers/cache&quot; | awk '{print $4}'&lt;/code&gt; komutuyla öğreneceğiz. 
+Aşağıda, kodumuza bellek istatistiklerinin de eklenmiş hali mevcut.&lt;/p&gt;
 
-&lt;p&gt;Gelelim Pencere isimli sınıfımızın constructor’ına. 
-Burada ilk olarak bir pencere yaratmamız gerekiyor. 
-Bunu &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt; nesnesi ile sağlıyoruz. 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt; nesnesini tanımlarken ona penceremizin başlık çubuğunda görüntülenecek olan 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;String&lt;/code&gt;‘i parametre olarak gönderiyoruz. 
-Bu uygulamada başlık çubuğumuzda “Basit Bir Pencere Yapıyoruz” metni görünecek.&lt;/p&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Shows user friendly disk usage&lt;/span&gt;
 
-&lt;p&gt;Daha sonra &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt; nesnemize verdiğimiz ismi kullanarak onun özelliklerini tanımlıyoruz. 
-Ben pencere ismini vermiştim. 
-Öyle devam edelim.&lt;/p&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda1&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda6&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
 
-&lt;p&gt;Penceremizin boyutunu ayarlamak için &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt;‘in bize sunduğu &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/Component.html#setSize(int,%20int)&quot;&gt;setSize&lt;/a&gt; methodunu kullanıyoruz. 
-Parametre olarak iki tane tamsayıyı sırasıyla genişlik ve yükseklik olarak giriyoruz.&lt;/p&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK1_TOTAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK1_USED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $3}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK1_FREE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $4}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;width&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;height&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK2_TOTAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK2_USED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $3}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK2_FREE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $4}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;MEMORY_TOTAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;free &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Mem&quot;&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;MEMORY_USED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;free &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;buffers/cache&quot;&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $3}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;MEMORY_FREE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;free &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;buffers/cache&quot;&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $4}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Penceremizin sağ üst köşesindeki çarpı tuşuna tıklandığında gerçekleşecek olan eylemi ayarlamak için &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt;‘in 
-&lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JFrame.html#setDefaultCloseOperation(int)&quot;&gt;setDefaultCloseOperation&lt;/a&gt; methodunu kullanıyoruz. 
-Bu methoda parametre olarak &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame.EXIT_ON_CLOSE&lt;/code&gt; sabit değerini atadık. 
-Bu sayede çarpı butonuna tıklandığında program kapatılacak. 
-Bunu ayarlamayı unutursanız eğer, pencereniz kapatmaya çalıştığınızda kapanmak yerine gizlenir, 
-arkaplanda çalışmaya devam eder.&lt;/p&gt;
+&lt;h2 id=&quot;bilgileri-ekrana-güzelce-yazdıralım&quot;&gt;Bilgileri Ekrana Güzelce Yazdıralım&lt;/h2&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setDefaultCloseOperation&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;JFrame&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;EXIT_ON_CLOSE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;p&gt;Herşey iyi güzel de, komutu çalıştırınca hala ekranda birşey göremiyoruz diyor musunuz? 
+Çünkü ekrana hiçbir şey yazdırmadık. Şimdi &lt;code class=&quot;highlighter-rouge&quot;&gt;echo&lt;/code&gt; ve &lt;code class=&quot;highlighter-rouge&quot;&gt;printf&lt;/code&gt; komutları eşliğinde ekrana bu değerleri yazdıralım.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;echo&lt;/code&gt; kullanmayı hepiniz biliyorsunuzdur.
+&lt;code class=&quot;highlighter-rouge&quot;&gt;pritf&lt;/code&gt; kullanmak ise biraz daha zahmetli ama sonu çok güzel bitiyor. 
+Bu komuta ilk parametre olarak kullanmak istediğiniz formatı geçiyorsunuz. 
+Örneğin 3 kelimeyi 10 karakterlik sütunlara sığdırmak ve aralarına pipe karakteri koymak istiyorsanız, 
+şu şekilde &lt;code class=&quot;highlighter-rouge&quot;&gt;printf&lt;/code&gt; yazmanız yeterli:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;| %-10s | %-10s | %-10s |n&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Kelime1&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Kelime2&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Kelime3&quot;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Şimdi geldik penceremize layout ayarlamaya. 
-Bunun için &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt;‘in &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JFrame.html#getContentPane()&quot;&gt;getContentPane()&lt;/a&gt; methodunu 
-kullanarak bize bir &lt;code class=&quot;highlighter-rouge&quot;&gt;Container&lt;/code&gt; nesnesi return etmesini sağlayacak, daha sonra da o 
-&lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/Container.html&quot;&gt;Container&lt;/a&gt; nesnesinin &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JFrame.html#setLayout(java.awt.LayoutManager)&quot;&gt;setLayout&lt;/a&gt; methodunu kullanıp ona bir layout atayacağız. 
-Ben burada &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/BorderLayout.html&quot;&gt;BorderLayout&lt;/a&gt; kullandım. 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;BorderLayout&lt;/code&gt; nedir diye merak edenler &lt;a href=&quot;https://docs.oracle.com/javase/tutorial/uiswing/layout/border.html&quot;&gt;şuradan&lt;/a&gt; detaylı anlatımına bakabilir. 
-Ben kısaca bahsedecek olursam, efenim şimdi, &lt;code class=&quot;highlighter-rouge&quot;&gt;BorderLayout&lt;/code&gt; ekranı 5 parçaya böler. 
-Bu parçalara “North”, “South”, “Center”, “East”, ve “West” isimlerini verir. 
-BorderLayout ile şekillendirilmiş bir alana bir element ekleyeceğimiz zaman hangi alanına ekleyeceğimizi 
-parametre olarak belirtmemiz gerekir. 
-Şimdi penceremizi BorderLayout ile şekillendirelim bakalım.&lt;/p&gt;
+&lt;p&gt;Sonuç olarak size şunu dönecektir:&lt;/p&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getContentPane&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setLayout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;BorderLayout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;div class=&quot;language-text highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;| Kelime1    | Kelime2    | Kelime3    |
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Şimdi oluşturduğumuz penceremize bir yazı yazalım. 
-Bunun için bir &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JLabel.html&quot;&gt;JLabel&lt;/a&gt; nesnesi yaratacağız 
-ve yaratırken kullandığımız parametre onun içeriğindeki metin olacak.&lt;/p&gt;
+&lt;p&gt;Şimdi kodumuza birazcık sanat ekleyelim ve son halini verelim. 
+Yukarıda hesapladığımız tüm değişkenleri güzel güzel ekrana yazdıralım. Bendeki kodun son hali şöyle:&lt;/p&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nc&quot;&gt;JLabel&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;metin&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JLabel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;İlk penceremizi yaptık.&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Shows user friendly disk usage&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;DISK1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda1&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda6&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;DISK1_TOTAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK1_USED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $3}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK1_FREE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $4}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;DISK2_TOTAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK2_USED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $3}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DISK2_FREE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $4}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;MEMORY_TOTAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;free &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Mem&quot;&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;MEMORY_USED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;free &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;buffers/cache&quot;&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $3}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;MEMORY_FREE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;free &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;buffers/cache&quot;&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $4}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;TABLE_FORMAT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;| %-10s | %-10s | %-10s | %-10s |n&quot;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;DIVIDER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;+------------+------------+------------+------------+&quot;&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$DIVIDER&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TABLE_FORMAT&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Storage&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Size&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Used&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Free&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$DIVIDER&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TABLE_FORMAT&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda1&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DISK1_TOTAL&lt;/span&gt;:0:-1&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; GB&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DISK1_USED&lt;/span&gt;:0:-1&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; GB&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DISK1_FREE&lt;/span&gt;:0:-1&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; GB&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TABLE_FORMAT&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda6&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DISK2_TOTAL&lt;/span&gt;:0:-1&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; GB&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DISK2_USED&lt;/span&gt;:0:-1&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; GB&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DISK2_FREE&lt;/span&gt;:0:-1&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; GB&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TABLE_FORMAT&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Memory&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$MEMORY_TOTAL&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; MB&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$MEMORY_USED&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; MB&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$MEMORY_FREE&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; MB&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$DIVIDER&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Yarattığımız &lt;code class=&quot;highlighter-rouge&quot;&gt;JLabel&lt;/code&gt; nesnesini metin isimli değişkene verdiğimize göre, şimdi onun üzerinde bir iki oynama yapabiliriz. 
-Şimdi yazı tipiyle biraz oynamak istiyorum ben. 
-Bunun için &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/Font.html&quot;&gt;Font&lt;/a&gt; nesnesini ve &lt;code class=&quot;highlighter-rouge&quot;&gt;JLabel&lt;/code&gt; nesnesinin &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JComponent.html#setFont(java.awt.Font)&quot;&gt;setFont&lt;/a&gt; methodunu kullanacağız.&lt;/p&gt;
+&lt;p&gt;Şimdi bu kodu &lt;code class=&quot;highlighter-rouge&quot;&gt;monitor&lt;/code&gt; ismiyle bir yere kaydedelim. 
+Ben şu şekilde kaydediyorum: ~/myscripts/monitor&lt;/p&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;metin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setFont&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Font&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Serif&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Font&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;BOLD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;25&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;p&gt;Daha sonra &lt;code class=&quot;highlighter-rouge&quot;&gt;chmod +x ~/myscripts/monitor&lt;/code&gt; komutunu çağırarak yazdığımız script’in çalışabilmesini sağlıyoruz.&lt;/p&gt;
+
+&lt;p&gt;Şimdi komutumuzu terminalden şu şekilde çalıştırabiliriz: &lt;code class=&quot;highlighter-rouge&quot;&gt;~/myscripts/monitor&lt;/code&gt;. Bize şuna benzer bir sonuç verecektir:&lt;/p&gt;
+
+&lt;pre class=&quot;language-bash command-line&quot; data-output=&quot;2-10&quot; data-user=&quot;sedrik&quot; data-host=&quot;localhost&quot;&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;sedrik@localhost ~ $&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;~/myscripts/monitor
+&lt;span class=&quot;go&quot;&gt;+------------+------------+------------+------------+
+| Storage    | Size       | Used       | Free       |
++------------+------------+------------+------------+
+| /dev/sda1  | 129 GB     | 21 GB      | 102 GB     |
+| /dev/sda6  | 90 GB      | 48 GB      | 38 GB      |
+| Memory     | 11922 MB   | 2552 MB    | 9370 MB    |
++------------+------------+------------+------------+
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;alias-tanımlayarak-kodumuza-her-yerden-erişelim&quot;&gt;Alias Tanımlayarak Kodumuza Her Yerden Erişelim&lt;/h2&gt;
+
+&lt;p&gt;Şimdi bu yazdığımız koda hep ~/myscripts klasörü altından mı erişeceğiz? 
+Haydi gelin bir de alias tanımlaması yapalım da, her yerden tek bir kelime ile bu kodumuzu çalıştırabilelim.&lt;/p&gt;
+
+&lt;p&gt;Alias tanımlamak için, &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.bashrc&lt;/code&gt; veya &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.bash_aliases&lt;/code&gt; dosyalarından birisini 
+gedit programı yardımıyla düzenleyelim. 
+Ben alias tanımlamak içni &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.bash_aliases&lt;/code&gt; dosyasını tavsiye ediyorum, adından belli. 
+Şu komutla açabiliriz bu dosyayı: &lt;code class=&quot;highlighter-rouge&quot;&gt;gedit ~/.bash_aliases&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Açılan gedit penceresinde, aşağıdaki satırı ekleyelim ve kaydedip kapatalım:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;monitor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;~/myscripts/monitor
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;JLabel&lt;/code&gt; nesnemiz üzerindeki düzenlemelerimiz bittiğine göre, şimdi onu penceremize ekleyebiliriz. 
-Bunun için &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt; içindeki &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/Container.html#add(java.awt.Component)&quot;&gt;add&lt;/a&gt; methodunu kullanacağız. 
-Ben bu &lt;code class=&quot;highlighter-rouge&quot;&gt;JLabel&lt;/code&gt; ögesini pencerenin üst kısmına eklemeyi uygun gördüm, siz değiştirebilirsiniz tabi ki :)&lt;/p&gt;
+&lt;p&gt;Daha sonra da terminal pencerelerimizi kapatalım ve tekrar açalım. 
+Böylelikle &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.bash_aliases&lt;/code&gt; dosyası terminale tekrar yüklenmiş olacak. 
+Artık terminalde hangi klasörde olursak olalım, &lt;code class=&quot;highlighter-rouge&quot;&gt;monitor&lt;/code&gt; yazarak programımızı çalıştırabiliriz.&lt;/p&gt;
 
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;North&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;metin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Bu arada kodun içinde bir yerlerde &lt;code class=&quot;highlighter-rouge&quot;&gt;${DISK2_USED:0:-1} GB&lt;/code&gt; kullandığımı görmüş 
+ve dikkatinizi çekmiş olabilir. &lt;code class=&quot;highlighter-rouge&quot;&gt;df -h&lt;/code&gt; komutu bize sayıların sonuna Gigabyte’ın G’sini ekleyerek veriyor. 
+Örneğin: 12G. Biz bunu istemiyoruz. 
+O kod, &lt;code class=&quot;highlighter-rouge&quot;&gt;DISK2_USED&lt;/code&gt; değişkeninin son karakterini yani ‘G’ karakterini silmeye yarıyor. 
+Daha sonra kendim elle bir boşluk bırakıp ‘GB’ yazıyorum. 
+Daha estetik görünüyor.&lt;/p&gt;
 
-&lt;p&gt;Şimdi bir buton oluşturalım ve üzerinde çıkış yazsın. 
-Tıklanıldığı zaman da program kapansın. 
-Gelişmiş butonlar oluşturabilmemiz için swing kütüphanemiz bize &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/JButton.html&quot;&gt;JButton&lt;/a&gt; nesnesini sunar. 
-Bir &lt;code class=&quot;highlighter-rouge&quot;&gt;JButton&lt;/code&gt; nesnesi yaratırken kullandığımız parametre onun üzerindeki metni belirler. 
-Şimdi üzerinde çıkış yazan bir &lt;code class=&quot;highlighter-rouge&quot;&gt;JButton&lt;/code&gt; nesnesi yaratıp onu buton isimli değişkenimize verelim.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nc&quot;&gt;JButton&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buton&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;JButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Çıkış&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Şimdi bu butonumuza &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/javax/swing/AbstractButton.html#addActionListener(java.awt.event.ActionListener)&quot;&gt;addActionListener&lt;/a&gt; methodunu ve &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/event/ActionListener.html&quot;&gt;ActionListener&lt;/a&gt; 
-sınıfını kullanarak bir dinleyici ekleyelim. 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;ActionListener&lt;/code&gt; methodundaki &lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/event/ActionListener.html#actionPerformed(java.awt.event.ActionEvent)&quot;&gt;actionPerformed&lt;/a&gt; methodu, bir action gerçekleştiği zaman bir 
-&lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/event/ActionEvent.html&quot;&gt;ActionEvent&lt;/a&gt; parametresi ile çağırılır. 
-Biz de &lt;code class=&quot;highlighter-rouge&quot;&gt;actionPerformed&lt;/code&gt; methodunun içerisine butona tıklandığında gerçekleşecek olan eylemleri kodlayacağız. 
-Ben burada &lt;code class=&quot;highlighter-rouge&quot;&gt;System.exit(1);&lt;/code&gt; komutu ile programı kapatmayı tercih ettim, basit bir şey olsun diye.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;buton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;addActionListener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ActionListener&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;actionPerformed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ActionEvent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Butonumuzu da ayarladığımıza göre, onu da penceremize ekleyebiliriz. 
-Yine aynı işlem, fakat bunu pencerenin aşağı kısmına ekliyoruz.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;South&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Ve en son olarak da penceremizin görünür olması için &lt;code class=&quot;highlighter-rouge&quot;&gt;JFrame&lt;/code&gt; nesnesinin 
-&lt;a href=&quot;https://docs.oracle.com/javase/7/docs/api/java/awt/Component.html#setVisible(boolean)&quot;&gt;setVisible&lt;/a&gt; methodunu kullanacağız. 
-Bunu penceremize bütün eklemeleri yaptıktan sonra çalıştırmamızda fayda varmış. 
-Hiç çalıştırmazsak da penceremiz görünmüyor.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;pencere&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setVisible&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Penceremizin son halini de koyalım buraya tam olsun:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/posts/java-swng-300x100.png&quot; alt=&quot;java swing window frame&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Bu yazının sonuna geldik. 
-Umarım faydalı bir iş çıkarmışımdır swing’e yeni başlayanlar için. 
-Başka bir yazıda görüşmek üzere, yorumlarınızı beklerim :)&lt;/p&gt;
-
+&lt;p&gt;Efendim hevesle yazdığım bir yazımın daha sonuna geldim. 
+Hepinize iyi programlamalar dilerim. 
+Kodlu kalın. 
+Herhangi bir soru veya yazı talebiniz için bu yazıya yorum bırakabilirsiniz.&lt;/p&gt;
 </description>
-        <pubDate>Thu, 03 Feb 2011 00:18:00 +0000</pubDate>
-        <link>http://demo.serdarkuzucu.com/javada-swing-ile-basit-bir-pencere-yapalim</link>
-        <guid isPermaLink="true">http://demo.serdarkuzucu.com/javada-swing-ile-basit-bir-pencere-yapalim</guid>
+        <pubDate>Mon, 06 Jul 2015 22:27:00 +0000</pubDate>
+        <link>http://demo.serdarkuzucu.com/bellek-ve-disk-istatistiklerini-gosteren-shell-script-gelistirelim</link>
+        <guid isPermaLink="true">http://demo.serdarkuzucu.com/bellek-ve-disk-istatistiklerini-gosteren-shell-script-gelistirelim</guid>
         
         
-        <category>Java</category>
+        <category>Bash</category>
         
         <category>Programlama</category>
+        
+        <category>Linux</category>
         
       </item>
     
