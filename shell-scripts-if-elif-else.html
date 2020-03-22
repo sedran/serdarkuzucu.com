@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Shell Scripts: if / elif / else</title>
+  <meta name="description" content="Merhaba arkadaşlar. Linux Shell Script Geliştirmek diye başladığım yazı dizisinin bir diğer yazısında daha birlikteyiz. Yavaş yavaş daha akıllı programlar ya...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://demo.serdarkuzucu.com/shell-scripts-if-elif-else">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="http://demo.serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/java" class="dropdown-item">Java (8)</a>
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (16)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="http://demo.serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Shell Scripts: if / elif / else</h1>
+    <p class="post-meta">
+      <time datetime="2015-06-28T02:41:00+00:00" itemprop="datePublished">Jun 28, 2015</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/bash">Bash</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/linux">Linux</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Merhaba arkadaşlar. 
+<a href="/linux-shell-script-gelistirmek">Linux Shell Script Geliştirmek</a> diye başladığım 
+yazı dizisinin bir diğer yazısında daha birlikteyiz. 
+Yavaş yavaş daha akıllı programlar yazar hale gelmeye başlıyoruz. 
+Bir önceki yazımda, <a href="/shell-scripts-while-ve-until-donguleri">while ve until döngülerini</a> görmüştük. 
+Bu yazıda da programlamanın olmazsa olmazlarından, if (eğer) komutunu inceleyeceğiz.</p>
+
+<!--more-->
+
+<p>if komutu bizim belirteceğimiz bir koşulu kontrol eder. 
+Eğer koşul doğru ise, yine bizim istediğimiz kodu çalıştırır. 
+İstersek koşul doğru olmadığında başka bir koşulu kontrol edebilir (elif) 
+veya belirttiğimiz hiçbir koşul doğru olmadığında (else) çalıştırılacak kodu söyleyebiliriz.</p>
+
+<p>Öncelikle if komutunu syntax(söz dizimi) olarak inceleyelim.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="c"># Sadece if</span>
+<span class="k">if</span> <span class="o">[[</span> koşul1 <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="c"># koşul1 doğru olduğunda çalışacak kod</span>
+<span class="k">fi</span>
+
+
+<span class="c"># if ve else</span>
+<span class="k">if</span> <span class="o">[[</span> koşul1 <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="c"># koşul1 doğru olduğunda çalışacak kod</span>
+<span class="k">else</span>
+    <span class="c"># koşul1 doğru olmadığında çalışacak kod</span>
+<span class="k">fi</span>
+
+
+<span class="c"># if ve elif</span>
+<span class="k">if</span> <span class="o">[[</span> koşul1 <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="c"># koşul1 doğru olduğunda çalışacak kod</span>
+<span class="k">elif</span> <span class="o">[[</span> koşul2 <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="c"># koşul1 yanlış olduğunda ve</span>
+    <span class="c"># koşul2 doğru olduğunca çalışacak kod</span>
+<span class="k">fi</span>
+
+
+<span class="c"># if, elif ve else</span>
+<span class="k">if</span> <span class="o">[[</span> koşul1 <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="c"># koşul1 doğru olduğunda çalışacak kod</span>
+<span class="k">elif</span> <span class="o">[[</span> koşul2 <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="c"># koşul1 yanlış olduğunda ve</span>
+    <span class="c"># koşul2 doğru olduğunca çalışacak kod</span>
+<span class="k">else</span>
+    <span class="c"># koşul1 ve koşul2 doğru olmadığında çalışacak kod</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>Şimdi örnek olarak RAM’de kalan boş yere göre vereceği mesaj değişecek olan bir kod parçası geliştirelim. 
+Öncelikle benim geliştirmiş olduğum, basitçe bellek istatistiklerini okuyup değişkenlere aktaran 
+ve süslü bir şekilde ekrana yazdıran kodu veriyorum. 
+Daha sonra bu koda <code class="highlighter-rouge">if/elif/else</code> yapısını kuracağız.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c"># if / elif / else</span>
+
+<span class="nv">TABLE_FORMAT</span><span class="o">=</span><span class="s2">"| %-10s | %-10s | %-10s |n"</span>
+<span class="nv">divider</span><span class="o">=</span><span class="s2">"===================="</span>
+<span class="nv">divider</span><span class="o">=</span><span class="s2">"</span><span class="nv">$divider$divider</span><span class="s2">"</span>
+
+<span class="nv">total_memory</span><span class="o">=</span><span class="si">$(</span>free <span class="nt">-m</span> | <span class="nb">grep</span> <span class="s2">"Mem:"</span> | <span class="nb">awk</span> <span class="s1">'{print $2}'</span><span class="si">)</span>
+<span class="nv">used_memory</span><span class="o">=</span><span class="si">$(</span>free <span class="nt">-m</span> | <span class="nb">grep</span> <span class="s2">"Mem:"</span> | <span class="nb">awk</span> <span class="s1">'{print $3}'</span><span class="si">)</span>
+<span class="nv">free_memory</span><span class="o">=</span><span class="si">$(</span>free <span class="nt">-m</span> | <span class="nb">grep</span> <span class="s2">"Mem:"</span> | <span class="nb">awk</span> <span class="s1">'{print $4}'</span><span class="si">)</span>
+
+<span class="nb">echo</span> <span class="s2">"</span><span class="nv">$divider</span><span class="s2">"</span>
+<span class="nb">printf</span> <span class="s2">"</span><span class="nv">$TABLE_FORMAT</span><span class="s2">"</span> <span class="s2">"Total"</span> <span class="s2">"Used"</span> <span class="s2">"Free"</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="nv">$divider</span><span class="s2">"</span>
+<span class="nb">printf</span> <span class="s2">"</span><span class="nv">$TABLE_FORMAT</span><span class="s2">"</span> <span class="s2">"</span><span class="nv">$total_memory</span><span class="s2"> MB"</span> <span class="s2">"</span><span class="nv">$used_memory</span><span class="s2"> MB"</span> <span class="s2">"</span><span class="nv">$free_memory</span><span class="s2"> MB"</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="nv">$divider</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>Göz korkutmasın. 
+Önceki yazılarda gösterdiğim değişken tanımlama 
+ve bir komutun sonucunu bir değişkene aktarma dışında ekstra birşey kullanmadım. 
+Geri kalan yabancı terimler standart linux komutları. 
+<code class="highlighter-rouge">free</code> komutu ile bellekteki boş alan hesaplanıyor, 
+<code class="highlighter-rouge">grep</code> komutu ile <code class="highlighter-rouge">free</code> komutunun sonucundan içinde “Mem:” geçen satır ayrıştırılıyor 
+ve <code class="highlighter-rouge">awk</code> komutuyla sırasıyla bu satırdaki ikinci, üçüncü ve dördüncü sütunlardaki veriler değişkenlere aktarılıyor. 
+Bu programı çalıştırınca aşağıdaki tabloyu çiziyor ekrana:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>========================================
+| Total      | Used       | Free       |
+========================================
+| 11909 MB   | 7373 MB    | 4535 MB    |
+========================================
+</code></pre></div></div>
+
+<p>Tabi tablodaki sayıların bilgisayardan bilgisayara değişeceğini söylememe gerek yok. 
+Şimdi bu koda ufak bir ekleme yapıp, boş bellek yüzdesini hesaplayıp, düzgün bir hata/uyarı/bilgi mesajı vereceğiz.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c"># if / elif / else</span>
+
+<span class="nv">TABLE_FORMAT</span><span class="o">=</span><span class="s2">"| %-10s | %-10s | %-10s |n"</span>
+<span class="nv">divider</span><span class="o">=</span><span class="s2">"===================="</span>
+<span class="nv">divider</span><span class="o">=</span><span class="s2">"</span><span class="nv">$divider$divider</span><span class="s2">"</span>
+
+<span class="nv">total_memory</span><span class="o">=</span><span class="si">$(</span>free <span class="nt">-m</span> | <span class="nb">grep</span> <span class="s2">"Mem:"</span> | <span class="nb">awk</span> <span class="s1">'{print $2}'</span><span class="si">)</span>
+<span class="nv">used_memory</span><span class="o">=</span><span class="si">$(</span>free <span class="nt">-m</span> | <span class="nb">grep</span> <span class="s2">"Mem:"</span> | <span class="nb">awk</span> <span class="s1">'{print $3}'</span><span class="si">)</span>
+<span class="nv">free_memory</span><span class="o">=</span><span class="si">$(</span>free <span class="nt">-m</span> | <span class="nb">grep</span> <span class="s2">"Mem:"</span> | <span class="nb">awk</span> <span class="s1">'{print $4}'</span><span class="si">)</span>
+
+<span class="nb">echo</span> <span class="s2">"</span><span class="nv">$divider</span><span class="s2">"</span>
+<span class="nb">printf</span> <span class="s2">"</span><span class="nv">$TABLE_FORMAT</span><span class="s2">"</span> <span class="s2">"Total"</span> <span class="s2">"Used"</span> <span class="s2">"Free"</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="nv">$divider</span><span class="s2">"</span>
+<span class="nb">printf</span> <span class="s2">"</span><span class="nv">$TABLE_FORMAT</span><span class="s2">"</span> <span class="s2">"</span><span class="nv">$total_memory</span><span class="s2"> MB"</span> <span class="s2">"</span><span class="nv">$used_memory</span><span class="s2"> MB"</span> <span class="s2">"</span><span class="nv">$free_memory</span><span class="s2"> MB"</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="nv">$divider</span><span class="s2">"</span>
+
+<span class="nv">free_percent</span><span class="o">=</span><span class="k">$((</span>free_memory <span class="o">*</span> <span class="m">100</span> <span class="o">/</span> total_memory<span class="k">))</span>
+
+<span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$free_percent</span><span class="s2">"</span> <span class="nt">-gt</span> <span class="s2">"50"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"We are safe. Memory=</span><span class="nv">$free_memory</span><span class="s2"> MB. </span><span class="nv">$free_percent</span><span class="s2">%"</span>
+<span class="k">elif</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$free_percent</span><span class="s2">"</span> <span class="nt">-gt</span> <span class="s2">"30"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"We are OK. Memory=</span><span class="nv">$free_memory</span><span class="s2"> MB. </span><span class="nv">$free_percent</span><span class="s2">%"</span>
+<span class="k">else
+    </span><span class="nb">echo</span> <span class="s2">"We are in danger. Memory=</span><span class="nv">$free_memory</span><span class="s2"> MB. </span><span class="nv">$free_percent</span><span class="s2">%"</span>
+<span class="k">fi</span>
+</code></pre></div></div>
+
+<p>Gördüğünüz gibi, 
+<code class="highlighter-rouge">free_percent=$((free_memory * 100 / total_memory))</code> ile boş belleğin toplam belleğe yüzdesini hesapladık 
+ve <code class="highlighter-rouge">if [[ "$free_percent" -gt "50" ]];</code> ile belleğin yüzde 50’den fazlası boş mu kontrolünü yaptık. 
+Eğer belleğin yüzde 50’den fazlası boşsa, güvendeyiz mesajı verdik. 
+<code class="highlighter-rouge">elif [[ "$free_percent" -gt "30" ]];</code> ile belleğin yüzde 30’undan fazlası boş mu kontrolü yaptık 
+ve sonrasında sorun yok mesajı verdik. 
+Eğer boş bellek yüzdesi yüzde 30’dan daha düşük bir seviyedeyse, tehlikedeyiz uyarısını yaptık. 
+Şimdi bu kodu benim bilgisayarımda çalıştırdığımızda ne sonuç veriyor tekrar paylaşayım.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>========================================
+| Total      | Used       | Free       |
+========================================
+| 11909 MB   | 7859 MB    | 4050 MB    |
+========================================
+We are OK. Memory=4050 MB. 34%
+</code></pre></div></div>
+
+<p>İşte <code class="highlighter-rouge">if/elif/else</code> kullanımı bu kadar basit.</p>
+
+<p>Şimdi interaktif ve istenildiği kadar toplama çıkarma yapılabilen bir hesap makinası yapalım.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c"># if/elif/else</span>
+
+<span class="nv">SUM</span><span class="o">=</span>0
+<span class="nv">operation</span><span class="o">=</span><span class="s2">"+"</span>
+
+<span class="k">while</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$operation</span><span class="s2">"</span> <span class="o">!=</span> <span class="s2">"="</span> <span class="o">]]</span><span class="p">;</span> <span class="k">do
+    </span><span class="nb">echo</span> <span class="nt">-n</span> <span class="s2">"Operation &gt;&gt; "</span>
+    <span class="nb">read </span>operation
+    
+    <span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$operation</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">"+"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+        </span><span class="nb">echo</span> <span class="nt">-n</span> <span class="s2">"Enter operand &gt;&gt; "</span>
+        <span class="nb">read </span>operand
+        <span class="nv">SUM</span><span class="o">=</span><span class="k">$((</span>SUM <span class="o">+</span> operand<span class="k">))</span>
+    <span class="k">elif</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$operation</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">"-"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+        </span><span class="nb">echo</span> <span class="nt">-n</span> <span class="s2">"Enter operand &gt;&gt; "</span>
+        <span class="nb">read </span>operand
+        <span class="nv">SUM</span><span class="o">=</span><span class="k">$((</span>SUM <span class="o">-</span> operand<span class="k">))</span>
+    <span class="k">elif</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$operation</span><span class="s2">"</span> <span class="o">=</span> <span class="s2">"="</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+        </span><span class="nb">echo</span> <span class="nt">-n</span> <span class="s2">"Exiting... "</span>
+    <span class="k">fi
+    
+    </span><span class="nb">echo</span> <span class="s2">"SUM is now </span><span class="nv">$SUM</span><span class="s2">"</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<p>Bu program önce kullanıcıdan bir işlem girmesini istiyor. 
+Kullanıcı <code class="highlighter-rouge">+</code>, <code class="highlighter-rouge">-</code>, veya <code class="highlighter-rouge">=</code> işaretlerinden birisini girebilir bu aşamada. 
+Eğer kullanıcı <code class="highlighter-rouge">+</code> işaretini girerse, program bir tane sayı girmesini istiyor. 
+Sayı girilince, girilen sayı <code class="highlighter-rouge">SUM</code> isimli değişkene ekleniyor. 
+Eğer kullanıcı <code class="highlighter-rouge">-</code> işaretini girerse, program yine bir tane sayı girmesini istiyor. 
+Sayı girilince, girilen sayı <code class="highlighter-rouge">SUM</code> isimli değişkenden çıkartılıyor. 
+<code class="highlighter-rouge">=</code> işareti girildiğinde ise program kapanıyor.</p>
+
+<p>Örnek bir kullanım çıktısını paylaşıyorum aşağıda:</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">sedrik@localhost ~ $</span><span class="w"> </span>./5_HelloWorld
+<span class="gp">Operation &gt;</span><span class="o">&gt;</span> +
+<span class="gp">Enter operand &gt;</span><span class="o">&gt;</span> 1
+<span class="go">SUM is now 1
+</span><span class="gp">Operation &gt;</span><span class="o">&gt;</span> +
+<span class="gp">Enter operand &gt;</span><span class="o">&gt;</span> 2
+<span class="go">SUM is now 3
+</span><span class="gp">Operation &gt;</span><span class="o">&gt;</span> -
+<span class="gp">Enter operand &gt;</span><span class="o">&gt;</span> 1
+<span class="go">SUM is now 2
+</span><span class="gp">Operation &gt;</span><span class="o">&gt;</span> <span class="o">=</span>
+<span class="go">Exiting... SUM is now 2
+</span></code></pre></div></div>
+
+<p><code class="highlighter-rouge">if / elif / else</code> hakkında söyleyeceklerim şimdilik bu kadar. 
+Bir ara hatırlatırsanız, 
+if komutlarında veya döngülerde koşul olarak kullanılabilecek özel yapılara değinmek istiyorum. 
+Şimdilik kalın sağlıcakla.</p>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/shell-scripts-while-ve-until-donguleri">&laquo; Shell Scripts: While ve Until Döngüleri</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+    <a class="next" href="/bellek-ve-disk-istatistiklerini-gosteren-shell-script-gelistirelim">Bellek ve Disk İstatistiklerini Gösteren Shell Script Geliştirelim &raquo;</a>
+    
+  </div>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'http://demo.serdarkuzucu.com/shell-scripts-if-elif-else';
+        this.page.identifier = 'shell-scripts-if-elif-else';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>

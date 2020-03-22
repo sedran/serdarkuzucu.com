@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Shell Scripts: While ve Until Döngüleri</title>
+  <meta name="description" content="Merhaba arkadaşlar. Linux Shell Script Geliştirmek diye başladığım yazı dizisinin bir diğer yazısında daha birlikteyiz. Şimdiye kadar konuyla ilgili yazdığım...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://demo.serdarkuzucu.com/shell-scripts-while-ve-until-donguleri">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="http://demo.serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/java" class="dropdown-item">Java (8)</a>
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (16)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="http://demo.serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Shell Scripts: While ve Until Döngüleri</h1>
+    <p class="post-meta">
+      <time datetime="2015-06-25T22:56:00+00:00" itemprop="datePublished">Jun 25, 2015</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/bash">Bash</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/linux">Linux</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Merhaba arkadaşlar. 
+<a href="/linux-shell-script-gelistirmek">Linux Shell Script Geliştirmek</a> 
+diye başladığım yazı dizisinin bir diğer yazısında daha birlikteyiz. 
+Şimdiye kadar konuyla ilgili yazdığım yazılardan iyi bir döngü yazmaya yetecek donanımı edindik. 
+Edindik diyorum, çünkü ben de yazarak öğreniyor, öğrenerek yazıyorum. 
+Şimdi de while ve until döngülerinin ne olduklarına ve nasıl kullanıldıklarına bakalım.</p>
+
+<!--more-->
+
+<h3 id="while-döngüsü">While Döngüsü</h3>
+
+<p>Döngüler, içlerinde tanımladığımız işlemi belirttiğimiz koşul gerçekleştiği sürece tekrarlayan yapılardır. 
+While döngüsü, içerisine verdiğimiz koşul doğru olduğu sürece verdiğimiz komutları tekrarlayan bir yapıya sahiptir.</p>
+
+<p>Öncelikle while döngüsü nasıl yazılır ona bakalım:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># syntax 1</span>
+<span class="k">while</span> <span class="o">[[</span> condition <span class="o">]]</span>
+<span class="k">do
+    </span><span class="nb">echo</span> <span class="s2">"condition holds"</span>
+<span class="k">done</span>
+
+<span class="c"># syntax 2</span>
+<span class="k">while</span> <span class="o">[[</span> condition <span class="o">]]</span><span class="p">;</span> <span class="k">do
+    </span><span class="nb">echo</span> <span class="s2">"condition holds"</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<p>Koşulu yazdıktan sonra koyduğumuz noktalı virgül, 
+<code class="highlighter-rouge">do</code> anahtar kelimesi ile koşulu aynı satıra yazabilmemizi sağlıyor. 
+Ben ikinci yazımı tercih ediyorum, gözüme hoş geldiği için.</p>
+
+<p><a href="/shell-scripts-program-argumanlarini-okumak">Program Argümanlarını Okumak</a> 
+isimli yazıda komut satırından gelen argümanları tek tek ekrana yazdırmayı başarmıştık. 
+Şimdi bir döngü yapıp hepsini daha şık bir kod ile yazdırmaya ne dersiniz?</p>
+
+<p>Aşağıdaki kod, parametre sayısı 0 oluncaya kadar ilk parametreyi ekrana yazdırıyor. 
+Bu kodun en önemli kısmı <code class="highlighter-rouge">shift</code> komutu. 
+Bu komut parametreleri birer sola kaydırıyor. 
+Yani örneğin <code class="highlighter-rouge">shift</code> çağırmadan önce argüman değerleri <code class="highlighter-rouge">$1="a"</code>, <code class="highlighter-rouge">$2="b"</code>, <code class="highlighter-rouge">$3="c"</code> durumundaysa, 
+<code class="highlighter-rouge">shift</code> çağırdıktan sonra <code class="highlighter-rouge">$1="b"</code>, <code class="highlighter-rouge">$2="c"</code> durumuna geçiyor. 
+Böylece tüm parametreleri <code class="highlighter-rouge">$1</code> değişkenini kullanarak okuyabiliyoruz.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c"># Learning Shell Scripting</span>
+<span class="c"># While Loop</span>
+
+<span class="nv">INDEX</span><span class="o">=</span>0
+<span class="k">while</span> <span class="o">[[</span> <span class="s2">"$#"</span> <span class="nt">-ne</span> <span class="s2">"0"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">do
+    </span><span class="nv">INDEX</span><span class="o">=</span><span class="k">$((</span><span class="nv">$INDEX</span> <span class="o">+</span> <span class="m">1</span><span class="k">))</span>
+    <span class="nb">echo</span> <span class="s2">"Parameter[</span><span class="nv">$INDEX</span><span class="s2">] is </span><span class="nv">$1</span><span class="s2">"</span>
+    <span class="nb">shift
+</span><span class="k">done</span>
+</code></pre></div></div>
+
+<p>Bu programı aşağıdaki gibi çağırırsanız, aşağıdaki sonucu alabilirsiniz:</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">sedrik@localhost ~ $</span><span class="w"> </span>./helloworld a b c d
+<span class="go">Parameter[1] is a
+Parameter[2] is b
+Parameter[3] is c
+Parameter[4] is d
+</span></code></pre></div></div>
+
+<h3 id="until-döngüsü">Until Döngüsü</h3>
+
+<p>While döngüsünün tam tersi şekilde koşulu sorgular. 
+Yani verdiğimiz koşul doğru olmadığı sürece verdiğimiz komutları tekrarlar. 
+Koşul ne zaman doğru olur, o zaman döngü durur.</p>
+
+<p>Aşağıdaki döngü, <code class="highlighter-rouge">my_variable</code> isimli değişken 10 değerinden büyük olduğu zaman duracak. 
+Yani ekrana 1’den 10’a kadar tüm sayıları yazdırmış olacağız.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/sh</span>
+<span class="c"># Learning Shell Scripting</span>
+<span class="c"># Until Loop</span>
+
+<span class="nv">my_variable</span><span class="o">=</span>1
+
+<span class="k">until</span> <span class="o">[[</span> <span class="s2">"</span><span class="k">${</span><span class="nv">my_variable</span><span class="k">}</span><span class="s2">"</span> <span class="nt">-gt</span> <span class="s2">"10"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">do
+    </span><span class="nb">echo</span> <span class="s2">"</span><span class="k">${</span><span class="nv">my_variable</span><span class="k">}</span><span class="s2">"</span>
+    <span class="nv">my_variable</span><span class="o">=</span><span class="k">$((</span>my_variable <span class="o">+</span> <span class="m">1</span><span class="k">))</span>
+<span class="k">done</span>
+</code></pre></div></div>
+
+<p>While syntax’ında olduğu gibi, until syntax’ında da, 
+koşuldan sonraki noktalı virgülü kaldırıp 
+<code class="highlighter-rouge">do</code> anahtar kelimesini bir sonraki satıra atabilirsiniz. 
+Ama ben atmamayı tercih edeceğim. 
+Bana göre böyle daha güzel görünüyor.</p>
+
+<p>Saygılarımı sunarak bu yazımı da sonlandırıyorum. 
+Herkese kodlu geceler dilerim. 
+Esenlikle.</p>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/shell-scripts-aritmetik-islemler">&laquo; Shell Scripts: Aritmetik İşlemler</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+    <a class="next" href="/shell-scripts-if-elif-else">Shell Scripts: if / elif / else &raquo;</a>
+    
+  </div>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'http://demo.serdarkuzucu.com/shell-scripts-while-ve-until-donguleri';
+        this.page.identifier = 'shell-scripts-while-ve-until-donguleri';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>

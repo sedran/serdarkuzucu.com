@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Java&#39;da Timer ve TimerTask Sınıflarının Kullanımı</title>
+  <meta name="description" content="Merhaba arkadaşlar. Bu yazımda Java’daki Timer ve TimerTask sınıflarının kullanımından bahsedeceğim. Bu sınıfların ne gibi dertlerimize derman olduğunu kısac...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://demo.serdarkuzucu.com/javada-timer-ve-timertask-siniflarinin-kullanimi">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="http://demo.serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/java" class="dropdown-item">Java (8)</a>
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (16)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="http://demo.serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Java'da Timer ve TimerTask Sınıflarının Kullanımı</h1>
+    <p class="post-meta">
+      <time datetime="2014-09-19T21:16:00+00:00" itemprop="datePublished">Sep 19, 2014</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Merhaba arkadaşlar. 
+Bu yazımda Java’daki <code class="highlighter-rouge">Timer</code> ve <code class="highlighter-rouge">TimerTask</code> sınıflarının kullanımından bahsedeceğim. 
+Bu sınıfların ne gibi dertlerimize derman olduğunu kısaca anlatmaya çalışacağım 
+ve nacizene birkaç örnek uygulama göstereceğim. 
+Öncelikle kemerlerimizi bağlayalım.</p>
+
+<!--more-->
+
+<h3 id="1-javautiltimer-sınıfı">1. <code class="highlighter-rouge">java.util.Timer</code> Sınıfı</h3>
+
+<p><code class="highlighter-rouge">Timer</code> sınıfı, bize belirli görevlerin belirtilen zamanda bir seferliğine 
+veya tekrarlayan aralıklarla arkaplanda (ayrı thread’de) çalıştırılmasını sağlayan 
+single-thread bir yapı sunmaktadır. 
+Yani yaratacağımız her <code class="highlighter-rouge">Timer</code> objesi yeni bir <code class="highlighter-rouge">Thread</code> anlamına geliyor.</p>
+
+<h3 id="2-javautiltimertask-sınıfı">2. <code class="highlighter-rouge">java.util.TimerTask</code> Sınıfı</h3>
+
+<p><code class="highlighter-rouge">Timer</code> nesnelerine yapması gereken işleri Runnable interface’inin bir implementasyonu olan 
+<code class="highlighter-rouge">TimerTask</code> nesneleri şeklinde veriyoruz. 
+Bir <code class="highlighter-rouge">Timer</code> nesnesine birden fazla <code class="highlighter-rouge">TimerTask</code> nesnesini zamanlayabiliyoruz.
+Aşağıya hemen bir örnek kod koyayım:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.timers</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Timer</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.TimerTask</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyFirstTimerApplication</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Create 2 timers</span>
+        <span class="c1">// which means 2 threads</span>
+        <span class="nc">Timer</span> <span class="n">timer1</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Timer</span><span class="o">(</span><span class="s">"MyTimer-1"</span><span class="o">);</span>
+        <span class="nc">Timer</span> <span class="n">timer2</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Timer</span><span class="o">(</span><span class="s">"MyTimer-2"</span><span class="o">);</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Scheduling tasks..."</span><span class="o">);</span>
+        <span class="c1">// Schedule the first task on the first timer</span>
+        <span class="n">timer1</span><span class="o">.</span><span class="na">scheduleAtFixedRate</span><span class="o">(</span><span class="k">new</span> <span class="nc">SimpleTimerTask</span><span class="o">(</span><span class="s">"Task1"</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">50</span><span class="o">);</span>
+        <span class="c1">// Schedule the second task on the second timer</span>
+        <span class="n">timer2</span><span class="o">.</span><span class="na">scheduleAtFixedRate</span><span class="o">(</span><span class="k">new</span> <span class="nc">SimpleTimerTask</span><span class="o">(</span><span class="s">"Task2"</span><span class="o">),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">100</span><span class="o">);</span>
+        <span class="c1">// Schedule the third task on the second timer</span>
+        <span class="n">timer2</span><span class="o">.</span><span class="na">scheduleAtFixedRate</span><span class="o">(</span><span class="k">new</span> <span class="nc">SimpleTimerTask</span><span class="o">(</span><span class="s">"Task3"</span><span class="o">),</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">100</span><span class="o">);</span>
+
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="c1">// Sleep main thread for 500 ms</span>
+            <span class="c1">// Timer threads continue executing</span>
+            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">500</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Interrupted! Exiting..."</span><span class="o">);</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="c1">// Here, main thread woke up</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Main thread woke up!"</span><span class="o">);</span>
+        <span class="c1">// Cancel all timers</span>
+        <span class="n">timer1</span><span class="o">.</span><span class="na">cancel</span><span class="o">();</span>
+        <span class="n">timer2</span><span class="o">.</span><span class="na">cancel</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Timers were cancelled!"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">SimpleTimerTask</span> <span class="kd">extends</span> <span class="nc">TimerTask</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+
+        <span class="kd">public</span> <span class="nf">SimpleTimerTask</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">dateStr</span> <span class="o">=</span> <span class="nc">String</span><span class="o">.</span><span class="na">valueOf</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">().</span><span class="na">getTime</span><span class="o">());</span>
+            <span class="nc">String</span> <span class="n">currentThreadStr</span> <span class="o">=</span> <span class="nc">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getName</span><span class="o">();</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"SimpleTimerTask {name: %s, date: %s, thread: %s}\n"</span><span class="o">,</span> <span class="n">name</span><span class="o">,</span> <span class="n">dateStr</span><span class="o">,</span> <span class="n">currentThreadStr</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Kodda ne yaptığımdan bahsedeyim kabaca. 
+Öncelikle iki tane Timer yarattım. 
+Timer objelerinin constructor’ına verdiğim parametreler, çalışacak olan Thread’lere verilecek olan isimler. 
+Hani demiştim ya her Timer objesi bir yeni Thread yaratır diye, işte o hesap. 
+SimpleTimerTask isminde bir sınıf oluşturdum, TimerTask’ı extend edecek şekilde. 
+TimerTask sınıfını extend eden bir sınıfın yapmak zorunda olduğu tek şey <code class="highlighter-rouge">run()</code> methodunu override etmektir. 
+Ben bu yazım için geliştirdiğim <code class="highlighter-rouge">SimpleTimerTask</code> sınıfının <code class="highlighter-rouge">run()</code> methodunda Task’e verdiğim isimi, 
+o anki zamanı ve Task’i çalıştıran Thread’in ismini konsola yazdırmayı tercih ettim. 
+Task’lere ve Thread’lere isim vermemin sebebi outputu kolayca takip edebilmemizdi.</p>
+
+<p>Timer nesnelerinin üzerinde TimerTask objelerini <code class="highlighter-rouge">schedule(...)</code> 
+veya <code class="highlighter-rouge">scheduleAtFixedRate(...)</code> methodlarıyla schedule ediyoruz. 
+<code class="highlighter-rouge">schedule(...)</code> methoduyla zamanlanan task’ler belirtilen zamanda sadece bir kere çalışırken, 
+<code class="highlighter-rouge">scheduleAtFixedRate(...)</code> methoduyla zamanlanan task’ler belirtilen zamanda başlar, 
+belirtilen aralıklarla tekrar tekrar çalışırlar. 
+Mesela yukarıdaki kod örneğinde ilk task’i 0 milisaniye sonra çalıştır, 
+50 milisaniyede bir tekrar et şeklinde ayarladım. 
+İkinci task’i 0 milisaniye sonra çalış ve 100 milisaniyede bir tekrar et şeklinde kurdum. 
+Son task’i ise 5 milisaniye sonra çalış, 100 milisaniyede bir tekrar et diye kurdum. 
+İlk task’i birinci Timer objesine verirken, diğer iki task’i ikinci Timer objesine verdim. 
+Yani sistemde 3 adet task, 2 tane Timer thread’i, 1 tane de main thread var. 
+Task’ler çalıştıktan sonra main thread’i 500 milisaniye uyumaya davet ettim 
+ve uyandığında da Timer’ları iptal etmesini istedim. 
+Kodu çalıştırdığımızda alacağımız sonuç şuna benzeyecektir:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Scheduling tasks...
+SimpleTimerTask {name: Task2, date: 1411150660445, thread: MyTimer-2}
+SimpleTimerTask {name: Task1, date: 1411150660445, thread: MyTimer-1}
+SimpleTimerTask {name: Task3, date: 1411150660450, thread: MyTimer-2}
+SimpleTimerTask {name: Task1, date: 1411150660495, thread: MyTimer-1}
+SimpleTimerTask {name: Task1, date: 1411150660545, thread: MyTimer-1}
+SimpleTimerTask {name: Task2, date: 1411150660545, thread: MyTimer-2}
+SimpleTimerTask {name: Task3, date: 1411150660550, thread: MyTimer-2}
+SimpleTimerTask {name: Task1, date: 1411150660595, thread: MyTimer-1}
+SimpleTimerTask {name: Task1, date: 1411150660645, thread: MyTimer-1}
+SimpleTimerTask {name: Task2, date: 1411150660645, thread: MyTimer-2}
+SimpleTimerTask {name: Task3, date: 1411150660650, thread: MyTimer-2}
+SimpleTimerTask {name: Task1, date: 1411150660695, thread: MyTimer-1}
+SimpleTimerTask {name: Task1, date: 1411150660745, thread: MyTimer-1}
+SimpleTimerTask {name: Task2, date: 1411150660745, thread: MyTimer-2}
+SimpleTimerTask {name: Task3, date: 1411150660750, thread: MyTimer-2}
+SimpleTimerTask {name: Task1, date: 1411150660795, thread: MyTimer-1}
+SimpleTimerTask {name: Task2, date: 1411150660845, thread: MyTimer-2}
+SimpleTimerTask {name: Task1, date: 1411150660845, thread: MyTimer-1}
+SimpleTimerTask {name: Task3, date: 1411150660850, thread: MyTimer-2}
+SimpleTimerTask {name: Task1, date: 1411150660895, thread: MyTimer-1}
+SimpleTimerTask {name: Task2, date: 1411150660945, thread: MyTimer-2}
+SimpleTimerTask {name: Task1, date: 1411150660945, thread: MyTimer-1}
+Main thread woke up!
+Timers were cancelled!
+</code></pre></div></div>
+
+<p>Kodun çıktısından task’lerin çalışma zamanlarını rahatlıkla görebiliyoruz. 
+Ayrıca her TimerTask’in bulunduğu Timer’ın thread’inde çalıştığını görüyoruz. 
+Şimdi bir adım derine inelim.</p>
+
+<p>Bir Timer objesinin sadece bir thread kullandığını söylemiştim. 
+Yani zamanladığımız her task bir queue’da bekletiliyor ve sırasıyla işleniyor. 
+Bunun şöyle bir dezavantajı var; eğer zamanlanan görev çok uzun sürüyorsa, 
+o işlem başladığında o Timer’ın thread’ini uzun süre meşgul edeceği için 
+sıradaki diğer task’lere zamanında sıra gelmeyebilir. 
+Örneğin 10 milisaniyede bir başka bir sunucuya bağlanıp veri transferi yapmak için bir Timer kurarsak, 
+network bazlı gecikmelerden dolayı verdiğimiz süre tutmayacaktır. 
+Yada bir Timer üzerinde aynı anda çalışmasını istediğimiz iki task’ten birisi diğerine göre daha geç çalışacaktır. 
+Bu yüzden genellikle Timer kullanılacağı zaman kısa işler yapmamızı öneriyor üstatlar. 
+Aşağıda bir örnek kod göstereyim de tam olsun.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.timers</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.File</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.FileWriter</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Timer</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.TimerTask</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TimerWithLatency</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">Timer</span> <span class="n">timer</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Timer</span><span class="o">();</span>
+        <span class="n">timer</span><span class="o">.</span><span class="na">scheduleAtFixedRate</span><span class="o">(</span><span class="k">new</span> <span class="nc">LongTimerTask</span><span class="o">(),</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">100</span><span class="o">);</span>
+
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Main thread is sleeping."</span><span class="o">);</span>
+            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">5000</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Oh no! I'm interrupted!"</span><span class="o">);</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Main thread woke up!"</span><span class="o">);</span>
+        <span class="n">timer</span><span class="o">.</span><span class="na">cancel</span><span class="o">();</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Timer cancelled!"</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">LongTimerTask</span> <span class="kd">extends</span> <span class="nc">TimerTask</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+            <span class="c1">// This is a long task</span>
+            <span class="kt">long</span> <span class="n">startDate</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"TaskStarted = "</span> <span class="o">+</span> <span class="n">startDate</span><span class="o">);</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="nc">File</span> <span class="n">file</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">File</span><span class="o">(</span><span class="s">"test-file.txt"</span><span class="o">);</span>
+                <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span> <span class="mi">5000</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                    <span class="nc">FileWriter</span> <span class="n">fileWriter</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileWriter</span><span class="o">(</span><span class="n">file</span><span class="o">);</span>
+                    <span class="n">fileWriter</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"Line"</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="s">"n"</span><span class="o">);</span>
+                    <span class="n">fileWriter</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>
+                    <span class="n">fileWriter</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+            <span class="o">}</span>
+            <span class="kt">long</span> <span class="n">finishDate</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"TimePassed = "</span> <span class="o">+</span> <span class="o">(</span><span class="n">finishDate</span> <span class="o">-</span> <span class="n">startDate</span><span class="o">));</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Biliyorum, <code class="highlighter-rouge">run()</code> methodunda çalıştırdığım kod tam bir amelelik, 
+fakat sadece yapılacak işin uzun süreceği hissini vermesi için o şekilde yazdım. 
+Bu kod çalıştırıldığında vereceği output da şunun gibi birşey olacaktır:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Main thread is sleeping.
+TaskStarted = 1411154424309
+TimePassed = 1296
+TaskStarted = 1411154425605
+TimePassed = 1066
+TaskStarted = 1411154426671
+TimePassed = 1641
+TaskStarted = 1411154428312
+Main thread woke up!
+Timer cancelled!
+TimePassed = 1205
+</code></pre></div></div>
+
+<p>Gördüğümüz üzere, 
+Timer üzerinde 100 milisaniyede bir çalış dediğimiz görev çok uzun olduğu için gecikmeler meydana gelmiş.
+100 milisaniyede bir çalışacak olan görev ortalama 1.5 saniyede bir çalışmış.
+Ayrıca burada farkına varmanızı istediğim bir diğer nokta da, 
+Timer <code class="highlighter-rouge">cancel()</code> methoduyla iptal edilir edilmez thread sonlanmıyor. 
+O an çalıştırmakta olduğu bir task varsa, o bittikten sonra Timer kapanıyor.</p>
+
+<p>Yav bu Timer iyiymiş, hoşmuş da, ne işimize yarayacak bu diye soranlar vardır.
+Timer’ı kısaca özetleyecek bir cümle uydurmam gerekseydi sanırım bu cümle 
+“arkaplanda zamanlanmış görevlerin çalıştırılması” olurdu. 
+Lakin malum biz programcılar cümlelerle değil kodla konuşuruz.
+O yüzden yine örnek vereceğim.
+Aklıma gelen ilk örnek word/excel gibi ofis uygulamalarında 5 dakikada bir 
+kullanıcının değişiklik yaptığı dosyanın otomatik olarak kaydedilmesi oldu.
+Fakat bu bana eğlenceli gelmedi.
+Hadi kısa süreliğine odun bir developer olmayı bir kenara bırakıp sevgilimize 
+iki Task’li basit bir Java süprizi hazırlayalım.</p>
+
+<p>Aşağıdaki kod <code class="highlighter-rouge">I love you ${sevgilinizin adı}</code> yazısını önce harf harf ekrana yazdıracak,
+sonra da bu yazının farklı renklerde görünmesini sağlayacak:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.timers</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.awt.Color</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.Dimension</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.Font</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.Graphics</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.reflect.InvocationTargetException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Timer</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.TimerTask</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.swing.JFrame</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.JLabel</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.JPanel</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.SwingUtilities</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TimerForGirlfriend</span> <span class="kd">extends</span> <span class="nc">JFrame</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">MESSAGE</span> <span class="o">=</span> <span class="s">"I love you ${GIRLFRIEND_NAME}"</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nc">CustomJPanel</span> <span class="n">panel</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">JLabel</span> <span class="n">label</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">TimerForGirlfriend</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="no">MESSAGE</span><span class="o">);</span>
+        <span class="n">setDefaultCloseOperation</span><span class="o">(</span><span class="no">EXIT_ON_CLOSE</span><span class="o">);</span>
+
+        <span class="n">panel</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">CustomJPanel</span><span class="o">();</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JLabel</span><span class="o">();</span>
+        <span class="n">label</span><span class="o">.</span><span class="na">setFont</span><span class="o">(</span><span class="k">new</span> <span class="nc">Font</span><span class="o">(</span><span class="s">"Comic Sans MS"</span><span class="o">,</span> <span class="nc">Font</span><span class="o">.</span><span class="na">BOLD</span><span class="o">,</span> <span class="mi">25</span><span class="o">));</span>
+        <span class="n">label</span><span class="o">.</span><span class="na">setForeground</span><span class="o">(</span><span class="nc">Color</span><span class="o">.</span><span class="na">BLUE</span><span class="o">);</span>
+        <span class="n">panel</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">label</span><span class="o">);</span>
+
+        <span class="n">setContentPane</span><span class="o">(</span><span class="n">panel</span><span class="o">);</span>
+        <span class="n">setSize</span><span class="o">(</span><span class="k">new</span> <span class="nc">Dimension</span><span class="o">(</span><span class="mi">500</span><span class="o">,</span> <span class="mi">100</span><span class="o">));</span>
+        <span class="n">setResizable</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
+        <span class="n">setLocationRelativeTo</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="nc">JLabel</span> <span class="nf">getLabel</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">label</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">CustomJPanel</span> <span class="kd">extends</span> <span class="nc">JPanel</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">paintComponent</span><span class="o">(</span><span class="nc">Graphics</span> <span class="n">g</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">g</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="nc">Color</span><span class="o">.</span><span class="na">WHITE</span><span class="o">);</span>
+            <span class="n">g</span><span class="o">.</span><span class="na">fillRect</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="n">getWidth</span><span class="o">(),</span> <span class="n">getHeight</span><span class="o">());</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">WriteTimerTask</span> <span class="kd">extends</span> <span class="nc">TimerTask</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="nc">JLabel</span> <span class="n">label</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">charIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">String</span> <span class="n">message</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+
+        <span class="kd">public</span> <span class="nf">WriteTimerTask</span><span class="o">(</span><span class="nc">JLabel</span> <span class="n">label</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">label</span> <span class="o">=</span> <span class="n">label</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">charIndex</span> <span class="o">==</span> <span class="no">MESSAGE</span><span class="o">.</span><span class="na">length</span><span class="o">())</span> <span class="o">{</span>
+                <span class="c1">// Whole message was displayed.</span>
+                <span class="k">return</span><span class="o">;</span>
+            <span class="o">}</span>
+            <span class="n">message</span> <span class="o">+=</span> <span class="no">MESSAGE</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">charIndex</span><span class="o">++);</span>
+
+            <span class="nc">SwingUtilities</span><span class="o">.</span><span class="na">invokeLater</span><span class="o">(</span><span class="k">new</span> <span class="nc">Runnable</span><span class="o">()</span> <span class="o">{</span>
+                <span class="nd">@Override</span>
+                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="c1">// Do UI update in event dispatcher thread</span>
+                    <span class="n">label</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">});</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">BlinkTimerTask</span> <span class="kd">extends</span> <span class="nc">TimerTask</span> <span class="o">{</span>
+        <span class="kd">private</span> <span class="nc">JLabel</span> <span class="n">label</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">colorIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="nc">Color</span><span class="o">[]</span> <span class="n">colors</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Color</span><span class="o">[]</span> <span class="o">{</span>
+            <span class="nc">Color</span><span class="o">.</span><span class="na">BLACK</span><span class="o">,</span> <span class="nc">Color</span><span class="o">.</span><span class="na">BLUE</span><span class="o">,</span> <span class="nc">Color</span><span class="o">.</span><span class="na">RED</span><span class="o">,</span> <span class="nc">Color</span><span class="o">.</span><span class="na">YELLOW</span><span class="o">,</span> <span class="nc">Color</span><span class="o">.</span><span class="na">MAGENTA</span><span class="o">,</span> <span class="nc">Color</span><span class="o">.</span><span class="na">GREEN</span>
+        <span class="o">};</span>
+
+        <span class="kd">public</span> <span class="nf">BlinkTimerTask</span><span class="o">(</span><span class="nc">JLabel</span> <span class="n">label</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">label</span> <span class="o">=</span> <span class="n">label</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+            <span class="kd">final</span> <span class="nc">Color</span> <span class="n">color</span> <span class="o">=</span> <span class="n">colors</span><span class="o">[</span><span class="n">colorIndex</span> <span class="o">%</span> <span class="n">colors</span><span class="o">.</span><span class="na">length</span><span class="o">];</span>
+            <span class="n">colorIndex</span><span class="o">++;</span>
+
+            <span class="nc">SwingUtilities</span><span class="o">.</span><span class="na">invokeLater</span><span class="o">(</span><span class="k">new</span> <span class="nc">Runnable</span><span class="o">()</span> <span class="o">{</span>
+                <span class="nd">@Override</span>
+                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="c1">// Do UI update in event dispatcher thread</span>
+                    <span class="n">label</span><span class="o">.</span><span class="na">setForeground</span><span class="o">(</span><span class="n">color</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">});</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span><span class="o">,</span> <span class="nc">InvocationTargetException</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="nc">TimerForGirlfriend</span> <span class="n">frame</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TimerForGirlfriend</span><span class="o">();</span>
+
+        <span class="nc">SwingUtilities</span><span class="o">.</span><span class="na">invokeAndWait</span><span class="o">(</span><span class="k">new</span> <span class="nc">Runnable</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                <span class="c1">// UI code must run in event dispatcher thread</span>
+                <span class="n">frame</span><span class="o">.</span><span class="na">setVisible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
+
+        <span class="c1">// Run after the frame is visible</span>
+        <span class="nc">Timer</span> <span class="n">timer</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Timer</span><span class="o">();</span>
+        <span class="kt">int</span> <span class="n">writeTimerTaskEndTime</span> <span class="o">=</span> <span class="mi">200</span> <span class="o">*</span> <span class="o">(</span><span class="no">MESSAGE</span><span class="o">.</span><span class="na">length</span><span class="o">()</span> <span class="o">+</span> <span class="mi">2</span><span class="o">);</span>
+        <span class="n">timer</span><span class="o">.</span><span class="na">scheduleAtFixedRate</span><span class="o">(</span><span class="k">new</span> <span class="nc">WriteTimerTask</span><span class="o">(</span><span class="n">frame</span><span class="o">.</span><span class="na">getLabel</span><span class="o">()),</span> <span class="mi">200</span><span class="o">,</span> <span class="mi">200</span><span class="o">);</span>
+        <span class="n">timer</span><span class="o">.</span><span class="na">scheduleAtFixedRate</span><span class="o">(</span><span class="k">new</span> <span class="nc">BlinkTimerTask</span><span class="o">(</span><span class="n">frame</span><span class="o">.</span><span class="na">getLabel</span><span class="o">()),</span> <span class="n">writeTimerTaskEndTime</span><span class="o">,</span> <span class="mi">200</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Efendim şimdilik benden bu kadar.
+Daha eğlenceli kodlar için izlemede kalın.
+Yorumlarınızı esirgemeyin.
+Kodlu geceler.</p>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/javada-swing-ile-basit-bir-pencere-yapalim">&laquo; Java'da Swing ile Basit Bir Pencere Yapalım</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+    <a class="next" href="/linux-shell-script-gelistirmek">Linux Shell Script Geliştirmek &raquo;</a>
+    
+  </div>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'http://demo.serdarkuzucu.com/javada-timer-ve-timertask-siniflarinin-kullanimi';
+        this.page.identifier = 'javada-timer-ve-timertask-siniflarinin-kullanimi';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>
