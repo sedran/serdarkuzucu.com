@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Checkbox Yerine Select Kullanalım</title>
+  <meta name="description" content="Uzun zaman olmuş blog yazmayalı. Madem frond-end developer olduk, hadi biraz daha Javascript yazalım. Geçen gün Netmera için bir sayfa geliştirirken karşılaş...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://demo.serdarkuzucu.com/checkbox-yerine-select-kullanalim">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="http://demo.serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/java" class="dropdown-item">Java (13)</a>
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (22)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="http://demo.serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Checkbox Yerine Select Kullanalım</h1>
+    <p class="post-meta">
+      <time datetime="2013-12-21T16:27:00+00:00" itemprop="datePublished">Dec 21, 2013</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/javascript">Javascript</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    
+<p>Uzun zaman olmuş blog yazmayalı. 
+Madem frond-end developer olduk, hadi biraz daha Javascript yazalım. 
+Geçen gün <a href="http://www.netmera.com/">Netmera</a> için bir sayfa geliştirirken karşılaştığım bir zorluktan bahsetmek istiyorum öncelikle. 
+Diyelim kullanıcıya ekranda belirli seçeneklerden istediği kadarını seçebilmesi için bir arayüz hazırlamamız gerekiyor. 
+Bunun için genellikle kullanılan ön yüz elemanı genellikle checkbox olur. 
+Fakat seçenekler biraz fazla olursa ne olur? 
+Ekranda 50-60 tane checkbox’ı alt alta göstermek ister miyiz? 
+Bu gibi durumlarda bizim kullandığımız genel yöntem 
+kullanıcıya bir tane select (dropdown yada combobox) göstermek 
+ve bir tane butonla da daha fazla select elementini ekrana getirebilmesini sağlamak. 
+Bu yöntem çok güzel bir şekilde ihtiyacımızı karşılıyor fakat bir sıkıntısı var, 
+Javascript ve jQuery ile bunu yönetmesi biraz zor.</p>
+
+<!--more-->
+
+<p>Bu ekranda alt alta dizeceğimiz açılır kutuların bir takım gereksinimleri karşılaması gerekiyor. 
+Gereksinimleri yazdığımda AngularJS kullanıcıları görecek ki aslında jQuery değil,
+AngularJS kullanmak daha mantıklı. 
+Fakat inat ettim bir türlü öğrenmiyorum.
+Belki bir dahaki yazımda aynı şeyi AngularJS ile yapmayı anlatırım.
+Şimdi gereksinimler:</p>
+
+<ol>
+  <li>Ekranda bir select varken kullanıcı tüm seçeneklerden sadece bir tanesini seçebilir.</li>
+  <li>Ekranda bulunan butona basarak ekrana yeni bir select ekleyebilir.</li>
+  <li>Ekrana yeni eklenen select’ler önceden eklenmiş olanlarda seçili olan değerleri bulundurmayacak.</li>
+  <li>Select’lerden herhangi bir tanesinde kullanıcı bir değer seçtiğinde, 
+önceden seçmiş olduğu değer diğer select’lere eklenecek, yeni seçtiği değer de diğer select’lerden çıkartılacak.</li>
+  <li>Elimizdeki seçenek sayısından fazla select ekleyemeyecek.</li>
+</ol>
+
+<p>Şimdilik ekrana eklenmiş bir select’in tekrar ekrandan silinmesi kısmına girmeyeceğim. 
+Belki yazı kısa olursa onu da eklerim.</p>
+
+<p>Aşağıdaki gibi, kullanıcının karşısına ilk önce ekranda tek seçenekle ve bir butonla çıkalım. 
+İsterse daha fazlasını eklesin.</p>
+
+<p><img src="/assets/posts/single-checkbox-and-button.png" alt="Asuman Only" /></p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"selectContainer"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p&gt;&lt;select</span> <span class="na">class=</span><span class="s">"my-select"</span><span class="nt">&gt;&lt;/select&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+
+<span class="nt">&lt;p&gt;&lt;button</span> <span class="na">id=</span><span class="s">"addOneMore"</span><span class="nt">&gt;</span>+ Ekle<span class="nt">&lt;/button&gt;&lt;/p&gt;</span>
+</code></pre></div></div>
+
+<p>Bu durumdayken kullanıcı “Ekle” butonuna iki kere basarsa ne olur? Onu da aşağıda görelim:</p>
+
+<p><img src="/assets/posts/three-checkboxes-and-button.png" alt="Three Checkboxes" /></p>
+
+<p>Bunu yapabilmek çok mu zor? 
+Hayır. Öncelikle elimizdeki tüm seçenekleri ve ekranda seçili olan seçenekleri birer array’de tutuyoruz.
+Daha sonra yeni bir select yaratılabilmesi için yapılması gereken <code class="highlighter-rouge">addOption</code>, <code class="highlighter-rouge">addOptions</code> 
+ve <code class="highlighter-rouge">addSelect</code> fonksiyonlarını tanımlıyoruz.</p>
+
+<h3 id="arrayler">Array’ler</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">elements</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">Asuman</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Ahmet</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Ali</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Ayşe</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Mehmet</span><span class="dl">"</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">selectedElements</span> <span class="o">=</span> <span class="p">[];</span>
+</code></pre></div></div>
+
+<h3 id="addoption-fonksiyonu">addOption Fonksiyonu:</h3>
+
+<p>Bu fonksiyon varolan bir select objesine yeni bir seçenek ekler.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Adds an option to a select object
+ */</span>
+<span class="kd">function</span> <span class="nx">addOption</span><span class="p">(</span><span class="nx">select</span><span class="p">,</span> <span class="nx">optVal</span><span class="p">,</span> <span class="nx">opt</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">opt</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">&lt;option /&gt;</span><span class="dl">"</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">value</span><span class="dl">'</span><span class="p">,</span> <span class="nx">optVal</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="nx">opt</span><span class="p">);</span>
+    <span class="nx">select</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">opt</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="addoptions-fonksiyonu">addOptions Fonksiyonu</h3>
+
+<p>Bu fonksiyon varolan bir select objesine elements array’indeki tüm elemanları ekler:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Adds all available options to a select object
+ */</span>
+<span class="kd">function</span> <span class="nx">addOptions</span><span class="p">(</span><span class="nx">select</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">elements</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">element</span> <span class="o">=</span> <span class="nx">elements</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="nx">addOption</span><span class="p">(</span><span class="nx">select</span><span class="p">,</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">element</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// remove new selected element from available elements</span>
+    <span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nx">elements</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="c1">// add it to selectedElements array</span>
+    <span class="nx">selectedElements</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="addselect-fonksiyonu">addSelect Fonksiyonu</h3>
+
+<p>Bu fonksiyon da Ekle butonuna basıldığında yeni bir select objesini ekrana ekler.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Adds a new select element when the add button is pressed.
+ */</span>
+<span class="kd">function</span> <span class="nx">addSelect</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">elements</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">select</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">&lt;select /&gt;</span><span class="dl">"</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="dl">"</span><span class="s2">my-select</span><span class="dl">"</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">&lt;p /&gt;</span><span class="dl">"</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">select</span><span class="p">);</span>
+    <span class="nx">addOptions</span><span class="p">(</span><span class="nx">select</span><span class="p">);</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#selectContainer</span><span class="dl">"</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Şimdi bir de bu fonksiyonları çalıştıran bir başlangıç noktası tanımlayalım:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Loads initial values into initial select objects
+ */</span>
+<span class="kd">function</span> <span class="nx">initialize</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.my-select</span><span class="dl">"</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">select</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+        <span class="nx">addOptions</span><span class="p">(</span><span class="nx">select</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#addOneMore</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="nx">addSelect</span><span class="p">);</span>
+<span class="nx">initialize</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>Bu kod şu haliyle, ilginç bir şekilde, çalışıyor. 
+Fakat birkaç eksiği var. Gereksinim 4 ve 5’i sağlamıyor. 
+Şimdi yeni bir select eklediğimizde önceki select’lerden yeni select’deki değeri silmek için gereken 
+<code class="highlighter-rouge">removeOption</code> ve <code class="highlighter-rouge">removeOptions</code> fonksiyonlarını yazalım.</p>
+
+<h3 id="removeoption-fonksiyonu">removeOption Fonksiyonu</h3>
+
+<p>Bu fonksiyon verilen bir select objesinden verilen bir değeri siler. 
+Artık bu select objesinden bu değer seçilemez.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Removes an option from a given select object
+ */</span>
+<span class="kd">function</span> <span class="nx">removeOption</span><span class="p">(</span><span class="nx">select</span><span class="p">,</span> <span class="nx">optionValue</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">option</span> <span class="o">=</span> <span class="nx">select</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">option[value="</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">optionValue</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">"]</span><span class="dl">'</span><span class="p">);</span>
+    <span class="nx">option</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="removeoptions-fonksiyonu">removeOptions Fonksiyonu</h3>
+
+<p>Bu da verilen bir seçeneği verilen bir select objesi hariç tüm select objelerinden siler.
+Yani yeni bir select objesi sayfaya eklendiği zaman
+bu select objesi hariç diğer tüm select objelerinden bu select objesinde seçili olan değerin silinmesi gerekiyor.
+Biraz uzun bir cümle oldu fakat anlaşılabilir bence :)</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Removes an option from all select objects except the given
+ */</span>
+<span class="kd">function</span> <span class="nx">removeOptions</span><span class="p">(</span><span class="nx">optionValue</span><span class="p">,</span> <span class="nx">excludeSelect</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">selects</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.my-select</span><span class="dl">"</span><span class="p">).</span><span class="nx">not</span><span class="p">(</span><span class="nx">excludeSelect</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">selects</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">select</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">selects</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+        <span class="nx">removeOption</span><span class="p">(</span><span class="nx">select</span><span class="p">,</span> <span class="nx">optionValue</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Tabi ki bu fonksiyonları yazdığımıza göre kullanmamız gerekiyor.
+Bunun için, yeni yaratılan select objesine seçenekleri eklerken, 
+<code class="highlighter-rouge">removeOptions</code> fonksiyonunu çağırıyoruz. 
+Yani yukarıda tanımladığımız <code class="highlighter-rouge">addOptions</code> fonksiyonunu şu şekilde modifiye ediyoruz:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Adds all available options to a select object
+ */</span>
+<span class="kd">function</span> <span class="nx">addOptions</span><span class="p">(</span><span class="nx">select</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">elements</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">element</span> <span class="o">=</span> <span class="nx">elements</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="nx">addOption</span><span class="p">(</span><span class="nx">select</span><span class="p">,</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">element</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// remove new selected element from available elements</span>
+    <span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nx">elements</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="c1">// add it to selectedElements array</span>
+    <span class="nx">selectedElements</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+    
+    <span class="nx">removeOptions</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">select</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Tamamlanmış gibi görünüyor değil mi? 
+Hayır. Hala gereksinim 4’ü doğru düzgün karşılayamadık. 
+Diyelim ki bu uygulamada 3 tane select objesi var ekranda. 
+Yani kullanıcı 2 tane ekledi sonradan. 
+Şimdi hepsinin içerisinde ‘Ayşe’ seçeneği var değil mi? 
+Ya 3’ünden de ‘Ayşe’ seçersek? 
+Bu durumun oluşmasını engellemek için de, bir select objesindeki seçim değiştiğinde, 
+o select objesinde önceden seçili olan değeri diğer objelere ekleyeceğiz, 
+şu anda seçili olan değeri de diğerlerinden sileceğiz. 
+Böylece, kullanıcı Ahmet seçeneği seçili olan kutuda Ayşe’yi seçerse,
+diğer kutulara Ahmet seçeneğini ekleyeceğiz ve Ayşe seçeneğini sileceğiz.</p>
+
+<p>Bunun için <code class="highlighter-rouge">selectionChange</code> ve <code class="highlighter-rouge">replaceOptions</code> isimli iki fonksiyonu ekleyeceğiz.</p>
+
+<h3 id="replaceoptions-fonksiyonu">replaceOptions Fonksiyonu</h3>
+
+<p>Bu fonksiyon üç parametre alıyor.
+Verilen bir select objesi haricindeki tüm select objelerine verilen bir seçeneği ekliyor
+ve onlardan verilen bir seçeneği siliyor.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Adds a value to and remove a value from all selects except the given select
+ */</span>
+<span class="kd">function</span> <span class="nx">replaceOptions</span><span class="p">(</span><span class="nx">addValue</span><span class="p">,</span> <span class="nx">removeValue</span><span class="p">,</span> <span class="nx">excludeSelect</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">selects</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.my-select</span><span class="dl">"</span><span class="p">).</span><span class="nx">not</span><span class="p">(</span><span class="nx">excludeSelect</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">selects</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">select</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">selects</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+        <span class="nx">removeOption</span><span class="p">(</span><span class="nx">select</span><span class="p">,</span> <span class="nx">removeValue</span><span class="p">);</span>
+        <span class="nx">addOption</span><span class="p">(</span><span class="nx">select</span><span class="p">,</span> <span class="nx">addValue</span><span class="p">,</span> <span class="nx">addValue</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="selectionchange-fonksiyonu">selectionChange Fonksiyonu</h3>
+
+<p>Bu fonksiyon ekrandaki select objelerinden birisinin değeri değiştiği zaman çağırılır. 
+Görevi select objelerinin ve yukarıda tanımladığımız iki array’in tutarlı kalmalarını sağlamaktır.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Called when a selection changes
+ */</span>
+<span class="kd">function</span> <span class="nx">selectionChange</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">select</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">select</span><span class="p">.</span><span class="nx">index</span><span class="p">(</span><span class="dl">"</span><span class="s2">.my-select</span><span class="dl">"</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">currentValue</span> <span class="o">=</span> <span class="nx">select</span><span class="p">.</span><span class="nx">val</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">previousValue</span> <span class="o">=</span> <span class="nx">selectedElements</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
+    <span class="kd">var</span> <span class="nx">indexInArray</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">inArray</span><span class="p">(</span><span class="nx">currentValue</span><span class="p">,</span> <span class="nx">elements</span><span class="p">);</span>
+    
+    <span class="nx">replaceOptions</span><span class="p">(</span><span class="nx">previousValue</span><span class="p">,</span> <span class="nx">currentValue</span><span class="p">,</span> <span class="nx">select</span><span class="p">);</span>
+    <span class="nx">elements</span><span class="p">[</span><span class="nx">indexInArray</span><span class="p">]</span> <span class="o">=</span> <span class="nx">previousValue</span><span class="p">;</span>
+    <span class="nx">selectedElements</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span> <span class="o">=</span> <span class="nx">currentValue</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Şimdi bu selectionChange fonksiyonunu tetikleyecek bir event listener tanımlamamız gerekiyor. 
+Bunu da sayfaya sonradan dinamik olarak eklenecek objeleri de düşünerek şu şekilde yapıyoruz:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">change</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">.my-select</span><span class="dl">'</span><span class="p">,</span> <span class="nx">selectionChange</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="final">Final</h3>
+
+<p>Şimdi buradaki kodu derleyip toparlayıp tekrar yazacak olursak, günün sonunda şöyle birşey çıkıyor karşımıza:</p>
+
+<p><a href="http://jsfiddle.net/sedran/NrG5U/">JSFiddle’da denemek için tıklayın.</a></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">elements</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">Asuman</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Ahmet</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Ali</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Ayşe</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">Mehmet</span><span class="dl">"</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">selectedElements</span> <span class="o">=</span> <span class="p">[];</span>
+
+<span class="cm">/**
+ * Adds an option to a select object
+ */</span>
+<span class="kd">function</span> <span class="nx">addOption</span><span class="p">(</span><span class="nx">select</span><span class="p">,</span> <span class="nx">optVal</span><span class="p">,</span> <span class="nx">opt</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">opt</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">&lt;option /&gt;</span><span class="dl">"</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">'</span><span class="s1">value</span><span class="dl">'</span><span class="p">,</span> <span class="nx">optVal</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="nx">opt</span><span class="p">);</span>
+    <span class="nx">select</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">opt</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * Adds all available options to a select object
+ */</span>
+<span class="kd">function</span> <span class="nx">addOptions</span><span class="p">(</span><span class="nx">select</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">elements</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">element</span> <span class="o">=</span> <span class="nx">elements</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+        <span class="nx">addOption</span><span class="p">(</span><span class="nx">select</span><span class="p">,</span> <span class="nx">element</span><span class="p">,</span> <span class="nx">element</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// remove new selected element from available elements</span>
+    <span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nx">elements</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="c1">// add it to selectedElements array</span>
+    <span class="nx">selectedElements</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+    
+    <span class="nx">removeOptions</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">select</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * Removes an option from a given select object
+ */</span>
+<span class="kd">function</span> <span class="nx">removeOption</span><span class="p">(</span><span class="nx">select</span><span class="p">,</span> <span class="nx">optionValue</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">option</span> <span class="o">=</span> <span class="nx">select</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="dl">'</span><span class="s1">option[value="</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">optionValue</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">"]</span><span class="dl">'</span><span class="p">);</span>
+    <span class="nx">option</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * Removes an option from all select objects except the given
+ */</span>
+<span class="kd">function</span> <span class="nx">removeOptions</span><span class="p">(</span><span class="nx">optionValue</span><span class="p">,</span> <span class="nx">excludeSelect</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">selects</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.my-select</span><span class="dl">"</span><span class="p">).</span><span class="nx">not</span><span class="p">(</span><span class="nx">excludeSelect</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">selects</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">select</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">selects</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+        <span class="nx">removeOption</span><span class="p">(</span><span class="nx">select</span><span class="p">,</span> <span class="nx">optionValue</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * Adds a new select element when the add button is pressed.
+ */</span>
+<span class="kd">function</span> <span class="nx">addSelect</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">elements</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">select</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">&lt;select /&gt;</span><span class="dl">"</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="dl">"</span><span class="s2">my-select</span><span class="dl">"</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">&lt;p /&gt;</span><span class="dl">"</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">select</span><span class="p">);</span>
+    <span class="nx">addOptions</span><span class="p">(</span><span class="nx">select</span><span class="p">);</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#selectContainer</span><span class="dl">"</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * Adds a value to and remove a value from all selects except the given select
+ */</span>
+<span class="kd">function</span> <span class="nx">replaceOptions</span><span class="p">(</span><span class="nx">addValue</span><span class="p">,</span> <span class="nx">removeValue</span><span class="p">,</span> <span class="nx">excludeSelect</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">selects</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.my-select</span><span class="dl">"</span><span class="p">).</span><span class="nx">not</span><span class="p">(</span><span class="nx">excludeSelect</span><span class="p">);</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">selects</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">select</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">selects</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+        <span class="nx">removeOption</span><span class="p">(</span><span class="nx">select</span><span class="p">,</span> <span class="nx">removeValue</span><span class="p">);</span>
+        <span class="nx">addOption</span><span class="p">(</span><span class="nx">select</span><span class="p">,</span> <span class="nx">addValue</span><span class="p">,</span> <span class="nx">addValue</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * Called when a selection changes
+ */</span>
+<span class="kd">function</span> <span class="nx">selectionChange</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">select</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">select</span><span class="p">.</span><span class="nx">index</span><span class="p">(</span><span class="dl">"</span><span class="s2">.my-select</span><span class="dl">"</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">currentValue</span> <span class="o">=</span> <span class="nx">select</span><span class="p">.</span><span class="nx">val</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">previousValue</span> <span class="o">=</span> <span class="nx">selectedElements</span><span class="p">[</span><span class="nx">index</span><span class="p">];</span>
+    <span class="kd">var</span> <span class="nx">indexInArray</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">inArray</span><span class="p">(</span><span class="nx">currentValue</span><span class="p">,</span> <span class="nx">elements</span><span class="p">);</span>
+    
+    <span class="nx">replaceOptions</span><span class="p">(</span><span class="nx">previousValue</span><span class="p">,</span> <span class="nx">currentValue</span><span class="p">,</span> <span class="nx">select</span><span class="p">);</span>
+    <span class="nx">elements</span><span class="p">[</span><span class="nx">indexInArray</span><span class="p">]</span> <span class="o">=</span> <span class="nx">previousValue</span><span class="p">;</span>
+    <span class="nx">selectedElements</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span> <span class="o">=</span> <span class="nx">currentValue</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/**
+ * Loads initial values into initial select objects
+ */</span>
+<span class="kd">function</span> <span class="nx">initialize</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.my-select</span><span class="dl">"</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">select</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+        <span class="nx">addOptions</span><span class="p">(</span><span class="nx">select</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+
+<span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#addOneMore</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="nx">addSelect</span><span class="p">);</span>
+<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">change</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">.my-select</span><span class="dl">'</span><span class="p">,</span> <span class="nx">selectionChange</span><span class="p">);</span>
+<span class="nx">initialize</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>Bu yöntemi anlatmak içindi.
+Bir sonraki yazımda bunu bir jQuery plugin’i olarak yazmayı düşünüyorum.
+Belki de AngularJS ile denerim şansımı.
+Kendinize iyi bakın efendim, kodlu günler.</p>
+
+<p>Dipnot: Front-End’i küçümsemeyin ;)</p>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/javada-swing-ile-basit-bir-pencere-yapalim">&laquo; Java'da Swing ile Basit Bir Pencere Yapalım</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+    <a class="next" href="/tab-archiver-tablerinizi-kaydedin">Tab Archiver: Tablerinizi Kaydedin &raquo;</a>
+    
+  </div>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'http://demo.serdarkuzucu.com/checkbox-yerine-select-kullanalim';
+        this.page.identifier = 'checkbox-yerine-select-kullanalim';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>
