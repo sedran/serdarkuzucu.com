@@ -37,9 +37,11 @@
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             
-            <a href="/category/java" class="dropdown-item">Java (8)</a>
+            <a href="/category/java" class="dropdown-item">Java (13)</a>
             
-            <a href="/category/programlama" class="dropdown-item">Programlama (16)</a>
+            <a href="/category/programlama" class="dropdown-item">Programlama (21)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
             
             <a href="/category/bash" class="dropdown-item">Bash (8)</a>
             
@@ -589,6 +591,176 @@ Bu yazımda Java’daki <code class="highlighter-rouge">Timer</code> ve <code cl
 Bu sınıfların ne gibi dertlerimize derman olduğunu kısaca anlatmaya çalışacağım 
 ve nacizene birkaç örnek uygulama göstereceğim. 
 Öncelikle kemerlerimizi bağlayalım.</p>
+
+</p>
+      </div>
+    </div>
+    
+    <div class="media mb-5">
+      <img class="post-featured-image mr-3" src="/assets/category/java.png" alt="Swing Uygulamalarında Thread Kullanımı">
+      <div class="media-body">
+        <h5 class="mt-0">
+          <a class="text-dark" href="/swing-uygulamalarinda-thread-kullanimi" rel="bookmark">
+            <u>Swing Uygulamalarında Thread Kullanımı</u>
+          </a>
+        </h5>
+        <span class="post-meta">Sep 18, 2014</span>
+        
+        <div>
+          
+          <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+          
+          <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+          
+        </div>
+        
+        <p><p>Java’da Swing uygulamalarında, kullanıcı arayüzündeki elementlerde değişiklik yapmak 
+ve bu arayüzden gelen eventleri dinlemek için tek thread kullanılır. 
+Bu thread’e “event dispatch thread” ismini vermişler. 
+Bu thread’in içinde uzun sürecek bir işlem yapmayı şiddetle önermiyoruz 
+çünkü bu thread’in kilitlenmesi kullanıcı arayüzünün kilitlenmesi anlamına geliyor.</p>
+
+</p>
+      </div>
+    </div>
+    
+    <div class="media mb-5">
+      <img class="post-featured-image mr-3" src="/assets/posts/java-threads.jpg" alt="Kendi Thread Pool'umuzu Yaratalım">
+      <div class="media-body">
+        <h5 class="mt-0">
+          <a class="text-dark" href="/kendi-thread-poolumuzu-yaratalim" rel="bookmark">
+            <u>Kendi Thread Pool'umuzu Yaratalım</u>
+          </a>
+        </h5>
+        <span class="post-meta">Jun 6, 2014</span>
+        
+        <div>
+          
+          <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+          
+          <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+          
+        </div>
+        
+        <p><p><a href="/thread-mantigi-java-ornekleri">Thread nedir, nasıl kullanılır</a>
+konusuna uzun zaman önce değinmiştim. 
+Peki multithread bir uygulamada sürekli yeni Thread yaratmak ne kadar iyi bir yöntemdir?
+Sık sık Thread yaratmak bazen performansı arttırmak yerine düşürebilir 
+çünkü yeni bir Thread yaratmak işletim sistemi için masraflı bir iştir. 
+Hem yeni bir Thread’in yaratılması, bu Thread için gerekli kaynakların ayrılması, 
+hem de yüzlerce Thread’i yönetmek ve bunlar arasında geçişler yapmak JVM için masraflı işlerdir.
+Bu yazıda Thread kullanımını nasıl kontrol altında tutarız buna bakıyor olacağız.</p>
+
+</p>
+      </div>
+    </div>
+    
+    <div class="media mb-5">
+      <img class="post-featured-image mr-3" src="/assets/posts/dining-philosophers-sm.png" alt="Dining Philosophers Problem Çözümü - Java Örnekli">
+      <div class="media-body">
+        <h5 class="mt-0">
+          <a class="text-dark" href="/dining-philosophers-problem-cozumu-java-ornekli" rel="bookmark">
+            <u>Dining Philosophers Problem Çözümü - Java Örnekli</u>
+          </a>
+        </h5>
+        <span class="post-meta">Apr 7, 2014</span>
+        
+        <div>
+          
+          <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+          
+          <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+          
+        </div>
+        
+        <p><p>Merhaba sevgili arkadaşlar.
+Yaklaşık 2 ay önce <a href="/dining-philosophers-problemi-java-uygulamasi">Dining Philosophers Problemine</a> değinmiş, 
+örnek bir Java uygulamasıyla kolayca sistemi deadlock’a sokabilmiştik.
+Sorunu yaratmış, fakat çözmeden bırakmıştık.
+2 aydır yoğun tempoda çalıştığım için tekrar blog yazmaya fırsat bulamadım.
+Şimdi basit bir yöntemle ve örnek kodlarla bu sorunun nasıl çözüleceğine odaklanacağız.</p>
+
+</p>
+      </div>
+    </div>
+    
+    <div class="media mb-5">
+      <img class="post-featured-image mr-3" src="/assets/posts/dining-philosophers-sm.png" alt="Dining Philosophers Problemi Java Uygulaması">
+      <div class="media-body">
+        <h5 class="mt-0">
+          <a class="text-dark" href="/dining-philosophers-problemi-java-uygulamasi" rel="bookmark">
+            <u>Dining Philosophers Problemi Java Uygulaması</u>
+          </a>
+        </h5>
+        <span class="post-meta">Jan 30, 2014</span>
+        
+        <div>
+          
+          <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+          
+          <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+          
+        </div>
+        
+        <p><p>Hayatımda hiç deadlock ile karşılaşmamış birisi olarak Java’da deadlock yakalamaya heves ettim.
+Bunu en güzel ve eğlenceli şekilde nasıl yaparım diye düşünürken Dining Philosophers Problem geldi aklıma.
+Basit bir Java kodu ile problemi yaratmayı başardım.</p>
+
+</p>
+      </div>
+    </div>
+    
+    <div class="media mb-5">
+      <img class="post-featured-image mr-3" src="/assets/category/java.png" alt="Java String Concatenation, StringBuilder ve StringBuffer">
+      <div class="media-body">
+        <h5 class="mt-0">
+          <a class="text-dark" href="/java-string-concatenation-stringbuilder-ve-stringbuffer" rel="bookmark">
+            <u>Java String Concatenation, StringBuilder ve StringBuffer</u>
+          </a>
+        </h5>
+        <span class="post-meta">Jan 19, 2014</span>
+        
+        <div>
+          
+          <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+          
+          <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+          
+        </div>
+        
+        <p>
+<p>Gece gece canım sıkıldı, yine yerimde duramadım, 
+bir benchmark yapıp yazılım camiasında sık sık dile getirilen bir noktaya bir de ben parmak basayım dedim. 
+Biliyorsunuz ki Java ile birşeyler geliştirirken sık sık <code class="highlighter-rouge">String</code>‘leri uç uca eklememiz gerekiyor. 
+En basit okul ödevinden en komplike web projelerine kadar bu işlemi 
+hiç düşünmeden concatenation yöntemi ile yapanlarımız var. 
+Hiç düşünür müydünüz bunun bir performans sorunu olarak değerlendirilebileceğini 
+ve alternatif yaklaşımlarının bulunduğunu?</p>
+
+</p>
+      </div>
+    </div>
+    
+    <div class="media mb-5">
+      <img class="post-featured-image mr-3" src="/assets/category/chrome-extensions.jpg" alt="Tab Archiver: Tablerinizi Kaydedin">
+      <div class="media-body">
+        <h5 class="mt-0">
+          <a class="text-dark" href="/tab-archiver-tablerinizi-kaydedin" rel="bookmark">
+            <u>Tab Archiver: Tablerinizi Kaydedin</u>
+          </a>
+        </h5>
+        <span class="post-meta">Jan 4, 2014</span>
+        
+        <div>
+          
+          <a class="btn btn-outline-dark btn-sm" href="/category/chrome-eklentileri">Chrome Eklentileri</a>
+          
+        </div>
+        
+        <p>
+<p>Google Chrome eklentisi geliştirmeye tam gaz devam ediyorum.
+Bu eklenti yardımıyla web tarayıcınızda açık olan tüm sekmeleri bir tıkla kaydedip kapatabilirsiniz.
+Daha sonra istediğiniz zaman bu sekmeleri geri getirebilirsiniz.</p>
 
 </p>
       </div>

@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Java String Concatenation, StringBuilder ve StringBuffer</title>
+  <meta name="description" content="Gece gece canım sıkıldı, yine yerimde duramadım, bir benchmark yapıp yazılım camiasında sık sık dile getirilen bir noktaya bir de ben parmak basayım dedim. B...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://demo.serdarkuzucu.com/java-string-concatenation-stringbuilder-ve-stringbuffer">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="http://demo.serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/java" class="dropdown-item">Java (13)</a>
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (21)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="http://demo.serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Java String Concatenation, StringBuilder ve StringBuffer</h1>
+    <p class="post-meta">
+      <time datetime="2014-01-19T00:55:00+00:00" itemprop="datePublished">Jan 19, 2014</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    
+<p>Gece gece canım sıkıldı, yine yerimde duramadım, 
+bir benchmark yapıp yazılım camiasında sık sık dile getirilen bir noktaya bir de ben parmak basayım dedim. 
+Biliyorsunuz ki Java ile birşeyler geliştirirken sık sık <code class="highlighter-rouge">String</code>‘leri uç uca eklememiz gerekiyor. 
+En basit okul ödevinden en komplike web projelerine kadar bu işlemi 
+hiç düşünmeden concatenation yöntemi ile yapanlarımız var. 
+Hiç düşünür müydünüz bunun bir performans sorunu olarak değerlendirilebileceğini 
+ve alternatif yaklaşımlarının bulunduğunu?</p>
+
+<!--more-->
+
+<p>Öncelikle bu işin kökenine inelim. 
+Ben ilk olarak Java’da tecrübeli abilerimizden tokat yememek için biraz araştırma yaptım. 
+Yine de yanlışlarım olabilir. 
+Sonuçta yaşım kaç başım kaç? :)</p>
+
+<p>Java’da karakter dizilerini bizim için anlamlı hale getiren üç temel sınıf var.
+Bunlar <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html">String</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html">StringBuilder</a> ve <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/StringBuffer.html">StringBuffer</a>. 
+Bu üçü hemen hemen benzer işlerde kullanılıyorlar 
+fakat ihtiyacınıza göre hangisini kullanmanız gerektiğine karar vermek iyi bir yazılımcı olarak size kalıyor.
+Şimdi birazcık farklarına değinelim bunların.</p>
+
+<h4 id="string">String</h4>
+
+<p>Java’da yarattığımız her string varsayılan olarak bu türde yaratılır.
+Yani iki tırnak içine karakterleri yazıp bunu bir değişkene atayacak olursanız,
+bu değişkenin türü <code class="highlighter-rouge">String</code>‘dir.
+<code class="highlighter-rouge">String</code> literatürde immutable, yani değişmez olarak geçer.
+Dökümantasyonunda da farkettiyseniz, 
+<code class="highlighter-rouge">String</code>‘in değişmesi için çağırabileceğimiz bütün fonksiyonlar yeni bir <code class="highlighter-rouge">String</code> objesi döner.
+Yani orjinal <code class="highlighter-rouge">String</code> objesine birşeycik olmaz.
+Yani aşağıdaki kod parçacığını çalıştırdığınızda elinizde birbirinden farklı 3 adet <code class="highlighter-rouge">String</code> objesi olur.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">s1</span> <span class="o">=</span> <span class="s">"aBcD1"</span><span class="o">;</span>
+<span class="nc">String</span> <span class="n">s2</span> <span class="o">=</span> <span class="n">s1</span> <span class="o">+</span> <span class="s">"a."</span><span class="o">;</span> <span class="c1">// s1 değişmeden kaldı</span>
+<span class="nc">String</span> <span class="n">s3</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="na">toLowerCase</span><span class="o">();</span> <span class="c1">// s1 yine değişmedi.</span>
+</code></pre></div></div>
+
+<h4 id="stringbuilder">StringBuilder</h4>
+
+<p><code class="highlighter-rouge">StringBuilder</code> sınıfı <code class="highlighter-rouge">String</code> objelerinin birleştirme işlemindeki gereksiz bellek 
+ve işlemci kullanımını azaltmak için yaratıldı. 
+Yazının son kısmında göstereceğim benchmark ile de gösteriyor ki 
+döngü içerisinde yapılan <code class="highlighter-rouge">String</code> concatenation işlemlerinde büyük ölçüde performans sağlıyor. 
+Normalde her <code class="highlighter-rouge">String</code> birleştirme işleminde yeni bir <code class="highlighter-rouge">String</code> objesi yaratılır 
+ve varolan <code class="highlighter-rouge">String</code> objesi değişmeden kalır. 
+Bu işlemler <code class="highlighter-rouge">StringBuilder</code> sınıfı ile yapıldığında ise tek bir obje ile 
+istediğimiz kadar <code class="highlighter-rouge">String</code>‘i birbirine ekleyebiliriz. 
+Aşağıda da basitçe <code class="highlighter-rouge">StringBuilder</code> sınıfı nasıl kullanılır ona bakalım:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+<span class="c1">// append methodu ile istediğimiz kadar </span>
+<span class="c1">// String'i StringBuilder objesine ekleyebiliriz.</span>
+<span class="n">builder</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"abcdef"</span><span class="o">);</span>
+<span class="n">builder</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"qwerty"</span><span class="o">);</span>
+<span class="n">builder</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"zxcvbb"</span><span class="o">);</span>
+
+<span class="nc">String</span> <span class="n">str</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+<span class="c1">// str = "abcdefqwertyzxcvbb";</span>
+</code></pre></div></div>
+
+<h4 id="stringbuffer">StringBuffer</h4>
+
+<p>Bu sınıf ile <code class="highlighter-rouge">StringBuilder</code> yaptıkları iş olarak baktığımızda neredeyse tamamen aynı.
+<code class="highlighter-rouge">String</code> objesinin concatenation işlemlerinde fazladan bellek 
+ve işlemci kullanımına karşı ikisi de aynı avantajı sağlar. 
+Aralarındaki tek fark, <code class="highlighter-rouge">StringBuffer</code> bu işi thread safe olarak yapar. 
+Thread safety kavramını açıklamanın yeri bu yazı değil fakat kabaca değinmek gerekirse, 
+şu şekilde açıklayabilirim: 
+eğer bir nesne birden fazla thread tarafından rastgele olarak kullanılıyorsa 
+ve bu nesne bir thread kendisiyle işini bitirmeden diğerinin işine başlamıyorsa, 
+o nesneye thread safe diyoruz. 
+Bir de kaba bir örnek vereyim. 
+Mesela <code class="highlighter-rouge">StringBuilder</code> objesine iki farklı thread aynı anda erişip birisi “abc”, 
+diğeri de “def” append etmeye çalışırsa, 
+en son elde ettiğimiz <code class="highlighter-rouge">String</code>‘in “adefbc”, “deabfc” veya “adbecf” olma 
+veya sistemin <code class="highlighter-rouge">Exception</code> fırlatma ihtimalleri var. 
+Bu durumda ya synchronized değişkenler kullanarak elle <code class="highlighter-rouge">StringBuilder</code> objesini koruyacağız, 
+ya da kendi kendini koruyabilen <code class="highlighter-rouge">StringBuffer</code> objesini kullanacağız. 
+<code class="highlighter-rouge">StringBuffer</code> objesinin thread safe yapısı da kendisini <code class="highlighter-rouge">StringBuilder</code>‘a göre biraz yavaş kılıyor. 
+Yani eğer sisteminizde birden fazla thread yoksa, <code class="highlighter-rouge">StringBuilder</code> kullanmanızı tavsiye ederim.</p>
+
+<p>Şimdi yaptığım benchmark uygulamasının kodlarını dökeyim ortaya.
+Yaptığım işlem basitçe şu:</p>
+
+<ol>
+  <li>Lorem ipsum satırlarından oluşan dosyayı okuyup her satırı global bir <code class="highlighter-rouge">ArrayList</code>‘e kaydet.</li>
+  <li><code class="highlighter-rouge">ArrayList</code> içindeki elemanları kopyalayıp tekrar ArrayList’e ekleyerek 
+1044480 adet String’den oluşan bir ArrayList elde et.</li>
+  <li>Toplamda 100 defa <code class="highlighter-rouge">String</code> concatenation, <code class="highlighter-rouge">StringBuilder</code> ve <code class="highlighter-rouge">StringBuffer</code> kullanarak 
+ArrayList içerisindeki <code class="highlighter-rouge">String</code>‘leri birleştir ve sürelerin ortalamalarını hesapla.</li>
+  <li>Oluşan sonuçları her adımda ve programın sonunda konsola yaz.</li>
+</ol>
+
+<p>Dürüst olmak gerekirse <code class="highlighter-rouge">String</code> concatenation işlemi o kadar uzun sürdü ki, 
+ilk stepte programı durdurup <code class="highlighter-rouge">String</code> ile yaptığım işlemi comment-out ettim 
+ve tekrar çalıştırdığımda sadece <code class="highlighter-rouge">StringBuilder</code> ve <code class="highlighter-rouge">StringBuffer</code>‘ı karşılaştırdım.</p>
+
+<p><code class="highlighter-rouge">String</code> işin içine girdiğinde çok daha küçük bir <code class="highlighter-rouge">ArrayList</code> (16320 cümle) ile çalıştım 
+ve döngülerin iterasyon sayılarını da düşük tuttum ki gece bitmeden bir sonuca varabileyim. 
+Aşağıda içinde <code class="highlighter-rouge">String</code> objesinin concatenation operatörünün de kullanıldığı 16320 cümleyi birleştirme süreleri:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Size of WORD_LIST: 16320
+Started 1. main iteration...
+concatenation: 52424.0 ms.
+string builder: 8.0 ms.
+string buffer: 9.0 ms.
+Finished 1. main iteration...
+</code></pre></div></div>
+
+<p>Buradan anlayacağımız üzere, 
+16320 tane <code class="highlighter-rouge">String</code> objesini birleştirmek için kesinlikle <code class="highlighter-rouge">String</code> concatenation kullanmıyoruz :).
+<code class="highlighter-rouge">String</code> concatenation işlemini uygulamadan kaldırdıktan sonra 
+<code class="highlighter-rouge">ArrayList</code>‘in boyutunu arttırıp (1044480 cümle) uygulamamızı 10 sample üretecek şekilde çalıştırırsak 
+şu sonuçları elde ediyoruz:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Size of WORD_LIST: 1044480
+Started 1. main iteration…
+string builder: 302.2 ms.
+string buffer: 230.49999999999997 ms.
+Finished 1. main iteration…
+Started 2. main iteration…
+string builder: 143.3 ms.
+string buffer: 149.30000000000004 ms.
+Finished 2. main iteration…
+Started 3. main iteration…
+string builder: 155.50000000000003 ms.
+string buffer: 150.5 ms.
+Finished 3. main iteration…
+Started 4. main iteration…
+string builder: 143.09999999999997 ms.
+string buffer: 160.4 ms.
+Finished 4. main iteration…
+Started 5. main iteration…
+string builder: 159.60000000000002 ms.
+string buffer: 198.8 ms.
+Finished 5. main iteration…
+Started 6. main iteration…
+string builder: 161.8 ms.
+string buffer: 143.2 ms.
+Finished 6. main iteration…
+Started 7. main iteration…
+string builder: 125.39999999999999 ms.
+string buffer: 142.4 ms.
+Finished 7. main iteration…
+Started 8. main iteration…
+string builder: 134.2 ms.
+string buffer: 148.2 ms.
+Finished 8. main iteration…
+Started 9. main iteration…
+string builder: 189.5 ms.
+string buffer: 170.4 ms.
+Finished 9. main iteration…
+Started 10. main iteration…
+string builder: 150.4 ms.
+string buffer: 292.5 ms.
+Finished 10. main iteration…
+Average time for concatenation: 0.0 ms.
+Average time for string builder: 166.49999999999997 ms.
+Average time for string buffer: 178.61999999999998 ms.
+</code></pre></div></div>
+
+<p>Raporun sonundaki ortalamadan anlayacağımız gibi <code class="highlighter-rouge">StringBuilder</code> objesi 
+<code class="highlighter-rouge">StringBuffer</code> objesine göre daha hızlı bir şekilde, 
+daha kısa sürede işini hallediyor. 
+Peki bazı ara steplerdeki anormal sonuçları nasıl açıklayabiliriz?
+Nasıl oluyor da bazen <code class="highlighter-rouge">StringBuffer</code> öne geçiyor? 
+Bunu 6 ay önce olsa açıklayamazdım fakat İşletim Sistemleri dersini aldığım için artık açıklayabilirim.
+İşletim Sistemleri Multi-Threading/Multi-Processing yapılarından dolayı sürekli olarak bizim işlemimizi yapmıyor.
+Büyük bir for döngüsü bitene kadar işlemcide çalışamaz mesela.
+İşletim sistemi o işlemi ara sıra duraklatıp bilgisayardaki diğer işlerle de ilgilenmek zorunda kalır.
+Hatta bu uygulamada yarattığımız yoğun işlemci kullanımı sebebiye de 
+işletim sistemi bizim uygulamamızın önceliğini düşürüyor olabilir.
+<code class="highlighter-rouge">StringBuilder</code> çalışırken bizim işlemimiz işletim sistemi tarafından 10 kere duraklatılmış 
+ve <code class="highlighter-rouge">StringBuffer</code> çalışırken de 8 kere duraklatılmış olabilir.
+Bu da <code class="highlighter-rouge">StringBuilder</code> kullanırken ölçtüğümüz zamanın daha fazla çıktığı stepleri kabaca açıklayabilir.</p>
+
+<h4 id="özet">Özet</h4>
+
+<p>Çok fazla yazı yazdım fakat hiçbir şey anlatamadım gibi bir his var içimde.
+Bir özet geçelim:</p>
+
+<ol>
+  <li><code class="highlighter-rouge">String</code> <strong>immutable(değişmez)</strong> bir sınıftır. 
+<code class="highlighter-rouge">String</code> üzerinden yapacağımız çoğu işlem yeni bir <code class="highlighter-rouge">String</code> objesi yaratır ve orjinal <code class="highlighter-rouge">String</code> objesi değişmez.</li>
+  <li>Çok fazla <code class="highlighter-rouge">String</code> birleştireceksek <code class="highlighter-rouge">String</code> concatenation kullanmıyoruz. 
+Bu işlem <strong>çok uzun sürer, yüksek bellek ve CPU kullanımına</strong> sebep olabilir.</li>
+  <li><strong>Birden fazla thread</strong> kullanıyorsak ve birden fazla thread aynı <code class="highlighter-rouge">StringBuilder</code> objesine erişiyorsa, 
+istenmedik sonuçlar doğabilir. Bu durumda <code class="highlighter-rouge">StringBuffer</code> kullanıyoruz.</li>
+  <li><strong>Birden fazla thread kullanmıyorsak</strong>, performans açısından <code class="highlighter-rouge">StringBuffer</code> değil <code class="highlighter-rouge">StringBuilder</code> kullanıyoruz.</li>
+</ol>
+
+<p>Programın kaynak kodlarını indirmek için <a href="https://app.box.com/s/xxw3aaw3v12szpamuww3">buraya tıklayın</a>.</p>
+
+<p>Yada sadece programda kullandığım test.txt dosyasına ihtiyacınız varsa, <a href="https://app.box.com/s/5v2qzmh0e6ezka7b7f1w">burayı tıklayın</a>.</p>
+
+<h5 id="i̇şte-kodlar">İşte kodlar:</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.File</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.FileNotFoundException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Scanner</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Prep</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">FILENAME</span> <span class="o">=</span> <span class="s">"test.txt"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="no">WORD_LIST</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;(</span><span class="mi">1000</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">SUB_ITERATION</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">MAIN_ITERATION</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">FileNotFoundException</span> <span class="o">{</span>
+        <span class="n">readFile</span><span class="o">(</span><span class="no">FILENAME</span><span class="o">);</span>
+
+        <span class="kt">double</span> <span class="n">averageTimeConcat</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">double</span> <span class="n">averageTimeBuild</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="kt">double</span> <span class="n">averageTimeBuffer</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="no">MAIN_ITERATION</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Started "</span> <span class="o">+</span> <span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">+</span> <span class="s">". main iteration..."</span><span class="o">);</span>
+
+            <span class="c1">// double concat = concatenateBenchmark(WORD_LIST, SUB_ITERATION);</span>
+            <span class="c1">// System.out.println("concatenation: " + concat + " ms.");</span>
+            <span class="c1">// averageTimeConcat += concat / MAIN_ITERATION;</span>
+
+            <span class="kt">double</span> <span class="n">builderTime</span> <span class="o">=</span> <span class="n">stringBuildBenchmark</span><span class="o">(</span><span class="no">WORD_LIST</span><span class="o">,</span> <span class="no">SUB_ITERATION</span><span class="o">);</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"string builder: "</span> <span class="o">+</span> <span class="n">builderTime</span> <span class="o">+</span> <span class="s">" ms."</span><span class="o">);</span>
+            <span class="n">averageTimeBuild</span> <span class="o">+=</span> <span class="n">builderTime</span> <span class="o">/</span> <span class="no">MAIN_ITERATION</span><span class="o">;</span>
+
+            <span class="kt">double</span> <span class="n">bufferTime</span> <span class="o">=</span> <span class="n">stringBufferBenchmark</span><span class="o">(</span><span class="no">WORD_LIST</span><span class="o">,</span> <span class="no">SUB_ITERATION</span><span class="o">);</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"string buffer: "</span> <span class="o">+</span> <span class="n">bufferTime</span> <span class="o">+</span> <span class="s">" ms."</span><span class="o">);</span>
+            <span class="n">averageTimeBuffer</span> <span class="o">+=</span> <span class="n">bufferTime</span> <span class="o">/</span> <span class="no">MAIN_ITERATION</span><span class="o">;</span>
+
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Finished "</span> <span class="o">+</span> <span class="o">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">+</span> <span class="s">". main iteration..."</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Average time for concatenation: "</span> <span class="o">+</span> <span class="n">averageTimeConcat</span> <span class="o">+</span> <span class="s">" ms."</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Average time for string builder: "</span> <span class="o">+</span> <span class="n">averageTimeBuild</span> <span class="o">+</span> <span class="s">" ms."</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Average time for string buffer: "</span> <span class="o">+</span> <span class="n">averageTimeBuffer</span> <span class="o">+</span> <span class="s">" ms."</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">double</span> <span class="nf">concatenateBenchmark</span><span class="o">(</span><span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">wordList</span><span class="o">,</span> <span class="kt">int</span> <span class="n">iteration</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">double</span> <span class="n">average</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">iteration</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">long</span> <span class="n">roundTime</span> <span class="o">=</span> <span class="n">concatenateWordList</span><span class="o">(</span><span class="n">wordList</span><span class="o">);</span>
+            <span class="n">average</span> <span class="o">+=</span> <span class="o">(</span><span class="kt">double</span><span class="o">)</span> <span class="n">roundTime</span> <span class="o">/</span> <span class="n">iteration</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">average</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">double</span> <span class="nf">stringBuildBenchmark</span><span class="o">(</span><span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">wordList</span><span class="o">,</span> <span class="kt">int</span> <span class="n">iteration</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">double</span> <span class="n">average</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">iteration</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">long</span> <span class="n">roundTime</span> <span class="o">=</span> <span class="n">stringBuildWordList</span><span class="o">(</span><span class="n">wordList</span><span class="o">);</span>
+            <span class="n">average</span> <span class="o">+=</span> <span class="o">(</span><span class="kt">double</span><span class="o">)</span> <span class="n">roundTime</span> <span class="o">/</span> <span class="n">iteration</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">average</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">double</span> <span class="nf">stringBufferBenchmark</span><span class="o">(</span><span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">wordList</span><span class="o">,</span> <span class="kt">int</span> <span class="n">iteration</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">double</span> <span class="n">average</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">iteration</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">long</span> <span class="n">roundTime</span> <span class="o">=</span> <span class="n">stringBufferWordList</span><span class="o">(</span><span class="n">wordList</span><span class="o">);</span>
+            <span class="n">average</span> <span class="o">+=</span> <span class="o">(</span><span class="kt">double</span><span class="o">)</span> <span class="n">roundTime</span> <span class="o">/</span> <span class="n">iteration</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">average</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">long</span> <span class="nf">concatenateWordList</span><span class="o">(</span><span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">wordList</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">startTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="nc">String</span> <span class="n">s</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">line</span> <span class="o">:</span> <span class="n">wordList</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="n">line</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kt">long</span> <span class="n">finishTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span> <span class="c1">// Just a dummy call</span>
+        <span class="k">return</span> <span class="n">finishTime</span> <span class="o">-</span> <span class="n">startTime</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">long</span> <span class="nf">stringBuildWordList</span><span class="o">(</span><span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">wordList</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">startTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="nc">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">line</span> <span class="o">:</span> <span class="n">wordList</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">builder</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">line</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="nc">String</span> <span class="n">s</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+        <span class="kt">long</span> <span class="n">finishTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span> <span class="c1">// Just a dummy call</span>
+        <span class="k">return</span> <span class="n">finishTime</span> <span class="o">-</span> <span class="n">startTime</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">long</span> <span class="nf">stringBufferWordList</span><span class="o">(</span><span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">wordList</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">long</span> <span class="n">startTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="nc">StringBuffer</span> <span class="n">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuffer</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">String</span> <span class="n">line</span> <span class="o">:</span> <span class="n">wordList</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">buffer</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">line</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="nc">String</span> <span class="n">s</span> <span class="o">=</span> <span class="n">buffer</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+        <span class="kt">long</span> <span class="n">finishTime</span> <span class="o">=</span> <span class="nc">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span> <span class="c1">// Just a dummy call</span>
+        <span class="k">return</span> <span class="n">finishTime</span> <span class="o">-</span> <span class="n">startTime</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">readFile</span><span class="o">(</span><span class="nc">String</span> <span class="n">filename</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">FileNotFoundException</span> <span class="o">{</span>
+        <span class="nc">Scanner</span> <span class="n">scanner</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Scanner</span><span class="o">(</span><span class="k">new</span> <span class="nc">File</span><span class="o">(</span><span class="n">filename</span><span class="o">));</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">scanner</span><span class="o">.</span><span class="na">hasNextLine</span><span class="o">())</span> <span class="o">{</span>
+            <span class="nc">String</span> <span class="n">line</span> <span class="o">=</span> <span class="n">scanner</span><span class="o">.</span><span class="na">nextLine</span><span class="o">();</span>
+            <span class="no">WORD_LIST</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">line</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">scanner</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">11</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="no">WORD_LIST</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="nc">String</span> <span class="n">line</span> <span class="o">=</span> <span class="no">WORD_LIST</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+                <span class="no">WORD_LIST</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">line</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Size of WORD_LIST: "</span> <span class="o">+</span> <span class="no">WORD_LIST</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Buraya kadar katlandığınız için teşekkür ederim efenim, umarım faydalı bir içerik olmuştur. 
+Sağlıcakla kalın.</p>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/tab-archiver-tablerinizi-kaydedin">&laquo; Tab Archiver: Tablerinizi Kaydedin</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+    <a class="next" href="/dining-philosophers-problemi-java-uygulamasi">Dining Philosophers Problemi Java Uygulaması &raquo;</a>
+    
+  </div>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'http://demo.serdarkuzucu.com/java-string-concatenation-stringbuilder-ve-stringbuffer';
+        this.page.identifier = 'java-string-concatenation-stringbuilder-ve-stringbuffer';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>

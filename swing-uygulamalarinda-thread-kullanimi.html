@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Swing Uygulamalarında Thread Kullanımı</title>
+  <meta name="description" content="Java’da Swing uygulamalarında, kullanıcı arayüzündeki elementlerde değişiklik yapmak ve bu arayüzden gelen eventleri dinlemek için tek thread kullanılır. Bu ...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://demo.serdarkuzucu.com/swing-uygulamalarinda-thread-kullanimi">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="http://demo.serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/java" class="dropdown-item">Java (13)</a>
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (21)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="http://demo.serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Swing Uygulamalarında Thread Kullanımı</h1>
+    <p class="post-meta">
+      <time datetime="2014-09-18T10:46:00+00:00" itemprop="datePublished">Sep 18, 2014</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Java’da Swing uygulamalarında, kullanıcı arayüzündeki elementlerde değişiklik yapmak 
+ve bu arayüzden gelen eventleri dinlemek için tek thread kullanılır. 
+Bu thread’e “event dispatch thread” ismini vermişler. 
+Bu thread’in içinde uzun sürecek bir işlem yapmayı şiddetle önermiyoruz 
+çünkü bu thread’in kilitlenmesi kullanıcı arayüzünün kilitlenmesi anlamına geliyor.</p>
+
+<!--more-->
+
+<p>Basit bir uygulama ile bu durumu hemen test edebiliriz. 
+Örneğin iki butonlu bir pencere geliştirelim ve butonun birisine tıklanınca uzun bir işlem gerçekleştirelim. 
+Bu işlem gerçekleşirken diğer butona tıklanamadığına, pencerenin kapatılamadığına, 
+yani kullanıcı arayüzünün tamamen kilitlendiğine şahit olacağız.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.swing</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.awt.Dimension</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.FlowLayout</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.event.ActionEvent</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.event.ActionListener</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.swing.JButton</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.JFrame</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.JLabel</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.JPanel</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TwoButtonFrame</span> <span class="kd">extends</span> <span class="nc">JFrame</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">JButton</span> <span class="n">longTaskButton</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JButton</span><span class="o">(</span><span class="s">"Difficult Task"</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="nc">JButton</span> <span class="n">shortTaskButton</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JButton</span><span class="o">(</span><span class="s">"Easy Task"</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="nc">JLabel</span> <span class="n">label</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JLabel</span><span class="o">(</span><span class="s">"Task Status: Not Run"</span><span class="o">);</span>
+
+    <span class="kd">public</span> <span class="nf">TwoButtonFrame</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">setDefaultCloseOperation</span><span class="o">(</span><span class="no">EXIT_ON_CLOSE</span><span class="o">);</span>
+        <span class="n">setSize</span><span class="o">(</span><span class="k">new</span> <span class="nc">Dimension</span><span class="o">(</span><span class="mi">200</span><span class="o">,</span> <span class="mi">200</span><span class="o">));</span>
+
+        <span class="nc">JPanel</span> <span class="n">panel</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JPanel</span><span class="o">(</span><span class="k">new</span> <span class="nc">FlowLayout</span><span class="o">());</span>
+        <span class="n">panel</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">longTaskButton</span><span class="o">);</span>
+        <span class="n">panel</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">shortTaskButton</span><span class="o">);</span>
+        <span class="n">panel</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">label</span><span class="o">);</span>
+        <span class="n">setContentPane</span><span class="o">(</span><span class="n">panel</span><span class="o">);</span>
+
+        <span class="n">longTaskButton</span><span class="o">.</span><span class="na">addActionListener</span><span class="o">(</span><span class="k">new</span> <span class="nc">ActionListener</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">actionPerformed</span><span class="o">(</span><span class="nc">ActionEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// runs in event dispatcher thread</span>
+                <span class="k">try</span> <span class="o">{</span>
+                    <span class="c1">// assume that we are running a job for 10 seconds</span>
+                    <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">10000</span><span class="o">);</span>
+                    <span class="n">label</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="s">"Task Status: Run"</span><span class="o">);</span>
+                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e1</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="n">e1</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
+
+        <span class="n">setLocationRelativeTo</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">TwoButtonFrame</span> <span class="n">frame</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TwoButtonFrame</span><span class="o">();</span>
+        <span class="n">frame</span><span class="o">.</span><span class="na">setVisible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Kodu çalıştırıp ekrandaki ilk butona tıklarsanız, arayüzün kilitlendiğini göreceksiniz.</p>
+
+<h4 id="yeni-thread-yaratmak">Yeni Thread Yaratmak</h4>
+
+<p>Şimdi butona tıklayınca çalışan ve uzun süren bu işlemi 
+event dispatcher thread içerisinden başka bir thread’e taşıyabiliriz. 
+Böylece kullanıcı arayüzünün kitlenmemesini sağlar, 
+olumsuz kullanıcı deneyimini ortadan kaldırırız. 
+Yapmamız gereken, butona tıklama eventinin kodumuza ilk düştüğü yerde 
+bir thread yaratıp yapılacak işlemi bu thread’e yaptırmak.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.swing</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.awt.Dimension</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.FlowLayout</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.event.ActionEvent</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.event.ActionListener</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.swing.JButton</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.JFrame</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.JLabel</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.JPanel</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TwoButtonFrame</span> <span class="kd">extends</span> <span class="nc">JFrame</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">JButton</span> <span class="n">longTaskButton</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JButton</span><span class="o">(</span><span class="s">"Difficult Task"</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="nc">JButton</span> <span class="n">shortTaskButton</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JButton</span><span class="o">(</span><span class="s">"Easy Task"</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="nc">JLabel</span> <span class="n">label</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JLabel</span><span class="o">(</span><span class="s">"Task Status: Not Run"</span><span class="o">);</span>
+
+    <span class="kd">public</span> <span class="nf">TwoButtonFrame</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">setDefaultCloseOperation</span><span class="o">(</span><span class="no">EXIT_ON_CLOSE</span><span class="o">);</span>
+        <span class="n">setSize</span><span class="o">(</span><span class="k">new</span> <span class="nc">Dimension</span><span class="o">(</span><span class="mi">200</span><span class="o">,</span> <span class="mi">200</span><span class="o">));</span>
+
+        <span class="nc">JPanel</span> <span class="n">panel</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JPanel</span><span class="o">(</span><span class="k">new</span> <span class="nc">FlowLayout</span><span class="o">());</span>
+        <span class="n">panel</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">longTaskButton</span><span class="o">);</span>
+        <span class="n">panel</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">shortTaskButton</span><span class="o">);</span>
+        <span class="n">panel</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">label</span><span class="o">);</span>
+        <span class="n">setContentPane</span><span class="o">(</span><span class="n">panel</span><span class="o">);</span>
+
+        <span class="n">longTaskButton</span><span class="o">.</span><span class="na">addActionListener</span><span class="o">(</span><span class="k">new</span> <span class="nc">ActionListener</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">actionPerformed</span><span class="o">(</span><span class="nc">ActionEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// runs in new thread:</span>
+                <span class="nc">Thread</span> <span class="n">thread</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="nd">@Override</span>
+                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                        <span class="k">try</span> <span class="o">{</span>
+                            <span class="c1">// assume that we are running a job for 10 seconds</span>
+                            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">10000</span><span class="o">);</span>
+                            <span class="n">label</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="s">"Task Status: Run"</span><span class="o">);</span>
+                        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e1</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="n">e1</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">};</span>
+                <span class="n">thread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
+
+        <span class="n">setLocationRelativeTo</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">TwoButtonFrame</span> <span class="n">frame</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TwoButtonFrame</span><span class="o">();</span>
+        <span class="n">frame</span><span class="o">.</span><span class="na">setVisible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Yukarıdaki kod sorunumuzu önemli bir ölçüde çözdü.
+Lakin bir büyük hata yaptık.
+Event dispatcher thread dışında başka bir thread üzerinden bir arayüz elementine(label) müdahale ettik.
+Yukarıda yarattığımız thread’in içerisinde <code class="highlighter-rouge">label.setText("Task Status: Run")</code> kodunu çağırmak 
+bu proje için bir sorun teşkil etmeyebilir fakat büyük sistemler için büyük bir sorundur.
+Çünkü arayüz elemanlarının sadece arayüz thread’i tarafından değiştirilmesi gerekir.
+Aksi takdirde birden fazla threadin aynı anda modifikasyonu 
+bu eleman üzerinde istemeyeceğimiz bir datanın görünmesine sebep olabilir.</p>
+
+<h4 id="bir-threadden-arayüz-threadine-i̇stekte-bulunmak">Bir Thread’den Arayüz Thread’ine İstekte Bulunmak</h4>
+
+<p>Yukarıda belirttiğim sorunun çözümü için Swing bize şık bir yöntem sunuyor.
+Bu sayede arayüz thread’inde yapılması gereken işi arayüz thread’ine gönderebiliyoruz.
+Kod örneğimizi yine gösterelim.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.swing</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.awt.Dimension</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.FlowLayout</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.event.ActionEvent</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.awt.event.ActionListener</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.swing.JButton</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.JFrame</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.JLabel</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.JPanel</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">javax.swing.SwingUtilities</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TwoButtonFrame</span> <span class="kd">extends</span> <span class="nc">JFrame</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="nc">JButton</span> <span class="n">longTaskButton</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JButton</span><span class="o">(</span><span class="s">"Difficult Task"</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="nc">JButton</span> <span class="n">shortTaskButton</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JButton</span><span class="o">(</span><span class="s">"Easy Task"</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="nc">JLabel</span> <span class="n">label</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JLabel</span><span class="o">(</span><span class="s">"Task Status: Not Run"</span><span class="o">);</span>
+
+    <span class="kd">public</span> <span class="nf">TwoButtonFrame</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">setDefaultCloseOperation</span><span class="o">(</span><span class="no">EXIT_ON_CLOSE</span><span class="o">);</span>
+        <span class="n">setSize</span><span class="o">(</span><span class="k">new</span> <span class="nc">Dimension</span><span class="o">(</span><span class="mi">200</span><span class="o">,</span> <span class="mi">200</span><span class="o">));</span>
+
+        <span class="nc">JPanel</span> <span class="n">panel</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JPanel</span><span class="o">(</span><span class="k">new</span> <span class="nc">FlowLayout</span><span class="o">());</span>
+        <span class="n">panel</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">longTaskButton</span><span class="o">);</span>
+        <span class="n">panel</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">shortTaskButton</span><span class="o">);</span>
+        <span class="n">panel</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">label</span><span class="o">);</span>
+        <span class="n">setContentPane</span><span class="o">(</span><span class="n">panel</span><span class="o">);</span>
+
+        <span class="n">longTaskButton</span><span class="o">.</span><span class="na">addActionListener</span><span class="o">(</span><span class="k">new</span> <span class="nc">ActionListener</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">actionPerformed</span><span class="o">(</span><span class="nc">ActionEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c1">// runs in new thread:</span>
+                <span class="nc">Thread</span> <span class="n">thread</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">()</span> <span class="o">{</span>
+                    <span class="nd">@Override</span>
+                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                        <span class="k">try</span> <span class="o">{</span>
+                            <span class="c1">// assume that we are running a job for 10 seconds</span>
+                            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">10000</span><span class="o">);</span>
+                            <span class="nc">SwingUtilities</span><span class="o">.</span><span class="na">invokeLater</span><span class="o">(</span><span class="k">new</span> <span class="nc">Runnable</span><span class="o">()</span> <span class="o">{</span>
+                                <span class="nd">@Override</span>
+                                <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                                    <span class="c1">// this line will be run by event dispatcher thread</span>
+                                    <span class="n">label</span><span class="o">.</span><span class="na">setText</span><span class="o">(</span><span class="s">"Task Status: Run"</span><span class="o">);</span>
+                                <span class="o">}</span>
+                            <span class="o">});</span>
+                        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e1</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="n">e1</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+                        <span class="o">}</span>
+                    <span class="o">}</span>
+                <span class="o">};</span>
+                <span class="n">thread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
+
+        <span class="n">setLocationRelativeTo</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">SwingUtilities</span><span class="o">.</span><span class="na">invokeLater</span><span class="o">(</span><span class="k">new</span> <span class="nc">Runnable</span><span class="o">()</span> <span class="o">{</span>
+            <span class="nd">@Override</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+                <span class="c1">// Application startup code also must be in event dispatcher thread</span>
+                <span class="nc">TwoButtonFrame</span> <span class="n">frame</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">TwoButtonFrame</span><span class="o">();</span>
+                <span class="n">frame</span><span class="o">.</span><span class="na">setVisible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Yukarıdaki kod örneğinde gördüğümüz gibi, <code class="highlighter-rouge">SwingUtilities.invokeLater(Runnable r)</code> methodunu kullandık.
+Bu method, parametre olarak verdiğimiz Runnable objesini 
+event dispatcher thread’inin işlem sırasına(EventQueue) sokuyor.
+Bu queue’daki işlemler de sırayla event dispatcher thread tarafından çalıştırıldığı için,
+Runnable objemizin run methodunda yazdığımız kod event dispatcher thread içerisinde çalışmış oluyor.
+Böylece multithread bir uygulamada arayüz işlemlerinin single thread olmasını sağlamış oluyoruz.</p>
+
+<p>Ayrıca kodda dikkatimizi çekmesi gereken bir ayrıntı daha var.
+main methodun içerisindeki kodları da event dispatcher thread’e gönderdik.
+Evet, kullanıcı arayüzünün startup kodunu da bu şekilde çalıştırmamız gerekiyor.</p>
+
+<h4 id="özet">Özet</h4>
+
+<ol>
+  <li>Uzun süren işlemler event dispatcher thread içerisinde yapılmamalıdır! Ayrı thread kullanılmalıdır.</li>
+  <li>Arayüz elementlerini modifiye eden işlemlerin event dispatcher thread dışından çağırılmaması gerekiyor.</li>
+  <li>Event dispatcher thread tarafından çalıştırılmasını istediğimiz işlemleri 
+<code class="highlighter-rouge">SwingUtilities.invokeLater(Runnable r)</code> methodunu kullanarak çalıştırıyoruz.</li>
+</ol>
+
+<h4 id="kaynaklar">Kaynaklar</h4>
+
+<ol>
+  <li><a href="http://www.javamex.com/tutorials/threads/swing_ui.shtml">Javamex - Threading with Swing</a></li>
+  <li><a href="http://www.javamex.com/tutorials/threads/invokelater.shtml">Javamex - Threading with Swing (ctd): SwingUtilities.invokeLater()</a></li>
+</ol>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/kendi-thread-poolumuzu-yaratalim">&laquo; Kendi Thread Pool'umuzu Yaratalım</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+    <a class="next" href="/javada-timer-ve-timertask-siniflarinin-kullanimi">Java'da Timer ve TimerTask Sınıflarının Kullanımı &raquo;</a>
+    
+  </div>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'http://demo.serdarkuzucu.com/swing-uygulamalarinda-thread-kullanimi';
+        this.page.identifier = 'swing-uygulamalarinda-thread-kullanimi';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>
