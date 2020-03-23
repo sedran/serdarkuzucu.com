@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>jQuery&#39;de Olaylar (Event Handling)</title>
+  <meta name="description" content="jQuery Giriş ve Gelişme yazısıyla başladığım jQuery yazı dizisine olaylar ile devam ediyorum. Bilgisayar programlarını ve web sitelerini interaktif hale geti...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://demo.serdarkuzucu.com/jqueryde-olaylar-event-handling">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="http://demo.serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/java" class="dropdown-item">Java (13)</a>
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (24)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (3)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="http://demo.serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">jQuery'de Olaylar (Event Handling)</h1>
+    <p class="post-meta">
+      <time datetime="2013-08-02T00:31:00+00:00" itemprop="datePublished">Aug 2, 2013</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/javascript">Javascript</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/jquery">jQuery</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p><a href="/jquery-giris-ve-gelisme">jQuery Giriş ve Gelişme</a> yazısıyla başladığım 
+jQuery yazı dizisine olaylar ile devam ediyorum. 
+Bilgisayar programlarını ve web sitelerini interaktif hale getiren şeyler aslında olay(event) dediğimiz şeylerdir. 
+Örneğin kullanıcı bir linke tıkladığında, 
+faresinin imlecini bir butonun üzerine getirdiğinde 
+veya klavyeden bir tuşa bastığında biz bunları anlık olarak yakalamak ve tepki vermek isteriz. 
+Aslında kullanıcının web sitesinde yaptığı hemen hemen herşeyin bir olay karşılığı vardır 
+ve jQuery sayesinde biz bu olayları çok kolay yakalayıp buna karşı bir davranış geliştirebilir, 
+bir tavır takınabiliriz.</p>
+
+<!--more-->
+
+<script src="//code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+<p>Misal bir butonumuz var. 
+Butona tıklandığında basit bir uyarı (alert) verelim. 
+Bunun için daha önceki yazıda anlattığım jQuery seçicilerini kullanarak 
+objemizi seçtikten sonra bu objemize click methoduyla bir olay dinleyici (event listener) ekliyoruz.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- HTML Kodumuz --&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"jQueryOrnekBtnClick"</span> 
+    <span class="na">class=</span><span class="s">"btn btn-success"</span><span class="nt">&gt;</span>Tıkla ve Gör<span class="nt">&lt;/button&gt;</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*
+ * jQuery Kodumuz
+ */</span>
+<span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#jQueryOrnekBtnClick</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="dl">"</span><span class="s2">Bu butona tıkladın: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#jQueryOrnekBtnClick</span><span class="dl">"</span><span class="p">).</span><span class="nx">html</span><span class="p">());</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<div class="card mb-2">
+<div class="card-body">
+<button id="jQueryOrnekBtnClick" class="btn btn-success">Tıkla ve Gör</button>
+<script type="text/javascript">
+$("#jQueryOrnekBtnClick").click(function () {
+    alert("Bu butona tıkladın: " + $("#jQueryOrnekBtnClick").html());
+});
+</script>
+</div>
+</div>
+
+<p>Nasıl çalıştığını görmek için yukarıdaki butona tıklayabilirsiniz.</p>
+
+<h4 id="1-this-kullanımı">1. ‘this’ kullanımı</h4>
+
+<p><code class="highlighter-rouge">this</code> anahtar sözcüğü ile bir objenin içerisinde kullanılan, 
+o objenin kendisine verdiği referanstır. 
+Peki jQuery olayları ile ilgisi ne? 
+Şöyle ki, bir jQuery olayı olduğunda, o olayı dinleyen fonksiyon, 
+o olayın meydana geldiği DOM objesinin bir methoduymuş gibi çağırılır. 
+Yani olayı dinleyen fonksiyonun içerisinde kullandığımızda <code class="highlighter-rouge">this</code> anahtar sözcüğü 
+olayın meydana geldiği DOM objesinin referansını alır.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- HTML Kodumuz --&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"jQueryThisOrnek"</span> 
+    <span class="na">class=</span><span class="s">"btn btn-warning"</span><span class="nt">&gt;</span>This Keyword Example<span class="nt">&lt;/button&gt;</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*
+ * jQuery Kodumuz
+ */</span>
+<span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#jQueryThisOrnek</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// 'this' burada tıkladığımız buton oluyor.</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="dl">"</span><span class="s2">className: </span><span class="dl">"</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">className</span><span class="p">);</span>
+
+    <span class="c1">// DOM objesini jQuery objesine çevirelim:</span>
+    <span class="kd">var</span> <span class="nx">that</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+
+    <span class="nx">alert</span><span class="p">(</span><span class="dl">"</span><span class="s2">Bu butona tıkladın: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">that</span><span class="p">.</span><span class="nx">html</span><span class="p">());</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<div class="card mb-2">
+<div class="card-body">
+<button id="jQueryThisOrnek" class="btn btn-warning">This Keyword Example</button>
+<script type="text/javascript">
+$("#jQueryThisOrnek").click(function () {
+    // 'this' burada tıkladığımız buton oluyor.
+    alert("className: " + this.className);
+
+    // DOM objesini jQuery objesine çevirelim:
+    var that = $(this);
+
+    alert("Bu butona tıkladın: " + that.html());
+});
+</script>
+</div>
+</div>
+
+<h4 id="2-event-parametresi">2. ‘event’ Parametresi</h4>
+
+<p>jQuery, bir olayı yakaladığımız zaman, o olayı dinlemesi için 
+parametre geçtiğimiz fonksiyona bir event objesi parametre geçer. 
+Bu event objesinden biz o olay ile ilgili bilgileri alabiliriz. 
+Örneğin aşağıdaki kod parçacığında bir butona tıklandığında yakalanan 
+event objesinin üzerinden o butonun konumunun ve olayın zamanının nasıl çekildiğini görebiliriz:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- HTML Kodumuz --&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"jQueryClickEventTest"</span>
+    <span class="na">class=</span><span class="s">"btn btn-danger"</span><span class="nt">&gt;</span>event Parametresi Test<span class="nt">&lt;/button&gt;</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*
+ * jQuery Kodumuz
+ */</span>
+<span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#jQueryClickEventTest</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">time</span> <span class="o">=</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">timeStamp</span><span class="p">)).</span><span class="nx">toLocaleString</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">txt</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">Konum: </span><span class="se">\n\t</span><span class="s2">width: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">t</span><span class="p">.</span><span class="nx">offsetWidth</span> 
+            <span class="o">+</span> <span class="dl">"</span><span class="s2">,</span><span class="se">\n\t</span><span class="s2">height: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">t</span><span class="p">.</span><span class="nx">offsetHeight</span>
+            <span class="o">+</span> <span class="dl">"</span><span class="s2">,</span><span class="se">\n\t</span><span class="s2">top: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">t</span><span class="p">.</span><span class="nx">offsetTop</span>
+            <span class="o">+</span> <span class="dl">"</span><span class="s2">,</span><span class="se">\n\t</span><span class="s2">left: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">t</span><span class="p">.</span><span class="nx">offsetLeft</span>
+            <span class="o">+</span> <span class="dl">"</span><span class="se">\n\n</span><span class="dl">"</span>
+            <span class="o">+</span> <span class="dl">"</span><span class="s2">Zaman: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">time</span><span class="p">;</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="nx">txt</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<div class="card mb-2">
+<div class="card-body">
+<button id="jQueryClickEventTest" class="btn btn-danger">event Parametresi Test</button>
+<script type="text/javascript">
+$("#jQueryClickEventTest").click(function (event) {
+    var t = event.target;
+    var time = (new Date(event.timeStamp)).toLocaleString();
+    var txt = "Konum: \n\twidth: " + t.offsetWidth 
+            + ",\n\theight: " + t.offsetHeight
+            + ",\n\ttop: " + t.offsetTop
+            + ",\n\tleft: " + t.offsetLeft
+            + "\n\n"
+            + "Zaman: " + time;
+    alert(txt);
+});
+</script>
+</div>
+</div>
+
+<p>Event objesi üzerinde taşınan başka özelliklerin neler olduğunu merak ederseniz, 
+şu linke bakabilirsiniz: <a href="http://api.jquery.com/category/events/event-object/">jQuery Event Object</a></p>
+
+<h4 id="3-olay-çeşitleri">3. Olay Çeşitleri</h4>
+
+<p>İşin temelini kaptığımıza göre, şimdi farklı olayları ve ne anlama geldiklerini görelim.</p>
+
+<h5 id="31-click-olayı">3.1. click Olayı</h5>
+
+<p>Tıklama olayıdır. 
+Herhangi bir objeye farenin herhangi bir butonuyla tıklandığında tetiklenir. 
+Aşağıda, farenin hangi tuşu ile tıklama yapıldığını algılayan bir kod parçacığı mevcut:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">button#registerUser</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">clickEvent</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Fare ile tıklama yapıldı.</span>
+    <span class="k">switch</span> <span class="p">(</span><span class="nx">clickEvent</span><span class="p">.</span><span class="nx">which</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nx">alert</span><span class="p">(</span><span class="dl">'</span><span class="s1">Sol tuş tıklandı.</span><span class="dl">'</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nx">alert</span><span class="p">(</span><span class="dl">'</span><span class="s1">Orta tuş tıklandı.</span><span class="dl">'</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="nx">alert</span><span class="p">(</span><span class="dl">'</span><span class="s1">Sağ tuş tıklandı.</span><span class="dl">'</span><span class="p">);</span>
+            <span class="k">break</span><span class="p">;</span>
+        <span class="nl">default</span><span class="p">:</span>
+            <span class="nx">alert</span><span class="p">(</span><span class="dl">'</span><span class="s1">Bambaşka bir fare tuşu tıklandı.</span><span class="dl">'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h5 id="32-dblclick-olayı">3.2. dblclick Olayı</h5>
+
+<p>Farenin çift tıklama olayını yakalayan bir fonksiyon atamamızı sağlar.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Mesela içeriklerimizi klasör simgeleriyle listelediğimiz</span>
+<span class="c1">// bir web sayfası düşünelim. Klasöre çift tıklandığında</span>
+<span class="c1">// klasör açılsın istiyoruz.</span>
+<span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">div.folderIcon</span><span class="dl">"</span><span class="p">).</span><span class="nx">dblclick</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">folder</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
+    <span class="c1">// Varsayalım ki klasörü açan fonksiyonu daha önceden tanımladık.</span>
+    <span class="nx">openFolder</span><span class="p">(</span><span class="nx">folder</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h5 id="33-mouseover-ve-mouseenter-olayları">3.3. mouseover ve mouseenter Olayları</h5>
+
+<p>Bu olaylar fare imleci bir elemanın üzerine geldiğinde tetiklenir.
+Lakin aralarında ufak bir fark var.
+İmleç bir elemanın içerisine girdiğinde hem mouseover hem de mouseenter olayı vuku bulur.
+Fakat hala o elemanın içerisindeyken, onun içindeki başka bir elemanın üzerine getirdiğimizde imleci,
+dıştaki elemanımızın mouseover olayı tekrar tetiklenir.
+Yani mouseenter elemana girince tetikleniyor, mouseover ise
+o elemanın içerisindeki elemanlara girip çıkarken de tetikleniyor.
+Aşağıdaki kod parçacıklarını bir yerde çalıştırırsanız, siz de sonucu göreceksiniz.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- Sonuçların yazıldığı alan --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"counter"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p&gt;</span>mouseover {outerDiv} = <span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">"mouseOverOuter"</span><span class="nt">&gt;&lt;/span&gt;&lt;/p&gt;</span>
+    <span class="nt">&lt;p&gt;</span>mouseover {innterDiv} = <span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">"mouseOverInner"</span><span class="nt">&gt;&lt;/span&gt;&lt;/p&gt;</span>
+    <span class="nt">&lt;p&gt;</span>mouseenter {outerDiv} = <span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">"mouseEnterOuter"</span><span class="nt">&gt;&lt;/span&gt;&lt;/p&gt;</span>
+    <span class="nt">&lt;p&gt;</span>mouseenter {innerDiv} = <span class="nt">&lt;span</span> <span class="na">id=</span><span class="s">"mouseEnterInner"</span><span class="nt">&gt;&lt;/span&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+
+<span class="c">&lt;!-- En dış div --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"outerDiv"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- İç div --&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"innerDiv"</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- Öylesine div --&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"innerinner"</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">/**
+ * HTML anlaşılır görünsün diye biraz da CSS yazalım.
+ */</span>
+<span class="nf">#outerDiv</span> <span class="p">{</span>
+    <span class="nl">width</span><span class="p">:</span> <span class="m">300px</span><span class="p">;</span>
+    <span class="nl">height</span><span class="p">:</span> <span class="m">300px</span><span class="p">;</span>
+    <span class="nl">padding</span><span class="p">:</span> <span class="m">50px</span><span class="p">;</span>
+    <span class="nl">background</span><span class="p">:</span> <span class="no">blue</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nf">#innerDiv</span> <span class="p">{</span>
+    <span class="nl">width</span><span class="p">:</span> <span class="m">200px</span><span class="p">;</span>
+    <span class="nl">height</span><span class="p">:</span> <span class="m">200px</span><span class="p">;</span>
+    <span class="nl">padding</span><span class="p">:</span> <span class="m">50px</span><span class="p">;</span>
+    <span class="nl">background</span><span class="p">:</span> <span class="no">red</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nf">#innerinner</span> <span class="p">{</span>
+    <span class="nl">background</span><span class="p">:</span> <span class="no">yellow</span><span class="p">;</span>
+    <span class="nl">width</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
+    <span class="nl">height</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">outerMouseOver</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nx">outerMouseEnter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nx">innerMouseOver</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nx">innerMouseEnter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#outerDiv</span><span class="dl">"</span><span class="p">).</span><span class="nx">mouseover</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">outerMouseOver</span><span class="o">++</span><span class="p">;</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">span#mouseOverOuter</span><span class="dl">"</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">outerMouseOver</span><span class="p">);</span>
+    <span class="p">});</span>
+
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#outerDiv</span><span class="dl">"</span><span class="p">).</span><span class="nx">mouseenter</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">outerMouseEnter</span><span class="o">++</span><span class="p">;</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">span#mouseEnterOuter</span><span class="dl">"</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">outerMouseEnter</span><span class="p">);</span>
+    <span class="p">});</span>
+
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#innerDiv</span><span class="dl">"</span><span class="p">).</span><span class="nx">mouseover</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">innerMouseOver</span><span class="o">++</span><span class="p">;</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">span#mouseOverInner</span><span class="dl">"</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">innerMouseOver</span><span class="p">);</span>
+    <span class="p">});</span>
+
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#innerDiv</span><span class="dl">"</span><span class="p">).</span><span class="nx">mouseenter</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">innerMouseEnter</span><span class="o">++</span><span class="p">;</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">span#mouseEnterInner</span><span class="dl">"</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">innerMouseEnter</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Bu örneği jsFiddle’da görüp denemek için: 
+<a href="http://jsfiddle.net/sedran/Y68fu/">jsfiddle.net/sedran/Y68fu/</a></p>
+
+<h5 id="34-change-olayı">3.4. change Olayı</h5>
+
+<p>change olayı da bir form alanının değeri kullanıcı tarafından değiştirildiği zaman tetiklenir.
+Bu bahsettiğim form alanları input, textarea ve select html tagleriyle oluşturulan alanlardır.
+Aşağıda bir örnek yapalım. Mesela iki tane select olsun sayfamızda.
+Bunların içerisindeki seçenekler aynı olsun fakat birinde seçilen diğerinde görünmesin.
+Yani birisinin değeri değiştiğinde ötekisinde o değeri gizleyeceğiz.
+Bunun için ben netmera’da şöyle bir çözüm getirmiştim:</p>
+
+<p><a href="http://jsfiddle.net/sedran/Jvf3w/1/">jsfiddle.net/sedran/Jvf3w/1/</a></p>
+
+<p>Tamam kabul bu biraz uçuk hayvani bir örnek oldu. 
+Daha basit bir örnek yazayım.
+Bir formdan bir kişi kartı oluşturalım dinamik olarak.
+Aşağıda 4 tane <code class="highlighter-rouge">input[type=text]</code> alan var. 
+Bunların hepsinin “listenChange” sınıfına sahip olduğunu görüyoruz.
+Dolayısıyla tek bir fonksiyon ile dördünün de değişim olayını yakalayabiliriz.
+Daha sonra üzerinde change olayı meydana gelen form elemanının id’sinden, 
+içeriğini değiştireceğimiz html elemanının id’sini buluyoruz.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- Form elemanlarının HTML kodları --&gt;</span>
+<span class="nt">&lt;div&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Ad Soyad: <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">id=</span><span class="s">"nameInput"</span> <span class="na">class=</span><span class="s">"listenChange"</span> <span class="nt">/&gt;&lt;/p&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Telefon: <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">id=</span><span class="s">"phoneInput"</span> <span class="na">class=</span><span class="s">"listenChange"</span> <span class="nt">/&gt;&lt;/p&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Email: <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">id=</span><span class="s">"emailInput"</span> <span class="na">class=</span><span class="s">"listenChange"</span> <span class="nt">/&gt;&lt;/p&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Adres: <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">id=</span><span class="s">"addressInput"</span> <span class="na">class=</span><span class="s">"listenChange"</span> <span class="nt">/&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+
+<span class="c">&lt;!-- Kişi kartının html kodu --&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"card"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h1</span> <span class="na">id=</span><span class="s">"name"</span><span class="nt">&gt;</span>Serdar Kuzucu<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;h2</span> <span class="na">id=</span><span class="s">"phone"</span><span class="nt">&gt;</span>05547865930<span class="nt">&lt;/h2&gt;</span>
+    <span class="nt">&lt;h3</span> <span class="na">id=</span><span class="s">"email"</span><span class="nt">&gt;</span>serdar.kuzucu@anymail.com<span class="nt">&lt;/h3&gt;</span>
+    <span class="nt">&lt;p</span> <span class="na">id=</span><span class="s">"address"</span><span class="nt">&gt;</span>Gül sokak 33 numara aydoğan apartmanı kat xx istanbul sarıyer<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">/**
+ * Kart için CSS kodu
+ */</span>
+<span class="nc">.card</span> <span class="p">{</span>
+    <span class="nl">width</span><span class="p">:</span> <span class="m">400px</span><span class="p">;</span>
+    <span class="nl">height</span><span class="p">:</span> <span class="m">200px</span><span class="p">;</span>
+    <span class="nl">border-radius</span><span class="p">:</span> <span class="m">10px</span><span class="p">;</span>
+    <span class="nl">background</span><span class="p">:</span> <span class="m">#eee</span><span class="p">;</span>
+    <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="m">#333</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.card</span> <span class="nt">h1</span> <span class="p">{</span>
+    <span class="nl">margin</span><span class="p">:</span> <span class="m">5px</span><span class="p">;</span>
+    <span class="nl">padding</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="nl">font</span><span class="p">:</span> <span class="nb">bold</span> <span class="m">30px</span> <span class="s2">'Comic Sans MS'</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.card</span> <span class="nt">h2</span> <span class="p">{</span>
+    <span class="nl">margin</span><span class="p">:</span> <span class="m">5px</span><span class="p">;</span>
+    <span class="nl">padding</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="nl">font</span><span class="p">:</span> <span class="nb">bold</span> <span class="m">20px</span> <span class="s2">'Comic Sans MS'</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nc">.card</span> <span class="nt">h3</span><span class="o">,</span> <span class="nc">.card</span> <span class="nt">p</span> <span class="p">{</span>
+    <span class="nl">margin</span><span class="p">:</span> <span class="m">5px</span><span class="p">;</span>
+    <span class="nl">padding</span><span class="p">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="nl">font</span><span class="p">:</span> <span class="nb">normal</span> <span class="m">20px</span> <span class="s1">"Open Sans"</span><span class="p">,</span> <span class="n">Helvetica</span><span class="p">,</span> <span class="n">Arial</span><span class="p">,</span> <span class="nb">sans-serif</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// sınıfı listenChange olan elemanlara tıklanınca çalışacak fonksiyon</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">.listenChange</span><span class="dl">"</span><span class="p">).</span><span class="nx">change</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// tıklanan elemanın id'sini al</span>
+        <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">);</span>
+        <span class="c1">// tıklanan elemanın değerini al</span>
+        <span class="kd">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>
+        <span class="c1">// tıklanan elemanın id'sinden 'Input' yazısını sil</span>
+        <span class="c1">// mesela nameInput ise id'si, name kalacak elimizde</span>
+        <span class="kd">var</span> <span class="nx">inputRemoved</span> <span class="o">=</span> <span class="nx">id</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="dl">"</span><span class="s2">Input</span><span class="dl">"</span><span class="p">,</span> <span class="dl">""</span><span class="p">);</span>
+        <span class="c1">// bu id ile bulacağımız elemanın içine input'daki değeri yaz</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#</span><span class="dl">"</span> <span class="o">+</span> <span class="nx">inputRemoved</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Bu örneğin çalışan hali için de jsFiddle linki:
+<a href="http://jsfiddle.net/sedran/Jvf3w/2/">jsfiddle.net/sedran/Jvf3w/2/</a></p>
+
+<h5 id="35-focus-ve-blur-olayları">3.5. focus ve blur Olayları</h5>
+
+<p>Bu olaylar da sayfamızdaki elemanlar focus kazandığında ve kaybettiğinde tetiklenir.
+İnput alanlarını düşünün.
+Klavyede TAB tuşuna basarak input alanlarının birinden diğerine geçebiliyoruz form doldururken.
+Veya fare ile tıklayarak bir input alanının içerisine focus olabiliyoruz.
+İşte bu durumlarda içine yazı yazabilir duruma geldiğimiz input alanı focus eventi fırlatır.
+İçinden çıktığımız alan ise blur eventi fırlatır.</p>
+
+<p>Eskiden bu blogdaki arama kutusunda bu event şu şekilde kullanılıyordu:
+Arama kutusunda varsayılan değer olarak “Tıkla, yaz ve aramaya başla” yazıyordu.
+Daha sonra focus eventi tetiklendiğinde bu yazı siliniyordu ve kullanıcı aramak istediği şeyi yazıyordu.
+Eğer blur eventi tetiklendiğinde kullanıcı birşey yazmamışsa, oraya tekrar eski yazı yazılıyordu.
+Bunu kod ile gösterecek olursak:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">id=</span><span class="s">"search"</span> <span class="na">name=</span><span class="s">"q"</span> 
+    <span class="na">value=</span><span class="s">"Tıkla, yaz ve aramaya başla!"</span> <span class="nt">/&gt;</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">$searchBar</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#search</span><span class="dl">"</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">defaultText</span> <span class="o">=</span> <span class="nx">$searchBar</span><span class="p">.</span><span class="nx">val</span><span class="p">();</span>
+    <span class="nx">$searchBar</span><span class="p">.</span><span class="nx">focus</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">$searchBar</span><span class="p">.</span><span class="nx">val</span><span class="p">()</span> <span class="o">==</span> <span class="nx">defaultText</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">$searchBar</span><span class="p">.</span><span class="nx">val</span><span class="p">(</span><span class="dl">""</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+    
+    <span class="nx">$searchBar</span><span class="p">.</span><span class="nx">blur</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">$searchBar</span><span class="p">.</span><span class="nx">val</span><span class="p">()</span> <span class="o">==</span> <span class="dl">""</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">$searchBar</span><span class="p">.</span><span class="nx">val</span><span class="p">(</span><span class="nx">defaultText</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Bu kodun çalışan hali için jsFiddle ise burada: 
+<a href="http://jsfiddle.net/sedran/76WNb/">jsfiddle.net/sedran/76WNb/</a></p>
+
+<p>Şimdi olay çeşitlerini burada kısa kesiyorum 
+ve değinmek istediğim birkaç güzel jQuery event methoduna daha değiniyorum.</p>
+
+<p><a href="http://api.jquery.com/hover/">hover</a>,
+<a href="http://api.jquery.com/keydown/">keydown</a>,
+<a href="http://api.jquery.com/keypress/">keypress</a> ve
+<a href="http://api.jquery.com/submit/">submit</a>
+gibi daha birçok event çeşidi için 
+<a href="http://api.jquery.com/category/events/">jQuery dökümantasyonunun event bölümüne</a> bakabilirsiniz.</p>
+
+<h4 id="4-preventdefault-stoppropagation-ve-return-false">4. preventDefault, stopPropagation ve return false</h4>
+
+<p>Amatör olarak eventler ile iş yaparken istenmeyen durumlarla karşılaşabiliriz.
+Mesela bir link var, bu link tıklandığında eventi yakalayıp javascript ile asenkron birşey yapmak istiyoruz.
+Fakat o da ne, javascript ile yapmak istediğimiz iş yapılmadan tıkladığımız linkin yönlendirdiği web sayfası açılmış.
+Yada iç içe gömülü iki html objesinin de tıklama olaylarında farklı işler yapmak istiyoruz
+fakat içtekine tıkladığımızda dıştaki de tıklama eventi fırlatıyor.
+Böyle durumlarda işlerin karışmasını önlemek için işte bu keywordler var:</p>
+
+<h4 id="41-preventdefault">4.1. preventDefault</h4>
+
+<p>Bir eventi yakaladığımızda, bu event üzerinden çağıracağımız <code class="highlighter-rouge">preventDefault</code> methodu, 
+o html objesi üzerinde o event için default olarak çalışacak olan fonksiyonun çalışmasını engeller. 
+Mesela google.com sitesine bağlanan bir link var sitemizde 
+ve bu linke tıklandığında google’a gitmesin de sayfada başka birşey yapsın istiyorsunuz. 
+Bu durumda browserın otomatik olarak google.com’u açmasını preventDefault methodu ile engelliyoruz.</p>
+
+<p>Mesela aşağıdaki örnekte, kullanıcıya bir soru soruyoruz. 
+Başka bir adrese yönlendiriliyorsunuz, onaylıyor musunuz diye. 
+Kullanıcı onay vermezse yönlendirme işlemini iptal ediyoruz.</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"http://www.google.com"</span> <span class="na">id=</span><span class="s">"googleLink"</span><span class="nt">&gt;</span>Google Linki<span class="nt">&lt;/a&gt;</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#googleLink</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">confirmation</span> <span class="o">=</span> <span class="nx">confirm</span><span class="p">(</span><span class="dl">"</span><span class="s2">Sitemizden çıkıp aşağıdaki adrese yönlendirilmek isteniyorsunuz. </span><span class="dl">"</span> <span class="o">+</span>
+         <span class="dl">"</span><span class="s2">Onaylıyor musunuz?</span><span class="se">\n</span><span class="dl">"</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">href</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">confirmation</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h5 id="42-stoppropagation">4.2. stopPropagation</h5>
+
+<p>İç içe iki HTML objesi düşünelim.
+İkisinin de kendine has click event handlerı olsun.
+Bu durumda ne gibi bir sorun oluşabilir?
+Sadece dıştaki html objesine tıkladığımız zaman, sadece dıştaki html objesinin click event handlerı çağırılır.
+Fakat içteki html objesine tıkladığımızda, hem içtekinin, hem de dıştakinin event handlerları çağırılır.
+Çünkü içtekine tıkladığımız zaman aslında dıştakine de tıklamış oluyoruz.
+Bu durum eğer tasarımımızda istenmeyen bir durumsa, istenmeyen sonuçlara yol açıyorsa,
+event üzerindeki stopPropagation methodunu çağırarak da bu durumun önünü kesebiliriz.
+Böylece, içteki html elemanına tıklandığında eventin dıştaki html elemanına kadar ilerlemesini durdurmuş oluyoruz.</p>
+
+<p>Aşağıda bir menü örneği verdim.
+Menü elemanlarından birisine tıklanınca o elemana bir class ekliyoruz.
+O elemanın içinde ise o classı silen bir span var.
+Ona tıklandığı zaman o menü elemanındaki classın silinmesi lazım.
+İçteki elemanın tıklama eventini yakalayıp classı silsek bile,
+dıştaki elemanın da tıklama eventi tetikleneceğinden o class tekrar o elemana ekleniyor,
+görünümde bir değişiklik olmuyordu normalde.
+Fakat stopPropagation methodu bu sorunsalı çözdü.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">ul li</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="dl">"</span><span class="s2">colorful</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">});</span>
+    
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">ul li span</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">$parent</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">closest</span><span class="p">(</span><span class="dl">"</span><span class="s2">li</span><span class="dl">"</span><span class="p">);</span>
+        <span class="nx">$parent</span><span class="p">.</span><span class="nx">removeClass</span><span class="p">(</span><span class="dl">"</span><span class="s2">colorful</span><span class="dl">"</span><span class="p">);</span>
+        <span class="nx">event</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Bu kodun çalışan örneğini görmek isterseniz, 
+jsFiddle: <a href="http://jsfiddle.net/sedran/LEghR/">jsfiddle.net/sedran/LEghR/</a></p>
+
+<h5 id="43-return-false">4.3. return false</h5>
+
+<p>Aynı anda hem <code class="highlighter-rouge">preventDefault</code> hem de <code class="highlighter-rouge">stopPropagation</code> methodlarını çağırmamız gerektiğini düşünelim.
+Bu bir sorun değil, tabi ki de ard arda ikisini de çağırabiliriz.
+Fakat gerek yok.
+İkisini birden çağırmak istediğimizde sadece return false yazmamız yeterli.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Aynı anda hem preventDefault</span>
+<span class="c1">// hem de stopPropagation çağıralım</span>
+<span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">ul li span</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+    <span class="nx">event</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
+<span class="p">});</span>
+
+<span class="c1">// Yukarıdaki koddan hiçbir farkı yok.</span>
+<span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">ul li span</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">preventDefault</code>, <code class="highlighter-rouge">stopPropagation</code> ve <code class="highlighter-rouge">return false</code> ile ilgili genel bir örnek için 
+jsFiddle: <a href="http://jsfiddle.net/sedran/updNu/1/">jsfiddle.net/sedran/updNu/1/</a></p>
+
+<h4 id="5-bind-ve-unbind-methodları">5. bind ve unbind methodları</h4>
+
+<p>Event dinleyicilerini click, keypress, dblclick gibi kendi isimlerinde yaratılmış fonksiyonlar ile atamak yerine,
+bind methoduyla da atayabiliriz.
+Bu bize çeşitli faydalar sağlayabilir.
+Bunlardan en önemlisi unbind methodu ile bu event dinleyicileri ortadan kaldırabilmektir.
+Aşağıdaki örnek kod bind/unbind methodlarının en basit kullanımını göstermektedir.</p>
+
+<p><strong>HTML Kodu:</strong></p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;p&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"doit"</span><span class="nt">&gt;</span>Click Me<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"binder"</span><span class="nt">&gt;</span>Bind Listener<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"unbinder"</span><span class="nt">&gt;</span>Unbind Listener<span class="nt">&lt;/button&gt;</span>
+</code></pre></div></div>
+
+<p><strong>Javascript Kodu:</strong></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Bind Listener yazan buton tıklandığında </span>
+    <span class="c1">// Click Me yazan butona bir click event listenerı bind edelim</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#binder</span><span class="dl">"</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#doit</span><span class="dl">"</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+            <span class="c1">// Bu butona tıklandığında ise ekrana birşeyler yazalım.</span>
+            <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">p</span><span class="dl">"</span><span class="p">).</span><span class="nx">html</span><span class="p">(</span><span class="dl">"</span><span class="s2">Button Clicked On: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">date</span><span class="p">.</span><span class="nx">toTimeString</span><span class="p">());</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+    
+    <span class="c1">// Unbind Listener yazan butona tıklayınca da </span>
+    <span class="c1">// Click Me üzerindeki click event listenerlarını temizleyelim.</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#unbinder</span><span class="dl">"</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#doit</span><span class="dl">"</span><span class="p">).</span><span class="nx">unbind</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Örnekte yaptığımız iş basit.
+‘Bind Listener’ yazan bir buton var.
+Bu butona basana kadar ‘Click Me’ yazan buton hiçbirşey yapmayacak.
+Bu butona basıldıktan sonra ise ‘Click Me’ butonuna bir click event listenerı bind edeceğiz.
+Bundan sonra Click Me butonu bir işlev kazanacak ve tıklandığında ekrana birşeyler yazacak.</p>
+
+<p>‘Unbind Listener’ butonu ise tıklandığı zaman ‘Click Me’ butonundaki event listenerı etkisiz hale getirecek 
+ve böylece ‘Click Me’ butonu tekrar işlevsiz hale gelecektir.</p>
+
+<p>Bu örneğin çalışan hali için tıklayın: 
+<a href="http://jsfiddle.net/sedran/L6Btr/">jsfiddle.net/sedran/L6Btr/</a></p>
+
+<h5 id="51-sadece-belirli-bir-fonksiyonu-unbind-etmek">5.1. Sadece Belirli Bir Fonksiyonu unbind Etmek</h5>
+
+<p>Bazen unbind ederek bir eventin tüm dinleyicilerini silmek istemeyiz.
+Sadece bir tanesini kaldırmamız gerekebilir.
+Bu durumda bir fonksiyon bind ederken elimizde o fonksiyona ait bir referans tutmamız gerekir.
+Yani önce ayrı bir yerde fonksiyonu tanımlamamız,
+daha sonra bu fonksiyonu ismiyle bind etmemiz
+ve unbind ederken de ismi ile unbind etmemiz gerekiyor.</p>
+
+<p>Bu açıklamaya güzel bir örnek şu şekilde geliştirilebilir:</p>
+
+<p><strong>HTML Kodu:</strong></p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"bindAListener"</span><span class="nt">&gt;</span>Bind Specific Function<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"unbindAListener"</span><span class="nt">&gt;</span>Unbind Specific Function<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;p&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"doit"</span><span class="nt">&gt;</span>Do It, Click Me<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>
+    <span class="nt">&lt;textarea</span> <span class="na">disabled=</span><span class="s">"disabled"</span> <span class="na">rows=</span><span class="s">"10"</span> <span class="na">cols=</span><span class="s">"35"</span><span class="nt">&gt;&lt;/textarea&gt;</span>
+<span class="nt">&lt;/p&gt;</span>
+</code></pre></div></div>
+
+<p><strong>Javascript Kodu:</strong></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Bu fonksiyon textarea'nın içeriğini temizler</span>
+    <span class="kd">function</span> <span class="nx">clearTextarea</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">textarea</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="dl">""</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// Bu fonksiyon textarea objesine metin ekler</span>
+    <span class="kd">function</span> <span class="nx">append</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">textarea</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">textarea</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">+</span> <span class="nx">str</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// Bu fonksiyon textarea içerisine Ahmet yazar</span>
+    <span class="kd">function</span> <span class="nx">writeAhmet</span><span class="p">()</span> <span class="p">{</span>
+       <span class="nx">append</span><span class="p">(</span><span class="dl">"</span><span class="s2">Ahmetn</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// Bu fonksiyon textarea içerisine Mehmet yazar</span>
+    <span class="kd">function</span> <span class="nx">writeMehmet</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">append</span><span class="p">(</span><span class="dl">"</span><span class="s2">Mehmetn</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// Bu fonksiyon textarea içerisine Serdar yazar</span>
+    <span class="kd">function</span> <span class="nx">writeSerdar</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">append</span><span class="p">(</span><span class="dl">"</span><span class="s2">Serdarn</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// doit butonuna tıklayınca her zaman</span>
+    <span class="c1">// clearTextarea, writeMehmet, ve writeAhmet</span>
+    <span class="c1">// fonksiyonları çağırılacak.</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#doit</span><span class="dl">"</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click</span><span class="dl">"</span><span class="p">,</span> <span class="nx">clearTextarea</span><span class="p">);</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#doit</span><span class="dl">"</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click</span><span class="dl">"</span><span class="p">,</span> <span class="nx">writeMehmet</span><span class="p">);</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#doit</span><span class="dl">"</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click</span><span class="dl">"</span><span class="p">,</span> <span class="nx">writeAhmet</span><span class="p">);</span>
+    
+    <span class="c1">// Bind Specific Listener butonuna tıklandıktan sonra</span>
+    <span class="c1">// doit butonu aynı zamanda writeSerdar</span>
+    <span class="c1">// fonksiyonunu da tetikleyecek.</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#bindAListener</span><span class="dl">"</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#doit</span><span class="dl">"</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click</span><span class="dl">"</span><span class="p">,</span> <span class="nx">writeSerdar</span><span class="p">);</span>
+    <span class="p">});</span>
+    
+    <span class="c1">// Unbind Specific Function butonuna tıklandıktan sonra</span>
+    <span class="c1">// doit butonu writeSerdar fonksiyonunu çağırmayı bırakacak</span>
+    <span class="c1">// Fakat diğer fonksiyonları çağırmaya devam edecek</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#unbindAListener</span><span class="dl">"</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#doit</span><span class="dl">"</span><span class="p">).</span><span class="nx">unbind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click</span><span class="dl">"</span><span class="p">,</span> <span class="nx">writeSerdar</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Çalışan örnek için şu linke göz atabilirsiniz:
+<a href="http://jsfiddle.net/sedran/8XVbx/">jsfiddle.net/sedran/8XVbx/</a></p>
+
+<p>Bu konuyla ilgili daha önceden yazdığım başka bir örnek için: 
+<a href="http://jsfiddle.net/sedran/nGdSq/1/">jsfiddle.net/sedran/nGdSq/1/</a></p>
+
+<h5 id="52-i̇sim-uzayınamespace-kullanmak">5.2. İsim Uzayı(namespace) Kullanmak</h5>
+
+<p>Bazı event dinleyicilerine özel isimler veya sınıflar vermek isteyebiliriz.
+Böylece o dinleyicileri kaldırırken onları tanımlayan fonksiyonlara referans vermek zorunda kalmayız.
+Bu olayın avantajlarından birisi bir dinleyici birden fazla isim uzayına kaydedebiliyor olmamız
+ve kaldırırken de bir isim uzayındaki tüm dinleyicileri kaldırabiliyor olmamız bence.
+Aşağıda zor gibi görünen fakat basit bir örnek var.</p>
+
+<p><strong>HTML Kodu:</strong></p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;p&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"aliGel"</span><span class="nt">&gt;</span>Ali Gel<span class="nt">&lt;/button&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"aliGit"</span><span class="nt">&gt;</span>Ali Git<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"veliGel"</span><span class="nt">&gt;</span>Veli Gel<span class="nt">&lt;/button&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"veliGit"</span><span class="nt">&gt;</span>Veli Git<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"removeAli"</span><span class="nt">&gt;</span>Ali Eventlerini Sil<span class="nt">&lt;/button&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"removeVeli"</span><span class="nt">&gt;</span>Veli Eventlerini Sil<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"removeGel"</span><span class="nt">&gt;</span>Gel Eventlerini Sil<span class="nt">&lt;/button&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"removeGit"</span><span class="nt">&gt;</span>Git Eventlerini Sil<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"doit"</span><span class="nt">&gt;</span>Do It, Click Me<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/p&gt;</span>
+ 
+<span class="nt">&lt;p&gt;</span>
+    <span class="nt">&lt;textarea</span> <span class="na">disabled=</span><span class="s">"disabled"</span> <span class="na">rows=</span><span class="s">"10"</span> <span class="na">cols=</span><span class="s">"35"</span><span class="nt">&gt;&lt;/textarea&gt;</span>
+<span class="nt">&lt;/p&gt;</span>
+</code></pre></div></div>
+
+<p><strong>Javascript Kodu:</strong></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Bu fonksiyon textarea'nın içeriğini temizler</span>
+    <span class="kd">function</span> <span class="nx">clearTextarea</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">textarea</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="dl">""</span><span class="p">);</span>
+    <span class="p">}</span>
+     
+    <span class="c1">// Bu fonksiyon textarea objesine metin ekler</span>
+    <span class="kd">function</span> <span class="nx">append</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">textarea</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">textarea</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">+</span> <span class="nx">str</span> <span class="o">+</span> <span class="dl">"</span><span class="se">\n</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#doit</span><span class="dl">"</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click</span><span class="dl">"</span><span class="p">,</span> <span class="nx">clearTextarea</span><span class="p">);</span>
+    
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#aliGel</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// Burada event listenerımızı</span>
+        <span class="c1">// ali ve gel adında iki adet isim uzayına ekledik</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#doit</span><span class="dl">"</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click.ali.gel</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">append</span><span class="p">(</span><span class="dl">"</span><span class="s2">Ali Gel</span><span class="dl">"</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+    
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#aliGit</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// Burada event listenerımızı</span>
+        <span class="c1">// ali ve git adında iki adet isim uzayına ekledik</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#doit</span><span class="dl">"</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click.ali.git</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">append</span><span class="p">(</span><span class="dl">"</span><span class="s2">Ali Git</span><span class="dl">"</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+    
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#veliGel</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// Burada event listenerımızı</span>
+        <span class="c1">// veli ve gel adında iki adet isim uzayına ekledik</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#doit</span><span class="dl">"</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click.veli.gel</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">append</span><span class="p">(</span><span class="dl">"</span><span class="s2">Veli Gel</span><span class="dl">"</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+    
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#veliGit</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// Burada event listenerımızı</span>
+        <span class="c1">// veli ve git adında iki adet isim uzayına ekledik</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#doit</span><span class="dl">"</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click.veli.git</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">append</span><span class="p">(</span><span class="dl">"</span><span class="s2">Veli Git</span><span class="dl">"</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+    
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#removeAli</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// Burada ali isim uzayındaki tüm </span>
+        <span class="c1">// click event listenerlarını temizliyoruz.</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#doit</span><span class="dl">"</span><span class="p">).</span><span class="nx">unbind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click.ali</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">});</span>
+    
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#removeVeli</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// Burada veli isim uzayındaki tüm </span>
+        <span class="c1">// click event listenerlarını temizliyoruz.</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#doit</span><span class="dl">"</span><span class="p">).</span><span class="nx">unbind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click.veli</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">});</span>
+    
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#removeGel</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// Burada gel isim uzayındaki tüm </span>
+        <span class="c1">// click event listenerlarını temizliyoruz.</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#doit</span><span class="dl">"</span><span class="p">).</span><span class="nx">unbind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click.gel</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">});</span>
+    
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#removeGit</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// Burada git isim uzayındaki tüm </span>
+        <span class="c1">// click event listenerlarını temizliyoruz.</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#doit</span><span class="dl">"</span><span class="p">).</span><span class="nx">unbind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click.git</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Bu örnekte elimizde bir iş yapıcı buton var.
+Bu buton ilk olarak işlevsiz.
+Biz bu butona diğer butonlar yardımıyla bazı işlevler ekliyoruz.
+Burada ekleyebildiğimiz dört tane işlev var.
+Bunlar sırasıyla ekrandaki textarea objesine “Ali Gel”, “Ali Git”, “Veli Gel”, ve “Veli Git” yazılarını yazmak.
+Bu butonların hepsine basarsak textarea objesine bu dört cümleyi de yazıyor <strong>doit</strong> id’sini dediğim buton.
+Fakat ekranda başka butonlar da var.
+Mesela “Ali Eventlerini Sil” yazan butona basarsak, “Ali Gel” ve “Ali Git” butonları ile
+eklediğimiz dinleyiciler yok olacak.
+“Veli Eventlerini Sil” butonuna basarsak “Veli Gel” ve “Veli Git” butonları ile eklediğimiz dinleyiciler uçacak.
+“Gel Eventlerini Sil” butonuna bastığımız zaman “Ali Gel” ve “Veli Gel” butonlarıyla eklediğimiz
+dinleyiciler kaybolacak ve eğer “Git Eventlerini Sil” butonuna basarsak da “Ali Git” ve “Veli Git”
+butonları ile eklediğimiz dinleyiciler ölecek.
+Nasıl yaptık bunu? Tabi ki namespace kullanarak.</p>
+
+<p>İşin özeti, “Ali Gel” ve “Veli Gel” butonları “Do It, Click Me” butonuna click eventi dinleyicisi eklerken
+sırasıyla “ali”, “gel”, “veli”, “gel” isim uzaylarını kullanarak ekliyorlar.
+Dolayısıyla “Gel Eventlerini Sil” dediğimizde “gel” isim uzayında olan bu iki dinleyiciyi yok etmiş oluyoruz.</p>
+
+<p>Bu kodu biraz daha kurcalamadan anlamak zor gelebilir.
+O yüzden şu linkten bir göz atın isterseniz:
+<a href="http://jsfiddle.net/sedran/zEmtW/">jsfiddle.net/sedran/zEmtW/</a></p>
+
+<h5 id="53-dinleyici-fonksiyona-bilgi-göndermek">5.3. Dinleyici Fonksiyona Bilgi Göndermek</h5>
+
+<p>Fonksiyon kalabalığı yaratmak istemeyebiliriz bazen.
+Birden fazla eventi tek bir fonksiyonla dinlemek de mümkün tabi ki.
+Tabi buradaki kastım sayfadaki tüm eventleri tek bir fonksiyona göndermek değil,
+bu kodumuzun okunabilirliğini oldukça azaltacaktır.
+Fakat bazı eventler benzer işlevleri tetikleyebilirler.
+Bu eventleri yakalayıp aynı fonksiyona dinlettirdiğimiz zaman da
+bu fonksiyon eventin kaynağını algılamakta biraz zorluk çekebilir.
+Bu durumlarda bind methodu bize event objesi üzerinde dinleyiciye bilgi gönderebilme altyapısını da sağlıyor.
+Ne büyük nimet değil mi? Neyse abartmadan devam edelim.</p>
+
+<p>Mesela bir butona tek tıklayınca bir kutuya “clickd 123”,
+çift tıklayınca da yine aynı kutuya “double clicked 321” yazsın.
+Bunun için click ve dblclick eventlerini tek bir fonksiyona dinlettirip,
+kutuya yazılacak olan mesajı da event üzerine ekleyeceğimiz bilgiden okutabiliriz.</p>
+
+<p><strong>HTML Kodu:</strong></p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"clickme"</span><span class="nt">&gt;</span>Click or Double Click Me<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;hr</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;textarea</span> <span class="na">disabled=</span><span class="s">"disabled"</span> <span class="na">rows=</span><span class="s">"20"</span> <span class="na">cols=</span><span class="s">"40"</span><span class="nt">&gt;&lt;/textarea&gt;</span>
+</code></pre></div></div>
+
+<p><strong>Javascript Kodu:</strong></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Bu fonksiyon textarea'nın içeriğini temizler</span>
+    <span class="kd">function</span> <span class="nx">clearTextarea</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">textarea</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="dl">""</span><span class="p">);</span>
+    <span class="p">}</span>
+     
+    <span class="c1">// Bu fonksiyon textarea objesine metin ekler</span>
+    <span class="kd">function</span> <span class="nx">append</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">textarea</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">textarea</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">()</span> <span class="o">+</span> <span class="nx">str</span> <span class="o">+</span> <span class="dl">"</span><span class="s2">n</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="c1">// Tek tıklamayı da çift tıklamayı da </span>
+    <span class="c1">// bu fonksiyon yakalasın</span>
+    <span class="kd">function</span> <span class="nx">clickOrDblClick</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">clearTextarea</span><span class="p">();</span>
+        
+        <span class="c1">// event üzerinde gönderdiğimiz data'dan</span>
+        <span class="c1">// gelen bilgileri de kutuya yazsın.</span>
+        <span class="nx">append</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">type</span><span class="p">);</span>
+        <span class="nx">append</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">anyValue</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#clickme</span><span class="dl">"</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span><span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">clicked</span><span class="dl">"</span><span class="p">,</span> <span class="na">anyValue</span><span class="p">:</span> <span class="mi">123</span><span class="p">},</span> <span class="nx">clickOrDblClick</span><span class="p">);</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#clickme</span><span class="dl">"</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="dl">"</span><span class="s2">dblclick</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span><span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">double clicked</span><span class="dl">"</span><span class="p">,</span> <span class="na">anyValue</span><span class="p">:</span> <span class="mi">321</span><span class="p">},</span> <span class="nx">clickOrDblClick</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Yukarıda gördüğümüz gibi, bind methoduna eğer ikinci parametre olarak bir json objesi geçersek, 
+bu eventi dinleyen fonksiyona gönderilecek parametreleri içeriyor demektir.</p>
+
+<p>Eventi dinleyen <strong>clickOrDblClick</strong> fonksiyonu da event üzerinde gelen data ne olursa olsun 
+aynı işi yapmakla yükümlü bir emir kulu oluyor bu durumda.</p>
+
+<p>Bu örneği çalıştırmak isterseniz de buyrun: 
+<a href="http://jsfiddle.net/sedran/MhtcM/">jsfiddle.net/sedran/MhtcM/</a></p>
+
+<h4 id="6-one-methodu-event-dinleyicinin-sadece-bir-kere-çalışması">6. one() Methodu: Event Dinleyicinin Sadece Bir Kere Çalışması</h4>
+
+<p>Bazı event dinleyicilerin sadece bir kere çalışmasını istediğimiz durumlar olabilir.
+Mesela bir butona tıkladığımız zaman sayfaya birşey eklenmesini istiyoruzdur 
+fakat ikinci kez tıklandığında eklenmesini istemiyoruzdur.
+Çünkü ekleyeceğimiz şeyi zaten eklemişizdir.
+Bu iş için amele bir yöntem event dinleyiciyi bind edip, dinleyici fonksiyon çalıştığında da unbind etmektir.
+Amele kodu aşağıda görebilirsiniz:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;button</span> <span class="na">id=</span><span class="s">"clickme"</span><span class="nt">&gt;</span>Click Me<span class="nt">&lt;/button&gt;</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#clickme</span><span class="dl">"</span><span class="p">).</span><span class="nx">bind</span><span class="p">(</span><span class="dl">'</span><span class="s1">click.appender</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#clickme</span><span class="dl">"</span><span class="p">).</span><span class="nx">after</span><span class="p">(</span><span class="dl">"</span><span class="s2">&lt;p&gt;Butona tıkladın!&lt;/p&gt;</span><span class="dl">"</span><span class="p">);</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#clickme</span><span class="dl">"</span><span class="p">).</span><span class="nx">unbind</span><span class="p">(</span><span class="dl">"</span><span class="s2">click.appender</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Amele kodun jsFiddle linki: 
+<a href="http://jsfiddle.net/sedran/XdwQK/1/">jsfiddle.net/sedran/XdwQK/1/</a></p>
+
+<p>Pek de kötü bir çözüm değil aslında. 
+Hatta yaygın bile olabilir. 
+Fakat daha iyisi varken neden bunu yazalım değil mi? İşte daha kolayı:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#clickme</span><span class="dl">"</span><span class="p">).</span><span class="nx">one</span><span class="p">(</span><span class="dl">'</span><span class="s1">click</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#clickme</span><span class="dl">"</span><span class="p">).</span><span class="nx">after</span><span class="p">(</span><span class="dl">"</span><span class="s2">&lt;p&gt;Butona tıkladın!&lt;/p&gt;</span><span class="dl">"</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">one</code> methodu ile eklediğimiz event dinleyici jQuery tarafından sadece event ilk gerçekleştiğinde çalıştırılır 
+ve daha sonra otomatik olarak unbind edilir. 
+Böylece bu işle biz uğraşmamış oluruz.</p>
+
+<p>İşte çalışan örnek kod:
+<a href="http://jsfiddle.net/sedran/XdwQK/2/">jsfiddle.net/sedran/XdwQK/2/</a></p>
+
+<p>Böylece aylardır taslak olarak duran bir blog yazımı da sonunda tamamlamış oluyorum.
+Buraya kadar okuduysanız sabrınız için teşekkürler.
+Umarım faydalı bir iş yapabilmişimdir.
+Nasıl desem, bir developer gözlerini tamamen kaybetmeden önce arkasından gelenlere birşeyler bırakabilmeli.
+Sorunuz olursa yorumlarınızı bekliyorum.</p>
+
+<p>Kodlu günler :)</p>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/jquery-giris-ve-gelisme">&laquo; jQuery Giriş ve Gelişme</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+    <a class="next" href="/linux-mysql-veritabanini-import-ve-export-etmek">Linux: MySQL Veritabanını Import ve Export Etmek &raquo;</a>
+    
+  </div>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'http://demo.serdarkuzucu.com/jqueryde-olaylar-event-handling';
+        this.page.identifier = 'jqueryde-olaylar-event-handling';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>

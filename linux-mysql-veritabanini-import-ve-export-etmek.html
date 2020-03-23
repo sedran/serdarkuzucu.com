@@ -6,12 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>HTML</title>
-  <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
-">
+  <title>Linux: MySQL Veritabanını Import ve Export Etmek</title>
+  <meta name="description" content="Bazen tüm bir MySQL veritabanını tek bir dosya halinde yedek almamız gerekebilir. Yada tam tersi, bir dosyadan bir database’i geri yüklememiz gerekebilir. Bu...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://demo.serdarkuzucu.com/category/html/">
+  <link rel="canonical" href="http://demo.serdarkuzucu.com/linux-mysql-veritabanini-import-ve-export-etmek">
   <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="http://demo.serdarkuzucu.com/feed.xml">
   <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
 </head>
@@ -88,16 +87,89 @@
 
 
     <div class="container blog-content">
-      <h1>HTML Kategorisinde 1 Yazı Mevcuttur</h1>
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
-
-
-<div>
-    <h4><a href="/bootstrap-4-grid-system"><u>Bootstrap 4 - Grid Sistemi</u></a></h4>
-    <p>
-        <time datetime="2020-03-03T00:00:00+00:00"> 10 Feb 2019 </time>
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Linux: MySQL Veritabanını Import ve Export Etmek</h1>
+    <p class="post-meta">
+      <time datetime="2013-08-21T15:14:00+00:00" itemprop="datePublished">Aug 21, 2013</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
     </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/linux">Linux</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/mysql">MySQL</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Bazen tüm bir MySQL veritabanını tek bir dosya halinde yedek almamız gerekebilir. 
+Yada tam tersi, bir dosyadan bir database’i geri yüklememiz gerekebilir. 
+Bunun için linux konsolunda doğrudan çalışan mysqldump ve mysql komutlarını kullanabiliriz. 
+Bu yazıda kaynak olarak gösterdiğim stackexchange linkini yer imlerime eklemiş 
+her ihtiyacım olduğunda oradan bakarak yapıyordum bu işi fakat buraya da not alayım dedim.</p>
+
+<!--more-->
+
+<p>Aşağıdaki şekilde kendi bilgisayarımızdaki veritabanını 
+veya eğer ssh ile bir sunucuya bağlıysak oradaki veritabanını bir dosyaya export edebilirsiniz:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysqldump <span class="nt">-u</span> username <span class="nt">-p</span> databasename <span class="o">&gt;</span> filename.sql
+</code></pre></div></div>
+
+<p>Bu komutu yazdığınızda size MySQL şifrenizi soracak 
+ve girdiğinizde filename.sql isminde bir dosya oluşturarak oraya veritabanını export edecektir.</p>
+
+<p>Aşağıdaki komutla ise bir dosyaya export edilmiş bir veritabanını MySQL’e import edebiliyoruz:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql <span class="nt">-u</span> username <span class="nt">-p</span> databasename &lt; filename.sql
+</code></pre></div></div>
+
+<p>Bu komutla da filename.sql adındaki dosyadan bir veritabanını içeri import etmiş olduk.</p>
+
+<p>Kaynak: <a href="http://dba.stackexchange.com/questions/25599/mysql-db-import-export-command-line-in-windows">dba.stackexchange.com</a></p>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/jqueryde-olaylar-event-handling">&laquo; jQuery'de Olaylar (Event Handling)</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+    <a class="next" href="/checkbox-yerine-select-kullanalim">Checkbox Yerine Select Kullanalım &raquo;</a>
+    
+  </div>
 </div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'http://demo.serdarkuzucu.com/linux-mysql-veritabanini-import-ve-export-etmek';
+        this.page.identifier = 'linux-mysql-veritabanini-import-ve-export-etmek';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
 
 
 
