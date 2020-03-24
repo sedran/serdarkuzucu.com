@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Linux: MySQL Veritabanını Import ve Export Etmek</title>
-  <meta name="description" content="Bazen tüm bir MySQL veritabanını tek bir dosya halinde yedek almamız gerekebilir. Yada tam tersi, bir dosyadan bir database’i geri yüklememiz gerekebilir. Bu...">
+  <title>Java&#39;da InputStream Class&#39;ının Skip Hatası</title>
+  <meta name="description" content="InputStream class’ının skip methodu bir datayı okurken okumak istemediğimiz kadar veriyi atlamamızı sağlaması gereken bir fonksiyon. Parametre olarak kaç byt...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://demo.serdarkuzucu.com/linux-mysql-veritabanini-import-ve-export-etmek">
+  <link rel="canonical" href="http://demo.serdarkuzucu.com/javada-inputstream-classinin-skip-hatasi">
   <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="http://demo.serdarkuzucu.com/feed.xml">
   <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
 </head>
@@ -96,9 +96,9 @@
       <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Linux: MySQL Veritabanını Import ve Export Etmek</h1>
+    <h1 class="post-title" itemprop="name headline">Java'da InputStream Class'ının Skip Hatası</h1>
     <p class="post-meta">
-      <time datetime="2013-08-21T15:14:00+00:00" itemprop="datePublished">Aug 21, 2013</time>
+      <time datetime="2012-06-09T02:46:00+00:00" itemprop="datePublished">Jun 9, 2012</time>
       
       • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
       <span itemprop="name">Serdar Kuzucu</span></span>
@@ -108,40 +108,55 @@
     
     <p>
       
-         <a class="btn btn-outline-dark btn-sm" href="/category/linux">Linux</a>
+         <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
       
-         <a class="btn btn-outline-dark btn-sm" href="/category/mysql">MySQL</a>
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
       
     </p>
     
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>Bazen tüm bir MySQL veritabanını tek bir dosya halinde yedek almamız gerekebilir. 
-Yada tam tersi, bir dosyadan bir database’i geri yüklememiz gerekebilir. 
-Bunun için linux konsolunda doğrudan çalışan mysqldump ve mysql komutlarını kullanabiliriz. 
-Bu yazıda kaynak olarak gösterdiğim stackexchange linkini yer imlerime eklemiş 
-her ihtiyacım olduğunda oradan bakarak yapıyordum bu işi fakat buraya da not alayım dedim.</p>
+    <p><code class="highlighter-rouge">InputStream</code> class’ının <code class="highlighter-rouge">skip</code> methodu bir datayı okurken 
+okumak istemediğimiz kadar veriyi atlamamızı sağlaması gereken bir fonksiyon. 
+Parametre olarak kaç byte skip edileceğini alıyor 
+ve return olarak da kaç byte skip ettiğini dönüyor. 
+Yani dosyanın sonuna gelinmediği sürece parametresi 
+ile return değerinin eşit olması gerekiyor, mantıken. 
+Ama bazı durumlarda nedense atladığı data parametre olarak verdiğimizden çok daha ufak, 
+neredeyse onda biri olabiliyor.</p>
 
 <!--more-->
 
-<p>Aşağıdaki şekilde kendi bilgisayarımızdaki veritabanını 
-veya eğer ssh ile bir sunucuya bağlıysak oradaki veritabanını bir dosyaya export edebilirsiniz:</p>
+<p>Az önce bu problem yüzünden yaklaşık 1 saatimi harcadım. 
+Çözümü de yine her zaman olduğu gibi 
+<a href="http://stackoverflow.com/a/9077180/618279">stackoverflow</a>‘da buldum.</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysqldump <span class="nt">-u</span> username <span class="nt">-p</span> databasename <span class="o">&gt;</span> filename.sql
+<p>Bu sorunu düzelten fonksiyonu kendime göre düzenledim ve şu şekilde kullanmaya başladım:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">static</span> <span class="kt">long</span> <span class="nf">skip</span><span class="o">(</span><span class="nc">InputStream</span> <span class="n">s</span><span class="o">,</span> <span class="kt">long</span> <span class="n">numbytes</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">IOException</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">numbytes</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kt">long</span> <span class="n">n</span> <span class="o">=</span> <span class="n">numbytes</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">buflen</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">(</span><span class="mi">1024</span><span class="o">,</span> <span class="n">n</span><span class="o">);</span>
+    <span class="kt">byte</span> <span class="n">data</span><span class="o">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="n">buflen</span><span class="o">];</span>
+    <span class="k">while</span> <span class="o">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">data</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="nc">Math</span><span class="o">.</span><span class="na">min</span><span class="o">((</span><span class="kt">long</span><span class="o">)</span> <span class="n">buflen</span><span class="o">,</span> <span class="n">n</span><span class="o">));</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">r</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">break</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">n</span> <span class="o">-=</span> <span class="n">r</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">numbytes</span> <span class="o">-</span> <span class="n">n</span><span class="o">;</span>
+<span class="o">}</span>
 </code></pre></div></div>
 
-<p>Bu komutu yazdığınızda size MySQL şifrenizi soracak 
-ve girdiğinizde filename.sql isminde bir dosya oluşturarak oraya veritabanını export edecektir.</p>
-
-<p>Aşağıdaki komutla ise bir dosyaya export edilmiş bir veritabanını MySQL’e import edebiliyoruz:</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mysql <span class="nt">-u</span> username <span class="nt">-p</span> databasename &lt; filename.sql
-</code></pre></div></div>
-
-<p>Bu komutla da filename.sql adındaki dosyadan bir veritabanını içeri import etmiş olduk.</p>
-
-<p>Kaynak: <a href="http://dba.stackexchange.com/questions/25599/mysql-db-import-export-command-line-in-windows">dba.stackexchange.com</a></p>
+<p>Java, kendisi de bu şekilde yaptığını söylüyor bize aslında.
+Bir byte array’i yaratıp onun içerisine okuyarak skip ediyormuş datayı.
+Biz de aynı şekilde yaptık.
+O yaptı çalışmadı, biz yaptık çalıştı.
+Garip.</p>
 
   </div>
 </article>
@@ -149,13 +164,13 @@ ve girdiğinizde filename.sql isminde bir dosya oluşturarak oraya veritabanın�
 <div class="row">
   <div class="col text-left">
     
-    <a class="prev" href="/jqueryde-olaylar-event-handling">&laquo; jQuery'de Olaylar (Event Handling)</a>
+    <a class="prev" href="/javada-swing-ile-basit-bir-pencere-yapalim">&laquo; Java'da Swing ile Basit Bir Pencere Yapalım</a>
     
   </div>
 
   <div class="col text-right">
     
-    <a class="next" href="/checkbox-yerine-select-kullanalim">Checkbox Yerine Select Kullanalım &raquo;</a>
+    <a class="next" href="/nesne-merkezliobject-oriented-javascript">Nesne Merkezli(Object Oriented) Javascript &raquo;</a>
     
   </div>
 </div>
@@ -164,8 +179,8 @@ ve girdiğinizde filename.sql isminde bir dosya oluşturarak oraya veritabanın�
   <div id="disqus_thread"></div>
 <script>
     var disqus_config = function () {
-        this.page.url = 'http://demo.serdarkuzucu.com/linux-mysql-veritabanini-import-ve-export-etmek';
-        this.page.identifier = 'linux-mysql-veritabanini-import-ve-export-etmek';
+        this.page.url = 'http://demo.serdarkuzucu.com/javada-inputstream-classinin-skip-hatasi';
+        this.page.identifier = 'javada-inputstream-classinin-skip-hatasi';
     };
     (function () {
         var d = document, s = d.createElement('script');
