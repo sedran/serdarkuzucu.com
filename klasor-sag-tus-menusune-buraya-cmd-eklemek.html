@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Metro Style Uygulamalarda Hata Yakalamak</title>
-  <meta name="description" content="Microsoft yakın zamanlarda Metro Style Apps isminde yeni bir konsept duyurmuş.Windows 8 yüklü tüm platformlarda çalışan bir uygulama türüymüş kendisi.Ben de ...">
+  <title>Windows: Klasör Sağ Tuş Menüsüne Buraya CMD Eklemek</title>
+  <meta name="description" content="Windows üzerinde çalışan programcı arkadaşlar bazı işlemler için kendilerine kolaylık sağlamak isteyebilirler.Mesela bir klasöre komut isteminde ulaşmak için...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://demo.serdarkuzucu.com/metro-style-uygulamalarda-hata-yakalamak">
+  <link rel="canonical" href="http://demo.serdarkuzucu.com/klasor-sag-tus-menusune-buraya-cmd-eklemek">
   <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="http://demo.serdarkuzucu.com/feed.xml">
   <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
 </head>
@@ -98,9 +98,9 @@
       <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Metro Style Uygulamalarda Hata Yakalamak</h1>
+    <h1 class="post-title" itemprop="name headline">Windows: Klasör Sağ Tuş Menüsüne Buraya CMD Eklemek</h1>
     <p class="post-meta">
-      <time datetime="2012-08-11T10:40:00+00:00" itemprop="datePublished">Aug 11, 2012</time>
+      <time datetime="2012-02-04T02:49:00+00:00" itemprop="datePublished">Feb 4, 2012</time>
       
       • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
       <span itemprop="name">Serdar Kuzucu</span></span>
@@ -110,57 +110,70 @@
     
     <p>
       
-         <a class="btn btn-outline-dark btn-sm" href="/category/javascript">Javascript</a>
+         <a class="btn btn-outline-dark btn-sm" href="/category/genel">Genel</a>
       
-         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
-      
-         <a class="btn btn-outline-dark btn-sm" href="/category/windows-8">Windows 8</a>
+         <a class="btn btn-outline-dark btn-sm" href="/category/bilgisayar-i̇puçları">Bilgisayar İpuçları</a>
       
     </p>
     
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>Microsoft yakın zamanlarda Metro Style Apps isminde yeni bir konsept duyurmuş.
-Windows 8 yüklü tüm platformlarda çalışan bir uygulama türüymüş kendisi.
-Ben de stajda kendimi bir anda Metro Style Apps geliştirirken buldum.
-En güzel yanı dil olarak C#, C++, VB, ve Javascript/HTML5 kullanılabiliyor olması.</p>
+    <p>Windows üzerinde çalışan programcı arkadaşlar bazı işlemler için kendilerine kolaylık sağlamak isteyebilirler.
+Mesela bir klasöre komut isteminde ulaşmak için cd komutu ile o klasörün adresini yazmak yerine, 
+klasöre sağ tıklayıp “Buraya CMD” gibi bir komutu seçebilmeli insan. 
+Bilgisayar mühendisliği öğrencisinin çok değerli proje zamanlarının 
+cmd komutlarıyla uğraştırılarak harcanmaması lazım. 
+O halde sağ tuş menümüze böyle bir kısayol ekleyelim ve kurtulalım.</p>
 
 <!--more-->
 
-<p>Tabi ki ilk tercihim Javascript oldu.
-Lakin error handling falan Javascript’te düşündüğümden çok daha zormuş, 
-asenkron işlemler, callback’ler, türü belli olmayan hatalar, 
-neden kaynaklandığını anlayamadığım <code class="highlighter-rouge">eval(..)</code> kod içerisinde patlayan hatalar, 
-programın çökmesi falan derken bir türlü önünü alamadım hataların.
-Daha sonra dedim bu böyle olmaz, bir iki döküman indirdim Microsoft’un sitesinden 
-ve okumaya başladım Metro Style App nedir, ne değildir.</p>
+<h5 id="adım-1">Adım 1.</h5>
 
-<p>Neyse, okurken fark ettim ki, Metro Style Apps içerisindeki hataları yakalamak 
-aslında benim düşündüğümden çok daha kolaymış. 
-Neredeyse 3 satır ile programda çıkan tüm hataları görmezden gelebiliyoruz. 
-Böylece program çökmemiş oluyor.</p>
+<p>Başlat menüsündeki arama çubuğuna <strong>regedit</strong> yazıp enter’a basıyoruz.
+“Kayıt Defteri Düzenleyicisi” isimli programın açılmış olması gerekiyor.</p>
 
-<p>İşte o sihirli kodlar:</p>
+<h5 id="adım-2">Adım 2.</h5>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">WinJS</span><span class="p">.</span><span class="nx">Application</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">customEventObject</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// daha sonra debug etmek için hata mesajını yazdıralım.</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Exception caught: </span><span class="dl">"</span> <span class="o">+</span> <span class="nx">customEventObject</span><span class="p">.</span><span class="nx">detail</span><span class="p">.</span><span class="nx">errorMessage</span><span class="p">);</span>
+<p>Kayıt Defteri Düzenleyicisi’nde sol tarafta 
+<strong>HKEY_LOCAL_MACHINE -&gt; SOFTWARE -&gt; Classes -&gt; Directory -&gt; shell</strong>
+adresine gidiyoruz. 
+Windows’a düzeltilemez hatalar vermenin mümkün olduğu kayıt defteri üzerinde değişiklik yapmadan önce 
+<em>kayıt defterinizin yedeğini almayı da unutmayın.</em></p>
 
-    <span class="c1">// true dönmezsek handle edilmemiş hatalar programı çökertir.</span>
-    <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-<span class="p">};</span>
-</code></pre></div></div>
+<p><img src="/assets/posts/regedit-right-click-cmd-here.png" alt="regedit" /></p>
 
-<p>Metro Style Application geliştirmek bana çok eğlenceli geldi.
-Özellikle de bu hata yakalama mekanizmasını indirdiğim pdf’den okuduğumda.
-Okuduğum İngilizce dökümanları da sizle paylaşayım son olarak.</p>
+<h5 id="adım-3">Adım 3.</h5>
 
-<p>Öncelikle, <a href="http://msdn.microsoft.com/en-us/library/windows/apps/hh974576.aspx">Metro Style Application nedir, ne değildir?</a></p>
+<p><strong>shell</strong> klasörüne sağ tıklıyoruz ve <strong>Yeni -&gt; Anahtar</strong> diyerek shell klasörünün altında 
+yeni bir klasör oluşmasını sağlıyoruz. 
+Bu klasörümüzün adına <strong>BurayaCMD</strong> koyalım. 
+Aslında itiraf etmek gerekirse isminin ne olduğu pek farketmiyor.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NOT (2020): Bazı linkler microsoft sitelerinden kaldırılmışlar.
-Bu sebeple buradan da silmek zorunda kaldım.
-</code></pre></div></div>
+<h5 id="adım-4">Adım 4.</h5>
+
+<p>Yarattığımız <strong>BurayaCMD</strong> isimli klasöre tıklıyoruz.
+Sağ tarafta göreceğimiz <strong>(Varsayılan)</strong> isimli değere çift tıklayalım 
+ve açılan kutudaki <strong>“Değer Verisi”</strong> kutusuna <strong>“Buraya CMD”</strong> yazalım. 
+Yada klasöre sağ tıkladığımız zaman orada yazmasını istediğiniz herhanbi bir komutu yazabilirsiniz. 
+3 ve 4. adımlarda yaptığımız değişiklikler şu şekilde görünüyor olmalı:</p>
+
+<p><img src="/assets/posts/cmd-here-regedit.png" alt="regedit" /></p>
+
+<h5 id="adım-5">Adım 5.</h5>
+
+<p>Şimdi yarattığımız <strong>BurayaCMD</strong> klasörüne sağ tıklıyoruz 
+ve <strong>Yeni -&gt; Anahtar</strong> diyerek onun altında da ismi <strong>“command”</strong> olan bir klasör yaratıyoruz.
+Bu klasröre tıklayıp, sağ tarafındaki <strong>(Varsayılan)</strong> isimli değere de çift tıkladıktan sonra 
+açılan kutuya <code class="highlighter-rouge">cmd.exe /k cd %1</code> yazıp Tamam diyoruz.</p>
+
+<p><img src="/assets/posts/regedit-right-click-cmd-here-final.png" alt="regedit" /></p>
+
+<p>An itibariyle bitmiş olması lazım.
+Şimdi herhangi bir klasöre sağ tıkladığınız zaman aşağıdaki resimde gördüğünüz gibi 
+<strong>Buraya CMD</strong> seçeneğinin çıkması lazım ve tıklanılınca da komut isteminin o dizin ile başlaması gerekir.</p>
+
+<p><img src="/assets/posts/cmd-here-final.png" alt="Buraya CMD" /></p>
 
 
   </div>
@@ -169,13 +182,13 @@ Bu sebeple buradan da silmek zorunda kaldım.
 <div class="row">
   <div class="col text-left">
     
-    <a class="prev" href="/nesne-merkezliobject-oriented-javascript">&laquo; Nesne Merkezli(Object Oriented) Javascript</a>
+    <a class="prev" href="/javada-kendi-layoutmanagerimizi-yaratalim">&laquo; Java'da Kendi LayoutManager'ımızı Yaratalım</a>
     
   </div>
 
   <div class="col text-right">
     
-    <a class="next" href="/winamp-jump-to-file-penceresi-acilmiyorsa">Winamp Jump To File Penceresi Açılmıyorsa &raquo;</a>
+    <a class="next" href="/javada-inputstream-classinin-skip-hatasi">Java'da InputStream Class'ının Skip Hatası &raquo;</a>
     
   </div>
 </div>
@@ -184,8 +197,8 @@ Bu sebeple buradan da silmek zorunda kaldım.
   <div id="disqus_thread"></div>
 <script>
     var disqus_config = function () {
-        this.page.url = 'http://demo.serdarkuzucu.com/metro-style-uygulamalarda-hata-yakalamak';
-        this.page.identifier = 'metro-style-uygulamalarda-hata-yakalamak';
+        this.page.url = 'http://demo.serdarkuzucu.com/klasor-sag-tus-menusune-buraya-cmd-eklemek';
+        this.page.identifier = 'klasor-sag-tus-menusune-buraya-cmd-eklemek';
     };
     (function () {
         var d = document, s = d.createElement('script');
