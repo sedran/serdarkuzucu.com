@@ -63,3 +63,13 @@ jekyll-archives:
     day: '/:year/:month/:day/'
     tag: '/tags/:name/'
     category: '/category/:name/'
+
+pagination:
+  enabled: true
+  per_page: 10
+  collection: 'posts'
+  sort_reverse: true
+  permalink: '/p/:num/'
+  trail:
+    before: 2 # The number of links before the current page
+    after: 2  # The number of links after the current page
