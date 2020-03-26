@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>PHP ile Code Converter Hazırlamak</title>
+  <meta name="description" content="Hani bazen sayfanıza kod yazmak istersiniz de o kod sayfada metin olarak görünmek yerine işlevsel olarak iş yapar. Yani siz sayfanızda &lt;br/&gt; kodunu yaz...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://demo.serdarkuzucu.com/php-ile-code-converter-hazirlamak">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="http://demo.serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (38)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (5)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (19)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (3)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (2)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (5)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="http://demo.serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">PHP ile Code Converter Hazırlamak</h1>
+    <p class="post-meta">
+      <time datetime="2010-08-17T16:20:00+00:00" itemprop="datePublished">Aug 17, 2010</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/php">PHP</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Hani bazen sayfanıza kod yazmak istersiniz de o kod sayfada metin olarak görünmek yerine işlevsel olarak iş yapar. 
+Yani siz sayfanızda <code class="highlighter-rouge">&lt;br/&gt;</code> kodunu yazmak istersiniz fakat sayfada <code class="highlighter-rouge">&lt;br/&gt;</code> olarak görünmez de 
+alt satıra geçme işlevini gerçekleştirir. 
+Bu durumda kodlarınızı çevirmeniz gerekir. 
+Sizin yazdığınız kodları çevirmek için hazırlanmış çeşitli web siteleri var. 
+Bunların en sağlam örneklerinden birisi de <a href="http://www.eblogtemplates.com/">eblogtemplates</a>‘in 
+<a href="http://www.eblogtemplates.com/blogger-ad-code-converter/">Blogger Adsense Code Converter</a>‘ıdır.</p>
+
+<!--more-->
+
+<p>Bu yazımızda, PHP ile kendi kod çevirmenimizi nasıl hazırlarız ona bakacağız, ki burda hazır yapılmışı var:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;style&gt;</span>
+  <span class="nt">body</span> <span class="p">{</span><span class="nl">text-align</span><span class="p">:</span><span class="nb">center</span><span class="p">;}</span>
+  <span class="nt">textarea</span> <span class="p">{</span><span class="nl">border</span><span class="p">:</span><span class="m">1px</span> <span class="nb">solid</span> <span class="m">#999</span><span class="p">;</span> <span class="nl">width</span><span class="p">:</span><span class="m">400px</span><span class="p">;</span> <span class="nl">margin</span><span class="p">:</span><span class="m">5px</span> <span class="nb">auto</span><span class="p">;</span><span class="nl">overflow</span><span class="p">:</span><span class="nb">auto</span><span class="p">;</span><span class="nl">resize</span><span class="p">:</span><span class="nb">none</span><span class="p">;}</span>
+  <span class="nt">p</span> <span class="p">{</span><span class="nl">border</span><span class="p">:</span><span class="m">1px</span> <span class="nb">solid</span> <span class="m">#999</span><span class="p">;</span><span class="nl">padding</span><span class="p">:</span><span class="m">5px</span><span class="p">;</span> <span class="nl">width</span><span class="p">:</span><span class="m">400px</span><span class="p">;</span> <span class="nl">margin</span><span class="p">:</span><span class="m">5px</span> <span class="nb">auto</span><span class="p">;</span><span class="nl">overflow</span><span class="p">:</span><span class="nb">auto</span><span class="p">;}</span>
+<span class="nt">&lt;/style&gt;</span>
+
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"code_convert.php"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;textarea</span> <span class="na">cols=</span><span class="s">"60"</span> <span class="na">rows=</span><span class="s">"10"</span> <span class="na">name=</span><span class="s">"normal"</span> <span class="nt">&gt;&lt;/textarea&gt;</span>
+  <span class="nt">&lt;br/&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">name=</span><span class="s">"conv"</span> <span class="na">value=</span><span class="s">"Convert!"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+
+<span class="cp">&lt;?php</span>
+<span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'conv'</span><span class="p">]))</span> <span class="p">{</span>
+  <span class="nv">$normal</span> <span class="o">=</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'normal'</span><span class="p">]));</span>
+  <span class="nv">$degismis</span> <span class="o">=</span> <span class="nb">nl2br</span><span class="p">(</span><span class="nb">stripslashes</span><span class="p">(</span><span class="nv">$normal</span><span class="p">));</span> 
+
+<span class="cp">?&gt;</span>
+  <span class="nt">&lt;p&gt;</span>Kodunuz: <span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;p&gt;</span>
+    <span class="nt">&lt;code&gt;</span><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nv">$degismis</span><span class="p">;</span> <span class="cp">?&gt;</span><span class="nt">&lt;/code&gt;</span>
+  <span class="nt">&lt;/p&gt;</span>
+<span class="cp">&lt;?php</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+
+<p>Şimdi, kodumuzu inceleyelim biraz. 
+Formumuzu oluşturduk, formumuzdaki <strong>textarea</strong> elementi ile kullanıcıdan kodu alıyoruz. 
+Gönder butonuna bastığı zaman PHP kodumuz çalışmaya başlıyor. 
+PHP kodumuz gelen kodu <code class="highlighter-rouge">$normal</code> isimli değişkene içindeki 
+özel html karakterlerini istediğimiz şekilde çevirip aktarıyor. 
+Daha sonra bu çevirmeden kaynaklanan slash karakterlerini temizleyip veriyi 
+<code class="highlighter-rouge">$degismis</code> isimli değişkene aktarıyor. 
+Ve son olarak da ekrana yazıyor kodumuzun son halini.</p>
+
+<p>Burada dikkat etmemiz gereken şey sayfayı <strong>code_convert.php</strong> ismiyle kaydetmek 
+veya sayfayı hangi isimle kaydedersek o ismi <code class="highlighter-rouge">&lt;form action=“code_convert.php” method=“post”&gt;</code> kısmında 
+<code class="highlighter-rouge">action</code> özelliğinin içerisine yazmak.</p>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+  </div>
+
+  <div class="col text-right">
+    
+    <a class="next" href="/phpde-checkboxlar-ile-islem-yapmak">PHP'de Checkbox'lar ile İşlem Yapmak &raquo;</a>
+    
+  </div>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'http://demo.serdarkuzucu.com/php-ile-code-converter-hazirlamak';
+        this.page.identifier = 'php-ile-code-converter-hazirlamak';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>

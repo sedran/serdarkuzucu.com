@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>PHP&#39;de Checkbox&#39;lar ile İşlem Yapmak - 2</title>
+  <meta name="description" content="Şu yarım bıraktığımız işe devam edelim. İlk yazıda, PHP’de Checkbox’lar ile basit bir ekrana yazma uygulaması yapmıştık. Şimdi ise, bir MySQL tablosundaki ka...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://demo.serdarkuzucu.com/phpde-checkboxlar-ile-islem-yapmak-2">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="http://demo.serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (38)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (5)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (19)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (3)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (2)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (5)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="http://demo.serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">PHP'de Checkbox'lar ile İşlem Yapmak - 2</h1>
+    <p class="post-meta">
+      <time datetime="2011-02-02T18:15:00+00:00" itemprop="datePublished">Feb 2, 2011</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/php">PHP</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Şu yarım bıraktığımız işe devam edelim. <a href="/phpde-checkboxlar-ile-islem-yapmak">İlk yazıda</a>, 
+PHP’de Checkbox’lar ile basit bir ekrana yazma uygulaması yapmıştık. 
+Şimdi ise, bir MySQL tablosundaki kayıtları Checkbox’lar kullanarak toplu halde silme işlemini göstermeye çalışacağım.</p>
+
+<!--more-->
+
+<p>Öncelikle hazırlayacağımız iki sayfa için de MySQL bağlantısı gerekeceği için, 
+bağlantıları kuran ayrı bir dosya hazırlayacağız 
+ve o dosyayı sayfalarımıza çağıracağız. 
+Aşağıdaki kodları kendimize göre düzenliyoruz, ve <code class="highlighter-rouge">baglan.php</code> isminde kaydediyoruz.</p>
+
+<p>Şimdi, yukarıda belirttiğimiz veritabanının içinde “checkbox” isminde bir tablo olduğunu varsayalım. 
+Tablonun içerisinde 3 sütun var, ve görünüşü de şu şekilde:</p>
+
+<p><img src="/assets/posts/mysql-phpmyadmin.jpg" alt="phpmyadmin - mysql" /></p>
+
+<p>Şimdi bu tablodaki kayıtları sıralayan, her kaydın yanına birer checkbox koyan bir arayüz hazırlamamız gerekiyor. 
+Ve bir de seçtiğimiz checkbox’lar ile işlem yapmamız için bir butona ihtiyacımız var. 
+Aşağıdaki kodları arayuz.php ismiyle kaydedelim.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">include</span><span class="p">(</span><span class="s1">'baglan.php'</span><span class="p">);</span> <span class="c1">// MySQL bağlantımızı kuran dosya</span>
+ 
+<span class="nv">$sql</span> <span class="o">=</span> <span class="nb">mysql_query</span><span class="p">(</span><span class="s2">"select * from checkbox"</span><span class="p">);</span> <span class="c1">// Checkbox isimli tablodan kayıtları al</span>
+<span class="k">echo</span> <span class="s1">'&lt;ul&gt;'</span><span class="p">;</span>
+<span class="k">echo</span> <span class="s1">'&lt;form action="islem.php" method="post"&gt;'</span><span class="p">;</span>
+
+<span class="k">while</span><span class="p">(</span><span class="nv">$dizi</span> <span class="o">=</span> <span class="nb">mysql_fetch_array</span><span class="p">(</span><span class="nv">$sql</span><span class="p">))</span> <span class="c1">// Tablodan gelen her satır için bir liste elemanı</span>
+<span class="p">{</span>
+   <span class="nv">$id</span> <span class="o">=</span> <span class="nv">$dizi</span><span class="p">[</span><span class="s1">'id'</span><span class="p">];</span>
+   <span class="nv">$isim</span> <span class="o">=</span> <span class="nv">$dizi</span><span class="p">[</span><span class="s1">'isim'</span><span class="p">];</span>
+   <span class="nv">$soyisim</span> <span class="o">=</span> <span class="nv">$dizi</span><span class="p">[</span><span class="s1">'soyisim'</span><span class="p">];</span>
+   <span class="k">echo</span> <span class="s1">'&lt;li&gt;&lt;input name="secenek['</span> <span class="o">.</span> <span class="nv">$id</span> <span class="o">.</span> <span class="s1">']" type="checkbox" value="'</span> <span class="o">.</span> <span class="nv">$id</span> <span class="o">.</span> <span class="s1">'" /&gt; '</span> <span class="o">.</span> <span class="nv">$isim</span> <span class="o">.</span> <span class="s1">' '</span><span class="o">.</span><span class="nv">$soyisim</span><span class="o">.</span><span class="s1">'&lt;/li&gt;'</span><span class="p">;</span> 
+<span class="p">}</span> 
+<span class="k">echo</span> <span class="s1">'&lt;input name="kayit_sil" type="submit" value="Sil" /&gt;'</span><span class="p">;</span>
+<span class="k">echo</span> <span class="s1">'&lt;/form&gt;'</span><span class="p">;</span>
+<span class="k">echo</span> <span class="s1">'&lt;/ul&gt;'</span><span class="p">;</span>
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+
+<p>Bu hazırladığımız sayfa ne yapıyor önce ona bakalım. 
+İlk başta include komutu ile daha önceden hazırlamış olduğumuz baglan.php sayfasını kendi içine çağırıyor.
+Böylece MySQL veritabanımıza bağlanmış oluyoruz.</p>
+
+<p>Daha sonra $sql değişkenine checkbox tablosundaki satırları atıyoruz.
+ul html tagını kullanarak bir liste yaratıyoruz, 
+bu listenin içine form‘umuzu oluşturuyoruz ki checkbox’larımız çalışsın.</p>
+
+<p>Yarattığımız formdan anlayacağımız gibi, formumuz verdiğimiz verileri post metodunu kullanarak 
+islem.php isimli bir dosyaya aktarıyor. 
+Yani yaratacağımız son dosya islem.php olacak. 
+Form yaratıldıktan sonra, while döngüsünü kullanarak, 
+tablodaki her satır için bir adet liste elemanı(li) yaratıyoruz, 
+liste elemanının içerisine, tablodan getirdiğimiz satır’ın id‘sini 
+value ve name‘inde barındıran bir checkbox, 
+ve checkbox’un yanına neyi işaretlediğimizi anlamamızı sağlayacak, isim ve soyisim verilerini getiriyoruz.</p>
+
+<p>While döngümüz sonlandıktan sonra, işaretlediğimiz checkbox’lardaki verileri 
+islem.php dosyasına aktarmak için, bir adet buton yaratıyoruz. 
+Ve son olarak yarattığımız form ve ul taglarını kapatıyoruz. 
+Bu sayfamızın görüntüsü şu şekilde olacaktır:</p>
+
+<p><img src="/assets/posts/arayuz_checkboxes.jpg" alt="Arayüz PHP Checkbox" /></p>
+
+<p>Şimdi gelelim islem.php sayfamıza. 
+Bu sayfaya gelecek olan verilere bir bakalım. 
+Buton‘a bastığımız zaman, ilk olarak buton‘un name değerini sayfaya göndermiş oluruz. 
+Bunu işaretlediğimiz checkbox‘ların name ve value değerleri takip eder. 
+Yani islem.php sayfamıza “eğer buton’a tıklanmışsa” şeklinde bir koşul ile başlamamız doğru olacaktır. 
+Daha sonra, işaretlenmiş checkbox’ların name değerlerinin oluşturduğu dizinin her işlemi için, 
+MySQL’dan silme işlemi yapacağız ve bunu foreach ile sağlayacağız. 
+Haydi bir de islem.php sayfamızın içine yazmamız gereken kodlarımıza bakalım.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">include</span><span class="p">(</span><span class="s1">'baglan.php'</span><span class="p">);</span> <span class="c1">// MySQL bağlantımız</span>
+ 
+<span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'kayit_sil'</span><span class="p">]))</span> <span class="c1">// Eğer butona basıldıysa</span>
+<span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'secenek'</span><span class="p">]))</span> <span class="c1">// Eğer seçeneklerden en az biri işaretlenmişse</span>
+  <span class="p">{</span>
+    <span class="nv">$dizi</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'secenek'</span><span class="p">];</span> <span class="c1">// Post ile gelen seçenekler diziye aktarılır.</span>
+    <span class="k">foreach</span><span class="p">(</span><span class="nv">$dizi</span> <span class="k">as</span> <span class="nv">$secenek</span><span class="p">)</span> <span class="c1">// dizinin her elemanı için tekrar eden döngü</span>
+    <span class="p">{</span>
+      <span class="nb">mysql_query</span><span class="p">(</span><span class="s2">"delete from checkbox where id = '</span><span class="nv">$secenek</span><span class="s2">'"</span><span class="p">);</span> <span class="c1">// MySQL'dan işbu veriyi silme</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="c1">// eğer hiçbir checkbox işaretlenmemişse</span>
+  <span class="p">{</span>
+    <span class="k">echo</span> <span class="s2">"Birşey seçmediniz!"</span><span class="p">;</span> <span class="c1">// ekrana bu yazılır.</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="nb">header</span><span class="p">(</span><span class="s2">"Location: arayuz.php"</span><span class="p">);</span> <span class="c1">// işlem tamamlandığında arayuz.php sayfasına döner</span>
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+
+<p>Son bir toparlamak gerekirse, islem.php sayfamızın ne yaptığı konusunda, 
+ilk satırda gerekli veritabanı bağlantısını sağlamak amacıyla baglan.php sayfasını include ediyor. 
+Daha sonra sayfaya eğer butona basılarak gelinmişse, ve eğer checkbox’lar işaretlenmişse, 
+işaretlenen her checkbox için, MySQL tablosundan bir kayıt siliyor. 
+Eğer işaretlenmiş checkbox yoksa, ekrana birşey seçmediniz yazıyor. 
+Daha sonra da header fonksiyonu aracılığıyla arayuz.php sayfasına geri dönüyor.</p>
+
+<p>Anlamadığınız bir kısım olursa, geriye dönüp 
+<a href="/phpde-checkboxlar-ile-islem-yapmak">PHP’de Checkbox’lar ile İşlem Yapmak</a> isimli yazıyı tekrar okuyun. 
+Olur da yine bir problem olursa, her zaman yorum olarak geri dönebilirsiniz.</p>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/phpde-bazi-mysql-veritabani-islemleri">&laquo; PHP’de Bazı MySQL Veritabanı İşlemleri</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+    <a class="next" href="/javada-swing-ile-basit-bir-pencere-yapalim">Java'da Swing ile Basit Bir Pencere Yapalım &raquo;</a>
+    
+  </div>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'http://demo.serdarkuzucu.com/phpde-checkboxlar-ile-islem-yapmak-2';
+        this.page.identifier = 'phpde-checkboxlar-ile-islem-yapmak-2';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>

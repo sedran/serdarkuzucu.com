@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Sıralama Algoritmaları</title>
+  <meta name="description" content="Selam gençler ve bilgisayar başındayken genç hissedebilenler. Bilgisayar ile ilgili uzun zamandır bir şeyler yazıp çizmemiştim. Ara sıra babam evde tatil yap...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://demo.serdarkuzucu.com/siralama-algoritmalari">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="http://demo.serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (38)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (5)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (19)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (3)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (2)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (5)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="http://demo.serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Sıralama Algoritmaları</h1>
+    <p class="post-meta">
+      <time datetime="2011-07-29T23:58:00+00:00" itemprop="datePublished">Jul 29, 2011</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <style>.algorithm_analysis td, .algorithm_analysis th { border:1px dotted #000; background: #ccc; padding:5px; text-align:right; } .algorithm_analysis th { text-align:left; font-weight:bold; color: #900; font-size:11px; } span.kare2 { vertical-align:top; font-size:0.6em; } </style>
+
+<p>Selam gençler ve bilgisayar başındayken genç hissedebilenler. 
+Bilgisayar ile ilgili uzun zamandır bir şeyler yazıp çizmemiştim. 
+Ara sıra babam evde tatil yaparken başında durmak durumunda olduğum manavdan yazıyorum bu yazıyı.</p>
+
+<!--more-->
+
+<p>Burada internet olmadığı için yazıyı Word’de yazıyorum 
+ve önceki geceden yazıyı yazabilmek için yapmam gereken araştırmaları yapıp, 
+bulduğum bütün web sayfalarını bilgisayarda bir klasöre kaydettim. 
+Şimdi eğlenceli bir iş günü beni bekliyor.</p>
+
+<p>Sıralama algoritmaları bilgisayarcıların üzerinde çok düşünüp sürekli yeni icatlar çıkardıkları bir konu. 
+O kadar çok sıralama algoritması icat etmişler ki, 
+hepsini araştırıp bir yazıda yazsaydım hem benim için ölümcül bir eylem olacaktı, 
+hem de okuyucu için korkutucu bir metin kitlesi ortaya çıkacaktı. 
+O yüzden bu yazıda şu 6 sıralama algoritmasına değinmek istiyorum:</p>
+
+<ol>
+  <li>Seçmeli Sıralama  <em>(Selection Sort)</em></li>
+  <li>Eklemeli Sıralama  <em>(Insertion Sort)</em></li>
+  <li>Kabuk Sıralaması  <em>(Shell Sort)</em></li>
+  <li>Birleştirmeli Sıralama  <em>(Merge Sort)</em></li>
+  <li>Hızlı Sıralama  <em>(Quick Sort)</em></li>
+  <li>Kabarcık Sıralaması  <em>(Bubble Sort)</em></li>
+</ol>
+
+<p>Kime göre neye göre seçtim veya sıraladım bunları? 
+Ben de tam bilmiyorum. 
+Araştırdım, kodlarını yazdım, hoşuma gidenleri yazdım, kodların uzunluğuna göre küçükten büyüğe sıraladım, 
+listeye sonradan eklediklerim oldu, sırası bozuldu falan filan. 
+Şimdi algoritmalarımızda biraz daha derine inelim.</p>
+
+<h3 id="1-seçmeli-sıralama-selection-sort">1. Seçmeli Sıralama (Selection Sort)</h3>
+
+<h4 id="11-çalışma-mantığı">1.1. Çalışma Mantığı</h4>
+
+<p>Bu algoritma bana göre düşünmesi en kolay sıralama algoritması. 
+İlk elemandan son elemana kadar her elemanı 
+kendinden sonra gelen kendinden küçük elemanların en küçüğü ile yer değiştiriyoruz. 
+Örneğin aşağıdaki diziyi 3. elemanına kadar sıraladığımızı düşünelim ve daha sonra ne yapacağımıza bakalım.</p>
+
+<p><code class="highlighter-rouge">{1, 2, 3, 10, 6, 4, 7}</code></p>
+
+<p>Gördüğümüz gibi, 3. elemana kadar sıralanmış bir dizimiz var. 
+Bu durumda şu anda 4. eleman olan 10’a bakmaktayız ve kuralımıza göre, 
+10’dan sonra gelen ve 10’dan küçük olan en küçük elemanı bulup 10 ile yerini değiştirmemiz gerekiyor. 
+Bu adımda bu kurala uyan sayımız 4. Yerlerini değiştirdiğimizde dizimiz şu hale geliyor:</p>
+
+<p><code class="highlighter-rouge">{1, 2, 3, 4, 6, 10, 7}</code></p>
+
+<p>Üçüncü elemana baktığımıza göre bir sonraki adımda da dördüncü elemana bakıyoruz ve kuralı uyguluyoruz. 
+Dizinin sonuna kadar böyle devam ettiğimizde tüm diziyi sıralamış oluyoruz.</p>
+
+<p><img src="/assets/posts/selection-sort.jpg" alt="Selection Sort" /></p>
+
+<h4 id="12-zaman-ve-bellek-kullanımı">1.2. Zaman ve Bellek Kullanımı</h4>
+
+<p>Kalburüstü sıralama algoritmaları genellikle en kötü durumda O(n<span class="kare2">2</span>) zaman alırlar 
+ve bu algoritma en iyi durumda bile O(n<span class="kare2">2</span>) zaman aldığı için 
+zaman açısından verimsiz bir algoritma olarak sınıflandırılıyor. 
+En önemli avantajı bellek kullanımında O(1) ekstra alan kullanması. 
+Bu avantajıyla da zaman açısından gerisinde kaldığı birçok gelişmiş algoritmayı geride bırakıyor. 
+Birkaç elemandan oluşan dizileri sıralarken hızlı kod yazmak açısından bu algoritmayı kullanabilirsiniz.</p>
+
+<h4 id="13-örnek-java-kodu">1.3. Örnek Java Kodu</h4>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">selectionSort</span><span class="o">(</span><span class="kt">int</span> <span class="n">arr</span><span class="o">[])</span> <span class="o">{</span>
+   <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+      <span class="kt">int</span> <span class="n">min</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span>
+      <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">j</span><span class="o">++)</span> <span class="o">{</span>
+         <span class="k">if</span> <span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="o">[</span><span class="n">min</span><span class="o">])</span> <span class="o">{</span>
+            <span class="n">min</span> <span class="o">=</span> <span class="n">j</span><span class="o">;</span>
+         <span class="o">}</span> 
+      <span class="o">}</span>
+      <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+      <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">min</span><span class="o">];</span>
+      <span class="n">arr</span><span class="o">[</span><span class="n">min</span><span class="o">]</span> <span class="o">=</span> <span class="n">temp</span><span class="o">;</span>
+   <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="2-eklemeli-sıralama-insertion-sort">2. Eklemeli Sıralama (Insertion Sort)</h3>
+
+<h4 id="21-çalışma-mantığı">2.1. Çalışma Mantığı</h4>
+
+<p>Bu algoritma dizinin 2. elemanından başlar ve son elemana varana kadar üzerine geldiği her elemanı, 
+o elemandan önce gelip de o elemandan büyük olan elemanlarla yer değiştirir. 
+Bu durumda işlem sırasında üzerine geldiğimiz bir elemanın solunda kalan elemanlar sıralı, 
+sağındakiler ise karışık düzende olacaktır. 
+Örneğin <code class="highlighter-rouge">a = {2,4,5,3,1,6}</code> şeklinde bir dizimiz olsun 
+ve üzerine geldiğimiz eleman da <code class="highlighter-rouge">a[3] = 3</code> olsun. 
+Görüldüğü gibi, üzerine geldiğimiz elemanın sol tarafı sıralı 
+ve sağ tarafı karışık düzende. 
+Bu durumda algoritma 3’ün solunda olup da 3’ten büyük olan elemanları birer eleman sağa kaydıracak 
+ve açılan boşluğa da 3’ü yerleştirecek. 
+Adım adım gidecek olursak: 
+<code class="highlighter-rouge">{2,4,5,3,1,6}</code> -&gt; <code class="highlighter-rouge">{2,4,5,5,1,6}</code> -&gt; <code class="highlighter-rouge">{2,4,4,5,1,6}</code> -&gt; <code class="highlighter-rouge">{2,3,4,5,1,6}.</code> 
+Daha sonra bir sonraki elemana geçilerek <code class="highlighter-rouge">a[4] = 1</code> elemanına gelinir 
+ve o da sola kaydırılarak <code class="highlighter-rouge">{1,2,3,4,5,6}</code> şeklindeki sıralı dizimizi buluruz.
+Son eleman zaten dizideki en büyük eleman olduğu için herhangi bir yer değiştirme işlemi yapılmadı.</p>
+
+<p><img src="/assets/posts/insertion-sort.gif" alt="Insertion Sort" /></p>
+
+<h4 id="22-zaman-ve-bellek-kullanımı">2.2. Zaman ve Bellek Kullanımı</h4>
+
+<p>Bu algoritma en iyi durumda O(n) ve en kötü durumda O(n<span class="kare2">2</span>), 
+yani ortalama olarak O(n<span class="kare2">2</span>) zaman alıyor. 
+Fazla karışık olmayan, yani neredeyse sıralı diyebileceğimiz diziler üzerinde çalıştırıldığında 
+seçmeli sıralamaya göre zamanı çok daha verimli kullanıyor. 
+Ek olarak O(1) bellek alanı kullanması açısından da birçok gelişmiş sıralama algoritmasını geride bırakıyor. 
+Çok karmaşık ve büyük dizilerde, özellikle de küçük terimleri sonlarında olan dizilerde tavsiye etmiyorum.</p>
+
+<h4 id="23-örnek-java-kodu">2.3. Örnek Java Kodu</h4>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">insertionSort</span><span class="o">(</span><span class="kt">int</span> <span class="n">arr</span><span class="o">[])</span> <span class="o">{</span>
+   <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">arr</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+      <span class="kt">int</span> <span class="n">value</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+      <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+      <span class="k">while</span><span class="o">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">arr</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+         <span class="n">arr</span><span class="o">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">j</span><span class="o">];</span>
+         <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span><span class="o">;</span>
+      <span class="o">}</span>
+      <span class="n">arr</span><span class="o">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+   <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="3-kabuk-sıralaması-shell-sort">3. Kabuk Sıralaması (Shell Sort)</h3>
+
+<p>Algoritmanın isminin(Shell Sort) kabuk sıralaması diye Türkçeye çevrilmesi komik olmuş 
+çünkü algoritmanın ismi algoritmayı bulan kişinin(Donald Shell) de soyadı 
+ve dolayısıyla algoritmanın kabuk ile hiçbir ilgisi yok. 
+Neyse konumuz bu değil.</p>
+
+<h4 id="31-çalışma-mantığı">3.1. Çalışma Mantığı</h4>
+
+<p>Yukarıda anlattığım eklemeli sıralama algoritmasını bir düşünelim.
+Çok büyük bir dizi üzerinde bu algoritmayı kullandığımızda,
+eğer dizinin küçük elemanları dizinin sonlarında duruyorsa,
+onları dizinin başına kaydırmak bizim için bir hayli zor bir işlem olacaktır. 
+Şunu da biliyoruz ki eklemeli sıralama algoritması 
+sıralıya yakın şekilde düzenlenmiş dizilerde çok daha hızlı çalışmakta. 
+Bu durumda eklemeli sıralama algoritmasının biraz daha geliştirilmiş versiyonu olan 
+kabuk sıralaması imdadımıza yetişiyor. 
+Kabuk sıralaması, diziyi büyük parçalara bölüp bu parçaları bir tablonun satırlarıymış gibi alt alta düşünerek, 
+bu tablonun sütunlarını eklemeli sıralama algoritmasıyla sıralı hale getiriyor. 
+Daha sonra diziyi biraz daha küçük parçalara bölüp tekrar tekrar aynı işlemleri yapıyor 
+ve en sonunda dizi elemanlarını birer birer ayırmış oluyor, yani tek sütun haline getirmiş oluyor 
+ve o sütunu da eklemeli sıralama mantığıyla sıraladığında sıralama işlemi tamamlanmış oluyor. 
+Bunu bu şekilde anlatmak çok zor olduğu için şimdi örnek bir dizi üzerinde düşünelim. 
+Dizimiz şu şekilde olsun:</p>
+
+<p><code class="highlighter-rouge">{13, 14, 94, 33, 82, 25, 59, 94, 65, 23, 45, 27, 73, 25, 39}</code></p>
+
+<p>Bu diziyi ilk olarak 5’e böldüğümüzü varsayalım. Aşağıdaki tabloyu elde ediyoruz:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>13 14 94 33 82
+25 59 94 65 23
+45 27 73 25 39
+</code></pre></div></div>
+
+<p>Şimdi bu tablonun sütunlarını sıralıyoruz ve şu tabloyu elde ediyoruz:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>13 14 73 25 23
+25 27 94 33 39
+45 29 94 65 82
+</code></pre></div></div>
+
+<p>Bu durumda dizimizin yeni hali şu oluyor:</p>
+
+<p><code class="highlighter-rouge">{14, 73, 25, 23, 13, 27, 94, 33, 39, 25, 59, 94, 65, 82, 45}</code></p>
+
+<p>Şimdi bu diziyi 3’e böldüğümüzü düşünelim. 
+Aşağıdaki tabloyu elde ediyoruz.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>14 73 25
+23 13 27
+94 33 39
+25 59 94
+65 82 45
+</code></pre></div></div>
+
+<p>Şimdi bu tablonun sütunlarını sıralıyoruz ve aşağıdaki tablo ile diziyi elde ediyoruz.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>14 13 25
+23 33 27
+25 59 39
+65 73 45
+94 82 94
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">{14, 13, 25, 23, 33, 27, 25, 59, 39, 65, 73, 45, 94, 82, 94}</code></p>
+
+<p>Son olarak da dizimizi 1’e böldüğümüzü düşünürsek, basit bir eklemeli sıralama işlemi yaptığımızı 
+ve elemanların neredeyse sıralanmış olduğunu görüyoruz. 
+Basit birkaç işlem ile karmaşık bir diziyi eklemeli sıralama ile kolayca sıralayabileceğimiz bir dizi haline getirdik.</p>
+
+<p><img src="/assets/posts/shell-sort.gif" alt="Shell Sort" /></p>
+
+<h4 id="32-zaman-ve-bellek-kullanımı">3.2. Zaman ve Bellek Kullanımı</h4>
+
+<p>Kabuk algoritması zaman olarak diziyi böldüğümüz parça sayısına göre değişmekte 
+fakat en uygun atlama aralığı seçildiği zamanlarda en kötü durumda 
+O(nlog<span class="kare2">2</span>n) zamanda işini görüyormuş. 
+Aşağıda vereceğim örnek kod ise işini O(n<span class="kare2">2</span>) zamanda görmekte. 
+Yaptığım testlerde sıralanmamış rastgele elemanlardan oluşan bir dizi üzerinde 
+kabuk metodu eklemeli sıralama metodunun yaklaşık 200 katı daha hızlı çalıştı. 
+Test sonuçlarını da yazının sonunda aktaracağım. 
+Bellek kullanımına geldiğimizde ise algoritma sadece O(1) ekstra alana ihtiyaç duyuyor. 
+Bellek kullanımı olarak yazdığım ilk iki algoritmadan farklı değil 
+fakat zaman olarak ilk iki algoritmadan da daha iyi. 
+Kodlama kolaylığını, bellek kullanımını ve hızını birlikte düşünürsek, 
+ben kendime bu yazıdaki 6 algoritma içerisinden bu algoritmayı tavsiye ederim.</p>
+
+<h4 id="33-örnek-java-kodu">3.3. Örnek Java Kodu</h4>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">shellSort</span><span class="o">(</span><span class="kt">int</span><span class="o">[]</span> <span class="n">a</span><span class="o">)</span> <span class="o">{</span>
+   <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">increment</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="na">length</span> <span class="o">/</span> <span class="mi">2</span><span class="o">;</span> <span class="n">increment</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">;</span> <span class="n">increment</span> <span class="o">=</span> <span class="o">(</span><span class="n">increment</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="nc">Math</span><span class="o">.</span><span class="na">round</span><span class="o">(</span><span class="n">increment</span> <span class="o">/</span> <span class="mf">2.2</span><span class="o">)))</span> <span class="o">{</span>
+      <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">increment</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">a</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+         <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">a</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+         <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="n">increment</span> <span class="o">&amp;&amp;</span> <span class="n">a</span><span class="o">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">increment</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">temp</span><span class="o">;</span> <span class="n">j</span> <span class="o">-=</span> <span class="n">increment</span><span class="o">){</span>
+            <span class="n">a</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">a</span><span class="o">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">increment</span><span class="o">];</span>
+            <span class="n">a</span><span class="o">[</span><span class="n">j</span> <span class="o">-</span> <span class="n">increment</span><span class="o">]</span> <span class="o">=</span> <span class="n">temp</span><span class="o">;</span>
+         <span class="o">}</span>
+      <span class="o">}</span>
+   <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="4-birleştirmeli-sıralama-merge-sort">4. Birleştirmeli Sıralama (Merge Sort)</h3>
+
+<h4 id="41-çalışma-mantığı">4.1. Çalışma Mantığı</h4>
+
+<p>Sıralı iki diziyi yine sıralı olacak şekilde birleştirmek kolay bir işlemdir.
+Dizilerin ilk elemanlarını karşılaştırırsınız ve küçük olanını alırsınız. 
+Daha sonra diğer dizide kalan almadığınız elemanı diğer dizinin ikinci elemanıyla karşılaştırırsınız 
+ve yine küçük olanı alırsınız. 
+İki dizide de eleman kalmayıncaya kadar bu böyle sürüp gider. 
+Birleştirmeli sıralama algoritmamız da buna benzer bir mantık kullanıyor. 
+Diziyi ikiye bölüp oluşan alt kümeleri tekrar birleştirmeli sıralama algoritmasına alıyor 
+ve böylece dizi sürekli ikiye bölünmüş oluyor. 
+Elemanları ikişerli olarak karşılaştırıp sıralı biçimde birleştiriyor, 
+daha sonra bu iki elemanlı alt kümeleri sıralı biçimde birleştirerek dört elemanlı alt kümeler elde ediyor. 
+Böyle devam ettiğimizde, örneğin dizimiz 16 elemanlı ise elimizde 8 elemanlı, elemanları sıralı iki alt küme kalıyor. 
+Bu alt kümeleri de aynı şekilde sıralı biçimde birleştirdiğimiz zaman dizimiz sıralanmış oluyor. 
+Aşağıdaki resimde bu işlemleri daha net görebiliyoruz.</p>
+
+<p><img src="/assets/posts/merge-sort.png" alt="Merge Sort" /></p>
+
+<h4 id="42-zaman-ve-bellek-kullanımı">4.2. Zaman ve Bellek Kullanımı</h4>
+
+<p>Bu algoritma araştırdığım kaynaklara göre ortalama ve en kötü durumda hayatımızdan O(nlogn) zaman götürüyor. 
+Teorik olarak yukarıdaki 3 algoritmadan da kısa zamanda işini görüyor denilebilir 
+fakat yaptığım birkaç testte Shell metodunun birleştirme metodunun önüne geçtiğini gözlemledim. 
+Bellek kullanımında ise bu metodun önceki yöntemlere göre dezavantajı var. 
+Birleştirmeli sıralama O(n)’lik bir ekstra bellek kullanıyor ki bu da boyutu büyük elemanlara sahip 
+çok elemanlı dizileri sıralarken kendini fazlasıyla belli edecektir. 
+Hem bellek kullanımının hem de performansın önemli olduğu durumlarda ben Shell metodunu tavsiye ediyorum.</p>
+
+<h4 id="43-örnek-java-kodu">4.3. Örnek Java Kodu</h4>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">mergeSort</span><span class="o">(</span><span class="kt">int</span> <span class="n">arr</span><span class="o">[])</span> <span class="o">{</span>
+   <span class="k">if</span><span class="o">(</span> <span class="n">arr</span><span class="o">.</span><span class="na">length</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="o">)</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="n">arr</span><span class="o">;</span>
+   <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+      <span class="kt">int</span> <span class="n">middle</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)(</span><span class="n">arr</span><span class="o">.</span><span class="na">length</span><span class="o">/</span><span class="mi">2</span><span class="o">);</span>
+      <span class="kt">int</span> <span class="n">left</span><span class="o">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">middle</span><span class="o">];</span>
+      <span class="kt">int</span> <span class="n">right</span><span class="o">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">arr</span><span class="o">.</span><span class="na">length</span><span class="o">-</span><span class="n">middle</span><span class="o">];</span>
+      <span class="k">for</span><span class="o">(</span> <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">middle</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+         <span class="n">left</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+      <span class="o">}</span>
+      <span class="k">for</span><span class="o">(</span> <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="n">middle</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">arr</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++</span> <span class="o">)</span> <span class="o">{</span>
+         <span class="n">right</span><span class="o">[</span><span class="n">i</span><span class="o">-</span><span class="n">middle</span><span class="o">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+      <span class="o">}</span>
+      <span class="n">left</span> <span class="o">=</span> <span class="n">mergeSort</span><span class="o">(</span><span class="n">left</span><span class="o">);</span>
+      <span class="n">right</span> <span class="o">=</span> <span class="n">mergeSort</span><span class="o">(</span><span class="n">right</span><span class="o">);</span>
+      <span class="kt">int</span> <span class="n">result</span><span class="o">[]</span> <span class="o">=</span> <span class="n">merge</span><span class="o">(</span><span class="n">left</span><span class="o">,</span> <span class="n">right</span><span class="o">);</span>
+      <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+   <span class="o">}</span>
+<span class="o">}</span>
+ 
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">merge</span><span class="o">(</span><span class="kt">int</span> <span class="n">left</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">right</span><span class="o">[])</span> <span class="o">{</span>
+   <span class="kt">int</span> <span class="n">result</span><span class="o">[]</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">left</span><span class="o">.</span><span class="na">length</span> <span class="o">+</span> <span class="n">right</span><span class="o">.</span><span class="na">length</span><span class="o">];</span>
+   <span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">,</span> <span class="n">posLeft</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">posRight</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+   <span class="k">while</span><span class="o">(</span><span class="n">left</span><span class="o">.</span><span class="na">length</span> <span class="o">&gt;</span> <span class="n">posLeft</span> <span class="o">&amp;&amp;</span> <span class="n">right</span><span class="o">.</span><span class="na">length</span> <span class="o">&gt;</span> <span class="n">posRight</span> <span class="o">)</span> <span class="o">{</span>
+      <span class="k">if</span><span class="o">(</span> <span class="n">left</span><span class="o">[</span><span class="n">posLeft</span><span class="o">]</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="o">[</span><span class="n">posRight</span><span class="o">]</span> <span class="o">)</span> <span class="o">{</span>
+         <span class="n">result</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">left</span><span class="o">[</span><span class="n">posLeft</span><span class="o">];</span>
+         <span class="n">posLeft</span><span class="o">++;</span>
+      <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+         <span class="n">result</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">right</span><span class="o">[</span><span class="n">posRight</span><span class="o">];</span>
+         <span class="n">posRight</span><span class="o">++;</span>
+      <span class="o">}</span>
+      <span class="n">i</span><span class="o">++;</span>
+   <span class="o">}</span>
+   <span class="k">if</span><span class="o">(</span> <span class="n">left</span><span class="o">.</span><span class="na">length</span> <span class="o">&gt;</span> <span class="n">posLeft</span> <span class="o">)</span> <span class="o">{</span>
+      <span class="k">for</span><span class="o">(;</span> <span class="n">posLeft</span><span class="o">&lt;</span><span class="n">left</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">posLeft</span><span class="o">++)</span> <span class="o">{</span>
+         <span class="n">result</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">left</span><span class="o">[</span><span class="n">posLeft</span><span class="o">];</span>
+         <span class="n">i</span><span class="o">++;</span>
+      <span class="o">}</span>
+   <span class="o">}</span>
+   <span class="k">if</span><span class="o">(</span> <span class="n">right</span><span class="o">.</span><span class="na">length</span> <span class="o">&gt;</span> <span class="n">posRight</span> <span class="o">)</span> <span class="o">{</span>
+      <span class="k">for</span><span class="o">(;</span> <span class="n">posRight</span><span class="o">&lt;</span><span class="n">right</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">posRight</span><span class="o">++)</span> <span class="o">{</span>
+         <span class="n">result</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">right</span><span class="o">[</span><span class="n">posRight</span><span class="o">];</span>
+         <span class="n">i</span><span class="o">++;</span>
+      <span class="o">}</span>
+   <span class="o">}</span>
+   <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="5-hızlı-sıralama-quick-sort">5. Hızlı Sıralama (Quick Sort)</h3>
+
+<h4 id="51-çalışma-mantığı">5.1. Çalışma Mantığı</h4>
+
+<p>Hızlı sıralama algoritması, verilen dizinin ortasına yakın bir yerinden bir pivot eleman seçer 
+ve pivottan büyük elemanları sağa, pivottan küçük elemanları sola kaydırır. 
+Bu işlemi yaptıktan sonra pivot elemanın solundaki ve sağındaki dizilerden ayrı ayrı pivot elemanlar seçer 
+ve o dizileri kendi içerisinde tekrar bu işleme tabi tutar. 
+Rekürsif bir şekilde bu işlem devam ettikten sonra tüm dizi sıralanmış olur.</p>
+
+<p><img src="/assets/posts/quick-sort.gif" alt="Quick Sort" /></p>
+
+<h4 id="52-zaman-ve-bellek-kullanımı">5.2. Zaman ve Bellek Kullanımı</h4>
+
+<p>Bu algoritma en kötü durumda O(n<span class="kare2">2</span>), 
+ortalamada ise O(nlogn) zaman alır. 
+Bu sayede performans olarak yukarıdaki tüm metotların üzerine çıkar. 
+Bellek kullanımı olarak ise en kötü durumda O(n) ekstra alan kullanır ki bu da rekürsif olmasından kaynaklanır.</p>
+
+<h4 id="53-örnek-java-kodu">5.3. Örnek Java Kodu</h4>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">quickSort</span><span class="o">(</span><span class="kt">int</span> <span class="n">arr</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">left</span><span class="o">,</span> <span class="kt">int</span> <span class="n">right</span><span class="o">)</span> <span class="o">{</span>
+   <span class="k">if</span><span class="o">(</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span> <span class="o">)</span> <span class="o">{</span>
+      <span class="kt">int</span> <span class="n">pivotIndex</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">left</span> <span class="o">+</span> <span class="o">(</span><span class="n">right</span><span class="o">-</span><span class="n">left</span><span class="o">)/</span><span class="mi">2</span><span class="o">);</span>
+      <span class="kt">int</span> <span class="n">pivotNewIndex</span> <span class="o">=</span> <span class="n">partition</span><span class="o">(</span><span class="n">arr</span><span class="o">,</span> <span class="n">left</span><span class="o">,</span> <span class="n">right</span><span class="o">,</span> <span class="n">pivotIndex</span><span class="o">);</span>
+      <span class="n">quickSort</span><span class="o">(</span><span class="n">arr</span><span class="o">,</span> <span class="n">left</span><span class="o">,</span> <span class="n">pivotNewIndex</span> <span class="o">-</span> <span class="mi">1</span><span class="o">);</span>
+      <span class="n">quickSort</span><span class="o">(</span><span class="n">arr</span><span class="o">,</span> <span class="n">pivotNewIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="o">,</span> <span class="n">right</span><span class="o">);</span>
+   <span class="o">}</span>
+<span class="o">}</span>
+  
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">partition</span><span class="o">(</span><span class="kt">int</span> <span class="n">arr</span><span class="o">[],</span> <span class="kt">int</span> <span class="n">left</span><span class="o">,</span> <span class="kt">int</span> <span class="n">right</span><span class="o">,</span> <span class="kt">int</span> <span class="n">pivotIndex</span><span class="o">)</span> <span class="o">{</span>
+   <span class="kt">int</span> <span class="n">pivotValue</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">pivotIndex</span><span class="o">];</span>
+   <span class="n">arr</span><span class="o">[</span><span class="n">pivotIndex</span><span class="o">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">right</span><span class="o">];</span>
+   <span class="n">arr</span><span class="o">[</span><span class="n">right</span><span class="o">]</span> <span class="o">=</span> <span class="n">pivotValue</span><span class="o">;</span>
+   <span class="kt">int</span> <span class="n">storeIndex</span> <span class="o">=</span> <span class="n">left</span><span class="o">;</span>
+   <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="n">left</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">right</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+     <span class="k">if</span><span class="o">(</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">pivotValue</span> <span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+        <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">storeIndex</span><span class="o">];</span>
+        <span class="n">arr</span><span class="o">[</span><span class="n">storeIndex</span><span class="o">]</span> <span class="o">=</span> <span class="n">temp</span><span class="o">;</span>
+        <span class="n">storeIndex</span><span class="o">++;</span>
+     <span class="o">}</span>
+   <span class="o">}</span>
+   <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">right</span><span class="o">];</span>
+   <span class="n">arr</span><span class="o">[</span><span class="n">right</span><span class="o">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">storeIndex</span><span class="o">];</span>
+   <span class="n">arr</span><span class="o">[</span><span class="n">storeIndex</span><span class="o">]</span> <span class="o">=</span> <span class="n">temp</span><span class="o">;</span>
+   <span class="k">return</span> <span class="n">storeIndex</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="6-kabarcık-sıralaması-bubble-sort">6. Kabarcık Sıralaması (Bubble Sort)</h3>
+
+<p>Bunu anlatmayı düşünmüyordum fakat sonra popülaritesine aldanıp listemin sonuna ekleyiverdim.
+Eğlenceli fakat yorucu bir algoritma.</p>
+
+<h4 id="61-çalışma-mantığı">6.1. Çalışma Mantığı</h4>
+
+<p>Mantık ve kodlama olarak çok basit fakat nasıl çalışacağını düşündüğümüzde 
+işlemcinin canını sıkabilecek kadar çok işlem yapan bir algoritma. 
+Dizinin başından başlıyor ve sonuna kadar tüm elemanları kendisinden önceki eleman ile karşılaştırıp, 
+gerekirse yerlerini değiştiriyor. 
+Bu şekilde diziyi dizi tamamen sıralanana kadar tekrar tekrar baştan sona tarıyor. 
+Dizinin tamamen sıralandığını, yani yer değiştirecek hiçbir eleman kalmadığını anladığında çalışmayı durduruyor 
+ve sıralama bitmiş oluyor.</p>
+
+<p><img src="/assets/posts/bubble-sort.png" alt="Bubble Sort" /></p>
+
+<h4 id="62-zaman-ve-bellek-kullanımı">6.2. Zaman ve Bellek Kullanımı</h4>
+
+<p>En kötü durum testinde bu sayfada yazdığım bütün algoritmalardan daha fazla zaman aldığını göreceksiniz zaten.
+Algoritma en kötü durumda O(n<span class="kare2">2</span>) zaman alıyor.
+Bellek kullanımında ise sadece O(1)’lik ek alana ihtiyaç duyuyor. 
+Küçük ve neredeyse sıralı olan dizilerde uygulanabilir fakat büyük dizilerde kesinlikle tavsiye etmiyorum.</p>
+
+<h4 id="63-örnek-java-kodu">6.3. Örnek Java Kodu</h4>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">bubbleSort</span><span class="o">(</span><span class="kt">int</span> <span class="n">arr</span><span class="o">[])</span> <span class="o">{</span>
+   <span class="kt">boolean</span> <span class="n">swapped</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+   <span class="k">do</span> <span class="o">{</span>
+      <span class="n">swapped</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+      <span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="o">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">arr</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+         <span class="k">if</span><span class="o">(</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span> <span class="o">&gt;</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+            <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">];</span>
+            <span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="n">temp</span><span class="o">;</span>
+            <span class="n">swapped</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+         <span class="o">}</span>
+      <span class="o">}</span>
+   <span class="o">}</span> <span class="k">while</span><span class="o">(</span><span class="n">swapped</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="7-algoritmalar-zamana-karşı">7. Algoritmalar Zamana Karşı</h3>
+
+<p>Aslında bu bölümde sadece aşağıdaki tabloyu çizip bırakacaktım 
+fakat dizileri 500.000 eleman ile denediğim için 25 dakikaya kadar uzayan algoritmalarım oldu. 
+Bu yüzden biraz da üzerinde konuşayım dedim. 
+Dediğim gibi, dizilerde beş yüz bin eleman kullandım. 
+Bu kadar uzun süreceğini biliyordum fakat jeton biraz geç düştü diyelim. 
+Tabloda gördüğümüz gibi, Seçmeli Sıralama algoritması dizi sıralı olsa bile çok fazla zaman alıyor. 
+Kabarcık Sıralamasını sıralamadan saymazsak en fazla zaman alan algoritma diyebiliriz. 
+Eklemeli Sıralama ve Kabarcık Sıralaması algoritmaları sıralı diziler üzerinde 
+müthiş bir zaman elde etmekte fakat işimiz sıralanmamış dizileri sıralamak olduğu için 
+sıralı diziler üzerinde yaptıkları hızın bizim için istatistikten başka bir anlamı yok. 
+Burada eğer bellek kullanımı sorun yaratabilecek bir diziden bahsetmiyorsak Hızlı Sıralama algoritmasını, 
+eğer bellek kullanımı bizim için önemliyse Kabuk Sıralamasını tavsiye ediyoruz.</p>
+
+<table class="algorithm_analysis">
+<tbody>
+<tr>
+<th>Algoritma</th>
+<th>Sıralı Dizi Üzerinde (ms)</th>
+<th>Tersten Sıralı Dizi Üzerinde (ms)</th>
+<th>Rastgele Sıralı Dizi Üzerinde (ms)</th>
+</tr>
+<tr>
+<th>Seçmeli Sıralama (Selection Sort)</th>
+<td>
+<div align="right">583334</div></td>
+<td>
+<div align="right">511961</div></td>
+<td>
+<div align="right">516530</div></td>
+</tr>
+<tr>
+<th>Eklemeli Sıralama (Insertion Sort)</th>
+<td>
+<div align="right">10</div></td>
+<td>
+<div align="right">407946</div></td>
+<td>
+<div align="right">234287</div></td>
+</tr>
+<tr>
+<th>Kabuk Sıralaması (Shell Sort)</th>
+<td>
+<div align="right">80</div></td>
+<td>
+<div align="right">100</div></td>
+<td>
+<div align="right">230</div></td>
+</tr>
+<tr>
+<th>Birleştirmeli Sıralama (Merge Sort)</th>
+<td>
+<div align="right">260</div></td>
+<td>
+<div align="right">230</div></td>
+<td>
+<div align="right">330</div></td>
+</tr>
+<tr>
+<th>Hızlı Sıralama (Quick Sort)</th>
+<td>
+<div align="right">60</div></td>
+<td>
+<div align="right">90</div></td>
+<td>
+<div align="right">160</div></td>
+</tr>
+<tr>
+<th>Kabarcık Sıralaması (Bubble Sort)</th>
+<td>
+<div align="right">10</div></td>
+<td>
+<div align="right">1536317</div></td>
+<td>
+<div align="right">2062972</div></td>
+</tr>
+</tbody>
+</table>
+
+<p>Kodlarımda, açıklamalarımda, dilbilgisi, imla veya noktalamada bir hatamı gördüyseniz yorum olarak geri bildirim bırakın bana. Umarım faydalı bir yazı olur.</p>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/sedran-renamer-beta">&laquo; Sedran Renamer Beta!</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+    <a class="next" href="/php-post-get-ve-request-dizilerinde-coklu-eleman-kontrolu">PHP Post, Get ve Request Dizilerinde Çoklu Eleman Kontrolü &raquo;</a>
+    
+  </div>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'http://demo.serdarkuzucu.com/siralama-algoritmalari';
+        this.page.identifier = 'siralama-algoritmalari';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>
