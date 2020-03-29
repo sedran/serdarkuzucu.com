@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://demo.serdarkuzucu.com/javascript-dersleri</loc>
+<lastmod>2009-09-08T21:42:00+00:00</lastmod>
+</url>
+<url>
+<loc>http://demo.serdarkuzucu.com/torrent-bulmak-ve-programsiz-indirmek</loc>
+<lastmod>2009-10-29T22:13:00+00:00</lastmod>
+</url>
+<url>
+<loc>http://demo.serdarkuzucu.com/fps-degeri-nedir-film-icin-dogru-altyaziyi-bulmak</loc>
+<lastmod>2009-12-28T15:05:00+00:00</lastmod>
+</url>
+<url>
+<loc>http://demo.serdarkuzucu.com/php-ile-bir-dizinin-ortalamasini-almak</loc>
+<lastmod>2010-08-16T00:54:00+00:00</lastmod>
+</url>
+<url>
 <loc>http://demo.serdarkuzucu.com/php-ile-code-converter-hazirlamak</loc>
 <lastmod>2010-08-17T16:20:00+00:00</lastmod>
 </url>
@@ -199,6 +215,15 @@
 <loc>http://demo.serdarkuzucu.com/category/programlama/</loc>
 </url>
 <url>
+<loc>http://demo.serdarkuzucu.com/category/javascript/</loc>
+</url>
+<url>
+<loc>http://demo.serdarkuzucu.com/category/genel/</loc>
+</url>
+<url>
+<loc>http://demo.serdarkuzucu.com/category/bilgisayar-i%CC%87pu%C3%A7lar%C4%B1/</loc>
+</url>
+<url>
 <loc>http://demo.serdarkuzucu.com/category/php/</loc>
 </url>
 <url>
@@ -209,15 +234,6 @@
 </url>
 <url>
 <loc>http://demo.serdarkuzucu.com/category/c/</loc>
-</url>
-<url>
-<loc>http://demo.serdarkuzucu.com/category/genel/</loc>
-</url>
-<url>
-<loc>http://demo.serdarkuzucu.com/category/bilgisayar-i%CC%87pu%C3%A7lar%C4%B1/</loc>
-</url>
-<url>
-<loc>http://demo.serdarkuzucu.com/category/javascript/</loc>
 </url>
 <url>
 <loc>http://demo.serdarkuzucu.com/category/windows-8/</loc>
