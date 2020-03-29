@@ -4,7 +4,7 @@ title:  "Visitor Design Pattern"
 date:   2017-05-28 05:12:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
-permalink: /visitor-design-pattern
+permalink: /visitor-design-pattern/
 comments: true
 post_identifier: visitor-design-pattern
 featured_image: /assets/posts/visitor-pattern-wristband.jpg

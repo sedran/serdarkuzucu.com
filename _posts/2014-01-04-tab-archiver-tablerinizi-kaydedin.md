@@ -4,7 +4,7 @@ title:  "Tab Archiver: Tablerinizi Kaydedin"
 date:   2014-01-04 13:54:00 +0300
 categories: [Chrome Eklentileri]
 author: Serdar Kuzucu
-permalink: /tab-archiver-tablerinizi-kaydedin
+permalink: /tab-archiver-tablerinizi-kaydedin/
 comments: true
 post_identifier: tab-archiver-tablerinizi-kaydedin
 featured_image: /assets/category/chrome-extensions.jpg

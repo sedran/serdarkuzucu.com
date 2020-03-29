@@ -4,7 +4,7 @@ title:  "Thread Mantığı, Java Örnekleri"
 date:   2011-11-05 08:05:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
-permalink: /thread-mantigi-java-ornekleri
+permalink: /thread-mantigi-java-ornekleri/
 comments: true
 post_identifier: thread-mantigi-java-ornekleri
 featured_image: /assets/category/java.png

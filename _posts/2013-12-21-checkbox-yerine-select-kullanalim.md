@@ -4,7 +4,7 @@ title:  "Checkbox Yerine Select Kullanalım"
 date:   2013-12-21 19:27:00 +0300
 categories: [Programlama, Javascript]
 author: Serdar Kuzucu
-permalink: /checkbox-yerine-select-kullanalim
+permalink: /checkbox-yerine-select-kullanalim/
 comments: true
 post_identifier: checkbox-yerine-select-kullanalim
 featured_image: /assets/posts/combo-box.png

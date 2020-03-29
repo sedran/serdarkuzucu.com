@@ -4,7 +4,7 @@ title:  "Adapter Pattern: Farklı Sistemler, Aynı Arayüz"
 date:   2017-05-13 04:03:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
-permalink: /adapter-pattern-farkli-sistemler-ayni-arayuz
+permalink: /adapter-pattern-farkli-sistemler-ayni-arayuz/
 comments: true
 post_identifier: adapter-pattern-farkli-sistemler-ayni-arayuz
 featured_image: /assets/posts/blog-uml-300x174.png

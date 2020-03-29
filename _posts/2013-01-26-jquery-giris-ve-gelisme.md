@@ -4,7 +4,7 @@ title:  "jQuery Giriş ve Gelişme"
 date:   2013-01-26 04:31:00 +0300
 categories: [Programlama, Javascript, jQuery]
 author: Serdar Kuzucu
-permalink: /jquery-giris-ve-gelisme
+permalink: /jquery-giris-ve-gelisme/
 comments: true
 post_identifier: jquery-giris-ve-gelisme
 featured_image: /assets/category/jquery.gif

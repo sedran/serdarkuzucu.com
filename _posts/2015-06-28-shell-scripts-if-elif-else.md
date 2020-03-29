@@ -4,7 +4,7 @@ title:  "Shell Scripts: if / elif / else"
 date:   2015-06-28 05:41:00 +0300
 categories: [Bash, Programlama, Linux]
 author: Serdar Kuzucu
-permalink: /shell-scripts-if-elif-else
+permalink: /shell-scripts-if-elif-else/
 comments: true
 post_identifier: shell-scripts-if-elif-else
 featured_image: /assets/category/bash.png

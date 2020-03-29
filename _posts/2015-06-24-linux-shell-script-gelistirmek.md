@@ -4,7 +4,7 @@ title:  "Linux Shell Script Geliştirmek"
 date:   2015-06-24 00:13:00 +0300
 categories: [Bash, Programlama, Linux]
 author: Serdar Kuzucu
-permalink: /linux-shell-script-gelistirmek
+permalink: /linux-shell-script-gelistirmek/
 comments: true
 post_identifier: linux-shell-script-gelistirmek
 featured_image: /assets/category/bash.png

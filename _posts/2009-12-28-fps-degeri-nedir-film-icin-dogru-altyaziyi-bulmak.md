@@ -4,7 +4,7 @@ title:  "FPS Değeri Nedir? Film İçin Doğru Altyazıyı Bulmak"
 date:   2009-12-28 18:05:00 +0300
 categories: [Genel, Bilgisayar İpuçları]
 author: Serdar Kuzucu
-permalink: /fps-degeri-nedir-film-icin-dogru-altyaziyi-bulmak
+permalink: /fps-degeri-nedir-film-icin-dogru-altyaziyi-bulmak/
 comments: true
 post_identifier: fps-degeri-nedir-film-icin-dogru-altyaziyi-bulmak
 featured_image: /assets/posts/movie.jpg

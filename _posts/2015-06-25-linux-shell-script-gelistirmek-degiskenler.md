@@ -4,7 +4,7 @@ title:  "Linux Shell Script Geliştirmek: Değişkenler"
 date:   2015-06-25 01:38:00 +0300
 categories: [Bash, Programlama, Linux]
 author: Serdar Kuzucu
-permalink: /linux-shell-script-gelistirmek-degiskenler
+permalink: /linux-shell-script-gelistirmek-degiskenler/
 comments: true
 post_identifier: linux-shell-script-gelistirmek-degiskenler
 featured_image: /assets/category/bash.png

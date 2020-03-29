@@ -4,7 +4,7 @@ title:  "Bitwise Operatörler"
 date:   2012-01-21 17:47:00 +0300
 categories: [Programlama, C++]
 author: Serdar Kuzucu
-permalink: /bitwise-operatorler
+permalink: /bitwise-operatorler/
 comments: true
 post_identifier: bitwise-operatorler
 featured_image: /assets/posts/bitwise.jpg

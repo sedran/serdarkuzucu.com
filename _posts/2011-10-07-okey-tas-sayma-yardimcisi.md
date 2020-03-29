@@ -4,7 +4,7 @@ title:  "Okey Taş Sayma Yardımcısı"
 date:   2011-10-07 16:28:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
-permalink: /okey-tas-sayma-yardimcisi
+permalink: /okey-tas-sayma-yardimcisi/
 comments: true
 post_identifier: okey-tas-sayma-yardimcisi
 featured_image: /assets/category/java.png

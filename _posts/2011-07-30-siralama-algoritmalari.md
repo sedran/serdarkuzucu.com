@@ -4,7 +4,7 @@ title:  "Sıralama Algoritmaları"
 date:   2011-07-30 02:58:00 +0300
 categories: [Programlama, Java]
 author: Serdar Kuzucu
-permalink: /siralama-algoritmalari
+permalink: /siralama-algoritmalari/
 comments: true
 post_identifier: siralama-algoritmalari
 featured_image: /assets/posts/sorting-algorithms.jpg

@@ -4,7 +4,7 @@ title:  "PHP ile Code Converter Hazırlamak"
 date:   2010-08-17 19:20:00 +0300
 categories: [Programlama, PHP]
 author: Serdar Kuzucu
-permalink: /php-ile-code-converter-hazirlamak
+permalink: /php-ile-code-converter-hazirlamak/
 comments: true
 post_identifier: php-ile-code-converter-hazirlamak
 featured_image: /assets/category/php.png

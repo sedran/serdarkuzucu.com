@@ -4,7 +4,7 @@ title:  "Dining Philosophers Problem Çözümü - Java Örnekli"
 date:   2014-04-07 16:55:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
-permalink: /dining-philosophers-problem-cozumu-java-ornekli
+permalink: /dining-philosophers-problem-cozumu-java-ornekli/
 comments: true
 post_identifier: dining-philosophers-problem-cozumu-java-ornekli
 featured_image: /assets/posts/dining-philosophers-sm.png

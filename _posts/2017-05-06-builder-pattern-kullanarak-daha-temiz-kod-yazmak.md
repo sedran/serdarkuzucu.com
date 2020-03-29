@@ -4,7 +4,7 @@ title:  "Builder Pattern Kullanarak Daha Temiz Kod Yazmak"
 date:   2017-05-06 23:18:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
-permalink: /builder-pattern-kullanarak-daha-temiz-kod-yazmak
+permalink: /builder-pattern-kullanarak-daha-temiz-kod-yazmak/
 comments: true
 post_identifier: builder-pattern-kullanarak-daha-temiz-kod-yazmak
 featured_image: /assets/posts/builder-minion.jpg

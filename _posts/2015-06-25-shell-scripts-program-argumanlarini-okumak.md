@@ -4,7 +4,7 @@ title:  "Shell Scripts: Program Argümanlarını Okumak"
 date:   2015-06-25 01:58:00 +0300
 categories: [Bash, Programlama, Linux]
 author: Serdar Kuzucu
-permalink: /shell-scripts-program-argumanlarini-okumak
+permalink: /shell-scripts-program-argumanlarini-okumak/
 comments: true
 post_identifier: shell-scripts-program-argumanlarini-okumak
 featured_image: /assets/category/bash.png

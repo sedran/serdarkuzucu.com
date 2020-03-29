@@ -4,7 +4,7 @@ title:  "Winamp Jump To File Penceresi Açılmıyorsa"
 date:   2012-10-12 22:55:00 +0300
 categories: [Genel, Bilgisayar İpuçları]
 author: Serdar Kuzucu
-permalink: /winamp-jump-to-file-penceresi-acilmiyorsa
+permalink: /winamp-jump-to-file-penceresi-acilmiyorsa/
 comments: true
 post_identifier: winamp-jump-to-file-penceresi-acilmiyorsa
 featured_image: /assets/posts/winamp.png

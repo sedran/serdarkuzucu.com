@@ -4,7 +4,7 @@ title:  "PHP Post, Get ve Request Dizilerinde Çoklu Eleman Kontrolü"
 date:   2011-08-22 14:34:00 +0300
 categories: [PHP, Programlama]
 author: Serdar Kuzucu
-permalink: /php-post-get-ve-request-dizilerinde-coklu-eleman-kontrolu
+permalink: /php-post-get-ve-request-dizilerinde-coklu-eleman-kontrolu/
 comments: true
 post_identifier: php-post-get-ve-request-dizilerinde-coklu-eleman-kontrolu
 featured_image: /assets/category/php.png

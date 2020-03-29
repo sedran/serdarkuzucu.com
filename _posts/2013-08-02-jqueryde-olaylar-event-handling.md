@@ -4,7 +4,7 @@ title:  "jQuery'de Olaylar (Event Handling)"
 date:   2013-08-02 03:31:00 +0300
 categories: [Programlama, Javascript, jQuery]
 author: Serdar Kuzucu
-permalink: /jqueryde-olaylar-event-handling
+permalink: /jqueryde-olaylar-event-handling/
 comments: true
 post_identifier: jqueryde-olaylar-event-handling
 featured_image: /assets/category/jquery.gif

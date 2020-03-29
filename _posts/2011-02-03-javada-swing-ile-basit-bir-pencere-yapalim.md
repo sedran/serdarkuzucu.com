@@ -4,7 +4,7 @@ title:  "Java'da Swing ile Basit Bir Pencere Yapalım"
 date:   2011-02-03 03:18:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
-permalink: /javada-swing-ile-basit-bir-pencere-yapalim
+permalink: /javada-swing-ile-basit-bir-pencere-yapalim/
 comments: true
 post_identifier: javada-swing-ile-basit-bir-pencere-yapalim
 featured_image: /assets/posts/Introduction_to_Swing_070807.png

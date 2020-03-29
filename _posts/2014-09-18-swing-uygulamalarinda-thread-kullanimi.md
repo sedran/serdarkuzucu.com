@@ -4,7 +4,7 @@ title:  "Swing Uygulamalarında Thread Kullanımı"
 date:   2014-09-18 13:46:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
-permalink: /swing-uygulamalarinda-thread-kullanimi
+permalink: /swing-uygulamalarinda-thread-kullanimi/
 comments: true
 post_identifier: swing-uygulamalarinda-thread-kullanimi
 featured_image: /assets/category/java.png

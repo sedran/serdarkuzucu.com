@@ -4,7 +4,7 @@ title:  "Java'da Kendi Border'ımızı Yaratalım"
 date:   2012-01-30 06:45:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
-permalink: /javada-kendi-borderimizi-yaratalim
+permalink: /javada-kendi-borderimizi-yaratalim/
 comments: true
 post_identifier: javada-kendi-borderimizi-yaratalim
 featured_image: /assets/category/java.png

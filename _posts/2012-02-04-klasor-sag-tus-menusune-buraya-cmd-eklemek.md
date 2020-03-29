@@ -4,7 +4,7 @@ title:  "Windows: Klasör Sağ Tuş Menüsüne Buraya CMD Eklemek"
 date:   2012-02-04 05:49:00 +0300
 categories: [Genel, Bilgisayar İpuçları]
 author: Serdar Kuzucu
-permalink: /klasor-sag-tus-menusune-buraya-cmd-eklemek
+permalink: /klasor-sag-tus-menusune-buraya-cmd-eklemek/
 comments: true
 post_identifier: klasor-sag-tus-menusune-buraya-cmd-eklemek
 featured_image: /assets/posts/win7logo.jpg

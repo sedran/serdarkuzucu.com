@@ -4,7 +4,7 @@ title:  "Java String Concatenation, StringBuilder ve StringBuffer"
 date:   2014-01-19 03:55:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
-permalink: /java-string-concatenation-stringbuilder-ve-stringbuffer
+permalink: /java-string-concatenation-stringbuilder-ve-stringbuffer/
 comments: true
 post_identifier: java-string-concatenation-stringbuilder-ve-stringbuffer
 featured_image: /assets/category/java.png

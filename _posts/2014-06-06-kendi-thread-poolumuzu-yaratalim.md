@@ -4,7 +4,7 @@ title:  "Kendi Thread Pool'umuzu Yaratalım"
 date:   2014-06-06 16:44:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
-permalink: /kendi-thread-poolumuzu-yaratalim
+permalink: /kendi-thread-poolumuzu-yaratalim/
 comments: true
 post_identifier: kendi-thread-poolumuzu-yaratalim
 featured_image: /assets/posts/java-threads.jpg

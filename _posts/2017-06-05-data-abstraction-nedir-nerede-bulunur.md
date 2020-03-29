@@ -4,7 +4,7 @@ title:  "Data Abstraction Nedir, Nerede Bulunur?"
 date:   2017-06-05 10:59:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
-permalink: /data-abstraction-nedir-nerede-bulunur
+permalink: /data-abstraction-nedir-nerede-bulunur/
 comments: true
 post_identifier: data-abstraction-nedir-nerede-bulunur
 featured_image: /assets/posts/fea-data-abstraction.png

@@ -4,7 +4,7 @@ title:  "Sedran Renamer Beta!"
 date:   2011-02-24 23:03:00 +0300
 categories: [Programlarım]
 author: Serdar Kuzucu
-permalink: /sedran-renamer-beta
+permalink: /sedran-renamer-beta/
 comments: true
 post_identifier: sedran-renamer-beta
 featured_image: /assets/category/java.png

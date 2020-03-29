@@ -4,7 +4,7 @@ title:  "PHP’de Bazı MySQL Veritabanı İşlemleri"
 date:   2011-02-02 12:02:00 +0300
 categories: [Programlama, PHP]
 author: Serdar Kuzucu
-permalink: /phpde-bazi-mysql-veritabani-islemleri
+permalink: /phpde-bazi-mysql-veritabani-islemleri/
 comments: true
 post_identifier: phpde-bazi-mysql-veritabani-islemleri
 featured_image: /assets/category/php.png

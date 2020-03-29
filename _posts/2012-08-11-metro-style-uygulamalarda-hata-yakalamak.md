@@ -4,7 +4,7 @@ title:  "Metro Style Uygulamalarda Hata Yakalamak"
 date:   2012-08-11 13:40:00 +0300
 categories: [Javascript, Programlama, Windows 8]
 author: Serdar Kuzucu
-permalink: /metro-style-uygulamalarda-hata-yakalamak
+permalink: /metro-style-uygulamalarda-hata-yakalamak/
 comments: true
 post_identifier: metro-style-uygulamalarda-hata-yakalamak
 featured_image: /assets/posts/metro-windows-8.png

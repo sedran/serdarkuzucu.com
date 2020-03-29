@@ -4,7 +4,7 @@ title:  "Java'da InputStream Class'ının Skip Hatası"
 date:   2012-06-09 05:46:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
-permalink: /javada-inputstream-classinin-skip-hatasi
+permalink: /javada-inputstream-classinin-skip-hatasi/
 comments: true
 post_identifier: javada-inputstream-classinin-skip-hatasi
 featured_image: /assets/category/java.png

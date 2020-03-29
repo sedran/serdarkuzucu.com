@@ -4,7 +4,7 @@ title:  "Linux: MySQL Veritabanını Import ve Export Etmek"
 date:   2013-08-21 18:14:00 +0300
 categories: [Linux, MySQL]
 author: Serdar Kuzucu
-permalink: /linux-mysql-veritabanini-import-ve-export-etmek
+permalink: /linux-mysql-veritabanini-import-ve-export-etmek/
 comments: true
 post_identifier: linux-mysql-veritabanini-import-ve-export-etmek
 featured_image: /assets/category/database.png

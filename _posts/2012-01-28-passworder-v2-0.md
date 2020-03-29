@@ -4,7 +4,7 @@ title:  "Passworder v2.0"
 date:   2012-01-28 04:02:00 +0300
 categories: [Programlarım]
 author: Serdar Kuzucu
-permalink: /passworder-v2-0
+permalink: /passworder-v2-0/
 comments: true
 post_identifier: passworder-v2-0
 featured_image: /assets/posts/lock-icon.png

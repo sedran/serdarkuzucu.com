@@ -4,7 +4,7 @@ title:  "Bellek ve Disk İstatistiklerini Gösteren Shell Script Geliştirelim"
 date:   2015-07-07 01:27:00 +0300
 categories: [Bash, Programlama, Linux]
 author: Serdar Kuzucu
-permalink: /bellek-ve-disk-istatistiklerini-gosteren-shell-script-gelistirelim
+permalink: /bellek-ve-disk-istatistiklerini-gosteren-shell-script-gelistirelim/
 comments: true
 post_identifier: bellek-ve-disk-istatistiklerini-gosteren-shell-script-gelistirelim
 featured_image: /assets/category/bash.png

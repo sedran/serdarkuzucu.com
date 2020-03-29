@@ -4,7 +4,7 @@ title:  "Bootstrap 4 - Grid Sistemi"
 date:   2019-02-10 21:03:00 +0300
 categories: [Bootstrap, Frontend, HTML]
 author: Serdar Kuzucu
-permalink: /bootstrap-4-grid-system
+permalink: /bootstrap-4-grid-system/
 comments: true
 post_identifier: bootstrap-4-grid-system
 featured_image: /assets/posts/bootstrap-4-logo.png

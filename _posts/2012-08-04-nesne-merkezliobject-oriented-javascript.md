@@ -4,7 +4,7 @@ title:  "Nesne Merkezli(Object Oriented) Javascript"
 date:   2012-08-04 19:47:00 +0300
 categories: [Javascript, Programlama]
 author: Serdar Kuzucu
-permalink: /nesne-merkezliobject-oriented-javascript
+permalink: /nesne-merkezliobject-oriented-javascript/
 comments: true
 post_identifier: nesne-merkezliobject-oriented-javascript
 featured_image: /assets/category/javascript.jpg

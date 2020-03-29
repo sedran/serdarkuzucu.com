@@ -4,7 +4,7 @@ title:  "Torrent Bulmak ve Programsız İndirmek"
 date:   2009-10-30 01:13:00 +0300
 categories: [Genel, Bilgisayar İpuçları]
 author: Serdar Kuzucu
-permalink: /torrent-bulmak-ve-programsiz-indirmek
+permalink: /torrent-bulmak-ve-programsiz-indirmek/
 comments: true
 post_identifier: torrent-bulmak-ve-programsiz-indirmek
 featured_image: /assets/posts/torrentlogo.jpeg

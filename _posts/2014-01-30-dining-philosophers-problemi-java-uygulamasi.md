@@ -4,7 +4,7 @@ title:  "Dining Philosophers Problemi Java Uygulaması"
 date:   2014-01-30 16:03:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
-permalink: /dining-philosophers-problemi-java-uygulamasi
+permalink: /dining-philosophers-problemi-java-uygulamasi/
 comments: true
 post_identifier: dining-philosophers-problemi-java-uygulamasi
 featured_image: /assets/posts/dining-philosophers-sm.png

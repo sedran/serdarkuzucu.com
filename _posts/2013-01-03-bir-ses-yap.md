@@ -4,7 +4,7 @@ title:  "Bir Ses Yap"
 date:   2013-01-03 03:50:00 +0300
 categories: [Genel]
 author: Serdar Kuzucu
-permalink: /bir-ses-yap
+permalink: /bir-ses-yap/
 comments: true
 post_identifier: bir-ses-yap
 featured_image: /assets/posts/treble-clef.png

@@ -4,7 +4,7 @@ title:  "PHP'de Checkbox'lar ile İşlem Yapmak"
 date:   2010-08-18 02:30:00 +0300
 categories: [Programlama, PHP]
 author: Serdar Kuzucu
-permalink: /phpde-checkboxlar-ile-islem-yapmak
+permalink: /phpde-checkboxlar-ile-islem-yapmak/
 comments: true
 post_identifier: phpde-checkboxlar-ile-islem-yapmak
 featured_image: /assets/category/php.png

@@ -4,7 +4,7 @@ title:  "Shell Scripts: Aritmetik İşlemler"
 date:   2015-06-25 23:58:00 +0300
 categories: [Bash, Programlama, Linux]
 author: Serdar Kuzucu
-permalink: /shell-scripts-aritmetik-islemler
+permalink: /shell-scripts-aritmetik-islemler/
 comments: true
 post_identifier: shell-scripts-aritmetik-islemler
 featured_image: /assets/category/bash.png

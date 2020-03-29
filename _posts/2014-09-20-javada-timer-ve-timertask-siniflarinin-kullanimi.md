@@ -4,7 +4,7 @@ title:  "Java'da Timer ve TimerTask Sınıflarının Kullanımı"
 date:   2014-09-20 00:16:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
-permalink: /javada-timer-ve-timertask-siniflarinin-kullanimi
+permalink: /javada-timer-ve-timertask-siniflarinin-kullanimi/
 comments: true
 post_identifier: javada-timer-ve-timertask-siniflarinin-kullanimi
 featured_image: /assets/category/java.png

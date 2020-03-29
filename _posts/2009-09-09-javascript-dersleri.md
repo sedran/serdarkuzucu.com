@@ -4,7 +4,7 @@ title:  "Javascript Dersleri"
 date:   2009-09-09 00:42:00 +0300
 categories: [Programlama, Javascript]
 author: Serdar Kuzucu
-permalink: /javascript-dersleri
+permalink: /javascript-dersleri/
 comments: true
 post_identifier: javascript-dersleri
 featured_image: /assets/category/js.png

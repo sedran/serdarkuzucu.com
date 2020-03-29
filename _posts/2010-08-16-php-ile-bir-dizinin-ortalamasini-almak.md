@@ -4,7 +4,7 @@ title:  "PHP ile Bir Dizinin Ortalamasını Almak"
 date:   2010-08-16 03:54:00 +0300
 categories: [Programlama, PHP]
 author: Serdar Kuzucu
-permalink: /php-ile-bir-dizinin-ortalamasini-almak
+permalink: /php-ile-bir-dizinin-ortalamasini-almak/
 comments: true
 post_identifier: php-ile-bir-dizinin-ortalamasini-almak
 featured_image: /assets/category/php.png

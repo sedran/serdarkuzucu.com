@@ -4,7 +4,7 @@ title:  "Shell Scripts: While ve Until Döngüleri"
 date:   2015-06-26 01:56:00 +0300
 categories: [Bash, Programlama, Linux]
 author: Serdar Kuzucu
-permalink: /shell-scripts-while-ve-until-donguleri
+permalink: /shell-scripts-while-ve-until-donguleri/
 comments: true
 post_identifier: shell-scripts-while-ve-until-donguleri
 featured_image: /assets/category/bash.png

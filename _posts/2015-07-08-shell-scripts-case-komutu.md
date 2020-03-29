@@ -4,7 +4,7 @@ title:  "Shell Scripts: Case Komutu"
 date:   2015-07-08 02:41:00 +0300
 categories: [Bash, Programlama, Linux]
 author: Serdar Kuzucu
-permalink: /shell-scripts-case-komutu
+permalink: /shell-scripts-case-komutu/
 comments: true
 post_identifier: shell-scripts-case-komutu
 featured_image: /assets/category/bash.png

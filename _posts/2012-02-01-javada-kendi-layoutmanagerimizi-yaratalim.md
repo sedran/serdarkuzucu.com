@@ -4,7 +4,7 @@ title:  "Java'da Kendi LayoutManager'ımızı Yaratalım"
 date:   2012-02-01 20:22:00 +0300
 categories: [Java, Programlama]
 author: Serdar Kuzucu
-permalink: /javada-kendi-layoutmanagerimizi-yaratalim
+permalink: /javada-kendi-layoutmanagerimizi-yaratalim/
 comments: true
 post_identifier: javada-kendi-layoutmanagerimizi-yaratalim
 featured_image: /assets/category/java.png
