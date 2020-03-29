@@ -13,7 +13,7 @@ description: > # this means to ignore newlines until "baseurl:"
   line in _config.yml. It will appear in your document head meta (for
   Google search results) and in your feed.xml site description.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://demo.serdarkuzucu.com" # the base hostname & protocol for your site
+url: "https://serdarkuzucu.com" # the base hostname & protocol for your site
 twitter_link: https://twitter.com/sedran
 stackoverflow_link: http://stackoverflow.com/users/618279/sedran
 linkedin_link: http://tr.linkedin.com/in/serdarkuzucu
@@ -22,6 +22,7 @@ github_link: https://github.com/sedran
 excerpt_separator: <!--more-->
 
 google_search_url: http://www.google.com/search
+google_search_domain: serdarkuzucu.com
 
 # Build settings
 markdown: kramdown
