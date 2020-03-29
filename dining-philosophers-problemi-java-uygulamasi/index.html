@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Dining Philosophers Problemi Java Uygulaması</title>
+  <meta name="description" content="Hayatımda hiç deadlock ile karşılaşmamış birisi olarak Java’da deadlock yakalamaya heves ettim.Bunu en güzel ve eğlenceli şekilde nasıl yaparım diye düşünürk...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="https://serdarkuzucu.com/dining-philosophers-problemi-java-uygulamasi/">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (40)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (6)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (5)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (4)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (6)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (19)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Dining Philosophers Problemi Java Uygulaması</h1>
+    <p class="post-meta">
+      <time datetime="2014-01-30T13:03:00+00:00" itemprop="datePublished">Jan 30, 2014</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Hayatımda hiç deadlock ile karşılaşmamış birisi olarak Java’da deadlock yakalamaya heves ettim.
+Bunu en güzel ve eğlenceli şekilde nasıl yaparım diye düşünürken Dining Philosophers Problem geldi aklıma.
+Basit bir Java kodu ile problemi yaratmayı başardım.</p>
+
+<!--more-->
+
+<p>Dining Philosophers problem,
+Türkçe söylemek gerekirse Makarna yiyen düşünürler problemi 
+(benim suçum değil wikipedia’de bu şekilde yer alıyor), 
+bilgisayar dünyasında paralellik, eşzamanlılık ve işlemler (prosesler) konusu anlatılırken 
+sık sık örnek olarak gösterilen bir problem. 
+Kısaca açıklamak gerekirse:</p>
+
+<p>5 filozof yuvarlak bir masa etrafında oturmuş makarna yiyecekler.
+Her filozofun bir tane sağında ve bir tane solunda çatal var 
+ve iki çatala da sahip olmadan kimse makarna yemeğe başlayamıyor. 
+Bu yüzden ortada çatal kapmak için bir rekabet dönüyor. 
+Bir çatalı bir filozof kullanırken diğer filozof kullanamayacağı için de 
+çatalı alamayan filozof o diğer filozofun o çatalı bırakmasını bekliyor.</p>
+
+<p><img src="/assets/posts/dining-philosophers-lg.png" alt="Dining Philosophers" width="500px" /></p>
+
+<p>İşte deadlock bu sebeple ortaya çıkıyor.
+Bu sahneyi programatik olarak canlandırdığımızda,
+her filozof önce soldaki çatalı almak için hamlesini yapıyor.
+Sol tarafındaki çatalı kapan filozoflar bu sefer sağ taraflarındaki çatallara yöneliyorlar.
+Fakat o çatal da sağ tarafındaki arkadaşının solundaki çatal olduğu için çoktan tutulmuş oluyor.
+Bu durumda her filozof eline bir çatal almış oluyor
+ve hiçbirisi ikinci çatalı alamadığı için sistemdeki prosesler sonsuz beklemeye giriyor.
+Buna da deadlock deniyor.</p>
+
+<p>Bunun için yazdığım örnek koda bakalım şimdi.
+Philosopher sınıfını yarattım önce.
+Kendi başına ayrı bir thread olarak çalışabilmesi için Thread sınıfını extend edecek şekilde tasarladım.
+Yaptığı iş sırasıyla çatalları almak, yemek yemek, çatalları bırakmak ve düşünmek.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.deadlock</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Philosopher</span> <span class="kd">extends</span> <span class="nc">Thread</span> <span class="kd">implements</span> <span class="nc">Runnable</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">forkLeft</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">forkRight</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">index</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Philosopher</span><span class="o">(</span><span class="kt">int</span> <span class="n">index</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">forkLeft</span> <span class="o">=</span> <span class="n">index</span><span class="o">;</span>
+        <span class="n">forkRight</span> <span class="o">=</span> <span class="o">(</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="o">)</span> <span class="o">%</span> <span class="mi">5</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">index</span> <span class="o">=</span> <span class="n">index</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// Endless life of a philosopher</span>
+        <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">takeForks</span><span class="o">();</span>
+            <span class="n">eat</span><span class="o">();</span>
+            <span class="n">putDownForks</span><span class="o">();</span>
+            <span class="n">think</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * Take left and right forks
+     */</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">takeForks</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Filozof#%d is taking forks\n"</span><span class="o">,</span> <span class="n">index</span><span class="o">);</span>
+        <span class="nc">Table</span><span class="o">.</span><span class="na">takeFork</span><span class="o">(</span><span class="n">forkLeft</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Filozof#%d took fork at left\n"</span><span class="o">,</span> <span class="n">index</span><span class="o">);</span>
+        <span class="nc">Table</span><span class="o">.</span><span class="na">takeFork</span><span class="o">(</span><span class="n">forkRight</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Filozof#%d took fork at right\n"</span><span class="o">,</span> <span class="n">index</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * Put left and right forks down
+     */</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">putDownForks</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Filozof#%d is putting forks down\n"</span><span class="o">,</span> <span class="n">index</span><span class="o">);</span>
+        <span class="nc">Table</span><span class="o">.</span><span class="na">putDownFork</span><span class="o">(</span><span class="n">forkLeft</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Filozof#%d put left fork down\n"</span><span class="o">,</span> <span class="n">index</span><span class="o">);</span>
+        <span class="nc">Table</span><span class="o">.</span><span class="na">putDownFork</span><span class="o">(</span><span class="n">forkRight</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Filozof#%d put right fork down\n"</span><span class="o">,</span> <span class="n">index</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * Eat for a while
+     */</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">eat</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Filozof#%d is now eating\n"</span><span class="o">,</span> <span class="n">index</span><span class="o">);</span>
+        <span class="n">sleep</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * think for a while
+     */</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">think</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Filozof#%d is now thinking\n"</span><span class="o">,</span> <span class="n">index</span><span class="o">);</span>
+        <span class="n">sleep</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">sleep</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="nc">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Daha sonra da Table sınıfını oluşturdum.
+main methodu da bu sınıfta tanımladım.
+Burada da filozofları yaratıp hepsini ayrı thread olarak başlatıyoruz.
+Ayrıca çatalları da bu sınıf içerisinde yaratıyoruz ve filozoflar istediği zaman bu sınıftan istiyorlar.
+Lock/unlock mekanizması da bu sınıf içerisinde bulunuyor o yüzden.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.deadlock</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.concurrent.locks.Lock</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.concurrent.locks.ReentrantLock</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Table</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Lock</span><span class="o">[]</span> <span class="n">forks</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Philosopher</span><span class="o">[]</span> <span class="n">philosophers</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">philosophers</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Philosopher</span><span class="o">[</span><span class="mi">5</span><span class="o">];</span>
+        <span class="n">forks</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Lock</span><span class="o">[</span><span class="mi">5</span><span class="o">];</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">philosophers</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">philosophers</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Philosopher</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+            <span class="n">forks</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ReentrantLock</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">philosophers</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+            <span class="n">philosophers</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">start</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * Locks a fork with given index
+     * @param fork index of the fork
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">takeFork</span><span class="o">(</span><span class="kt">int</span> <span class="n">fork</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">forks</span><span class="o">[</span><span class="n">fork</span><span class="o">].</span><span class="na">lock</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+     * unlocks a fork with given index
+     * @param fork index of the fork
+     */</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">putDownFork</span><span class="o">(</span><span class="kt">int</span> <span class="n">fork</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">forks</span><span class="o">[</span><span class="n">fork</span><span class="o">].</span><span class="na">unlock</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Deadlock’lar genelde her zaman olmaz.
+Bu programı da çalıştırdığınız zaman düzgün bir şekilde çalışabilir.
+Genellikle bir kaç kere programı kapatıp açtıktan sonra güzel bir deadlock yakalayabiliyorum.
+İşte deadlock olduğu bir anın konsol çıktısı:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Filozof#2 is taking forks
+Filozof#1 is taking forks
+Filozof#4 is taking forks
+Filozof#0 is taking forks
+Filozof#0 took fork at left
+Filozof#3 is taking forks
+Filozof#4 took fork at left
+Filozof#1 took fork at left
+Filozof#2 took fork at left
+Filozof#3 took fork at left
+</code></pre></div></div>
+
+<p>Çıktıdan da görebileceğimiz üzere, 
+önce tüm filozoflar soldaki çatalı alıyor.
+Daha sonra da program hiçbir şey yapamaz hale geliyor.
+Çünkü program bu noktaya geldikten sonra 
+tüm filozoflar diğer çatalın boşa çıkmasını bekler durumda kalıyorlar.</p>
+
+<p>Bu yazıyı kısa tutuyorum şimdilik.
+İlerde başka bir yazıda çözümüne de değinebilirim bu konunun.
+Şimdilik esen kalın.</p>
+
+<h3 id="kaynaklar">Kaynaklar:</h3>
+<ul>
+  <li><a href="http://tr.wikipedia.org/wiki/Makarna_yiyen_d%C3%BC%C5%9F%C3%BCn%C3%BCrler_sorunu">Wikipedia: Makarna yiyen düşünürler sorunu</a></li>
+  <li><a href="http://en.wikipedia.org/wiki/Dining_philosophers_problem">Wikipedia: Dining philosophers problem</a></li>
+</ul>
+
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/java-string-concatenation-stringbuilder-ve-stringbuffer/">&laquo; Java String Concatenation, StringBuilder ve StringBuffer</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+    <a class="next" href="/dining-philosophers-problem-cozumu-java-ornekli/">Dining Philosophers Problem Çözümü - Java Örnekli &raquo;</a>
+    
+  </div>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://serdarkuzucu.com/dining-philosophers-problemi-java-uygulamasi/';
+        this.page.identifier = 'dining-philosophers-problemi-java-uygulamasi';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>

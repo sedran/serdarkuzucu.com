@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Adapter Pattern: Farklı Sistemler, Aynı Arayüz</title>
+  <meta name="description" content="Bir sistem geliştirirsiniz ve bu sistemin işlevini görebilmesi için başka sistemlere entegre olması gerekir. Bazen o kadar eski teknolojiler ile geliştirilmi...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="https://serdarkuzucu.com/adapter-pattern-farkli-sistemler-ayni-arayuz/">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (40)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (6)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (5)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (4)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (6)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (19)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Adapter Pattern: Farklı Sistemler, Aynı Arayüz</h1>
+    <p class="post-meta">
+      <time datetime="2017-05-13T01:03:00+00:00" itemprop="datePublished">May 13, 2017</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Bir sistem geliştirirsiniz ve bu sistemin işlevini görebilmesi için başka sistemlere entegre olması gerekir. 
+Bazen o kadar eski teknolojiler ile geliştirilmiş sistemlere entegre olmak zorundasınızdır ki, 
+bu amaç için yazdığınız kod geliştirmekte olduğunuz projeye hiç yakışmaz, 
+sürekli gözünüzü tırmalar. 
+Özetle, elinizde başka bir sisteme ait bir interface vardır 
+ve bu interface’in yapısı sizin projenizin yapısına uygun değildir.</p>
+
+<!--more-->
+
+<p>Aşağıdaki görsel durumu gerçek hayatta karşılaştığımız temel bir problemle özetlemektedir. 
+Amerika’dan bir laptop aldınız ve Avrupa’da bir ülkeye gittiniz. 
+Elinizde sağdaki nesne, duvarda ise soldaki interface var. 
+Bu durumda bilgisayarınızı şarj edebilmek için ortadaki adaptöre ihtiyaç duyarsınız. 
+Adapter pattern’ın ismi de aslında gerçek hayattaki adaptörlerden geliyor.</p>
+
+<p><img src="/assets/posts/blog-realworld-adapters-300x138.jpg" alt="/assets/posts/blog-realworld-adapters-300x138.jpg" width="400px" /></p>
+
+<h3 id="kullanım-amaçları">Kullanım Amaçları</h3>
+
+<ul>
+  <li>Birbirine uyumlu olmayan iki farklı interface’in birlikte çalışmasının sağlanması.</li>
+  <li>Varolan bir interface’in yeni bir interface’e çevirilmesi.</li>
+  <li>Eski bir interface’in yeni bir sisteme entegre edilmesi.</li>
+  <li>Benzer işlevli farklı sistemlerin aynı interface ile kullanılabilmesi.</li>
+</ul>
+
+<p>Kodlarını inceleyeceğimiz örneğe gelmeden önce birkaç gerçek hayat örneği vereyim.</p>
+
+<p>Mobil cihazlara bildirim göndermek istediğinizde, 
+Android cihazlar için Google Cloud Messaging (veya artık Firebase) kullanırken, 
+iOS cihazlar için Apple Push Notification Service (apns) kullanmanız gerekmektedir. 
+Microsoft cihazlar için de vardı bir servis birkaç sene önce kullanmıştım, şimdi hatırlayamadım. 
+Bu durumda <code class="highlighter-rouge">PushNotificationAdapter</code> gibi bir interface tasarlayıp, 
+bu interface’den <code class="highlighter-rouge">FirebasePushNotificationAdapter</code>, <code class="highlighter-rouge">ApplePushNotificationAdapter</code> 
+ve <code class="highlighter-rouge">MicrosoftPushNotificationAdapter</code> gibi 3 farklı sınıf oluşturabilirsiniz. 
+Hatta sadece test ortamınızda veya kendi bilgisayarınızda çalışacak <code class="highlighter-rouge">DummyPushNotificationAdapter</code> 
+gibi bir sınıf tasarlayıp sistemin göndermeye çalıştığı bildirimleri 
+bambaşka bir yere (log dosyası, veritabanı, vb.) gönderebilirsiniz.</p>
+
+<p>Ücretlendirme yapmak için <code class="highlighter-rouge">PaymentAdapter</code> interface’ini tanımlayıp, 
+farklı ödeme yöntemleri için <code class="highlighter-rouge">PaypalPaymentAdapter</code>, <code class="highlighter-rouge">VisaPaymentAdapter</code>, <code class="highlighter-rouge">MasterCardPaymentAdapter</code> 
+veya <code class="highlighter-rouge">MobilePaymentAdapter</code> gibi sınıflar oluşturabilirsiniz.</p>
+
+<h3 id="sosyal-medyada-paylaşım-yapmak">Sosyal Medya’da Paylaşım Yapmak</h3>
+
+<p>Bu yazıda aynı içeriği farklı sosyal medya platformlarında 
+paylaşmak için adapter pattern kullanarak bir çözüm geliştireceğiz.</p>
+
+<p><strong>Talep:</strong> Sistemimizin Facebook, Twitter ve Google Plus adındaki 
+üç farklı sosyal medya platformunda paylaşım yapabilmesi istenmektedir. 
+Paylaşılacak olan içerikler her zaman bir adet metin ve bir adet URL içerecek.</p>
+
+<p><strong>Sorun:</strong> 3 tane birbirinden farklı sosyal medya platformumuz var. 
+Hepsi farklı şirketler tarafından geliştirilmekte, 
+hepsinin interface’leri farklı. 
+Twitter’ın meşhur bir REST API’ı var 
+ve bu API için geliştirilmiş Java kütüphaneleri de açık kaynak kodlu olarak mevcut. 
+Facebook bu işler için bize REST tabanlı Graph API sunuyor. 
+Google Plus biraz daha ileri gitmiş ve kendileri Java kütüphanesi paylaşmışlar.</p>
+
+<p>Bu sistemlerin hepsi REST de olsa, hepsi Java kütüphanesi de paylaşsa, sorun devam edecekti.</p>
+
+<p>Her sistem için yazacağımız kodlar tamamen birbirinden farklı olmak zorunda 
+ve tüm bu kodları yazacak <strong>güzel bir yere ihtiyacımız var</strong>. 
+Kodları yazacak güzel bir yer aramaya başlamadan önce, birkaç interface ve enumeration yazalım.</p>
+
+<p>Öncelikle sosyal medya platformlarını belirlemek için <code class="highlighter-rouge">Platform</code> adında bir <code class="highlighter-rouge">enum</code> tanımlayalım.</p>
+
+<h5 id="platform">Platform</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.adapterpattern</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">enum</span> <span class="nc">Platform</span> <span class="o">{</span>
+    <span class="no">FACEBOOK</span><span class="o">,</span> <span class="no">TWITTER</span><span class="o">,</span> <span class="no">GOOGLE_PLUS</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Paylaşılacak olan içeriği ve hangi platformda(yada hepsinde) paylaşılacağını gönderdiğimiz 
+<code class="highlighter-rouge">SocialMediaShareClient</code> interface’ini oluşturalım. 
+Bu interface’i kullanan kişi, esas işi bunun yaptığını düşünecek.</p>
+
+<h5 id="socialmediashareclient">SocialMediaShareClient</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.adapterpattern</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">SocialMediaShareClient</span> <span class="o">{</span>
+    <span class="cm">/**
+     * Shares the given text and link on a specified social media platform
+     *
+     * @param platform social media platform on which the text and link will be shared
+     * @param text     text to share on the specified social media platform
+     * @param link     link to share on the specified social media platform
+     */</span>
+    <span class="kt">void</span> <span class="nf">share</span><span class="o">(</span><span class="nc">Platform</span> <span class="n">platform</span><span class="o">,</span> <span class="nc">String</span> <span class="n">text</span><span class="o">,</span> <span class="nc">String</span> <span class="n">link</span><span class="o">);</span>
+
+    <span class="cm">/**
+     * Shares the given text and link on all social media platform defined in this client
+     *
+     * @param text text to share on all social media platforms
+     * @param link link to share on all social media platforms
+     */</span>
+    <span class="kt">void</span> <span class="nf">share</span><span class="o">(</span><span class="nc">String</span> <span class="n">text</span><span class="o">,</span> <span class="nc">String</span> <span class="n">link</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>En amatör zamanlarımda <code class="highlighter-rouge">interface</code> bile tanımlamazdım :)
+Az amatör zamanlarımda ise bu interface’in implementasyonunda tüm sosyal medya platformları için <code class="highlighter-rouge">if/else</code> 
+veya <code class="highlighter-rouge">switch/case</code> kullanır, tüm kodu oraya kitle olarak yazardım :)</p>
+
+<p>Böyle bir çirkinlik yapmamamız için birileri çıkmış ve <strong>adapter pattern</strong>‘ı icat etmiş.</p>
+
+<p>Çok özendim, önce bir UML diagram çizdim. Hemen şöyle orta yere bırakayım onu:</p>
+
+<p><img src="/assets/posts/blog-uml-adapter-pattern.png" alt="Adapter Pattern UML" /></p>
+
+<p>Diagramı yorumlayalım. Herkes UML bilmek zorunda değil. 
+Ben de bildiğimi iddia edemiyorum zaten. 
+Mezun olduğumdan beri UML diagram çizmemiştim. 
+Hatalı çizgiler falan koyduysam, okların yönü falan ters olduysa kusura bakmayın.</p>
+
+<p>Öncelikle yukarıda kodunu paylaştığım <code class="highlighter-rouge">SocialMediaShareClient</code> arayüzünden 
+<code class="highlighter-rouge">DefaultSocialMediaShareClient</code> adında bir implementasyon sınıfı yazacağız. 
+Arayüzünde iki method olan bu sınıfın görevi verilen belli bir platformda 
+veya tüm platformlarda ilgili içeriğin paylaşılması olacak. 
+Hangi platformda nasıl paylaşılacağı ile ilgili detayları ise 
+<code class="highlighter-rouge">SocialMediaShareAdapter</code> arayüzünün implementasyonları içeriyor olacak.</p>
+
+<p>Bu sebeple aşağıdaki <code class="highlighter-rouge">SocialMediaShareAdapter</code> arayüzünü geliştiriyor olacağız:</p>
+
+<h5 id="socialmediashareadapter">SocialMediaShareAdapter</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.adapterpattern</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">SocialMediaShareAdapter</span> <span class="o">{</span>
+    <span class="cm">/**
+     * Share a text and link on the social media platform
+     *
+     * @param text text to share on the social media platform
+     * @param link link to share on the social media platform
+     * @return unique identifier of the post returned by the social media platform
+     */</span>
+    <span class="nc">String</span> <span class="nf">share</span><span class="o">(</span><span class="nc">String</span> <span class="n">text</span><span class="o">,</span> <span class="nc">String</span> <span class="n">link</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Bu arayüz üzerinde bulunan <code class="highlighter-rouge">String share(String text, String link)</code> methodu, 
+ilgili sosyal medyada verilen text ve linkin paylaşılmasını sağlayacak 
+ve paylaşılan gönderinin unique id’sini dönecek. 
+Her sosyal medya platformu bizden farklı formatta data bekliyor 
+ve cevap olarak da farklı formatta data dönüyor. 
+Data türleri arasındaki tüm çeviri işlemleri 
+<code class="highlighter-rouge">SocialMediaShareAdapter</code> arayüzünün implementasyonları içerisine gömülecek 
+ve böylece adaptörleri kullanan sınıfların (<code class="highlighter-rouge">DefaultSocialMediaShareClient</code>) 
+bu işlemlerden haberi olmayacak.</p>
+
+<p>Bir sonraki aşamada Facebook, Twitter ve Google Plus için üç ayrı adaptörü aşağıdaki gibi tanımlıyoruz.</p>
+
+<h5 id="facebookshareadapter">FacebookShareAdapter</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.adapterpattern</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FacebookShareAdapter</span> <span class="kd">implements</span> <span class="nc">SocialMediaShareAdapter</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">share</span><span class="o">(</span><span class="nc">String</span> <span class="n">text</span><span class="o">,</span> <span class="nc">String</span> <span class="n">link</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Facebook specific code...</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Sharing %s %s on facebook\n"</span><span class="o">,</span> <span class="n">text</span><span class="o">,</span> <span class="n">link</span><span class="o">);</span>
+
+        <span class="c1">// Post item to facebook and get post_id from response</span>
+        <span class="k">return</span> <span class="s">"example_post_id"</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h5 id="twittershareadapter">TwitterShareAdapter</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.adapterpattern</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TwitterShareAdapter</span> <span class="kd">implements</span> <span class="nc">SocialMediaShareAdapter</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">share</span><span class="o">(</span><span class="nc">String</span> <span class="n">text</span><span class="o">,</span> <span class="nc">String</span> <span class="n">link</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Twitter specific code here...</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Sharing %s %s on twitter\n"</span><span class="o">,</span> <span class="n">text</span><span class="o">,</span> <span class="n">link</span><span class="o">);</span>
+
+        <span class="c1">// Post item to Twitter and get tweet id</span>
+        <span class="k">return</span> <span class="s">"example_tweet_id"</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h5 id="googleplusshareadapter">GooglePlusShareAdapter</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.adapterpattern</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">GooglePlusShareAdapter</span> <span class="kd">implements</span> <span class="nc">SocialMediaShareAdapter</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">share</span><span class="o">(</span><span class="nc">String</span> <span class="n">text</span><span class="o">,</span> <span class="nc">String</span> <span class="n">link</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// Google Plus related code here...</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"Sharing %s %s on Google+\n"</span><span class="o">,</span> <span class="n">text</span><span class="o">,</span> <span class="n">link</span><span class="o">);</span>
+
+        <span class="c1">// Post item to Google+ and get post id</span>
+        <span class="k">return</span> <span class="s">"example_post_id_g+"</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Bu yazdığım 3 sınıfın içerisine tüm sosyal medya platformu spesifik detayları gizliyoruz. 
+<strong>Abstraction</strong>‘ın dibine vuruyoruz. 
+Daha abstract olsun diye adaptörlerin içine gerçek kodları yazmadım, siz yazdığımı varsayın :)</p>
+
+<p>Son olarak <code class="highlighter-rouge">DefaultSocialMediaShareClient</code> sınıfını yazıyoruz. 
+Bu sınıf hangi platform için hangi adaptörü kullanması gerektiğini bilen sınıf oluyor.</p>
+
+<h5 id="defaultsocialmediashareclient">DefaultSocialMediaShareClient</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.adapterpattern</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.HashMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DefaultSocialMediaShareClient</span> <span class="kd">implements</span> <span class="nc">SocialMediaShareClient</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">Platform</span><span class="o">,</span> <span class="nc">SocialMediaShareAdapter</span><span class="o">&gt;</span> <span class="n">adapters</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">DefaultSocialMediaShareClient</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">adapters</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">adapters</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="nc">Platform</span><span class="o">.</span><span class="na">FACEBOOK</span><span class="o">,</span> <span class="k">new</span> <span class="nc">FacebookShareAdapter</span><span class="o">());</span>
+        <span class="n">adapters</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="nc">Platform</span><span class="o">.</span><span class="na">TWITTER</span><span class="o">,</span> <span class="k">new</span> <span class="nc">TwitterShareAdapter</span><span class="o">());</span>
+        <span class="n">adapters</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="nc">Platform</span><span class="o">.</span><span class="na">GOOGLE_PLUS</span><span class="o">,</span> <span class="k">new</span> <span class="nc">GooglePlusShareAdapter</span><span class="o">());</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">share</span><span class="o">(</span><span class="nc">Platform</span> <span class="n">platform</span><span class="o">,</span> <span class="nc">String</span> <span class="n">text</span><span class="o">,</span> <span class="nc">String</span> <span class="n">link</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">SocialMediaShareAdapter</span> <span class="n">adapter</span> <span class="o">=</span> <span class="n">adapters</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">platform</span><span class="o">);</span>
+        <span class="nc">String</span> <span class="n">postIdentifier</span> <span class="o">=</span> <span class="n">adapter</span><span class="o">.</span><span class="na">share</span><span class="o">(</span><span class="n">text</span><span class="o">,</span> <span class="n">link</span><span class="o">);</span>
+        <span class="n">storePost</span><span class="o">(</span><span class="n">platform</span><span class="o">,</span> <span class="n">text</span><span class="o">,</span> <span class="n">link</span><span class="o">,</span> <span class="n">postIdentifier</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">share</span><span class="o">(</span><span class="nc">String</span> <span class="n">text</span><span class="o">,</span> <span class="nc">String</span> <span class="n">link</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">adapters</span><span class="o">.</span><span class="na">forEach</span><span class="o">((</span><span class="n">platform</span><span class="o">,</span> <span class="n">adapter</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">share</span><span class="o">(</span><span class="n">platform</span><span class="o">,</span> <span class="n">text</span><span class="o">,</span> <span class="n">link</span><span class="o">));</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">storePost</span><span class="o">(</span><span class="nc">Platform</span> <span class="n">platform</span><span class="o">,</span> <span class="nc">String</span> <span class="n">text</span><span class="o">,</span> <span class="nc">String</span> <span class="n">link</span><span class="o">,</span> <span class="nc">String</span> <span class="n">identifier</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">"storePost::platform=%s::text=%s::link=%s::identifier=%s\n"</span><span class="o">,</span> <span class="n">platform</span><span class="o">,</span> <span class="n">text</span><span class="o">,</span> <span class="n">link</span><span class="o">,</span> <span class="n">identifier</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Bu şekilde sistemimizin mimari tasarımını tamamlamış oluyoruz. 
+Yukarıdaki kodda gördüğünüz <code class="highlighter-rouge">storePost</code> methodunun işlevinin 
+paylaşılan içerikler ile ilgili kayıtların veritabanına yazılması olduğunu varsayabilirsiniz. 
+Böylece hangi sosyal medya platformuna giderse gitsin 
+bir içeriği düzgün şekilde paylaşabilen 
+ve platformdan cevap olarak dönen ID’yi veritabanında saklayabilen 
+bir yapıyı gayet temiz bir şekilde kurmuş olduk. 
+Bu arayüzü kullanan bir main method ile yazımızı taçlandıralım:</p>
+
+<h5 id="adaptertutorialmain">AdapterTutorialMain</h5>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.adapterpattern</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">AdapterTutorialMain</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">SocialMediaShareClient</span> <span class="n">socialMediaShareClient</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DefaultSocialMediaShareClient</span><span class="o">();</span>
+
+        <span class="c1">// Share on all social media platforms</span>
+        <span class="nc">String</span> <span class="n">text</span> <span class="o">=</span> <span class="s">"Have you read my latest blog post about builder pattern?"</span><span class="o">;</span>
+        <span class="nc">String</span> <span class="n">link</span> <span class="o">=</span> <span class="s">"http://blog.asosyalbebe.com/2017/05/builder-pattern-temiz-kod-yazmak.html"</span><span class="o">;</span>
+        <span class="n">socialMediaShareClient</span><span class="o">.</span><span class="na">share</span><span class="o">(</span><span class="n">text</span><span class="o">,</span> <span class="n">link</span><span class="o">);</span>
+
+        <span class="c1">// Only share on Facebook</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s">"Last night, we had lots of fun!"</span><span class="o">;</span>
+        <span class="n">link</span> <span class="o">=</span> <span class="s">"https://www.youtube.com/watch?v=Sv6dMFF_yts"</span><span class="o">;</span>
+        <span class="n">socialMediaShareClient</span><span class="o">.</span><span class="na">share</span><span class="o">(</span><span class="nc">Platform</span><span class="o">.</span><span class="na">FACEBOOK</span><span class="o">,</span> <span class="n">text</span><span class="o">,</span> <span class="n">link</span><span class="o">);</span>
+
+        <span class="c1">// Only share on Twitter</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s">"My current mode #happy #happiness"</span><span class="o">;</span>
+        <span class="n">link</span> <span class="o">=</span> <span class="s">"https://www.youtube.com/watch?v=Sv6dMFF_yts"</span><span class="o">;</span>
+        <span class="n">socialMediaShareClient</span><span class="o">.</span><span class="na">share</span><span class="o">(</span><span class="nc">Platform</span><span class="o">.</span><span class="na">TWITTER</span><span class="o">,</span> <span class="n">text</span><span class="o">,</span> <span class="n">link</span><span class="o">);</span>
+
+        <span class="c1">// Only share on Google Plus</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="s">"My current mode #happy #happiness"</span><span class="o">;</span>
+        <span class="n">link</span> <span class="o">=</span> <span class="s">"https://www.youtube.com/watch?v=Sv6dMFF_yts"</span><span class="o">;</span>
+        <span class="n">socialMediaShareClient</span><span class="o">.</span><span class="na">share</span><span class="o">(</span><span class="nc">Platform</span><span class="o">.</span><span class="na">GOOGLE_PLUS</span><span class="o">,</span> <span class="n">text</span><span class="o">,</span> <span class="n">link</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="kapanış">Kapanış</h3>
+
+<p>Bu yazıda Design Pattern’larından Adapter Pattern’a değinmeye çalıştım dilim döndüğünce. 
+Yapısı sistemimizin yapısından oldukça farklı olan 
+başka bir sistemle entegre olmanın getirdiği iğrenç detayları 
+bu sayede çeşitli adaptörlerin içine gizleyebiliyoruz. 
+Hoşumuza gitmeyen bir arayüzü hoşumuza giden 
+ve projemiz için daha uygun bir arayüze çevirebiliyoruz.</p>
+
+<p>Aynı zamanda nesne tabanlı programlamanın en önemli bileşenlerinden olan <strong>Polymorphism</strong>, 
+<strong>Inheritance</strong> ve <strong>Abstraction</strong> gibi baba konseptleri de çok güzel uygulamış oluyor, 
+kodumuzu bizden sonra okuyanlardan tam puan alıyoruz.</p>
+
+<p>Bir önceki yazımda temiz ve kaliteli yazılım geliştirme konusundaki takıntılarımı dile getirmiştim. 
+Bu gibi hassasiyetlerimiz olmasa biz yazılımcılar için mesleğimiz 
+internetten çalışan bir kodu kopyalayıp projenin orta yerine yapıştırmaktan ibaret oluyor çoğu zaman. 
+Çeşitli Design Pattern’ları öğrenmek ve bunları doğru yerlerde uygulamayı amaç edinmek de 
+kaliteli kod yazma sürecinin olmazsa olmazlarından.</p>
+
+<p>Hatasız kul olmaz. 
+Benim de bu yazıda yaptığım hatalar olmuştur elbet. 
+Eğer görürsen, lütfen yorum yap sayın okuyucum. 
+Bu vesileyle yazımı şu güzel cümle ile kapatayım:</p>
+
+<blockquote>
+  <p>Yazılım ustalığı (Software Craftsmanship) ulaşılacak bir varış noktası değil, 
+insanın sürekli kendisini geliştirdiği bir yolculuktur.</p>
+</blockquote>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/builder-pattern-kullanarak-daha-temiz-kod-yazmak/">&laquo; Builder Pattern Kullanarak Daha Temiz Kod Yazmak</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+    <a class="next" href="/visitor-design-pattern/">Visitor Design Pattern &raquo;</a>
+    
+  </div>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://serdarkuzucu.com/adapter-pattern-farkli-sistemler-ayni-arayuz/';
+        this.page.identifier = 'adapter-pattern-farkli-sistemler-ayni-arayuz';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>

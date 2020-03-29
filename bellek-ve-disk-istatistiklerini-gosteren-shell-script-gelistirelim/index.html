@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Bellek ve Disk İstatistiklerini Gösteren Shell Script Geliştirelim</title>
+  <meta name="description" content="Merhaba arkadaşlar. Bu yazıda, shell script yazma konusunda geliştirdiğimiz becerileri, bir takım linux komutlarını ve özelliklerini kullanarak basit bir pro...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="https://serdarkuzucu.com/bellek-ve-disk-istatistiklerini-gosteren-shell-script-gelistirelim/">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (40)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (6)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (5)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (4)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (6)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (19)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Bellek ve Disk İstatistiklerini Gösteren Shell Script Geliştirelim</h1>
+    <p class="post-meta">
+      <time datetime="2015-07-06T22:27:00+00:00" itemprop="datePublished">Jul 6, 2015</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/bash">Bash</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/linux">Linux</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Merhaba arkadaşlar. 
+Bu yazıda, shell script yazma konusunda geliştirdiğimiz becerileri, 
+bir takım linux komutlarını ve özelliklerini kullanarak basit bir program yazacağız. 
+Bu program, format edilmiş bir şekilde bellekteki ve sabit disklerimizdeki boş alanı gösterecek. 
+Bu yazıyı bazı komutların üzerinde durmak istediğim için adım adım yazacağım. 
+Öncelikle kemerlerimizi bağlıyoruz.</p>
+
+<!--more-->
+
+<h2 id="disk-kullanımını-görmek">Disk Kullanımını Görmek</h2>
+
+<p>Öncelikle hard disklerimizi ve toplam/kullanılan/boş alanları nasıl görebileceğimize bakalım. 
+Ben bu işlem için linux’da varolan <code class="highlighter-rouge">df -h</code> komutunu kullanıyorum. 
+Diskler çok büyük depolama alanları olduğu için, bu komuttan gigabyte değerinde ölçüm alıyoruz.</p>
+
+<p>Bir terminal açıp, <code class="highlighter-rouge">df -h</code> komutunu yazdığınızda, aşağıdakine benzer bir output alacaksınız.</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">sedrik@localhost ~ $</span><span class="w"> </span><span class="nb">df</span> <span class="nt">-h</span>
+<span class="go">Filesystem      Size  Used Avail Use% Mounted on
+udev            5,9G     0  5,9G   0% /dev
+tmpfs           1,2G  9,4M  1,2G   1% /run
+/dev/sda1       129G   21G  102G  17% /
+tmpfs           5,9G  754M  5,1G  13% /dev/shm
+tmpfs           5,0M  4,0K  5,0M   1% /run/lock
+tmpfs           5,9G     0  5,9G   0% /sys/fs/cgroup
+/dev/sda6        90G   48G   38G  56% /appdata
+cgmfs           100K     0  100K   0% /run/cgmanager/fs
+tmpfs           1,2G     0  1,2G   0% /run/user/1001
+tmpfs           1,2G   56K  1,2G   1% /run/user/1000
+</span></code></pre></div></div>
+
+<p>Ben diskimi iki partition’a bölmüştüm ve birinci partition’ı <code class="highlighter-rouge">/</code> adresine mount etmiştim. 
+Bu yüzden <code class="highlighter-rouge">/dev/sda1</code> satırındaki disk kullanımı, birinci partition’ıma ait.</p>
+
+<p>İkinci partition’ımı da <code class="highlighter-rouge">/appdata</code> adresine mount etmiştim. 
+Bu yüzden <code class="highlighter-rouge">/dev/sda6</code> satırındaki disk kullanımı, ikinci partition’ıma ait. 
+Siz de diskinizi iyi tanımalı ve bu aşamada hangi partition’ların 
+kullanım istatistiklerini kontrol etmek istediğinize karar vermelisiniz.</p>
+
+<h2 id="bellek-kullanımını-görmek">Bellek Kullanımını Görmek</h2>
+
+<p>Şimdi de bellekteki toplam/kullanılan/boş alanları nasıl öğrenebileceğimize bakalım. 
+Bu işlem için <code class="highlighter-rouge">free -m</code> komutunu kullanıyorum ben. <code class="highlighter-rouge">-m</code> seçeneğini kullandığımızda değerleri megabyte cinsinden veriyor. 
+Şimdi bir terminal açıp <code class="highlighter-rouge">free -m</code> komutunu yazarsanız, aşağıdakine benzer bir output alabilirsiniz:</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">sedrik@localhost ~ $</span><span class="w"> </span>free <span class="nt">-m</span>
+<span class="go">             total       used       free     shared    buffers     cached
+Mem:         11922       9844       2078       1129        223       7111
+-/+ buffers/cache:       2509       9412
+Swap:         1951          0       1951
+</span></code></pre></div></div>
+
+<p>Benim gibi siz de yanılabilirsiniz bu komutu kullandığınızda. 
+İlk satırdaki kullanılan ve boş bellek miktarı, aslında fiziksel olarak doğru değerler. 
+Fakat ubuntu, RAM’de boş yer bulduğunda işlemlerimizde zaman kazandırmak için disk cache yapıyor, 
+yani sabit diskimizdeki sık kullandığımız veya kullanma ihtimalimiz olan bilgileri RAM’e kopyalıyor. 
+Eğer RAM’e ihtiyacımız olursa aniden, bu yedeklediği bilgileri RAM’den siliyor. 
+Dolayısı ile bellek kullanımını monitör etmek istediğimizde, birinci satırdaki bilgileri değil, 
+ikinci satırdaki bilgileri kullanırsak daha doğru sonuç elde ediyoruz, içimiz kararmıyor. 
+İkinci satırda, disk cache için kullanılmış alanları da free sütununa ekleyerek gösteriyor.</p>
+
+<h2 id="komut-sonuçlarından-i̇stenilen-bilgilerin-alınması">Komut Sonuçlarından İstenilen Bilgilerin Alınması</h2>
+
+<p><code class="highlighter-rouge">df -h</code> ve <code class="highlighter-rouge">free -m</code> şeklinde iki komut gördük. 
+Uzun uzun sonuçlar veriyorlar, kafalarına göre formatlıyorlar. 
+Peki bu sonuçlardan nasıl istediğimiz bilgileri alıp değişkenlere aktarırız?</p>
+
+<p>Öncelikle istediğimiz satırları alarak başlayalım. 
+Pipe (<code class="highlighter-rouge">|</code>) karakteri, bir komuttan çıkan sonucu diğer komuta input olarak vermemizi sağlıyor. 
+Örneğin <code class="highlighter-rouge">df -h | grep "/dev/sda1"</code> komutunu yazdığımızda, 
+<code class="highlighter-rouge">df -h</code> komutundan çıkan sonucu <code class="highlighter-rouge">grep</code> komutuna vermiş oluyoruz. 
+<code class="highlighter-rouge">grep</code> komutu da, kendine gelen inputun içerisinden sadece 
+istediğimiz anahtar kelimeyi içeren satırları output olarak veriyor, diğerlerini eliyor.</p>
+
+<p>Böylece istediğimiz sabit diske ait istatistikleri tek bir satır halinde bir değişkene aktarabiliyoruz. 
+Aşağıdaki kodda benim iki partition’ıma ait istatistikleri <code class="highlighter-rouge">DISK1</code> ve <code class="highlighter-rouge">DISK2</code> isimli değişkenlere aktarmış olduk.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c"># Shows user friendly disk usage</span>
+
+<span class="nv">DISK1</span><span class="o">=</span><span class="si">$(</span><span class="nb">df</span> <span class="nt">-h</span> | <span class="nb">grep</span> <span class="s2">"/dev/sda1"</span><span class="si">)</span>
+<span class="nv">DISK2</span><span class="o">=</span><span class="si">$(</span><span class="nb">df</span> <span class="nt">-h</span> | <span class="nb">grep</span> <span class="s2">"/dev/sda6"</span><span class="si">)</span>
+</code></pre></div></div>
+
+<p>Şimdi bu satırlardan toplam disk boyutu, kullanılan alan ve boş alan istatistiklerini ayıklayalım. 
+<code class="highlighter-rouge">df -h</code> komutunu çalıştırdığınızda farketmişsinizdir ki, toplam disk boyutu 2. sütunda yer alıyor. 
+Kullanılan disk boyutu 3. sütunda, diskteki boş alan da 4. sütunda yer alıyor. 
+Peki elimizdeki satırlardan sütunları nasıl ayıklıyoruz? <code class="highlighter-rouge">awk</code> komutu ile!</p>
+
+<p>Bir programın outputunu pipe (<code class="highlighter-rouge">|</code>) karakteri ile <code class="highlighter-rouge">awk '{print $1}'</code> komutuna vermek, 
+ekrana o çıkıdaki birinci sütunun değerinin yazılmasını sağlıyor. 
+Biz ise 2. 3. ve 4. sütunlara ihtiyaç duyuyoruz, 
+o yüzden <code class="highlighter-rouge">awk</code> komutumuzdaki print edilen sayıyı değiştirmemiz gerekiyor.</p>
+
+<p>Aşağıdaki kod parçası, iki diskin de kullanım istatistiklerini TOTAL, USED ve FREE olmak üzere üçer değişkene bölüyor.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c"># Shows user friendly disk usage</span>
+
+<span class="nv">DISK1</span><span class="o">=</span><span class="si">$(</span><span class="nb">df</span> <span class="nt">-h</span> | <span class="nb">grep</span> <span class="s2">"/dev/sda1"</span><span class="si">)</span>
+<span class="nv">DISK2</span><span class="o">=</span><span class="si">$(</span><span class="nb">df</span> <span class="nt">-h</span> | <span class="nb">grep</span> <span class="s2">"/dev/sda6"</span><span class="si">)</span>
+
+<span class="nv">DISK1_TOTAL</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK1</span> | <span class="nb">awk</span> <span class="s1">'{print $2}'</span><span class="si">)</span>
+<span class="nv">DISK1_USED</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK1</span> | <span class="nb">awk</span> <span class="s1">'{print $3}'</span><span class="si">)</span>
+<span class="nv">DISK1_FREE</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK1</span> | <span class="nb">awk</span> <span class="s1">'{print $4}'</span><span class="si">)</span>
+
+<span class="nv">DISK2_TOTAL</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK2</span> | <span class="nb">awk</span> <span class="s1">'{print $2}'</span><span class="si">)</span>
+<span class="nv">DISK2_USED</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK2</span> | <span class="nb">awk</span> <span class="s1">'{print $3}'</span><span class="si">)</span>
+<span class="nv">DISK2_FREE</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK2</span> | <span class="nb">awk</span> <span class="s1">'{print $4}'</span><span class="si">)</span>
+</code></pre></div></div>
+
+<p>Şimdi bellek ile ilgili istatistiklere bakalım. 
+<code class="highlighter-rouge">free -m</code> komutu ile bunu yapacağımızdan bahsetmiştik. 
+Toplam RAM boyutumuzu, <code class="highlighter-rouge">free -m</code> komutunda içerisinde “Mem” anahtar kelimesi geçen satırın 2. sütunu söylüyor. 
+Bu yüzden bu bilgiyi <code class="highlighter-rouge">free -m | grep "Mem" | awk '{print $2}'</code> şeklinde alacağız.</p>
+
+<p>Kullanılan ve boş alanları ise <code class="highlighter-rouge">free -m</code> komutunun “buffers/cache” 
+anahtar kelimesi geçen satırının 3. ve 4. sütunları içeriyor. 
+Bu yüzden kullanılan RAM bilgisini <code class="highlighter-rouge">free -m | grep "buffers/cache" | awk '{print $3}'</code> komutuyla öğrenirken, 
+boş RAM bilgisini de <code class="highlighter-rouge">free -m | grep "buffers/cache" | awk '{print $4}'</code> komutuyla öğreneceğiz. 
+Aşağıda, kodumuza bellek istatistiklerinin de eklenmiş hali mevcut.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c"># Shows user friendly disk usage</span>
+
+<span class="nv">DISK1</span><span class="o">=</span><span class="si">$(</span><span class="nb">df</span> <span class="nt">-h</span> | <span class="nb">grep</span> <span class="s2">"/dev/sda1"</span><span class="si">)</span>
+<span class="nv">DISK2</span><span class="o">=</span><span class="si">$(</span><span class="nb">df</span> <span class="nt">-h</span> | <span class="nb">grep</span> <span class="s2">"/dev/sda6"</span><span class="si">)</span>
+
+<span class="nv">DISK1_TOTAL</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK1</span> | <span class="nb">awk</span> <span class="s1">'{print $2}'</span><span class="si">)</span>
+<span class="nv">DISK1_USED</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK1</span> | <span class="nb">awk</span> <span class="s1">'{print $3}'</span><span class="si">)</span>
+<span class="nv">DISK1_FREE</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK1</span> | <span class="nb">awk</span> <span class="s1">'{print $4}'</span><span class="si">)</span>
+
+<span class="nv">DISK2_TOTAL</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK2</span> | <span class="nb">awk</span> <span class="s1">'{print $2}'</span><span class="si">)</span>
+<span class="nv">DISK2_USED</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK2</span> | <span class="nb">awk</span> <span class="s1">'{print $3}'</span><span class="si">)</span>
+<span class="nv">DISK2_FREE</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK2</span> | <span class="nb">awk</span> <span class="s1">'{print $4}'</span><span class="si">)</span>
+
+<span class="nv">MEMORY_TOTAL</span><span class="o">=</span><span class="si">$(</span>free <span class="nt">-m</span> | <span class="nb">grep</span> <span class="s2">"Mem"</span> | <span class="nb">awk</span> <span class="s1">'{print $2}'</span><span class="si">)</span>
+<span class="nv">MEMORY_USED</span><span class="o">=</span><span class="si">$(</span>free <span class="nt">-m</span> | <span class="nb">grep</span> <span class="s2">"buffers/cache"</span> | <span class="nb">awk</span> <span class="s1">'{print $3}'</span><span class="si">)</span>
+<span class="nv">MEMORY_FREE</span><span class="o">=</span><span class="si">$(</span>free <span class="nt">-m</span> | <span class="nb">grep</span> <span class="s2">"buffers/cache"</span> | <span class="nb">awk</span> <span class="s1">'{print $4}'</span><span class="si">)</span>
+</code></pre></div></div>
+
+<h2 id="bilgileri-ekrana-güzelce-yazdıralım">Bilgileri Ekrana Güzelce Yazdıralım</h2>
+
+<p>Herşey iyi güzel de, komutu çalıştırınca hala ekranda birşey göremiyoruz diyor musunuz? 
+Çünkü ekrana hiçbir şey yazdırmadık. Şimdi <code class="highlighter-rouge">echo</code> ve <code class="highlighter-rouge">printf</code> komutları eşliğinde ekrana bu değerleri yazdıralım.</p>
+
+<p><code class="highlighter-rouge">echo</code> kullanmayı hepiniz biliyorsunuzdur.
+<code class="highlighter-rouge">pritf</code> kullanmak ise biraz daha zahmetli ama sonu çok güzel bitiyor. 
+Bu komuta ilk parametre olarak kullanmak istediğiniz formatı geçiyorsunuz. 
+Örneğin 3 kelimeyi 10 karakterlik sütunlara sığdırmak ve aralarına pipe karakteri koymak istiyorsanız, 
+şu şekilde <code class="highlighter-rouge">printf</code> yazmanız yeterli:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">printf</span> <span class="s2">"| %-10s | %-10s | %-10s |n"</span> <span class="s2">"Kelime1"</span> <span class="s2">"Kelime2"</span> <span class="s2">"Kelime3"</span>
+</code></pre></div></div>
+
+<p>Sonuç olarak size şunu dönecektir:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>| Kelime1    | Kelime2    | Kelime3    |
+</code></pre></div></div>
+
+<p>Şimdi kodumuza birazcık sanat ekleyelim ve son halini verelim. 
+Yukarıda hesapladığımız tüm değişkenleri güzel güzel ekrana yazdıralım. Bendeki kodun son hali şöyle:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+<span class="c"># Shows user friendly disk usage</span>
+
+<span class="nv">DISK1</span><span class="o">=</span><span class="si">$(</span><span class="nb">df</span> <span class="nt">-h</span> | <span class="nb">grep</span> <span class="s2">"/dev/sda1"</span><span class="si">)</span>
+<span class="nv">DISK2</span><span class="o">=</span><span class="si">$(</span><span class="nb">df</span> <span class="nt">-h</span> | <span class="nb">grep</span> <span class="s2">"/dev/sda6"</span><span class="si">)</span>
+
+<span class="nv">DISK1_TOTAL</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK1</span> | <span class="nb">awk</span> <span class="s1">'{print $2}'</span><span class="si">)</span>
+<span class="nv">DISK1_USED</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK1</span> | <span class="nb">awk</span> <span class="s1">'{print $3}'</span><span class="si">)</span>
+<span class="nv">DISK1_FREE</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK1</span> | <span class="nb">awk</span> <span class="s1">'{print $4}'</span><span class="si">)</span>
+
+<span class="nv">DISK2_TOTAL</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK2</span> | <span class="nb">awk</span> <span class="s1">'{print $2}'</span><span class="si">)</span>
+<span class="nv">DISK2_USED</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK2</span> | <span class="nb">awk</span> <span class="s1">'{print $3}'</span><span class="si">)</span>
+<span class="nv">DISK2_FREE</span><span class="o">=</span><span class="si">$(</span><span class="nb">echo</span> <span class="nv">$DISK2</span> | <span class="nb">awk</span> <span class="s1">'{print $4}'</span><span class="si">)</span>
+
+<span class="nv">MEMORY_TOTAL</span><span class="o">=</span><span class="si">$(</span>free <span class="nt">-m</span> | <span class="nb">grep</span> <span class="s2">"Mem"</span> | <span class="nb">awk</span> <span class="s1">'{print $2}'</span><span class="si">)</span>
+<span class="nv">MEMORY_USED</span><span class="o">=</span><span class="si">$(</span>free <span class="nt">-m</span> | <span class="nb">grep</span> <span class="s2">"buffers/cache"</span> | <span class="nb">awk</span> <span class="s1">'{print $3}'</span><span class="si">)</span>
+<span class="nv">MEMORY_FREE</span><span class="o">=</span><span class="si">$(</span>free <span class="nt">-m</span> | <span class="nb">grep</span> <span class="s2">"buffers/cache"</span> | <span class="nb">awk</span> <span class="s1">'{print $4}'</span><span class="si">)</span>
+
+<span class="nv">TABLE_FORMAT</span><span class="o">=</span><span class="s2">"| %-10s | %-10s | %-10s | %-10s |n"</span>
+<span class="nv">DIVIDER</span><span class="o">=</span><span class="s2">"+------------+------------+------------+------------+"</span>
+
+<span class="nb">echo</span> <span class="s2">"</span><span class="nv">$DIVIDER</span><span class="s2">"</span>
+<span class="nb">printf</span> <span class="s2">"</span><span class="nv">$TABLE_FORMAT</span><span class="s2">"</span> <span class="s2">"Storage"</span> <span class="s2">"Size"</span> <span class="s2">"Used"</span> <span class="s2">"Free"</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="nv">$DIVIDER</span><span class="s2">"</span>
+<span class="nb">printf</span> <span class="s2">"</span><span class="nv">$TABLE_FORMAT</span><span class="s2">"</span> <span class="s2">"/dev/sda1"</span> <span class="s2">"</span><span class="k">${</span><span class="nv">DISK1_TOTAL</span>:0:-1<span class="k">}</span><span class="s2"> GB"</span> <span class="s2">"</span><span class="k">${</span><span class="nv">DISK1_USED</span>:0:-1<span class="k">}</span><span class="s2"> GB"</span> <span class="s2">"</span><span class="k">${</span><span class="nv">DISK1_FREE</span>:0:-1<span class="k">}</span><span class="s2"> GB"</span>
+<span class="nb">printf</span> <span class="s2">"</span><span class="nv">$TABLE_FORMAT</span><span class="s2">"</span> <span class="s2">"/dev/sda6"</span> <span class="s2">"</span><span class="k">${</span><span class="nv">DISK2_TOTAL</span>:0:-1<span class="k">}</span><span class="s2"> GB"</span> <span class="s2">"</span><span class="k">${</span><span class="nv">DISK2_USED</span>:0:-1<span class="k">}</span><span class="s2"> GB"</span> <span class="s2">"</span><span class="k">${</span><span class="nv">DISK2_FREE</span>:0:-1<span class="k">}</span><span class="s2"> GB"</span>
+<span class="nb">printf</span> <span class="s2">"</span><span class="nv">$TABLE_FORMAT</span><span class="s2">"</span> <span class="s2">"Memory"</span> <span class="s2">"</span><span class="nv">$MEMORY_TOTAL</span><span class="s2"> MB"</span> <span class="s2">"</span><span class="nv">$MEMORY_USED</span><span class="s2"> MB"</span> <span class="s2">"</span><span class="nv">$MEMORY_FREE</span><span class="s2"> MB"</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="nv">$DIVIDER</span><span class="s2">"</span>
+</code></pre></div></div>
+
+<p>Şimdi bu kodu <code class="highlighter-rouge">monitor</code> ismiyle bir yere kaydedelim. 
+Ben şu şekilde kaydediyorum: ~/myscripts/monitor</p>
+
+<p>Daha sonra <code class="highlighter-rouge">chmod +x ~/myscripts/monitor</code> komutunu çağırarak yazdığımız script’in çalışabilmesini sağlıyoruz.</p>
+
+<p>Şimdi komutumuzu terminalden şu şekilde çalıştırabiliriz: <code class="highlighter-rouge">~/myscripts/monitor</code>. Bize şuna benzer bir sonuç verecektir:</p>
+
+<pre class="language-bash command-line" data-output="2-10" data-user="sedrik" data-host="localhost"><code></code></pre>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">sedrik@localhost ~ $</span><span class="w"> </span>~/myscripts/monitor
+<span class="go">+------------+------------+------------+------------+
+| Storage    | Size       | Used       | Free       |
++------------+------------+------------+------------+
+| /dev/sda1  | 129 GB     | 21 GB      | 102 GB     |
+| /dev/sda6  | 90 GB      | 48 GB      | 38 GB      |
+| Memory     | 11922 MB   | 2552 MB    | 9370 MB    |
++------------+------------+------------+------------+
+</span></code></pre></div></div>
+
+<h2 id="alias-tanımlayarak-kodumuza-her-yerden-erişelim">Alias Tanımlayarak Kodumuza Her Yerden Erişelim</h2>
+
+<p>Şimdi bu yazdığımız koda hep ~/myscripts klasörü altından mı erişeceğiz? 
+Haydi gelin bir de alias tanımlaması yapalım da, her yerden tek bir kelime ile bu kodumuzu çalıştırabilelim.</p>
+
+<p>Alias tanımlamak için, <code class="highlighter-rouge">~/.bashrc</code> veya <code class="highlighter-rouge">~/.bash_aliases</code> dosyalarından birisini 
+gedit programı yardımıyla düzenleyelim. 
+Ben alias tanımlamak içni <code class="highlighter-rouge">~/.bash_aliases</code> dosyasını tavsiye ediyorum, adından belli. 
+Şu komutla açabiliriz bu dosyayı: <code class="highlighter-rouge">gedit ~/.bash_aliases</code></p>
+
+<p>Açılan gedit penceresinde, aşağıdaki satırı ekleyelim ve kaydedip kapatalım:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">alias </span><span class="nv">monitor</span><span class="o">=</span>~/myscripts/monitor
+</code></pre></div></div>
+
+<p>Daha sonra da terminal pencerelerimizi kapatalım ve tekrar açalım. 
+Böylelikle <code class="highlighter-rouge">~/.bash_aliases</code> dosyası terminale tekrar yüklenmiş olacak. 
+Artık terminalde hangi klasörde olursak olalım, <code class="highlighter-rouge">monitor</code> yazarak programımızı çalıştırabiliriz.</p>
+
+<p>Bu arada kodun içinde bir yerlerde <code class="highlighter-rouge">${DISK2_USED:0:-1} GB</code> kullandığımı görmüş 
+ve dikkatinizi çekmiş olabilir. <code class="highlighter-rouge">df -h</code> komutu bize sayıların sonuna Gigabyte’ın G’sini ekleyerek veriyor. 
+Örneğin: 12G. Biz bunu istemiyoruz. 
+O kod, <code class="highlighter-rouge">DISK2_USED</code> değişkeninin son karakterini yani ‘G’ karakterini silmeye yarıyor. 
+Daha sonra kendim elle bir boşluk bırakıp ‘GB’ yazıyorum. 
+Daha estetik görünüyor.</p>
+
+<p>Efendim hevesle yazdığım bir yazımın daha sonuna geldim. 
+Hepinize iyi programlamalar dilerim. 
+Kodlu kalın. 
+Herhangi bir soru veya yazı talebiniz için bu yazıya yorum bırakabilirsiniz.</p>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/shell-scripts-if-elif-else/">&laquo; Shell Scripts: if / elif / else</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+    <a class="next" href="/shell-scripts-case-komutu/">Shell Scripts: Case Komutu &raquo;</a>
+    
+  </div>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://serdarkuzucu.com/bellek-ve-disk-istatistiklerini-gosteren-shell-script-gelistirelim/';
+        this.page.identifier = 'bellek-ve-disk-istatistiklerini-gosteren-shell-script-gelistirelim';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Data Abstraction Nedir, Nerede Bulunur?</title>
+  <meta name="description" content="Yazılım geliştirme prensiplerinin en önemlilerinden birisi olan abstraction, yani soyutlama, kendi içinde iki çeşide ayrılıyor. Bunlar procedural abstraction...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="https://serdarkuzucu.com/data-abstraction-nedir-nerede-bulunur/">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (40)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (6)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (5)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (4)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (6)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (19)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Data Abstraction Nedir, Nerede Bulunur?</h1>
+    <p class="post-meta">
+      <time datetime="2017-06-05T07:59:00+00:00" itemprop="datePublished">Jun 5, 2017</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Yazılım geliştirme prensiplerinin en önemlilerinden birisi olan <strong>abstraction</strong>, 
+yani soyutlama, kendi içinde iki çeşide ayrılıyor. 
+Bunlar <strong>procedural abstraction</strong> ve <strong>data abstraction</strong>. 
+Bu yazıda kısaca <strong>data abstraction</strong>‘ın ne olduğundan bahsetmeye çalışacağım.</p>
+
+<p>Öncelikle <strong>abstraction</strong> ve <strong>encapsulation</strong> terimleri ne anlama geliyor ondan bahsetmek istiyorum 
+çünkü bu terimler tanımları çok yakın olduğundan genellikle birbiri ile karıştırılıyorlar.</p>
+
+<!--more-->
+
+<p><strong>Abstraction:</strong> Gereksiz karmaşıklığın (complexity) gizlenerek oluşturulan bileşenlerin sadece ilgili kısımlarının 
+yazılımın diğer kısımlarına sunulması işlemidir. Bu sayede bu bileşenleri kullanan diğer bileşenler alt seviyelerdeki 
+kompleks işlemlerin nasıl yapıldığı ile ilgilenmek zorunda kalmaz. Java’da çoğunlukla <strong>interface</strong>, <strong>abstract class</strong> 
+gibi konseptleri kullandığımızda bir takım detayları soyutlamış oluruz.</p>
+
+<p><strong>Encapsulation:</strong> Bir yazılım bileşeninin iç yapısının dış dünyadan gizlenmesidir. Böylece bu bileşenin işleyişinde 
+yapılabilecek herhangi bir değişikliğin bileşeni kullanan diğer yazılım bileşenlerini etkilememesi sağlanır. 
+Java’da bir sınıfta <strong>private method</strong>, <strong>private field</strong> gibi dışarıya kapalı tanımlar yaptığımızda sınıfımızın 
+işleyişini ve iç yapısındaki verileri encapsulate etmiş oluruz. Böylece bu sınıfın işleyişine ileride müdahale 
+ettiğimizde bu sınıfı kullanan diğer sınıflara dokunmak zorunda kalmayız.</p>
+
+<p>Abstraction, yazılımımızı farklı seviyelere (layers of abstraction) ayırmamızı sağlar. 
+Örneğin, kullandığımız işletim sistemi diskten bir dosyanın nasıl okunması gerektiğini bilir ve bizden birçok 
+donanım spesifik detayı gizleyerek sadece ilgili fonksiyonaliteyi soyut olarak bize sunar. 
+Java, platform bağımsız bir dil olarak, işletim sistemleri ile iletişime nasıl geçilmesi gerektiği ile ilgili 
+detayları bizden gizleyerek, dosya okuma/yazma gibi işlemleri daha da soyut olarak bize çeşitli sınıflar ile sağlar. 
+Apache’nin açık kaynak kodlu <a href="https://poi.apache.org/spreadsheet/quick-guide.html">POI kütüphanesi</a>, Java’nın temel dosya/okuma yazma bileşenlerini kullanarak 
+excel dosya formatının nasıl okunup yazılması gerektiği ile ilgili birçok gereksiz detayı bizden saklar. Bu sayede 
+bizim yazılımımız sadece excel’in satırlarına ilgili bilgileri girip dosyayı kaydet komutunu vermekten ibaret olur.</p>
+
+<p>Aşağıda Apache POI kütüphanesinin dökümantasyonundan <a href="https://poi.apache.org/spreadsheet/quick-guide.html#CreateCells">örnek bir excel yazma kodu</a> göstermek istiyorum.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Workbook</span> <span class="n">wb</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HSSFWorkbook</span><span class="o">();</span>
+<span class="nc">CreationHelper</span> <span class="n">createHelper</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="na">getCreationHelper</span><span class="o">();</span>
+<span class="nc">Sheet</span> <span class="n">sheet</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="na">createSheet</span><span class="o">(</span><span class="s">"new sheet"</span><span class="o">);</span>
+
+<span class="c1">// Create a row and put some cells in it. Rows are 0 based.</span>
+<span class="nc">Row</span> <span class="n">row</span> <span class="o">=</span> <span class="n">sheet</span><span class="o">.</span><span class="na">createRow</span><span class="o">((</span><span class="kt">short</span><span class="o">)</span> <span class="mi">0</span><span class="o">);</span>
+<span class="c1">// Create a cell and put a value in it.</span>
+<span class="nc">Cell</span> <span class="n">cell</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="na">createCell</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+<span class="n">cell</span><span class="o">.</span><span class="na">setCellValue</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+
+<span class="c1">// Or do it on one line.</span>
+<span class="n">row</span><span class="o">.</span><span class="na">createCell</span><span class="o">(</span><span class="mi">1</span><span class="o">).</span><span class="na">setCellValue</span><span class="o">(</span><span class="mf">1.2</span><span class="o">);</span>
+<span class="n">row</span><span class="o">.</span><span class="na">createCell</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="na">setCellValue</span><span class="o">(</span><span class="n">createHelper</span><span class="o">.</span><span class="na">createRichTextString</span><span class="o">(</span><span class="s">"This is a string"</span><span class="o">));</span>
+<span class="n">row</span><span class="o">.</span><span class="na">createCell</span><span class="o">(</span><span class="mi">3</span><span class="o">).</span><span class="na">setCellValue</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+
+<span class="c1">// Write the output to a file</span>
+<span class="nc">FileOutputStream</span> <span class="n">fileOut</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FileOutputStream</span><span class="o">(</span><span class="s">"workbook.xls"</span><span class="o">);</span>
+<span class="n">wb</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">fileOut</span><span class="o">);</span>
+<span class="n">fileOut</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p>Bu örnekten görüleceği gibi, bir excel dosyasının formatının nasıl olması gerektiği ile ilgili detayları 
+kullandığımız kütüphane bizden soyutladı. Diske dosya nasıl yazılır detayını ise Java içerisinde bulunan 
+sınıflar bu kütüphaneden soyutladı.</p>
+
+<p>Bu sayede yazılımda kompleks işleri bir üst seviye için kolaylaştıran <strong>farklı soyutlama seviyeleri</strong> ortaya çıktı. 
+Yazılım mimarisine eklenen her bir soyutlama seviyesi, yazılımı makine anlayacak seviyeden insan anlayacak seviyeye 
+bir adım daha yaklaştırır.</p>
+
+<p>Bir excel dosyası tonla bilgi taşıyan zengin bir içeriğe sahiptir. <code class="highlighter-rouge">HSSFWorkbook</code> sınıfı bu bilgilerin çoğunu 
+ve nasıl manipüle edileceğine ait detayları bizden gizler, bu sayede bu kütüphanede ileriki zamanlarda 
+yapılabilecek performans iyileştirmeleri yada refactoring gibi işlemlerde bizim kodumuzu güncellememiz gerekmez. 
+Encapsulation da burada bu şekilde kullanıldı.</p>
+
+<p><strong>Abstraction</strong> yazılımın tasarımı aşamasında yapılan bir çalışmadır. 
+<strong>Encapsulation</strong> ise implementasyon aşamasında yapılır.</p>
+
+<h3 id="peki-data-abstraction-ne">Peki Data Abstraction Ne?</h3>
+
+<p>Yukarıda verdiğim örnekler genellikle procedural abstraction’a örnekti. Yani bir işin nasıl yapılacağına dair 
+detayların soyutlanması idi. Data Abstraction ise, komplex bir datanın nasıl implement edildiğine ait detayın 
+bu datayı kullananlardan saklanmasıdır. Data ne kadar abstract ise, o kadar günlük hayatta kullandığımız datalara 
+yakın, makine dili olan 1 ve 0’lara uzaktır.</p>
+
+<p>Ben bu konuya <strong>Structure and Interpretation of Computer Programs</strong> isimli kitapta verilen karmaşık sayılar örneği 
+ile devam etmek istiyorum çünkü ben de bu kitap sayesinde bu konsept ile tanıştım.</p>
+
+<p>Matematik derslerinden hatırlarsınız karmaşık sayılar diye bir konu vardır, hiç sevememiştim. 
+Bir karmaşık sayı kutupsal ve düzlemsel(bu kelime doğru mu emin değilim) olarak iki farklı şekilde gösterilebilir.</p>
+
+<p><img src="/assets/posts/polar-form-of-cn.gif" alt="Polar form of complex number" /></p>
+
+<p>Örneğin yukarıdaki resimdeki z karmaşık sayısı aşağıdaki iki farklı biçimde gösterilebilir 
+ve ikisi de sayısal olarak aynıdır:</p>
+
+<p><code class="highlighter-rouge">z = r ∠ θ</code></p>
+
+<p><code class="highlighter-rouge">z = a + bi</code></p>
+
+<p>Buradan anlaşılıyor ki <code class="highlighter-rouge">ComplexNumber</code> diye bir sınıf geliştirmek istesek, 
+bu sınıf içerisinde veriyi iki farklı şekilde tutabiliriz. Birinci yöntem bir açı ve bir büyüklük içeren yani iki adet 
+<code class="highlighter-rouge">double</code> alandan oluşan bir sınıf tasarlamak. İkinci yöntem ise karmaşık sayının reel eksendeki izdüşümünü 
+ve sanal eksendeki izdüşümünü tutan yine iki adet <code class="highlighter-rouge">double</code> alandan oluşan bir sınıf tasarlamak.</p>
+
+<p>Şimdi tek tek iki yöntemin de nasıl tasarlanabileceğine bakalım. 
+Öncelikle <code class="highlighter-rouge">ComplexNumber</code> isimli bir <em>interface</em> tanımlayıp, karmaşık sayılar üzerinde yapılabilecek işlemleri 
+tanımlıyoruz. Böylece karmaşık sayıyı kullanacak olan başka yazılım bileşenlerine ihtiyaçları olan methodları 
+baştan belirlemiş oluyoruz.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ComplexNumber</span> <span class="o">{</span>
+    <span class="nc">ComplexNumber</span> <span class="nf">sum</span><span class="o">(</span><span class="nc">ComplexNumber</span> <span class="n">other</span><span class="o">);</span>
+    
+    <span class="nc">ComplexNumber</span> <span class="nf">subtract</span><span class="o">(</span><span class="nc">ComplexNumber</span> <span class="n">other</span><span class="o">);</span>
+
+    <span class="nc">ComplexNumber</span> <span class="nf">multiply</span><span class="o">(</span><span class="nc">ComplexNumber</span> <span class="n">other</span><span class="o">);</span>
+    
+    <span class="nc">ComplexNumber</span> <span class="nf">divide</span><span class="o">(</span><span class="nc">ComplexNumber</span> <span class="n">other</span><span class="o">);</span>
+    
+    <span class="kt">double</span> <span class="nf">getRealPart</span><span class="o">();</span>
+    
+    <span class="kt">double</span> <span class="nf">getImaginaryPart</span><span class="o">();</span>
+    
+    <span class="kt">double</span> <span class="nf">getAngle</span><span class="o">();</span>
+    
+    <span class="kt">double</span> <span class="nf">getMagnitude</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Daha sonra bu interface’den türeyen <em>abstract</em> bir sınıf tanımlayıp, <code class="highlighter-rouge">sum</code>, <code class="highlighter-rouge">subtract</code>, <code class="highlighter-rouge">multiply</code> ve <code class="highlighter-rouge">divide</code> 
+methodlarını buraya yazıyorum çünkü bu methodlar datanın içeride nasıl tutulduğundan bağımsız methodlar. 
+Yani karmaşık sayılar üzerinde yapılan dört işlemde bile karmaşık sayı datasının içeride nasıl tutulduğu 
+ile ilgilenmemiş olduk.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">BaseComplexNumber</span> <span class="kd">implements</span> <span class="nc">ComplexNumber</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="kt">double</span> <span class="no">EPSILON</span> <span class="o">=</span> <span class="mf">0.00001</span><span class="o">;</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">ComplexNumber</span> <span class="nf">sum</span><span class="o">(</span><span class="nc">ComplexNumber</span> <span class="n">other</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">double</span> <span class="n">realPart</span> <span class="o">=</span> <span class="n">getRealPart</span><span class="o">()</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="na">getRealPart</span><span class="o">();</span>
+        <span class="kt">double</span> <span class="n">imaginaryPart</span> <span class="o">=</span> <span class="n">getImaginaryPart</span><span class="o">()</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="na">getImaginaryPart</span><span class="o">();</span>
+        <span class="k">return</span> <span class="nc">ComplexNumbers</span><span class="o">.</span><span class="na">fromRectangularForm</span><span class="o">(</span><span class="n">realPart</span><span class="o">,</span> <span class="n">imaginaryPart</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">ComplexNumber</span> <span class="nf">subtract</span><span class="o">(</span><span class="nc">ComplexNumber</span> <span class="n">other</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">double</span> <span class="n">realPart</span> <span class="o">=</span> <span class="n">getRealPart</span><span class="o">()</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="na">getRealPart</span><span class="o">();</span>
+        <span class="kt">double</span> <span class="n">imaginaryPart</span> <span class="o">=</span> <span class="n">getImaginaryPart</span><span class="o">()</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="na">getImaginaryPart</span><span class="o">();</span>
+        <span class="k">return</span> <span class="nc">ComplexNumbers</span><span class="o">.</span><span class="na">fromRectangularForm</span><span class="o">(</span><span class="n">realPart</span><span class="o">,</span> <span class="n">imaginaryPart</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">ComplexNumber</span> <span class="nf">divide</span><span class="o">(</span><span class="nc">ComplexNumber</span> <span class="n">other</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">double</span> <span class="n">magnitude</span> <span class="o">=</span> <span class="n">getMagnitude</span><span class="o">()</span> <span class="o">/</span> <span class="n">other</span><span class="o">.</span><span class="na">getMagnitude</span><span class="o">();</span>
+        <span class="kt">double</span> <span class="n">angle</span> <span class="o">=</span> <span class="n">getAngle</span><span class="o">()</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="na">getAngle</span><span class="o">();</span>
+        <span class="k">return</span> <span class="nc">ComplexNumbers</span><span class="o">.</span><span class="na">fromPolarForm</span><span class="o">(</span><span class="n">magnitude</span><span class="o">,</span> <span class="n">angle</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">ComplexNumber</span> <span class="nf">multiply</span><span class="o">(</span><span class="nc">ComplexNumber</span> <span class="n">other</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">double</span> <span class="n">magnitude</span> <span class="o">=</span> <span class="n">getMagnitude</span><span class="o">()</span> <span class="o">*</span> <span class="n">other</span><span class="o">.</span><span class="na">getMagnitude</span><span class="o">();</span>
+        <span class="kt">double</span> <span class="n">angle</span> <span class="o">=</span> <span class="n">getAngle</span><span class="o">()</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="na">getAngle</span><span class="o">();</span>
+        <span class="k">return</span> <span class="nc">ComplexNumbers</span><span class="o">.</span><span class="na">fromPolarForm</span><span class="o">(</span><span class="n">magnitude</span><span class="o">,</span> <span class="n">angle</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="nc">Object</span> <span class="n">obj</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">obj</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="o">!(</span><span class="n">obj</span> <span class="k">instanceof</span> <span class="nc">ComplexNumber</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="nc">ComplexNumber</span> <span class="n">other</span> <span class="o">=</span> <span class="o">(</span><span class="nc">ComplexNumber</span><span class="o">)</span> <span class="n">obj</span><span class="o">;</span>
+        <span class="k">return</span> <span class="nf">isZero</span><span class="o">(</span><span class="n">getRealPart</span><span class="o">()</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="na">getRealPart</span><span class="o">())</span> <span class="o">&amp;&amp;</span> <span class="n">isZero</span><span class="o">(</span><span class="n">getImaginaryPart</span><span class="o">()</span> <span class="o">-</span> <span class="n">other</span><span class="o">.</span><span class="na">getImaginaryPart</span><span class="o">());</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">boolean</span> <span class="nf">isZero</span><span class="o">(</span><span class="kt">double</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="no">EPSILON</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">x</span> <span class="o">-</span> <span class="no">EPSILON</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Kendisine ait <code class="highlighter-rouge">realPart</code>, <code class="highlighter-rouge">imaginaryPart</code>, <code class="highlighter-rouge">angle</code> ve <code class="highlighter-rouge">magnitude</code> değerlerini dönme 
+veya gerekirse hesaplama işlerini ise datayı asıl tutan sınıfın omuzlarına yükledik, 
+çünkü bu işlemler içerideki verinin nasıl saklandığına bağlı değişiklik gösteriyorlar.</p>
+
+<p>Kutupsal gösterimdeki (polar form) şekliyle veriyi tuttuğumuz bir sınıf geliştirecek olursak, 
+aşağıdaki gibi bir implementasyon yapabiliriz:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PolarComplexNumber</span> <span class="kd">extends</span> <span class="nc">BaseComplexNumber</span> <span class="kd">implements</span> <span class="nc">ComplexNumber</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">double</span> <span class="n">magnitude</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">double</span> <span class="n">angle</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">PolarComplexNumber</span><span class="o">(</span><span class="kt">double</span> <span class="n">magnitude</span><span class="o">,</span> <span class="kt">double</span> <span class="n">angle</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">magnitude</span> <span class="o">=</span> <span class="n">magnitude</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">angle</span> <span class="o">=</span> <span class="n">angle</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">getRealPart</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">magnitude</span> <span class="o">*</span> <span class="nc">Math</span><span class="o">.</span><span class="na">cos</span><span class="o">(</span><span class="n">angle</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">getImaginaryPart</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">magnitude</span> <span class="o">*</span> <span class="nc">Math</span><span class="o">.</span><span class="na">sin</span><span class="o">(</span><span class="n">angle</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">getAngle</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">angle</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">getMagnitude</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">magnitude</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kt">double</span> <span class="n">degrees</span> <span class="o">=</span> <span class="nc">Math</span><span class="o">.</span><span class="na">toDegrees</span><span class="o">(</span><span class="n">angle</span><span class="o">);</span>
+        <span class="k">return</span>  <span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"%.2f x (cos(%.0fu00b0) + i x sin(%.0fu00b0))"</span><span class="o">,</span> <span class="n">magnitude</span><span class="o">,</span> <span class="n">degrees</span><span class="o">,</span> <span class="n">degrees</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Bu sınıf görüldüğü gibi açı ve büyüklük değerlerini tutup, 
+realPart ve imaginaryPart değerlerini hesaplayarak hizmet veriyor.</p>
+
+<p>Düzlemsel gösterimdeki (rectangular form) halde veriyi tutmak istersek eğer, 
+aşağıdaki gibi bir sınıf geliştirebiliriz:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">RectangularComplexNumber</span> <span class="kd">extends</span> <span class="nc">BaseComplexNumber</span> <span class="kd">implements</span> <span class="nc">ComplexNumber</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">double</span> <span class="n">realPart</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">double</span> <span class="n">imaginaryPart</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">RectangularComplexNumber</span><span class="o">(</span><span class="kt">double</span> <span class="n">realPart</span><span class="o">,</span> <span class="kt">double</span> <span class="n">imaginaryPart</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">realPart</span> <span class="o">=</span> <span class="n">realPart</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">imaginaryPart</span> <span class="o">=</span> <span class="n">imaginaryPart</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">getRealPart</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">realPart</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">getImaginaryPart</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">imaginaryPart</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">getAngle</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nc">Math</span><span class="o">.</span><span class="na">atan2</span><span class="o">(</span><span class="n">imaginaryPart</span><span class="o">,</span> <span class="n">realPart</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">double</span> <span class="nf">getMagnitude</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nc">Math</span><span class="o">.</span><span class="na">sqrt</span><span class="o">(</span><span class="n">realPart</span> <span class="o">*</span> <span class="n">realPart</span> <span class="o">+</span> <span class="n">imaginaryPart</span> <span class="o">*</span> <span class="n">imaginaryPart</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nc">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">"%.2f + i x %.2f"</span><span class="o">,</span> <span class="n">realPart</span><span class="o">,</span> <span class="n">imaginaryPart</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Görüldüğü üzere bu sınıf da realPart ve imaginaryPart değerlerini tutup, 
+angle ve magnitude değerlerini hesaplayarak hizmet veriyor.</p>
+
+<p><code class="highlighter-rouge">BaseComplexNumber</code> sınıfında factory method olarak kullandığımız <code class="highlighter-rouge">ComplexNumbers.fromPolarForm</code> 
+ve <code class="highlighter-rouge">ComplexNumbers.fromRectangularForm</code> methodları bu iki gösterimden herhangi birisini seçip 
+onu dönecek şekilde geliştirilebilir. <code class="highlighter-rouge">ComplexNumbers</code> aracılığı ile başka yazılım bileşenlerinin 
+elde edebileceği tek nesne tipi <code class="highlighter-rouge">ComplexNumber</code> olacaktır. 
+Yani datanın nasıl represent edildiğini datayı kullananlardan soyutlamış olduk.</p>
+
+<p>Ben hazır yazmışken iki sınıfı da kullanayım dedim ve ortaya şöyle bir sınıf çıktı:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ComplexNumbers</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">ComplexNumber</span> <span class="nf">fromRectangularForm</span><span class="o">(</span><span class="kt">double</span> <span class="n">realPart</span><span class="o">,</span> <span class="kt">double</span> <span class="n">imaginaryPart</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">RectangularComplexNumber</span><span class="o">(</span><span class="n">realPart</span><span class="o">,</span> <span class="n">imaginaryPart</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">ComplexNumber</span> <span class="nf">fromPolarForm</span><span class="o">(</span><span class="kt">double</span> <span class="n">magnitude</span><span class="o">,</span> <span class="kt">double</span> <span class="n">angle</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">PolarComplexNumber</span><span class="o">(</span><span class="n">magnitude</span><span class="o">,</span> <span class="n">angle</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Buradan çıkarmamız gereken sonuç tabi ki de bir sistemde aynı veriyi birçok farklı şekilde tasarlamak gerektiği değil. 
+Bir yazılımda kompleks bir veri tipi (karmaşık sayı gibi) yaratıyorsanız, 
+bu veri tipini kullanan yazılımın diğer bileşenleri için önemli olan iki soruyu cevaplamanız gerekmektedir.</p>
+
+<p>Bunlardan birincisi, bu veriyi nasıl yaratacakları. 
+Bu örneklerde, <code class="highlighter-rouge">ComplexNumbers</code> sınıfı içerisindeki iki factory method ile verinin kolayca yaratılmasını sağladık.</p>
+
+<p>İkinci önemli soru da bu veri üzerindeki gerekli bilgilere nasıl erişecekleri. 
+Açtığımız <code class="highlighter-rouge">ComplexNumber</code> arayüzü ile karmaşık sayı ile ilgili bilgilere 
+nasıl erişeceklerini de diğer yazılım bileşenlerine anlatmış olduk.</p>
+
+<p>Bundan gerisi bizim içeride veriyi nasıl 
+ve ne formatta sakladığımız ve bu da bizden başkasını ilgilendirmez. 
+Biz istersek içeride byte dizisi olarak tutalım, 
+istersek String olarak tutalım, ya da çok daha kötü bir yapı kuralım. 
+Dış dünyaya aynı interface’i çalışır durumda verebiliyorsak 
+verimizin iç dünyasını istediğimiz biçimde şekillendirebiliriz.</p>
+
+<h3 id="finito">Finito</h3>
+
+<p>Bu yazıda birçok soyut kavrama değindiğim için tonla hata yapmış olabilirim. 
+Böyle durumlarda yorumlarınız ile beni düzeltmekten geri kalmayın.</p>
+
+<p>Yazıda bir ara ismini zikrettiğim muhteşem kitabın görselini de ekleyeyim. 
+Çok uzun uğraşlar sonucu keşfettiğim bir kitap değil zaten, şu tarz listelerden buluyorum böyle kitapları: 
+<a href="https://stackoverflow.com/questions/1711/what-is-the-single-most-influential-book-every-programmer-should-read/1713" target="_blank">What is the single most influential book every programmer should read?</a></p>
+
+<p><img src="/assets/posts/saiocp_cover.jpg" alt="Structure and Interpretation of Computer Programs" width="221px" /></p>
+
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/visitor-design-pattern/">&laquo; Visitor Design Pattern</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+    <a class="next" href="/docker-wordpress-https-nginx-letsencrypt/">Docker ile WordPress Kurulumu ve Https &raquo;</a>
+    
+  </div>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://serdarkuzucu.com/data-abstraction-nedir-nerede-bulunur/';
+        this.page.identifier = 'data-abstraction-nedir-nerede-bulunur';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>

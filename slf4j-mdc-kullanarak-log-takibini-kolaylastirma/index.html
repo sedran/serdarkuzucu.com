@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Slf4j: MDC Kullanarak Log Takibini Kolaylaştırma</title>
+  <meta name="description" content="Bu yazıda birden fazla sınıfın log yazdığı bir log dosyasında spesifik bir HTTP isteğine ait logları nasıl buluruz sorusuna kolay uygulanabilir bir cevap pay...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="https://serdarkuzucu.com/slf4j-mdc-kullanarak-log-takibini-kolaylastirma/">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (40)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (6)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (5)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (4)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (6)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (19)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Slf4j: MDC Kullanarak Log Takibini Kolaylaştırma</h1>
+    <p class="post-meta">
+      <time datetime="2019-02-13T22:49:00+00:00" itemprop="datePublished">Feb 13, 2019</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Bu yazıda birden fazla sınıfın log yazdığı bir log dosyasında spesifik bir HTTP isteğine ait logları nasıl buluruz sorusuna kolay uygulanabilir bir cevap paylaşacağım. <!--more--></p>
+
+<p>Problemi doğuran şey sistemdeki aynı methodlara aynı anda birden fazla istek geldiğinde logların birbirine karışması ve hangi logun hangi isteğe ait olduğunun anlaşılamaması.</p>
+
+<p>Çözüm; sisteme gelen her HTTP isteği için unique bir string oluşturacağız ve bu değerin bu istek boyunca tüm loglarda görünmesini sağlayacağız. Bunu amele gibi elimizle her log statement’a eklemek yerine SLF4J’nin MDC (Mapped Diagnostic Context) yöntemini kullanacağız.</p>
+
+<blockquote>
+  <p>Dilerseniz bu yazıdaki örnek uygulamaya aşağıdaki github adresimden ulaşabilirsiniz:</p>
+
+  <p><a href="https://github.com/sedran/mdc-log-track-id-demo">Github: Slf4j MDC Kullanarak Log Takibini Kolaylaştırma</a></p>
+</blockquote>
+
+<h2 id="demo-uygulamanın-oluşturulması">Demo Uygulamanın Oluşturulması</h2>
+
+<p>Öncelikle bu yazı için ufak bir Spring Boot demo uygulaması geliştirdim.
+Intellij Idea’da projeyi yaratırken Gradle seçmeyi unuttuğum için Maven projesi olarak yaratıldı. 
+O sebeple <code>pom.xml</code> dosyasını paylaşıyorum:</p>
+
+<h3 id="pomxml">pom.xml</h3>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">"http://maven.apache.org/POM/4.0.0"</span> <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+         <span class="na">xsi:schemaLocation=</span><span class="s">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+    <span class="nt">&lt;parent&gt;</span>
+        <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+        <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;version&gt;</span>2.1.2.RELEASE<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;relativePath/&gt;</span> <span class="c">&lt;!-- lookup parent from repository --&gt;</span>
+    <span class="nt">&lt;/parent&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>com.serdarkuzucu<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>mdc-demo<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;name&gt;</span>mdc-demo<span class="nt">&lt;/name&gt;</span>
+    <span class="nt">&lt;description&gt;</span>MDC Demo Project<span class="nt">&lt;/description&gt;</span>
+
+    <span class="nt">&lt;properties&gt;</span>
+        <span class="nt">&lt;java.version&gt;</span>1.8<span class="nt">&lt;/java.version&gt;</span>
+    <span class="nt">&lt;/properties&gt;</span>
+
+    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="nt">&lt;/artifactId&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;/dependencies&gt;</span>
+
+    <span class="nt">&lt;build&gt;</span>
+        <span class="nt">&lt;plugins&gt;</span>
+            <span class="nt">&lt;plugin&gt;</span>
+                <span class="nt">&lt;groupId&gt;</span>org.springframework.boot<span class="nt">&lt;/groupId&gt;</span>
+                <span class="nt">&lt;artifactId&gt;</span>spring-boot-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;/plugin&gt;</span>
+        <span class="nt">&lt;/plugins&gt;</span>
+    <span class="nt">&lt;/build&gt;</span>
+<span class="nt">&lt;/project&gt;</span>
+</code></pre></div></div>
+
+<h3 id="mdcdemoapplicationjava">MdcDemoApplication.java</h3>
+
+<p>Spring Boot uygulamasını ayağa kaldıran main methodu içeren sınıf.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.serdarkuzucu.mdcdemo</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.boot.SpringApplication</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.SpringBootApplication</span><span class="o">;</span>
+
+<span class="nd">@SpringBootApplication</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MdcDemoApplication</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="nc">MdcDemoApplication</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="randomnumberservicejava">RandomNumberService.java</h3>
+
+<p>Random sayı üreten ve bir miktar log üreten bir sınıf.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.serdarkuzucu.mdcdemo.service</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.slf4j.Logger</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.slf4j.LoggerFactory</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Service</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Random</span><span class="o">;</span>
+
+<span class="cm">/**
+ * @author Serdar Kuzucu
+ */</span>
+<span class="nd">@Service</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RandomNumberService</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Logger</span> <span class="no">LOG</span> <span class="o">=</span> <span class="nc">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="nc">RandomNumberService</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+    <span class="kd">public</span> <span class="nc">Number</span> <span class="nf">generateRandomNumber</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">int</span> <span class="n">randomNumber</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Random</span><span class="o">().</span><span class="na">nextInt</span><span class="o">();</span>
+        <span class="no">LOG</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"generated random number is {}"</span><span class="o">,</span> <span class="n">randomNumber</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">randomNumber</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="randomnumbercontrollerjava">RandomNumberController.java</h3>
+
+<p><code>/random-number</code> URL’ine gelen istekleri cevaplayacak olan controller. Bir miktar log üretecek, <code>RandomNumberService</code> sınıfına çağrı yapacak. Bu sayede istek attığımızda iki farklı sınıfın log yazmasını göreceğiz.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.serdarkuzucu.mdcdemo.controller</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.serdarkuzucu.mdcdemo.service.RandomNumberService</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.slf4j.Logger</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.slf4j.LoggerFactory</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.HashMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+
+<span class="cm">/**
+ * @author Serdar Kuzucu
+ */</span>
+<span class="nd">@RestController</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RandomNumberController</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Logger</span> <span class="no">LOG</span> <span class="o">=</span> <span class="nc">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="nc">RandomNumberController</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">RandomNumberService</span> <span class="n">randomNumberService</span><span class="o">;</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">public</span> <span class="nf">RandomNumberController</span><span class="o">(</span><span class="nc">RandomNumberService</span> <span class="n">randomNumberService</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">randomNumberService</span> <span class="o">=</span> <span class="n">randomNumberService</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"random-number"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Number</span><span class="o">&gt;</span> <span class="nf">getRandomNumber</span><span class="o">()</span> <span class="o">{</span>
+        <span class="no">LOG</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"RandomNumberController.getRandomNumber invoked"</span><span class="o">);</span>
+
+        <span class="kd">final</span> <span class="nc">Number</span> <span class="n">randomNumber</span> <span class="o">=</span> <span class="n">randomNumberService</span><span class="o">.</span><span class="na">generateRandomNumber</span><span class="o">();</span>
+        <span class="no">LOG</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"randomNumber={}"</span><span class="o">,</span> <span class="n">randomNumber</span><span class="o">);</span>
+
+        <span class="kd">final</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Number</span><span class="o">&gt;</span> <span class="n">responseBody</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;&gt;();</span>
+        <span class="n">responseBody</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"value"</span><span class="o">,</span> <span class="n">randomNumber</span><span class="o">);</span>
+
+        <span class="no">LOG</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"RandomNumberController.getRandomNumber result={}"</span><span class="o">,</span> <span class="n">responseBody</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">responseBody</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="applicationproperties">application.properties</h3>
+
+<p>Bu dosyada <code>logging.pattern.console</code> property’sini ezerek 
+Spring Boot’un varsayılan log pattern’ını değiştiriyoruz. 
+Demo için gerek olmayabilir fakat bence böyle loglar daha güzel görünüyor.</p>
+
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">logging.pattern.console</span><span class="p">=</span><span class="s">%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} |</span><span class="se">\
+</span>  <span class="s">%clr(%5p) | </span><span class="se">\
+</span>  <span class="s">%clr(%logger{0}){cyan} </span><span class="se">\
+</span>  <span class="s">%clr(:){faint} </span><span class="se">\
+</span>  <span class="s">%m%n</span>
+</code></pre></div></div>
+
+<p>Uygulamayı çalıştırıp tarayıcımızda <code>http://localhost:8080/random-number</code> 
+URL’ini açarsak, loglarda şunların çıktığını göreceğiz:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2019-02-13 01:17:36.582 | INFO | RandomNumberController : RandomNumberController.getRandomNumber invoked
+2019-02-13 01:17:36.582 | INFO | RandomNumberService : generated random number is 773800082
+2019-02-13 01:17:36.583 | INFO | RandomNumberController : randomNumber=773800082
+2019-02-13 01:17:36.583 | INFO | RandomNumberController : RandomNumberController.getRandomNumber result={value=773800082}
+</code></pre></div></div>
+
+<p>Aynı anda bu satırlardan yüzlerce karışık sırada log dosyasında olduğunu düşünelim. 
+Birbirinden ayırt etmekte zorlanırdık.</p>
+
+<h2 id="mdc-yönteminin-uygulanması">MDC Yönteminin Uygulanması</h2>
+
+<p>Öncelikle bu işe bir isim verelim. 
+Biz ürettiğimiz bu unique string’e şirkette <b>log takip kodu</b> diyoruz. 
+Kodun içerisinde <code>logTrackId</code> olarak kullanacağım. 
+Şimdi <code>logTrackId</code> üreten <code>LogTrackIdGenerator</code> arayüzünü ve 
+<code>UUIDLogTrackIdGenerator</code> sınıfını yazalım:</p>
+
+<h3 id="logtrackidgeneratorjava">LogTrackIdGenerator.java</h3>
+
+<p>“Program to interfaces, not implementations” paradigmasına bağlı kalarak 
+<code>logTrackId</code> üreten bir interface tasarlıyoruz:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.serdarkuzucu.mdcdemo.util</span><span class="o">;</span>
+
+<span class="cm">/**
+ * @author Serdar Kuzucu
+ */</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">LogTrackIdGenerator</span> <span class="o">{</span>
+    <span class="nc">String</span> <span class="nf">generate</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="uuidlogtrackidgeneratorjava">UUIDLogTrackIdGenerator.java</h3>
+
+<p><code>LogTrackIdGenerator</code> interface’i için UUID üretip içindeki tire (-) 
+karakterini silen bir implementasyon yazıyoruz.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.serdarkuzucu.mdcdemo.util</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Component</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.UUID</span><span class="o">;</span>
+
+<span class="cm">/**
+ * Generates a random UUID without hyphens
+ *
+ * @author Serdar Kuzucu
+ */</span>
+<span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UUIDLogTrackIdGenerator</span> <span class="kd">implements</span> <span class="nc">LogTrackIdGenerator</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">generate</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="no">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span class="o">().</span><span class="na">toString</span><span class="o">().</span><span class="na">replaceAll</span><span class="o">(</span><span class="s">"-"</span><span class="o">,</span> <span class="s">""</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="logtrackidgeneratingfilterjava">LogTrackIdGeneratingFilter.java</h3>
+
+<p>Bir adet <code>javax.servlet.Filter</code> implementasyonu yazıyoruz 
+ve üzerine <code>@Component</code> annotation’ını ekliyoruz. 
+Bu şekilde annotate ettiğimiz sınıflar Spring Boot tarafından 
+otomatik olarak taranıp bean olarak ayağa kaldırılır. 
+Üstüne üstlük Filter türünde olduğu için Spring Boot bu bean’i 
+tüm HTTP isteklerinin önüne filtre olarak yerleştirir. 
+Yani sunucuya gelen tüm istekler <code>doFilter</code> methodundan geçer.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.serdarkuzucu.mdcdemo.filter</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.serdarkuzucu.mdcdemo.util.LogTrackIdGenerator</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.slf4j.Logger</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.slf4j.LoggerFactory</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.slf4j.MDC</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.annotation.Autowired</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Component</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.servlet.*</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+
+<span class="cm">/**
+ * @author Serdar Kuzucu
+ */</span>
+<span class="nd">@Component</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">LogTrackIdGeneratingFilter</span> <span class="kd">implements</span> <span class="nc">Filter</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Logger</span> <span class="no">LOG</span> <span class="o">=</span> <span class="nc">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="nc">LogTrackIdGeneratingFilter</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">LOG_TRACK_ID_MDC_KEY</span> <span class="o">=</span> <span class="s">"logTrackId"</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">LogTrackIdGenerator</span> <span class="n">logTrackIdGenerator</span><span class="o">;</span>
+
+    <span class="nd">@Autowired</span>
+    <span class="kd">public</span> <span class="nf">LogTrackIdGeneratingFilter</span><span class="o">(</span><span class="nc">LogTrackIdGenerator</span> <span class="n">logTrackIdGenerator</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">logTrackIdGenerator</span> <span class="o">=</span> <span class="n">logTrackIdGenerator</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doFilter</span><span class="o">(</span><span class="nc">ServletRequest</span> <span class="n">servletRequest</span><span class="o">,</span> <span class="nc">ServletResponse</span> <span class="n">servletResponse</span><span class="o">,</span> <span class="nc">FilterChain</span> <span class="n">filterChain</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">IOException</span><span class="o">,</span> <span class="nc">ServletException</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="nc">String</span> <span class="n">logTrackId</span> <span class="o">=</span> <span class="n">logTrackIdGenerator</span><span class="o">.</span><span class="na">generate</span><span class="o">();</span>
+        <span class="no">MDC</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="no">LOG_TRACK_ID_MDC_KEY</span><span class="o">,</span> <span class="n">logTrackId</span><span class="o">);</span>
+
+        <span class="no">LOG</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"Log track id {} generated"</span><span class="o">,</span> <span class="n">logTrackId</span><span class="o">);</span>
+
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">filterChain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">servletRequest</span><span class="o">,</span> <span class="n">servletResponse</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="no">MDC</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="no">LOG_TRACK_ID_MDC_KEY</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><code>doFilter</code> methodunun içerisinde <code>LogTrackIdGenerator</code> aracılığıyla 
+ürettiğimiz log takip kodunu <code>org.slf4j.MDC</code> sınıfının statik bir methodu olan
+<code>put</code> methoduna verdik. 
+MDC, <code>ThreadLocal</code> üzerinde duran bir Map gibi çalışır. 
+Yani bu veri yapısına bir bilgi girerken bir key kullanırız. 
+Log takip kodu için <code>logTrackId</code> keyini kullandım. 
+Daha sonra <code>application.properties</code> dosyasında log pattern’ine bu keyi gireceğiz.</p>
+
+<p><code>filterChain.doFilter</code> çağırarak HTTP isteğini bizden sonra çalışacak olan 
+filtreler varsa onlara veya doğrudan isteği karşılayacak olan Servlet’e gönderiyoruz. 
+Bu esnada geliştirdiğimiz <code>RandomNumberController</code> da tetiklenmiş oluyor. 
+Daha sonra ThreadLocal içerisine attığımız MDC değeri Thread’in üzerinde kalmasın diye 
+<code>MDC.remove(key)</code> çağırıyoruz.</p>
+
+<h3 id="applicationproperties-1">application.properties</h3>
+
+<p><code>logTrackId</code> keyi ile MDC üzerine yerleştirdiğimiz veriyi 
+log pattern’ine eklemek için, 
+<b>application.properties</b> dosyasında herhangi bir yere 
+<code>%X{logTrackId:-none}</code> ekliyoruz. 
+<code>:-none</code> kısmı isteğe bağlı olarak eklenmeyebilir de. 
+MDC’nin içinde log takip kodu olmadığı zamanlarda loga “none” yazmasını sağlıyor. 
+Benim <b>application.properties</b> dosyam aşağıdaki gibi:</p>
+
+<div class="language-properties highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="py">logging.pattern.console</span><span class="p">=</span><span class="s">%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} |</span><span class="se">\
+</span>  <span class="s">%clr(%5p) | </span><span class="se">\
+</span>  <span class="s">%clr(%X{logTrackId:-none}) | </span><span class="se">\
+</span>  <span class="s">%clr(%logger{0}){cyan} </span><span class="se">\
+</span>  <span class="s">%clr(:){faint} </span><span class="se">\
+</span>  <span class="s">%m%n</span>
+</code></pre></div></div>
+
+<p>Uygulamayı çalıştırıp tarayıcımızda <code>http://localhost:8080/random-number</code> 
+URL’ini açarsak, loglarda şunların çıktığını göreceğiz:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2019-02-13 01:37:55.357 | INFO | 95e3e1b5dea0427197e7ef78cf42e416 | RandomNumberController : RandomNumberController.getRandomNumber invoked
+2019-02-13 01:37:55.357 | INFO | 95e3e1b5dea0427197e7ef78cf42e416 | RandomNumberService : generated random number is -916135574
+2019-02-13 01:37:55.357 | INFO | 95e3e1b5dea0427197e7ef78cf42e416 | RandomNumberController : randomNumber=-916135574
+2019-02-13 01:37:55.357 | INFO | 95e3e1b5dea0427197e7ef78cf42e416 | RandomNumberController : RandomNumberController.getRandomNumber result={value=-916135574}
+</code></pre></div></div>
+
+<p>Gördüğünüz gibi <code>logTrackId=95e3e1b5dea0427197e7ef78cf42e416</code> değeri üretildi 
+ve bu işleme ait tüm log satırlarında yazdığı görüldü.</p>
+
+<p>MDC ile ilgili anlatmak istediklerim bunlar. 
+Sorularınız olursa aşağıdaki yorum formunu dilediğiniz gibi doldurabilirsiniz. 
+Sizin de MDC ile ilgili farklı kullanım senaryolarınız varsa duymak isterim.</p>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/user-threads-vs-daemon-threads/">&laquo; User Threads vs Daemon Threads</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+  </div>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://serdarkuzucu.com/slf4j-mdc-kullanarak-log-takibini-kolaylastirma/';
+        this.page.identifier = 'slf4j-mdc-kullanarak-log-takibini-kolaylastirma';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>

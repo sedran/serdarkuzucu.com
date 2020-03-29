@@ -6,8 +6,8 @@
 </description>
     <link>https://serdarkuzucu.com/</link>
     <atom:link href="https://serdarkuzucu.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 29 Mar 2020 23:39:30 +0000</pubDate>
-    <lastBuildDate>Sun, 29 Mar 2020 23:39:30 +0000</lastBuildDate>
+    <pubDate>Sun, 29 Mar 2020 23:49:47 +0000</pubDate>
+    <lastBuildDate>Sun, 29 Mar 2020 23:49:47 +0000</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
     
       <item>
@@ -341,8 +341,8 @@ Sorularınız olursa aşağıdaki yorum formunu dilediğiniz gibi doldurabilirsi
 Sizin de MDC ile ilgili farklı kullanım senaryolarınız varsa duymak isterim.&lt;/p&gt;
 </description>
         <pubDate>Wed, 13 Feb 2019 22:49:00 +0000</pubDate>
-        <link>https://serdarkuzucu.com/slf4j-mdc-kullanarak-log-takibini-kolaylastirma</link>
-        <guid isPermaLink="true">https://serdarkuzucu.com/slf4j-mdc-kullanarak-log-takibini-kolaylastirma</guid>
+        <link>https://serdarkuzucu.com/slf4j-mdc-kullanarak-log-takibini-kolaylastirma/</link>
+        <guid isPermaLink="true">https://serdarkuzucu.com/slf4j-mdc-kullanarak-log-takibini-kolaylastirma/</guid>
         
         
         <category>Java</category>
@@ -546,8 +546,8 @@ User thread sonlandığında doğrudan aşağı indirdi.&lt;/p&gt;
 &lt;p&gt;İyi geceler.&lt;/p&gt;
 </description>
         <pubDate>Mon, 11 Feb 2019 23:37:00 +0000</pubDate>
-        <link>https://serdarkuzucu.com/user-threads-vs-daemon-threads</link>
-        <guid isPermaLink="true">https://serdarkuzucu.com/user-threads-vs-daemon-threads</guid>
+        <link>https://serdarkuzucu.com/user-threads-vs-daemon-threads/</link>
+        <guid isPermaLink="true">https://serdarkuzucu.com/user-threads-vs-daemon-threads/</guid>
         
         
         <category>Java</category>
@@ -805,8 +805,8 @@ Bootstrap birçok faydalı bileşen barındıran büyük bir kütüphane.
 Birçok bileşenini kullanmasanız da sadece grid sistemi için bile kullanılabilir.&lt;/p&gt;
 </description>
         <pubDate>Sun, 10 Feb 2019 18:03:00 +0000</pubDate>
-        <link>https://serdarkuzucu.com/bootstrap-4-grid-system</link>
-        <guid isPermaLink="true">https://serdarkuzucu.com/bootstrap-4-grid-system</guid>
+        <link>https://serdarkuzucu.com/bootstrap-4-grid-system/</link>
+        <guid isPermaLink="true">https://serdarkuzucu.com/bootstrap-4-grid-system/</guid>
         
         
         <category>Bootstrap</category>
@@ -1295,8 +1295,8 @@ Sunuculara yapılan otomatikleştirilmiş saldırıların çoğu root kullanıc�
 &lt;p&gt;Bu gecelik söyleyeceklerim veya söylemeyi planladıklarımdan hatırlayabildiklerim bu kadar. Kodlu geceler.&lt;/p&gt;
 </description>
         <pubDate>Mon, 04 Feb 2019 22:42:00 +0000</pubDate>
-        <link>https://serdarkuzucu.com/docker-wordpress-https-nginx-letsencrypt</link>
-        <guid isPermaLink="true">https://serdarkuzucu.com/docker-wordpress-https-nginx-letsencrypt</guid>
+        <link>https://serdarkuzucu.com/docker-wordpress-https-nginx-letsencrypt/</link>
+        <guid isPermaLink="true">https://serdarkuzucu.com/docker-wordpress-https-nginx-letsencrypt/</guid>
         
         
         <category>Docker</category>
@@ -1620,8 +1620,8 @@ Böyle durumlarda yorumlarınız ile beni düzeltmekten geri kalmayın.&lt;/p&gt
 
 </description>
         <pubDate>Mon, 05 Jun 2017 07:59:00 +0000</pubDate>
-        <link>https://serdarkuzucu.com/data-abstraction-nedir-nerede-bulunur</link>
-        <guid isPermaLink="true">https://serdarkuzucu.com/data-abstraction-nedir-nerede-bulunur</guid>
+        <link>https://serdarkuzucu.com/data-abstraction-nedir-nerede-bulunur/</link>
+        <guid isPermaLink="true">https://serdarkuzucu.com/data-abstraction-nedir-nerede-bulunur/</guid>
         
         
         <category>Java</category>
@@ -2000,8 +2000,8 @@ elime geçmesini sabırsızlıkla bekliyorum.&lt;/p&gt;
 
 </description>
         <pubDate>Sun, 28 May 2017 02:12:00 +0000</pubDate>
-        <link>https://serdarkuzucu.com/visitor-design-pattern</link>
-        <guid isPermaLink="true">https://serdarkuzucu.com/visitor-design-pattern</guid>
+        <link>https://serdarkuzucu.com/visitor-design-pattern/</link>
+        <guid isPermaLink="true">https://serdarkuzucu.com/visitor-design-pattern/</guid>
         
         
         <category>Java</category>
@@ -2329,8 +2329,8 @@ insanın sürekli kendisini geliştirdiği bir yolculuktur.&lt;/p&gt;
 &lt;/blockquote&gt;
 </description>
         <pubDate>Sat, 13 May 2017 01:03:00 +0000</pubDate>
-        <link>https://serdarkuzucu.com/adapter-pattern-farkli-sistemler-ayni-arayuz</link>
-        <guid isPermaLink="true">https://serdarkuzucu.com/adapter-pattern-farkli-sistemler-ayni-arayuz</guid>
+        <link>https://serdarkuzucu.com/adapter-pattern-farkli-sistemler-ayni-arayuz/</link>
+        <guid isPermaLink="true">https://serdarkuzucu.com/adapter-pattern-farkli-sistemler-ayni-arayuz/</guid>
         
         
         <category>Java</category>
@@ -3164,8 +3164,8 @@ yine 1 senelik bir ara vermek durumunda kalırsam, 1 sene sonraya kim öle kim k
 
 </description>
         <pubDate>Sat, 06 May 2017 20:18:00 +0000</pubDate>
-        <link>https://serdarkuzucu.com/builder-pattern-kullanarak-daha-temiz-kod-yazmak</link>
-        <guid isPermaLink="true">https://serdarkuzucu.com/builder-pattern-kullanarak-daha-temiz-kod-yazmak</guid>
+        <link>https://serdarkuzucu.com/builder-pattern-kullanarak-daha-temiz-kod-yazmak/</link>
+        <guid isPermaLink="true">https://serdarkuzucu.com/builder-pattern-kullanarak-daha-temiz-kod-yazmak/</guid>
         
         
         <category>Java</category>
@@ -3390,8 +3390,8 @@ Aşağıdaki gibi, parametre seçeneklerimize eşanlamlı seçenekler ekleyelim:
 Umarım işlerinizi çılgınca hızlandırabilecek Shell Script’ler yazabilirsiniz.&lt;/p&gt;
 </description>
         <pubDate>Tue, 07 Jul 2015 23:41:00 +0000</pubDate>
-        <link>https://serdarkuzucu.com/shell-scripts-case-komutu</link>
-        <guid isPermaLink="true">https://serdarkuzucu.com/shell-scripts-case-komutu</guid>
+        <link>https://serdarkuzucu.com/shell-scripts-case-komutu/</link>
+        <guid isPermaLink="true">https://serdarkuzucu.com/shell-scripts-case-komutu/</guid>
         
         
         <category>Bash</category>
@@ -3648,8 +3648,8 @@ Kodlu kalın.
 Herhangi bir soru veya yazı talebiniz için bu yazıya yorum bırakabilirsiniz.&lt;/p&gt;
 </description>
         <pubDate>Mon, 06 Jul 2015 22:27:00 +0000</pubDate>
-        <link>https://serdarkuzucu.com/bellek-ve-disk-istatistiklerini-gosteren-shell-script-gelistirelim</link>
-        <guid isPermaLink="true">https://serdarkuzucu.com/bellek-ve-disk-istatistiklerini-gosteren-shell-script-gelistirelim</guid>
+        <link>https://serdarkuzucu.com/bellek-ve-disk-istatistiklerini-gosteren-shell-script-gelistirelim/</link>
+        <guid isPermaLink="true">https://serdarkuzucu.com/bellek-ve-disk-istatistiklerini-gosteren-shell-script-gelistirelim/</guid>
         
         
         <category>Bash</category>
