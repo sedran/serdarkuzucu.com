@@ -1,1 +1,1 @@
-Sitemap: http://demo.serdarkuzucu.com/sitemap.xml
+Sitemap: https://serdarkuzucu.com/sitemap.xml
