@@ -6,9 +6,413 @@
 </description>
     <link>https://serdarkuzucu.com/</link>
     <atom:link href="https://serdarkuzucu.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 01 Apr 2020 21:20:41 +0000</pubDate>
-    <lastBuildDate>Wed, 01 Apr 2020 21:20:41 +0000</lastBuildDate>
+    <pubDate>Sun, 12 Apr 2020 22:23:25 +0000</pubDate>
+    <lastBuildDate>Sun, 12 Apr 2020 22:23:25 +0000</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
+    
+      <item>
+        <title>Thread Local Nedir?</title>
+        <description>&lt;p&gt;Bu yazıda Java dünyasında sıkça kullanıldığına 
+veya bahsedildiğine şahit olduğumuz &lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; sınıfını inceleyeceğiz.
+&lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; sınıfı belirlediğimiz nesnelerin sadece aynı thread tarafından erişilebilir olmasını sağlar.
+Bu sayede &lt;strong&gt;thread safe&lt;/strong&gt; olmayan nesneleri &lt;strong&gt;thread safe&lt;/strong&gt; kullanmış oluruz.
+Bir &lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; nesnesi içerisine yazdığımız nesne, 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt;‘e yazan thread tarafından çalıştırılan tüm methodlar tarafından okunabilir olacaktır.
+Gelin bu güçlü aracı avantajları ve dezavantajları ile inceleyelim.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;İlk olarak &lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; teknik olarak nedir ona bakalım.
+Java’da her yaratılan &lt;code class=&quot;highlighter-rouge&quot;&gt;Thread&lt;/code&gt; nesnesi içerisinde 
+o &lt;em&gt;Thread&lt;/em&gt;‘e ait &lt;em&gt;ThreadLocal&lt;/em&gt;‘lerin tutulduğu bir map bulunmaktadır.
+İki farklı thread aynı &lt;em&gt;ThreadLocal&lt;/em&gt; nesnesine eriştikleri zaman,
+ThreadLocal nesnesi değerini o an kendisine erişen thread’in içerisindeki &lt;em&gt;Map&lt;/em&gt;‘den okur veya yazar.
+Bu sayede iki farklı &lt;em&gt;Thread&lt;/em&gt; aynı ThreadLocal nesnesi üzerinden farklı değerlere ulaşırlar.&lt;/p&gt;
+
+&lt;h3 id=&quot;nasıl-tanımlanmalı&quot;&gt;Nasıl Tanımlanmalı?&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;new&lt;/code&gt; anahtar kelimesi ile yarattığımız her bir yeni &lt;em&gt;ThreadLocal&lt;/em&gt; nesnesi 
+&lt;em&gt;Thread&lt;/em&gt; içerisindeki Map’de farklı bir key olarak tutulmaktadır.
+Bu sebeple belirli bir amaç için kullanacağımız &lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; nesnesinin 
+sadece tek bir instance’ının olduğundan emin olmalıyız.&lt;/p&gt;
+
+&lt;p&gt;Bunun en kolay yolu da &lt;code class=&quot;highlighter-rouge&quot;&gt;static final&lt;/code&gt; olarak tanımlamaktır.
+Bu sayede oluşturacağımız &lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; nesnesinin aynı &lt;code class=&quot;highlighter-rouge&quot;&gt;ClassLoader&lt;/code&gt; içerisinde 
+sadece tek bir instance’ının olacağını garanti etmiş oluruz.&lt;/p&gt;
+
+&lt;h3 id=&quot;nasıl-kullanılır&quot;&gt;Nasıl Kullanılır?&lt;/h3&gt;
+
+&lt;p&gt;Bu kısımda &lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; üzerindeki method ve constructor’ları inceleyelim.&lt;/p&gt;
+
+&lt;h4 id=&quot;boş-threadlocal-oluşturma&quot;&gt;Boş ThreadLocal Oluşturma&lt;/h4&gt;
+
+&lt;p&gt;İçinde herhangi bir değer taşımayan (null value) bir ThreadLocal, doğrudan boş constructor kullanılarak üretilebilir. 
+Bu ThreadLocal nesnesine erişen her bir Thread &lt;code class=&quot;highlighter-rouge&quot;&gt;get&lt;/code&gt; methodundan &lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt; değerini alacaktır.&lt;/p&gt;
+
+&lt;p&gt;Bu yazıdaki örneklerde çoğunlukla Java’da thread-safe olmayan 
+&lt;a href=&quot;https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html&quot;&gt;SimpleDateFormat&lt;/a&gt; sınıfını
+&lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; içerisinde kullanacağım.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;DATE_FORMAT_THREAD_LOCAL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;threadlocal-değerini-atamak&quot;&gt;ThreadLocal Değerini Atamak&lt;/h4&gt;
+
+&lt;p&gt;Boş veya dolu fark etmeksizin bir ThreadLocal nesnesine &lt;code class=&quot;highlighter-rouge&quot;&gt;set&lt;/code&gt; methodunu kullanarak yeni bir değer atayabilirsiniz.
+Atadığınız değer sadece o değeri atadığınız Thread için geçerli olacaktır.
+Diğer Thread’lerin atayacakları veya okuyacakları değerler tamamen mevcut Thread’inkinden bağımsız olacaktır.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;shouldSetValueToThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;yyyy-MM-dd HH:mm:ss&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;threadlocal-değerini-okumak&quot;&gt;ThreadLocal Değerini Okumak&lt;/h4&gt;
+
+&lt;p&gt;Bir ThreadLocal üzerinde mevcut Thread için tutulmakta olan değeri almak için &lt;code class=&quot;highlighter-rouge&quot;&gt;get&lt;/code&gt; methodu kullanılır.
+Mevcut Thread tarafından değer atanmamış veya başlangıç değeri bulunmayan bir ThreadLocal üzerindeki 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;get&lt;/code&gt; methodunu çağırmak &lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt; değerini dönecektir.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;shouldSetAndGetThreadLocalValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+
+    &lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currentValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;assertNull&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;simpleDateFormat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;yyyy-MM-dd HH:mm:ss&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;simpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;currentValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;assertNotNull&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;assertSame&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;simpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currentValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;başlangıç-değeri-ile-oluşturma&quot;&gt;Başlangıç Değeri ile Oluşturma&lt;/h4&gt;
+
+&lt;p&gt;ThreadLocal nesneleri bir başlangıç değerine sahip olabilir. 
+Bu durumda &lt;code class=&quot;highlighter-rouge&quot;&gt;set&lt;/code&gt; çağırmadan &lt;code class=&quot;highlighter-rouge&quot;&gt;get&lt;/code&gt; methodunu ilk kez çağıran her bir Thread belirlenen initialValue değerini alırlar.
+Bu ilk değer her Thread için farklı olabileceği gibi aynı değer de verilebilir.
+Bu kısım tamamen kullanıcıya kalmış.
+Aşağıda başlangıç değeri ile bir ThreadLocal nesnesi oluşturmanın iki farklı yolunu görelim.&lt;/p&gt;
+
+&lt;h5 id=&quot;initialvalue-methodunun-override-edilmesi&quot;&gt;initialValue Methodunun Override Edilmesi&lt;/h5&gt;
+
+&lt;p&gt;ThreadLocal sınıfı üzerinde bulunan &lt;code class=&quot;highlighter-rouge&quot;&gt;initialValue&lt;/code&gt; methodunun görevi 
+bir ThreadLocal nesnesi için ilk değerin üretilmesidir.
+Bu method ThreadLocal sınıfı içerisinde &lt;code class=&quot;highlighter-rouge&quot;&gt;return null&lt;/code&gt; şeklinde yazılmıştır.&lt;/p&gt;
+
+&lt;p&gt;Aşağıdaki şekilde &lt;code class=&quot;highlighter-rouge&quot;&gt;initialValue&lt;/code&gt; methodunun override edildiği ThreadLocal’den extend eden
+bir anonymous class yazarak kullanacağımız ThreadLocal için bir ilk değer belirleyebiliyoruz.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;shouldGetInitialValueWhenInitialValueMethodIsOverridden&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;initialValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;SimpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;yyyy-MM-dd HH:mm:ss&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currentValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;assertNotNull&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;assertEquals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;yyyy-MM-dd HH:mm:ss&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currentValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toPattern&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h5 id=&quot;static-withinitial-methodu-i̇le-başlangıç-değerinin-verilmesi&quot;&gt;Static &lt;code class=&quot;highlighter-rouge&quot;&gt;withInitial&lt;/code&gt; Methodu İle Başlangıç Değerinin Verilmesi&lt;/h5&gt;
+
+&lt;p&gt;Java 8 ile birlikte gelen static &lt;code class=&quot;highlighter-rouge&quot;&gt;withInitial&lt;/code&gt; methodunu kullanarak 
+başlangıç değeri olan bir ThreadLocal nesnesi yaratabiliriz.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;initialValue&lt;/code&gt; methodunu override ederken anonymous bir sınıf yaratmıştık.
+Bu yöntemde ise ThreadLocal içerisinde tanımlı ThreadLocal’den extend eden
+&lt;code class=&quot;highlighter-rouge&quot;&gt;SuppliedThreadLocal&lt;/code&gt; isimli bir private inner class dönülüyor.&lt;/p&gt;
+
+&lt;p&gt;Bu method parametre olarak bir &lt;code class=&quot;highlighter-rouge&quot;&gt;Supplier&lt;/code&gt; alıyor 
+ve başlangıç değerine ihtiyacı olan her Thread tarafından bu Supplier çağırılıyor.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;shouldGetInitialValueWhenThreadLocalIsConstructedUsingWithInitialMethod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;withInitial&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;yyyy-MM-dd HH:mm:ss&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currentValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;assertNotNull&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;assertEquals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;yyyy-MM-dd HH:mm:ss&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currentValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toPattern&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;threadlocal-değerinin-temizlenmesi&quot;&gt;ThreadLocal Değerinin Temizlenmesi&lt;/h4&gt;
+
+&lt;p&gt;Bir ThreadLocal’e bir Thread tarafından atanan değer yine aynı Thread tarafından temizlenebilir.
+Bu işlem &lt;code class=&quot;highlighter-rouge&quot;&gt;remove&lt;/code&gt; methodu kullanılarak yapılır.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;remove&lt;/code&gt; işlemi sonrası &lt;code class=&quot;highlighter-rouge&quot;&gt;get&lt;/code&gt; methodu &lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt; dönecektir.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;shouldRemoveThreadLocalValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;simpleDateFormat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;yyyy-MM-dd HH:mm:ss&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;simpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currentValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;assertNotNull&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;assertSame&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;simpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;currentValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;currentValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;assertNull&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;currentValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;inheritablethreadlocal-sınıfı&quot;&gt;InheritableThreadLocal Sınıfı&lt;/h4&gt;
+
+&lt;p&gt;Bu sınıf da bir ThreadLocal çeşidi olmakta olup, özelliği şudur:
+Bu türdeki ThreadLocal’in üzerindeki mevcut Thread’e ait değer,
+çocuk Thread’lere aktarılır.
+Çocuk Thread nedir? Mevcut Thread tarafından oluşturulmuş Thread’ler, mevcut thread’in çocuklarıdır.&lt;/p&gt;
+
+&lt;p&gt;Aşağıdaki örnekte oluşturulan yeni Thread’de parent Thread’in ThreadLocal değerinin aktarıldığını görebiliyoruz.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;inheritableThreadLocalShouldInheritValuesToChild&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;InterruptedException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;InheritableThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Demo Value&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AtomicReference&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;valueInThread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AtomicReference&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;thread&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;valueInThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;threadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;thread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;assertEquals&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Demo Value&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;valueInThread&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;kullanım-alanları&quot;&gt;Kullanım Alanları&lt;/h3&gt;
+
+&lt;p&gt;Bir değerin bir Thread içerisinde her yerden ulaşılabilir olmasını isteyebileceğimiz
+bir çok durumda ThreadLocal kullanılabilir. 
+Gördüğüm birkaç örneği aşağıda paylaşıyorum.
+Sizler de bildiğiniz ThreadLocal kullanım alanlarını yorum olarak paylaşabilirseniz
+birlikte daha fazla şey öğrenebiliriz.&lt;/p&gt;
+
+&lt;h4 id=&quot;kullanıcının-tanınması-authentication&quot;&gt;Kullanıcının Tanınması (Authentication)&lt;/h4&gt;
+
+&lt;p&gt;Bir kullanıcının yaptığı işlem eğer sisteme girişinden çıkışına kadar 
+hep aynı Thread içerisinde akışına devam ediyorsa,
+kullanıcıya ait giriş bilgileri ThreadLocal üzerinde tutulabilir.&lt;/p&gt;
+
+&lt;p&gt;Mesela bir HTTP server uygulamasında 
+kullanıcının Cookie’sinde gönderdiği bir bilgi okunup bir cache server 
+veya veritabanı üzerinden kullanıcı bilgisi çekiliyorsa,
+bu değer ThreadLocal üzerinde tutularak 
+çağırılan tüm methodlar tarafından kullanıcı bilgisinin erişilebilir olması sağlanabilir.&lt;/p&gt;
+
+&lt;p&gt;Örnek olarak Spring Security bir takım filtreler kullanarak 
+gelen HTTP isteğinin hangi kullanıcı tarafından yapıldığını anlar
+ve &lt;code class=&quot;highlighter-rouge&quot;&gt;SecurityContextHolder&lt;/code&gt; içerisine kullanıcı verisini yazar.
+Bu sınıf varsayılan olarak ThreadLocal kullanmaktadır.
+İstek Controller veya servis katmanlarımıza geldiğinde istersek &lt;code class=&quot;highlighter-rouge&quot;&gt;SecurityContextHolder&lt;/code&gt; üzerinden
+kullanıcı bilgisine static methodlar kullanarak ulaşabiliyoruz.&lt;/p&gt;
+
+&lt;h4 id=&quot;thread-safe-olmayan-sınıfların-singleton-gibi-kullanılması&quot;&gt;Thread-Safe Olmayan Sınıfların Singleton Gibi Kullanılması&lt;/h4&gt;
+
+&lt;p&gt;Yeni nesnesinin oluşturulması pahalı olan sınıfları genellikle singleton yapmaya çalışıyoruz.
+Fakat kullandığımız sınıf thread-safe değilse orada çuvallayabiliriz.
+Birden fazla thread, thread-safe olmayan singleton bir nesneye eriştiğinde
+bu nesnenin state’inde bir takım istenmeyen sonuçlar ortaya çıkabilir.&lt;/p&gt;
+
+&lt;p&gt;Bu durumda oluşturması maliyetli nesnemizi 
+uygulama genelinde tek instance olan bir singleton olarak tanımlamak yerine,
+her thread’de bir instance’ı olacak şekilde oluşturabiliriz.&lt;/p&gt;
+
+&lt;p&gt;Örnek olarak yukarıdaki örneklerde de kullandığım &lt;code class=&quot;highlighter-rouge&quot;&gt;SimpleDateFormat&lt;/code&gt; sınıfını verebilirim.
+Bu sınıf thread-safe olmadığı için global değişken olarak kullanılamıyor.
+Onun yerine bu sınıfın ya her methodda yeni bir nesnesinin oluşturulması gerekiyor
+ya da ThreadLocal üzerinde tutulması gerekiyor.&lt;/p&gt;
+
+&lt;h4 id=&quot;bir-i̇şlemi-başından-sonuna-kadar-takip-edebilmek&quot;&gt;Bir İşlemi Başından Sonuna Kadar Takip Edebilmek&lt;/h4&gt;
+
+&lt;p&gt;Eğer bir işlem başladığında ThreadLocal’e bir değer girersek ve bittiğinde o değeri silersek,
+işlem boyunca aynı thread içerisinde olup biten tüm işlemlerde bu değeri görebiliriz.&lt;/p&gt;
+
+&lt;p&gt;Bu sayede bir method yapmakta olduğu işi hangi context içerisinde yaptığını bilmek isterse
+ThreadLocal’den alabilir.&lt;/p&gt;
+
+&lt;p&gt;Örnek olarak logging kütüphanelerindeki MDC yapısı verilebilir.
+MDC yapısını kullanarak bir işin başından sonuna kadar loglara aynı değerin yazılmasını sağlayabiliriz.
+Örneğin sisteme gelen her istek için unique bir TransactionId üretiyoruz 
+ve bu istek sırasında yazılan tüm loglarda bu TransactionId değerini görüyoruz.&lt;/p&gt;
+
+&lt;p&gt;MDC ile log takibi yapmak ile ilgili daha önce yazmış olduğum bir yazı için tıklayın:
+&lt;a href=&quot;/slf4j-mdc-kullanarak-log-takibini-kolaylastirma/&quot;&gt;Slf4j: MDC Kullanarak Log Takibini Kolaylaştırma&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;dikkat&quot;&gt;Dikkat!&lt;/h3&gt;
+
+&lt;p&gt;Global değişken kullanmanın yazılımın tasarımı açısından kötü olduğu konusunda 
+birçok yazılım geliştirici uzun zamandır hemfikir. 
+ThreadLocal kavramı da global variable kavramına çok yakın olduğu için zorunlu kalınmadıkça kullanılmamalıdır.
+Mümkün olduğunda ThreadLocal kullanmak yerine 
+methodlara ilgili değerler parametre geçilebilir, 
+cache kütüphaneleri kullanılabilir 
+veya çeşitli dependency injection yöntemleri kullanılabilir.&lt;/p&gt;
+
+&lt;p&gt;Yazılım geliştirirken fark ettiğim problemlerden birisi de 
+ThreadLocal kullanılan sınıfların unit testini yazmanın
+dependency injection ile yazılmış sınıfların testini yazmaktan daha zor olduğudur.&lt;/p&gt;
+
+&lt;p&gt;Ayrıca ThreadLocal’lerin kullanıldıkları context’lere göre
+dikkat edilmesi gereken bazı hususlar ortaya çıkmaktadır.&lt;/p&gt;
+
+&lt;p&gt;Bunlardan en yaygınları memory leak’ler 
+ve yanlış değerlerin yanlış Thread’lerde bulunması durumlarıdır.&lt;/p&gt;
+
+&lt;p&gt;Öncelikle memory leak oluşma durumuna bir bakalım.&lt;/p&gt;
+
+&lt;h4 id=&quot;classloader-leak&quot;&gt;ClassLoader Leak&lt;/h4&gt;
+
+&lt;p&gt;Application Server dediğimiz tomcat, weblogic ve jboss gibi uygulamalara 
+birden fazla farklı uygulamayı yükleyebiliyoruz.
+Application Server’lar kendileri de bir java process’i olduğu için 
+bir Application Server’a yüklediğimiz tüm bu uygulamalar tek bir JVM içerisinde çalışıyorlar.&lt;/p&gt;
+
+&lt;p&gt;Application Server ise uygulamaların arasındaki ayrımı sağlayabilmek için 
+hepsine ayrı ClassLoader nesnesi yaratır. 
+Bu uygulamalar ve onların bağımlı olduğu kütüphaneler bu ClassLoader tarafından JVM’e yüklenir.&lt;/p&gt;
+
+&lt;p&gt;Belirli bir uygulamayı kapatıp açarken veya yeni bir versiyonunu canlıya alırken
+Application Server ilgili uygulamayı kapatır 
+ve bağlı olduğu ClassLoader da Garbage Collector tarafından yok edilir.&lt;/p&gt;
+
+&lt;p&gt;Application Server’larda gelen HTTP istekleri işlemek için kullandığı bir Thread Pool bulunur.
+Bu ThreadPool’daki Thread’ler genellikle Application Server ayakta olduğu sürece yaşarlar.
+Eğer Application Server’a yüklü bir uygulama HTTP isteğini yorumlarken ThreadLocal’e bir şey yazarsa 
+ve bu isteğe cevap verirken ThreadLocal’e yazdığı değerleri silmezse 
+bu değer Application Server’a ait olan Thread’in üzerinde kalır.&lt;/p&gt;
+
+&lt;p&gt;Application Server üzerindeki bir uygulamayı kapatırken eğer Application Server’ın ThreadLocal’i üzerinde
+kapatılmakta olan uygulanın ClassLoader’ı tarafından JVM’e yüklenmiş bir sınıfa ait bir nesne kaldıysa,
+bu nesne tüm ClassLoader’ın Garbage Collector tarafından silinmesini engeller.
+Bir ClassLoader belki binlerce sınıfı memory’ye yükleyeceği için Garbage Collect olmaması çok büyük problemdir.
+Uygulama Application Server üzerinde tekrar ayağa kaldırılırken yepyeni bir ClassLoader oluşturulur
+ve yeniden tüm class’lar load edilir.
+Bu şekilde uygulamalar aç/kapa yaptıkça Application Server üzerinde ClassLoader’lar birikecektir
+ve nihayetinde &lt;code class=&quot;highlighter-rouge&quot;&gt;java.lang.OutOfMemoryError: PermGen space&lt;/code&gt; hatası alınacaktır.
+Bu noktadan sonra artık Application Server’ın restart edilmesi gerekecektir.&lt;/p&gt;
+
+&lt;p&gt;Eğer Application Server Thread’lerinin üzerine bir ThreadLocal yazılıyorsa
+bunun iş biterken silindiğinden emin olunması gerekir.&lt;/p&gt;
+
+&lt;p&gt;Bu sebeple ThreadLocal yazıldıktan sonraki işlem &lt;code class=&quot;highlighter-rouge&quot;&gt;try/finally&lt;/code&gt; bloğu ile yazılmalı.
+Ben aşağıdaki gibi yazıyorum genellikle:&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;UserContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;USER_CONTEXT_THREAD_LOCAL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
+
+&lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;doFilter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ServletRequest&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ServletResponse&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FilterChain&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;chain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 
+  &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;IOException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ServletException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+  
+  &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UserContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;userContext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UserContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// do some work to fill userContext...&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// other stuff...&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// things...&lt;/span&gt;
+    &lt;span class=&quot;no&quot;&gt;USER_CONTEXT_THREAD_LOCAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;userContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;chain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;doFilter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;request&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;finally&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;no&quot;&gt;USER_CONTEXT_THREAD_LOCAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;threadlocal-değerinin-i̇stenmeyen-yerlere-gitmesi&quot;&gt;ThreadLocal Değerinin İstenmeyen Yerlere Gitmesi&lt;/h4&gt;
+
+&lt;p&gt;Yukarıdaki ClassLoader leak konusuna çok benziyor. 
+Eğer bir ThreadLocal set ediyorsak çok büyük ihtimalle aynı method içerisinde onu silme fırsatımız olacaktır.&lt;/p&gt;
+
+&lt;p&gt;Örneğin bir ExecutorService kullanıyorsak ve ona çalıştırması için verdiğimiz Runnable sınıfında ThreadLocal
+kullanımı yapıyorsak, aynı Runnable içerisinde bu ThreadLocal’i silmeliyiz.
+Yoksa ExecutorService aynı thread’leri kullanarak başka işleri de koşacağı için 
+ThreadLocal’e set ettiğimiz değer alakasız başka işler tarafından erişilebilir olacaktır.&lt;/p&gt;
+
+&lt;p&gt;Aynı zamanda executorService’e submit ettiğimiz Runnable ayrı bir thread tarafından çalıştırılacağı için,
+&lt;code class=&quot;highlighter-rouge&quot;&gt;executorService.submit()&lt;/code&gt; methodunu çağırdığımız thread’deki ThreadLocal’leri görmeyecektir.&lt;/p&gt;
+
+&lt;p&gt;Aşağıdaki kodda executorService’e bir task verilmeden önce oradaki iş parçacığı ile paylaşmak istediğimiz
+ThreadLocal değeri önce bir değişkene aktarılıyor.
+Daha sonra executorService’in içerisinde işi çalıştıran Thread’in ThreadLocal’ine tekrar set ediliyor.
+Daha önemlisi, executorService’deki işimiz bittiğinde &lt;code class=&quot;highlighter-rouge&quot;&gt;finally&lt;/code&gt; bloğu içerisinde ThreadLocal’i tekrar temizliyoruz.
+Bu sayede ExecutorService tarafından yapılan diğer işlere fazladan bilgi vermemiş oluyoruz.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;executeBatchTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;UserContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;userContext&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;USER_CONTEXT_THREAD_LOCAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+    
+    &lt;span class=&quot;n&quot;&gt;executorService&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;submit&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;no&quot;&gt;USER_CONTEXT_THREAD_LOCAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;userContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;// Do work in executor thread &lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;finally&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;no&quot;&gt;USER_CONTEXT_THREAD_LOCAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;remove&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;bitiriyoruz&quot;&gt;Bitiriyoruz&lt;/h3&gt;
+
+&lt;p&gt;ThreadLocal hakkında söylenebilecek her şey bu kadar değildir elbette.
+Elimden geldiğince hakkında bildiklerimi anlatmaya çalıştım.&lt;/p&gt;
+
+&lt;p&gt;Her ne kadar hatalı kullandığımız bir ThreadLocal ile production sistemlerinde başımızı belaya sokabilecek olsak da,
+meşhur büyüğümüz &lt;a href=&quot;https://en.wikipedia.org/wiki/Joshua_Bloch&quot;&gt;Joshua Bloch&lt;/a&gt; array ile de bunu yapabilirsiniz demiş :)&lt;/p&gt;
+
+&lt;p&gt;Bu sebeple Joshua Bloch’un bu konudaki aşağıdaki meşhur alıntısıyla bitiriyorum:&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;“Can you cause unintended object retention with thread locals? 
+Sure you can. 
+But you can do this with arrays too. 
+That doesn’t mean that thread locals (or arrays) are bad things. 
+Merely that you have to use them with some care. 
+The use of thread pools demands extreme care. 
+Sloppy use of thread pools in combination with sloppy use of thread locals can cause unintended object retention, 
+as has been noted in many places. 
+But placing the blame on thread locals is unwarranted.” 
+    - Joshua Bloch&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;kaynaklar&quot;&gt;Kaynaklar&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.oracle.com/javase/8/docs/api/java/lang/ThreadLocal.html&quot;&gt;https://docs.oracle.com/javase/8/docs/api/java/lang/ThreadLocal.html&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.oracle.com/javase/8/docs/api/java/lang/InheritableThreadLocal.html&quot;&gt;https://docs.oracle.com/javase/8/docs/api/java/lang/InheritableThreadLocal.html&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://tutorials.jenkov.com/java-concurrency/threadlocal.html&quot;&gt;http://tutorials.jenkov.com/java-concurrency/threadlocal.html&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.baeldung.com/java-threadlocal&quot;&gt;https://www.baeldung.com/java-threadlocal&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://stackoverflow.com/questions/40079616/what-is-classloader-leak&quot;&gt;https://stackoverflow.com/questions/40079616/what-is-classloader-leak&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://stackoverflow.com/questions/817856/when-and-how-should-i-use-a-threadlocal-variable&quot;&gt;https://stackoverflow.com/questions/817856/when-and-how-should-i-use-a-threadlocal-variable&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://stackoverflow.com/questions/17008906/what-is-the-use-and-need-of-thread-local&quot;&gt;https://stackoverflow.com/questions/17008906/what-is-the-use-and-need-of-thread-local&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://plumbr.io/blog/locked-threads/how-to-shoot-yourself-in-foot-with-threadlocals&quot;&gt;https://plumbr.io/blog/locked-threads/how-to-shoot-yourself-in-foot-with-threadlocals&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Sun, 12 Apr 2020 21:50:00 +0000</pubDate>
+        <link>https://serdarkuzucu.com/2020/04/13/thread-local-nedir-java/</link>
+        <guid isPermaLink="true">https://serdarkuzucu.com/2020/04/13/thread-local-nedir-java/</guid>
+        
+        
+        <category>Java</category>
+        
+        <category>Programlama</category>
+        
+      </item>
     
       <item>
         <title>Slf4j: MDC Kullanarak Log Takibini Kolaylaştırma</title>
@@ -3392,264 +3796,6 @@ Umarım işlerinizi çılgınca hızlandırabilecek Shell Script’ler yazabilir
         <pubDate>Tue, 07 Jul 2015 23:41:00 +0000</pubDate>
         <link>https://serdarkuzucu.com/shell-scripts-case-komutu/</link>
         <guid isPermaLink="true">https://serdarkuzucu.com/shell-scripts-case-komutu/</guid>
-        
-        
-        <category>Bash</category>
-        
-        <category>Programlama</category>
-        
-        <category>Linux</category>
-        
-      </item>
-    
-      <item>
-        <title>Bellek ve Disk İstatistiklerini Gösteren Shell Script Geliştirelim</title>
-        <description>&lt;p&gt;Merhaba arkadaşlar. 
-Bu yazıda, shell script yazma konusunda geliştirdiğimiz becerileri, 
-bir takım linux komutlarını ve özelliklerini kullanarak basit bir program yazacağız. 
-Bu program, format edilmiş bir şekilde bellekteki ve sabit disklerimizdeki boş alanı gösterecek. 
-Bu yazıyı bazı komutların üzerinde durmak istediğim için adım adım yazacağım. 
-Öncelikle kemerlerimizi bağlıyoruz.&lt;/p&gt;
-
-&lt;!--more--&gt;
-
-&lt;h2 id=&quot;disk-kullanımını-görmek&quot;&gt;Disk Kullanımını Görmek&lt;/h2&gt;
-
-&lt;p&gt;Öncelikle hard disklerimizi ve toplam/kullanılan/boş alanları nasıl görebileceğimize bakalım. 
-Ben bu işlem için linux’da varolan &lt;code class=&quot;highlighter-rouge&quot;&gt;df -h&lt;/code&gt; komutunu kullanıyorum. 
-Diskler çok büyük depolama alanları olduğu için, bu komuttan gigabyte değerinde ölçüm alıyoruz.&lt;/p&gt;
-
-&lt;p&gt;Bir terminal açıp, &lt;code class=&quot;highlighter-rouge&quot;&gt;df -h&lt;/code&gt; komutunu yazdığınızda, aşağıdakine benzer bir output alacaksınız.&lt;/p&gt;
-
-&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;sedrik@localhost ~ $&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;Filesystem      Size  Used Avail Use% Mounted on
-udev            5,9G     0  5,9G   0% /dev
-tmpfs           1,2G  9,4M  1,2G   1% /run
-/dev/sda1       129G   21G  102G  17% /
-tmpfs           5,9G  754M  5,1G  13% /dev/shm
-tmpfs           5,0M  4,0K  5,0M   1% /run/lock
-tmpfs           5,9G     0  5,9G   0% /sys/fs/cgroup
-/dev/sda6        90G   48G   38G  56% /appdata
-cgmfs           100K     0  100K   0% /run/cgmanager/fs
-tmpfs           1,2G     0  1,2G   0% /run/user/1001
-tmpfs           1,2G   56K  1,2G   1% /run/user/1000
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Ben diskimi iki partition’a bölmüştüm ve birinci partition’ı &lt;code class=&quot;highlighter-rouge&quot;&gt;/&lt;/code&gt; adresine mount etmiştim. 
-Bu yüzden &lt;code class=&quot;highlighter-rouge&quot;&gt;/dev/sda1&lt;/code&gt; satırındaki disk kullanımı, birinci partition’ıma ait.&lt;/p&gt;
-
-&lt;p&gt;İkinci partition’ımı da &lt;code class=&quot;highlighter-rouge&quot;&gt;/appdata&lt;/code&gt; adresine mount etmiştim. 
-Bu yüzden &lt;code class=&quot;highlighter-rouge&quot;&gt;/dev/sda6&lt;/code&gt; satırındaki disk kullanımı, ikinci partition’ıma ait. 
-Siz de diskinizi iyi tanımalı ve bu aşamada hangi partition’ların 
-kullanım istatistiklerini kontrol etmek istediğinize karar vermelisiniz.&lt;/p&gt;
-
-&lt;h2 id=&quot;bellek-kullanımını-görmek&quot;&gt;Bellek Kullanımını Görmek&lt;/h2&gt;
-
-&lt;p&gt;Şimdi de bellekteki toplam/kullanılan/boş alanları nasıl öğrenebileceğimize bakalım. 
-Bu işlem için &lt;code class=&quot;highlighter-rouge&quot;&gt;free -m&lt;/code&gt; komutunu kullanıyorum ben. &lt;code class=&quot;highlighter-rouge&quot;&gt;-m&lt;/code&gt; seçeneğini kullandığımızda değerleri megabyte cinsinden veriyor. 
-Şimdi bir terminal açıp &lt;code class=&quot;highlighter-rouge&quot;&gt;free -m&lt;/code&gt; komutunu yazarsanız, aşağıdakine benzer bir output alabilirsiniz:&lt;/p&gt;
-
-&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;sedrik@localhost ~ $&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;free &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt;
-&lt;span class=&quot;go&quot;&gt;             total       used       free     shared    buffers     cached
-Mem:         11922       9844       2078       1129        223       7111
--/+ buffers/cache:       2509       9412
-Swap:         1951          0       1951
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Benim gibi siz de yanılabilirsiniz bu komutu kullandığınızda. 
-İlk satırdaki kullanılan ve boş bellek miktarı, aslında fiziksel olarak doğru değerler. 
-Fakat ubuntu, RAM’de boş yer bulduğunda işlemlerimizde zaman kazandırmak için disk cache yapıyor, 
-yani sabit diskimizdeki sık kullandığımız veya kullanma ihtimalimiz olan bilgileri RAM’e kopyalıyor. 
-Eğer RAM’e ihtiyacımız olursa aniden, bu yedeklediği bilgileri RAM’den siliyor. 
-Dolayısı ile bellek kullanımını monitör etmek istediğimizde, birinci satırdaki bilgileri değil, 
-ikinci satırdaki bilgileri kullanırsak daha doğru sonuç elde ediyoruz, içimiz kararmıyor. 
-İkinci satırda, disk cache için kullanılmış alanları da free sütununa ekleyerek gösteriyor.&lt;/p&gt;
-
-&lt;h2 id=&quot;komut-sonuçlarından-i̇stenilen-bilgilerin-alınması&quot;&gt;Komut Sonuçlarından İstenilen Bilgilerin Alınması&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;df -h&lt;/code&gt; ve &lt;code class=&quot;highlighter-rouge&quot;&gt;free -m&lt;/code&gt; şeklinde iki komut gördük. 
-Uzun uzun sonuçlar veriyorlar, kafalarına göre formatlıyorlar. 
-Peki bu sonuçlardan nasıl istediğimiz bilgileri alıp değişkenlere aktarırız?&lt;/p&gt;
-
-&lt;p&gt;Öncelikle istediğimiz satırları alarak başlayalım. 
-Pipe (&lt;code class=&quot;highlighter-rouge&quot;&gt;|&lt;/code&gt;) karakteri, bir komuttan çıkan sonucu diğer komuta input olarak vermemizi sağlıyor. 
-Örneğin &lt;code class=&quot;highlighter-rouge&quot;&gt;df -h | grep &quot;/dev/sda1&quot;&lt;/code&gt; komutunu yazdığımızda, 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;df -h&lt;/code&gt; komutundan çıkan sonucu &lt;code class=&quot;highlighter-rouge&quot;&gt;grep&lt;/code&gt; komutuna vermiş oluyoruz. 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;grep&lt;/code&gt; komutu da, kendine gelen inputun içerisinden sadece 
-istediğimiz anahtar kelimeyi içeren satırları output olarak veriyor, diğerlerini eliyor.&lt;/p&gt;
-
-&lt;p&gt;Böylece istediğimiz sabit diske ait istatistikleri tek bir satır halinde bir değişkene aktarabiliyoruz. 
-Aşağıdaki kodda benim iki partition’ıma ait istatistikleri &lt;code class=&quot;highlighter-rouge&quot;&gt;DISK1&lt;/code&gt; ve &lt;code class=&quot;highlighter-rouge&quot;&gt;DISK2&lt;/code&gt; isimli değişkenlere aktarmış olduk.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# Shows user friendly disk usage&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;DISK1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda1&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DISK2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda6&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Şimdi bu satırlardan toplam disk boyutu, kullanılan alan ve boş alan istatistiklerini ayıklayalım. 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;df -h&lt;/code&gt; komutunu çalıştırdığınızda farketmişsinizdir ki, toplam disk boyutu 2. sütunda yer alıyor. 
-Kullanılan disk boyutu 3. sütunda, diskteki boş alan da 4. sütunda yer alıyor. 
-Peki elimizdeki satırlardan sütunları nasıl ayıklıyoruz? &lt;code class=&quot;highlighter-rouge&quot;&gt;awk&lt;/code&gt; komutu ile!&lt;/p&gt;
-
-&lt;p&gt;Bir programın outputunu pipe (&lt;code class=&quot;highlighter-rouge&quot;&gt;|&lt;/code&gt;) karakteri ile &lt;code class=&quot;highlighter-rouge&quot;&gt;awk '{print $1}'&lt;/code&gt; komutuna vermek, 
-ekrana o çıkıdaki birinci sütunun değerinin yazılmasını sağlıyor. 
-Biz ise 2. 3. ve 4. sütunlara ihtiyaç duyuyoruz, 
-o yüzden &lt;code class=&quot;highlighter-rouge&quot;&gt;awk&lt;/code&gt; komutumuzdaki print edilen sayıyı değiştirmemiz gerekiyor.&lt;/p&gt;
-
-&lt;p&gt;Aşağıdaki kod parçası, iki diskin de kullanım istatistiklerini TOTAL, USED ve FREE olmak üzere üçer değişkene bölüyor.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# Shows user friendly disk usage&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;DISK1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda1&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DISK2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda6&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;DISK1_TOTAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DISK1_USED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $3}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DISK1_FREE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $4}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;DISK2_TOTAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DISK2_USED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $3}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DISK2_FREE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $4}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Şimdi bellek ile ilgili istatistiklere bakalım. 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;free -m&lt;/code&gt; komutu ile bunu yapacağımızdan bahsetmiştik. 
-Toplam RAM boyutumuzu, &lt;code class=&quot;highlighter-rouge&quot;&gt;free -m&lt;/code&gt; komutunda içerisinde “Mem” anahtar kelimesi geçen satırın 2. sütunu söylüyor. 
-Bu yüzden bu bilgiyi &lt;code class=&quot;highlighter-rouge&quot;&gt;free -m | grep &quot;Mem&quot; | awk '{print $2}'&lt;/code&gt; şeklinde alacağız.&lt;/p&gt;
-
-&lt;p&gt;Kullanılan ve boş alanları ise &lt;code class=&quot;highlighter-rouge&quot;&gt;free -m&lt;/code&gt; komutunun “buffers/cache” 
-anahtar kelimesi geçen satırının 3. ve 4. sütunları içeriyor. 
-Bu yüzden kullanılan RAM bilgisini &lt;code class=&quot;highlighter-rouge&quot;&gt;free -m | grep &quot;buffers/cache&quot; | awk '{print $3}'&lt;/code&gt; komutuyla öğrenirken, 
-boş RAM bilgisini de &lt;code class=&quot;highlighter-rouge&quot;&gt;free -m | grep &quot;buffers/cache&quot; | awk '{print $4}'&lt;/code&gt; komutuyla öğreneceğiz. 
-Aşağıda, kodumuza bellek istatistiklerinin de eklenmiş hali mevcut.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# Shows user friendly disk usage&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;DISK1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda1&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DISK2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda6&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;DISK1_TOTAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DISK1_USED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $3}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DISK1_FREE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $4}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;DISK2_TOTAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DISK2_USED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $3}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DISK2_FREE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $4}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;MEMORY_TOTAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;free &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Mem&quot;&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;MEMORY_USED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;free &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;buffers/cache&quot;&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $3}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;MEMORY_FREE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;free &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;buffers/cache&quot;&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $4}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;bilgileri-ekrana-güzelce-yazdıralım&quot;&gt;Bilgileri Ekrana Güzelce Yazdıralım&lt;/h2&gt;
-
-&lt;p&gt;Herşey iyi güzel de, komutu çalıştırınca hala ekranda birşey göremiyoruz diyor musunuz? 
-Çünkü ekrana hiçbir şey yazdırmadık. Şimdi &lt;code class=&quot;highlighter-rouge&quot;&gt;echo&lt;/code&gt; ve &lt;code class=&quot;highlighter-rouge&quot;&gt;printf&lt;/code&gt; komutları eşliğinde ekrana bu değerleri yazdıralım.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;echo&lt;/code&gt; kullanmayı hepiniz biliyorsunuzdur.
-&lt;code class=&quot;highlighter-rouge&quot;&gt;pritf&lt;/code&gt; kullanmak ise biraz daha zahmetli ama sonu çok güzel bitiyor. 
-Bu komuta ilk parametre olarak kullanmak istediğiniz formatı geçiyorsunuz. 
-Örneğin 3 kelimeyi 10 karakterlik sütunlara sığdırmak ve aralarına pipe karakteri koymak istiyorsanız, 
-şu şekilde &lt;code class=&quot;highlighter-rouge&quot;&gt;printf&lt;/code&gt; yazmanız yeterli:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;| %-10s | %-10s | %-10s |n&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Kelime1&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Kelime2&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Kelime3&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Sonuç olarak size şunu dönecektir:&lt;/p&gt;
-
-&lt;div class=&quot;language-text highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;| Kelime1    | Kelime2    | Kelime3    |
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Şimdi kodumuza birazcık sanat ekleyelim ve son halini verelim. 
-Yukarıda hesapladığımız tüm değişkenleri güzel güzel ekrana yazdıralım. Bendeki kodun son hali şöyle:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# Shows user friendly disk usage&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;DISK1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda1&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DISK2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-h&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda6&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;DISK1_TOTAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DISK1_USED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $3}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DISK1_FREE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK1&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $4}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;DISK2_TOTAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DISK2_USED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $3}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DISK2_FREE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$DISK2&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $4}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;MEMORY_TOTAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;free &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Mem&quot;&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;MEMORY_USED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;free &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;buffers/cache&quot;&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $3}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;MEMORY_FREE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;free &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;buffers/cache&quot;&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $4}'&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;TABLE_FORMAT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;| %-10s | %-10s | %-10s | %-10s |n&quot;&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;DIVIDER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;+------------+------------+------------+------------+&quot;&lt;/span&gt;
-
-&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$DIVIDER&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TABLE_FORMAT&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Storage&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Size&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Used&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Free&quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$DIVIDER&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TABLE_FORMAT&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda1&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DISK1_TOTAL&lt;/span&gt;:0:-1&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; GB&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DISK1_USED&lt;/span&gt;:0:-1&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; GB&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DISK1_FREE&lt;/span&gt;:0:-1&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; GB&quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TABLE_FORMAT&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;/dev/sda6&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DISK2_TOTAL&lt;/span&gt;:0:-1&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; GB&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DISK2_USED&lt;/span&gt;:0:-1&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; GB&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;DISK2_FREE&lt;/span&gt;:0:-1&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; GB&quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;printf&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$TABLE_FORMAT&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Memory&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$MEMORY_TOTAL&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; MB&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$MEMORY_USED&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; MB&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$MEMORY_FREE&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; MB&quot;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$DIVIDER&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Şimdi bu kodu &lt;code class=&quot;highlighter-rouge&quot;&gt;monitor&lt;/code&gt; ismiyle bir yere kaydedelim. 
-Ben şu şekilde kaydediyorum: ~/myscripts/monitor&lt;/p&gt;
-
-&lt;p&gt;Daha sonra &lt;code class=&quot;highlighter-rouge&quot;&gt;chmod +x ~/myscripts/monitor&lt;/code&gt; komutunu çağırarak yazdığımız script’in çalışabilmesini sağlıyoruz.&lt;/p&gt;
-
-&lt;p&gt;Şimdi komutumuzu terminalden şu şekilde çalıştırabiliriz: &lt;code class=&quot;highlighter-rouge&quot;&gt;~/myscripts/monitor&lt;/code&gt;. Bize şuna benzer bir sonuç verecektir:&lt;/p&gt;
-
-&lt;pre class=&quot;language-bash command-line&quot; data-output=&quot;2-10&quot; data-user=&quot;sedrik&quot; data-host=&quot;localhost&quot;&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;
-
-&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;sedrik@localhost ~ $&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;~/myscripts/monitor
-&lt;span class=&quot;go&quot;&gt;+------------+------------+------------+------------+
-| Storage    | Size       | Used       | Free       |
-+------------+------------+------------+------------+
-| /dev/sda1  | 129 GB     | 21 GB      | 102 GB     |
-| /dev/sda6  | 90 GB      | 48 GB      | 38 GB      |
-| Memory     | 11922 MB   | 2552 MB    | 9370 MB    |
-+------------+------------+------------+------------+
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;alias-tanımlayarak-kodumuza-her-yerden-erişelim&quot;&gt;Alias Tanımlayarak Kodumuza Her Yerden Erişelim&lt;/h2&gt;
-
-&lt;p&gt;Şimdi bu yazdığımız koda hep ~/myscripts klasörü altından mı erişeceğiz? 
-Haydi gelin bir de alias tanımlaması yapalım da, her yerden tek bir kelime ile bu kodumuzu çalıştırabilelim.&lt;/p&gt;
-
-&lt;p&gt;Alias tanımlamak için, &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.bashrc&lt;/code&gt; veya &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.bash_aliases&lt;/code&gt; dosyalarından birisini 
-gedit programı yardımıyla düzenleyelim. 
-Ben alias tanımlamak içni &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.bash_aliases&lt;/code&gt; dosyasını tavsiye ediyorum, adından belli. 
-Şu komutla açabiliriz bu dosyayı: &lt;code class=&quot;highlighter-rouge&quot;&gt;gedit ~/.bash_aliases&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;Açılan gedit penceresinde, aşağıdaki satırı ekleyelim ve kaydedip kapatalım:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;alias &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;monitor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;~/myscripts/monitor
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Daha sonra da terminal pencerelerimizi kapatalım ve tekrar açalım. 
-Böylelikle &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.bash_aliases&lt;/code&gt; dosyası terminale tekrar yüklenmiş olacak. 
-Artık terminalde hangi klasörde olursak olalım, &lt;code class=&quot;highlighter-rouge&quot;&gt;monitor&lt;/code&gt; yazarak programımızı çalıştırabiliriz.&lt;/p&gt;
-
-&lt;p&gt;Bu arada kodun içinde bir yerlerde &lt;code class=&quot;highlighter-rouge&quot;&gt;${DISK2_USED:0:-1} GB&lt;/code&gt; kullandığımı görmüş 
-ve dikkatinizi çekmiş olabilir. &lt;code class=&quot;highlighter-rouge&quot;&gt;df -h&lt;/code&gt; komutu bize sayıların sonuna Gigabyte’ın G’sini ekleyerek veriyor. 
-Örneğin: 12G. Biz bunu istemiyoruz. 
-O kod, &lt;code class=&quot;highlighter-rouge&quot;&gt;DISK2_USED&lt;/code&gt; değişkeninin son karakterini yani ‘G’ karakterini silmeye yarıyor. 
-Daha sonra kendim elle bir boşluk bırakıp ‘GB’ yazıyorum. 
-Daha estetik görünüyor.&lt;/p&gt;
-
-&lt;p&gt;Efendim hevesle yazdığım bir yazımın daha sonuna geldim. 
-Hepinize iyi programlamalar dilerim. 
-Kodlu kalın. 
-Herhangi bir soru veya yazı talebiniz için bu yazıya yorum bırakabilirsiniz.&lt;/p&gt;
-</description>
-        <pubDate>Mon, 06 Jul 2015 22:27:00 +0000</pubDate>
-        <link>https://serdarkuzucu.com/bellek-ve-disk-istatistiklerini-gosteren-shell-script-gelistirelim/</link>
-        <guid isPermaLink="true">https://serdarkuzucu.com/bellek-ve-disk-istatistiklerini-gosteren-shell-script-gelistirelim/</guid>
         
         
         <category>Bash</category>

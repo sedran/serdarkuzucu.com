@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Thread Local Nedir?</title>
+  <meta name="description" content="Bu yazıda Java dünyasında sıkça kullanıldığına veya bahsedildiğine şahit olduğumuz ThreadLocal sınıfını inceleyeceğiz.ThreadLocal sınıfı belirlediğimiz nesne...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="https://serdarkuzucu.com/2020/04/13/thread-local-nedir-java/">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2260086-7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-2260086-7');
+  </script>
+  
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (41)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (6)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (5)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (4)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (6)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (20)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Thread Local Nedir?</h1>
+    <p class="post-meta">
+      <time datetime="2020-04-12T21:50:00+00:00" itemprop="datePublished">Apr 12, 2020</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Bu yazıda Java dünyasında sıkça kullanıldığına 
+veya bahsedildiğine şahit olduğumuz <code class="highlighter-rouge">ThreadLocal</code> sınıfını inceleyeceğiz.
+<code class="highlighter-rouge">ThreadLocal</code> sınıfı belirlediğimiz nesnelerin sadece aynı thread tarafından erişilebilir olmasını sağlar.
+Bu sayede <strong>thread safe</strong> olmayan nesneleri <strong>thread safe</strong> kullanmış oluruz.
+Bir <code class="highlighter-rouge">ThreadLocal</code> nesnesi içerisine yazdığımız nesne, 
+<code class="highlighter-rouge">ThreadLocal</code>‘e yazan thread tarafından çalıştırılan tüm methodlar tarafından okunabilir olacaktır.
+Gelin bu güçlü aracı avantajları ve dezavantajları ile inceleyelim.</p>
+
+<!--more-->
+
+<p>İlk olarak <code class="highlighter-rouge">ThreadLocal</code> teknik olarak nedir ona bakalım.
+Java’da her yaratılan <code class="highlighter-rouge">Thread</code> nesnesi içerisinde 
+o <em>Thread</em>‘e ait <em>ThreadLocal</em>‘lerin tutulduğu bir map bulunmaktadır.
+İki farklı thread aynı <em>ThreadLocal</em> nesnesine eriştikleri zaman,
+ThreadLocal nesnesi değerini o an kendisine erişen thread’in içerisindeki <em>Map</em>‘den okur veya yazar.
+Bu sayede iki farklı <em>Thread</em> aynı ThreadLocal nesnesi üzerinden farklı değerlere ulaşırlar.</p>
+
+<h3 id="nasıl-tanımlanmalı">Nasıl Tanımlanmalı?</h3>
+
+<p><code class="highlighter-rouge">new</code> anahtar kelimesi ile yarattığımız her bir yeni <em>ThreadLocal</em> nesnesi 
+<em>Thread</em> içerisindeki Map’de farklı bir key olarak tutulmaktadır.
+Bu sebeple belirli bir amaç için kullanacağımız <code class="highlighter-rouge">ThreadLocal</code> nesnesinin 
+sadece tek bir instance’ının olduğundan emin olmalıyız.</p>
+
+<p>Bunun en kolay yolu da <code class="highlighter-rouge">static final</code> olarak tanımlamaktır.
+Bu sayede oluşturacağımız <code class="highlighter-rouge">ThreadLocal</code> nesnesinin aynı <code class="highlighter-rouge">ClassLoader</code> içerisinde 
+sadece tek bir instance’ının olacağını garanti etmiş oluruz.</p>
+
+<h3 id="nasıl-kullanılır">Nasıl Kullanılır?</h3>
+
+<p>Bu kısımda <code class="highlighter-rouge">ThreadLocal</code> üzerindeki method ve constructor’ları inceleyelim.</p>
+
+<h4 id="boş-threadlocal-oluşturma">Boş ThreadLocal Oluşturma</h4>
+
+<p>İçinde herhangi bir değer taşımayan (null value) bir ThreadLocal, doğrudan boş constructor kullanılarak üretilebilir. 
+Bu ThreadLocal nesnesine erişen her bir Thread <code class="highlighter-rouge">get</code> methodundan <code class="highlighter-rouge">null</code> değerini alacaktır.</p>
+
+<p>Bu yazıdaki örneklerde çoğunlukla Java’da thread-safe olmayan 
+<a href="https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat</a> sınıfını
+<code class="highlighter-rouge">ThreadLocal</code> içerisinde kullanacağım.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="nc">ThreadLocal</span><span class="o">&lt;</span><span class="nc">SimpleDateFormat</span><span class="o">&gt;</span> <span class="no">DATE_FORMAT_THREAD_LOCAL</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ThreadLocal</span><span class="o">&lt;&gt;();</span>
+</code></pre></div></div>
+
+<h4 id="threadlocal-değerini-atamak">ThreadLocal Değerini Atamak</h4>
+
+<p>Boş veya dolu fark etmeksizin bir ThreadLocal nesnesine <code class="highlighter-rouge">set</code> methodunu kullanarak yeni bir değer atayabilirsiniz.
+Atadığınız değer sadece o değeri atadığınız Thread için geçerli olacaktır.
+Diğer Thread’lerin atayacakları veya okuyacakları değerler tamamen mevcut Thread’inkinden bağımsız olacaktır.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">shouldSetValueToThreadLocal</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="nc">ThreadLocal</span><span class="o">&lt;</span><span class="nc">SimpleDateFormat</span><span class="o">&gt;</span> <span class="n">threadLocal</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ThreadLocal</span><span class="o">&lt;&gt;();</span>
+    <span class="n">threadLocal</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="k">new</span> <span class="nc">SimpleDateFormat</span><span class="o">(</span><span class="s">"yyyy-MM-dd HH:mm:ss"</span><span class="o">));</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="threadlocal-değerini-okumak">ThreadLocal Değerini Okumak</h4>
+
+<p>Bir ThreadLocal üzerinde mevcut Thread için tutulmakta olan değeri almak için <code class="highlighter-rouge">get</code> methodu kullanılır.
+Mevcut Thread tarafından değer atanmamış veya başlangıç değeri bulunmayan bir ThreadLocal üzerindeki 
+<code class="highlighter-rouge">get</code> methodunu çağırmak <code class="highlighter-rouge">null</code> değerini dönecektir.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">shouldSetAndGetThreadLocalValue</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="nc">ThreadLocal</span><span class="o">&lt;</span><span class="nc">SimpleDateFormat</span><span class="o">&gt;</span> <span class="n">threadLocal</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ThreadLocal</span><span class="o">&lt;&gt;();</span>
+
+    <span class="nc">SimpleDateFormat</span> <span class="n">currentValue</span> <span class="o">=</span> <span class="n">threadLocal</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+    <span class="n">assertNull</span><span class="o">(</span><span class="n">currentValue</span><span class="o">);</span>
+
+    <span class="kd">final</span> <span class="nc">SimpleDateFormat</span> <span class="n">simpleDateFormat</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SimpleDateFormat</span><span class="o">(</span><span class="s">"yyyy-MM-dd HH:mm:ss"</span><span class="o">);</span>
+    <span class="n">threadLocal</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">simpleDateFormat</span><span class="o">);</span>
+
+    <span class="n">currentValue</span> <span class="o">=</span> <span class="n">threadLocal</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+    <span class="n">assertNotNull</span><span class="o">(</span><span class="n">currentValue</span><span class="o">);</span>
+    <span class="n">assertSame</span><span class="o">(</span><span class="n">simpleDateFormat</span><span class="o">,</span> <span class="n">currentValue</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="başlangıç-değeri-ile-oluşturma">Başlangıç Değeri ile Oluşturma</h4>
+
+<p>ThreadLocal nesneleri bir başlangıç değerine sahip olabilir. 
+Bu durumda <code class="highlighter-rouge">set</code> çağırmadan <code class="highlighter-rouge">get</code> methodunu ilk kez çağıran her bir Thread belirlenen initialValue değerini alırlar.
+Bu ilk değer her Thread için farklı olabileceği gibi aynı değer de verilebilir.
+Bu kısım tamamen kullanıcıya kalmış.
+Aşağıda başlangıç değeri ile bir ThreadLocal nesnesi oluşturmanın iki farklı yolunu görelim.</p>
+
+<h5 id="initialvalue-methodunun-override-edilmesi">initialValue Methodunun Override Edilmesi</h5>
+
+<p>ThreadLocal sınıfı üzerinde bulunan <code class="highlighter-rouge">initialValue</code> methodunun görevi 
+bir ThreadLocal nesnesi için ilk değerin üretilmesidir.
+Bu method ThreadLocal sınıfı içerisinde <code class="highlighter-rouge">return null</code> şeklinde yazılmıştır.</p>
+
+<p>Aşağıdaki şekilde <code class="highlighter-rouge">initialValue</code> methodunun override edildiği ThreadLocal’den extend eden
+bir anonymous class yazarak kullanacağımız ThreadLocal için bir ilk değer belirleyebiliyoruz.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">shouldGetInitialValueWhenInitialValueMethodIsOverridden</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="nc">ThreadLocal</span><span class="o">&lt;</span><span class="nc">SimpleDateFormat</span><span class="o">&gt;</span> <span class="n">threadLocal</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ThreadLocal</span><span class="o">&lt;</span><span class="nc">SimpleDateFormat</span><span class="o">&gt;()</span> <span class="o">{</span>
+        <span class="nd">@Override</span>
+        <span class="kd">protected</span> <span class="nc">SimpleDateFormat</span> <span class="nf">initialValue</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">SimpleDateFormat</span><span class="o">(</span><span class="s">"yyyy-MM-dd HH:mm:ss"</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">};</span>
+
+    <span class="kd">final</span> <span class="nc">SimpleDateFormat</span> <span class="n">currentValue</span> <span class="o">=</span> <span class="n">threadLocal</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+    <span class="n">assertNotNull</span><span class="o">(</span><span class="n">currentValue</span><span class="o">);</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="s">"yyyy-MM-dd HH:mm:ss"</span><span class="o">,</span> <span class="n">currentValue</span><span class="o">.</span><span class="na">toPattern</span><span class="o">());</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h5 id="static-withinitial-methodu-i̇le-başlangıç-değerinin-verilmesi">Static <code class="highlighter-rouge">withInitial</code> Methodu İle Başlangıç Değerinin Verilmesi</h5>
+
+<p>Java 8 ile birlikte gelen static <code class="highlighter-rouge">withInitial</code> methodunu kullanarak 
+başlangıç değeri olan bir ThreadLocal nesnesi yaratabiliriz.</p>
+
+<p><code class="highlighter-rouge">initialValue</code> methodunu override ederken anonymous bir sınıf yaratmıştık.
+Bu yöntemde ise ThreadLocal içerisinde tanımlı ThreadLocal’den extend eden
+<code class="highlighter-rouge">SuppliedThreadLocal</code> isimli bir private inner class dönülüyor.</p>
+
+<p>Bu method parametre olarak bir <code class="highlighter-rouge">Supplier</code> alıyor 
+ve başlangıç değerine ihtiyacı olan her Thread tarafından bu Supplier çağırılıyor.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">shouldGetInitialValueWhenThreadLocalIsConstructedUsingWithInitialMethod</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="nc">ThreadLocal</span><span class="o">&lt;</span><span class="nc">SimpleDateFormat</span><span class="o">&gt;</span> <span class="n">threadLocal</span> <span class="o">=</span> <span class="nc">ThreadLocal</span><span class="o">.</span><span class="na">withInitial</span><span class="o">(</span>
+            <span class="o">()</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">SimpleDateFormat</span><span class="o">(</span><span class="s">"yyyy-MM-dd HH:mm:ss"</span><span class="o">));</span>
+
+    <span class="kd">final</span> <span class="nc">SimpleDateFormat</span> <span class="n">currentValue</span> <span class="o">=</span> <span class="n">threadLocal</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+    <span class="n">assertNotNull</span><span class="o">(</span><span class="n">currentValue</span><span class="o">);</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="s">"yyyy-MM-dd HH:mm:ss"</span><span class="o">,</span> <span class="n">currentValue</span><span class="o">.</span><span class="na">toPattern</span><span class="o">());</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="threadlocal-değerinin-temizlenmesi">ThreadLocal Değerinin Temizlenmesi</h4>
+
+<p>Bir ThreadLocal’e bir Thread tarafından atanan değer yine aynı Thread tarafından temizlenebilir.
+Bu işlem <code class="highlighter-rouge">remove</code> methodu kullanılarak yapılır.</p>
+
+<p><code class="highlighter-rouge">remove</code> işlemi sonrası <code class="highlighter-rouge">get</code> methodu <code class="highlighter-rouge">null</code> dönecektir.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">shouldRemoveThreadLocalValue</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="nc">ThreadLocal</span><span class="o">&lt;</span><span class="nc">SimpleDateFormat</span><span class="o">&gt;</span> <span class="n">threadLocal</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ThreadLocal</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">final</span> <span class="nc">SimpleDateFormat</span> <span class="n">simpleDateFormat</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SimpleDateFormat</span><span class="o">(</span><span class="s">"yyyy-MM-dd HH:mm:ss"</span><span class="o">);</span>
+    <span class="n">threadLocal</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">simpleDateFormat</span><span class="o">);</span>
+
+    <span class="nc">SimpleDateFormat</span> <span class="n">currentValue</span> <span class="o">=</span> <span class="n">threadLocal</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+    <span class="n">assertNotNull</span><span class="o">(</span><span class="n">currentValue</span><span class="o">);</span>
+    <span class="n">assertSame</span><span class="o">(</span><span class="n">simpleDateFormat</span><span class="o">,</span> <span class="n">currentValue</span><span class="o">);</span>
+
+    <span class="n">threadLocal</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
+    <span class="n">currentValue</span> <span class="o">=</span> <span class="n">threadLocal</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+    <span class="n">assertNull</span><span class="o">(</span><span class="n">currentValue</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="inheritablethreadlocal-sınıfı">InheritableThreadLocal Sınıfı</h4>
+
+<p>Bu sınıf da bir ThreadLocal çeşidi olmakta olup, özelliği şudur:
+Bu türdeki ThreadLocal’in üzerindeki mevcut Thread’e ait değer,
+çocuk Thread’lere aktarılır.
+Çocuk Thread nedir? Mevcut Thread tarafından oluşturulmuş Thread’ler, mevcut thread’in çocuklarıdır.</p>
+
+<p>Aşağıdaki örnekte oluşturulan yeni Thread’de parent Thread’in ThreadLocal değerinin aktarıldığını görebiliyoruz.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">inheritableThreadLocalShouldInheritValuesToChild</span><span class="o">()</span> <span class="kd">throws</span> <span class="nc">InterruptedException</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="nc">ThreadLocal</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">threadLocal</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">InheritableThreadLocal</span><span class="o">&lt;&gt;();</span>
+    <span class="n">threadLocal</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="s">"Demo Value"</span><span class="o">);</span>
+
+    <span class="kd">final</span> <span class="nc">AtomicReference</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">valueInThread</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AtomicReference</span><span class="o">&lt;&gt;();</span>
+
+    <span class="kd">final</span> <span class="nc">Thread</span> <span class="n">thread</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
+        <span class="n">valueInThread</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">threadLocal</span><span class="o">.</span><span class="na">get</span><span class="o">());</span>
+    <span class="o">});</span>
+
+    <span class="n">thread</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+    <span class="n">thread</span><span class="o">.</span><span class="na">join</span><span class="o">();</span>
+
+    <span class="n">assertEquals</span><span class="o">(</span><span class="s">"Demo Value"</span><span class="o">,</span> <span class="n">valueInThread</span><span class="o">.</span><span class="na">get</span><span class="o">());</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="kullanım-alanları">Kullanım Alanları</h3>
+
+<p>Bir değerin bir Thread içerisinde her yerden ulaşılabilir olmasını isteyebileceğimiz
+bir çok durumda ThreadLocal kullanılabilir. 
+Gördüğüm birkaç örneği aşağıda paylaşıyorum.
+Sizler de bildiğiniz ThreadLocal kullanım alanlarını yorum olarak paylaşabilirseniz
+birlikte daha fazla şey öğrenebiliriz.</p>
+
+<h4 id="kullanıcının-tanınması-authentication">Kullanıcının Tanınması (Authentication)</h4>
+
+<p>Bir kullanıcının yaptığı işlem eğer sisteme girişinden çıkışına kadar 
+hep aynı Thread içerisinde akışına devam ediyorsa,
+kullanıcıya ait giriş bilgileri ThreadLocal üzerinde tutulabilir.</p>
+
+<p>Mesela bir HTTP server uygulamasında 
+kullanıcının Cookie’sinde gönderdiği bir bilgi okunup bir cache server 
+veya veritabanı üzerinden kullanıcı bilgisi çekiliyorsa,
+bu değer ThreadLocal üzerinde tutularak 
+çağırılan tüm methodlar tarafından kullanıcı bilgisinin erişilebilir olması sağlanabilir.</p>
+
+<p>Örnek olarak Spring Security bir takım filtreler kullanarak 
+gelen HTTP isteğinin hangi kullanıcı tarafından yapıldığını anlar
+ve <code class="highlighter-rouge">SecurityContextHolder</code> içerisine kullanıcı verisini yazar.
+Bu sınıf varsayılan olarak ThreadLocal kullanmaktadır.
+İstek Controller veya servis katmanlarımıza geldiğinde istersek <code class="highlighter-rouge">SecurityContextHolder</code> üzerinden
+kullanıcı bilgisine static methodlar kullanarak ulaşabiliyoruz.</p>
+
+<h4 id="thread-safe-olmayan-sınıfların-singleton-gibi-kullanılması">Thread-Safe Olmayan Sınıfların Singleton Gibi Kullanılması</h4>
+
+<p>Yeni nesnesinin oluşturulması pahalı olan sınıfları genellikle singleton yapmaya çalışıyoruz.
+Fakat kullandığımız sınıf thread-safe değilse orada çuvallayabiliriz.
+Birden fazla thread, thread-safe olmayan singleton bir nesneye eriştiğinde
+bu nesnenin state’inde bir takım istenmeyen sonuçlar ortaya çıkabilir.</p>
+
+<p>Bu durumda oluşturması maliyetli nesnemizi 
+uygulama genelinde tek instance olan bir singleton olarak tanımlamak yerine,
+her thread’de bir instance’ı olacak şekilde oluşturabiliriz.</p>
+
+<p>Örnek olarak yukarıdaki örneklerde de kullandığım <code class="highlighter-rouge">SimpleDateFormat</code> sınıfını verebilirim.
+Bu sınıf thread-safe olmadığı için global değişken olarak kullanılamıyor.
+Onun yerine bu sınıfın ya her methodda yeni bir nesnesinin oluşturulması gerekiyor
+ya da ThreadLocal üzerinde tutulması gerekiyor.</p>
+
+<h4 id="bir-i̇şlemi-başından-sonuna-kadar-takip-edebilmek">Bir İşlemi Başından Sonuna Kadar Takip Edebilmek</h4>
+
+<p>Eğer bir işlem başladığında ThreadLocal’e bir değer girersek ve bittiğinde o değeri silersek,
+işlem boyunca aynı thread içerisinde olup biten tüm işlemlerde bu değeri görebiliriz.</p>
+
+<p>Bu sayede bir method yapmakta olduğu işi hangi context içerisinde yaptığını bilmek isterse
+ThreadLocal’den alabilir.</p>
+
+<p>Örnek olarak logging kütüphanelerindeki MDC yapısı verilebilir.
+MDC yapısını kullanarak bir işin başından sonuna kadar loglara aynı değerin yazılmasını sağlayabiliriz.
+Örneğin sisteme gelen her istek için unique bir TransactionId üretiyoruz 
+ve bu istek sırasında yazılan tüm loglarda bu TransactionId değerini görüyoruz.</p>
+
+<p>MDC ile log takibi yapmak ile ilgili daha önce yazmış olduğum bir yazı için tıklayın:
+<a href="/slf4j-mdc-kullanarak-log-takibini-kolaylastirma/">Slf4j: MDC Kullanarak Log Takibini Kolaylaştırma</a></p>
+
+<h3 id="dikkat">Dikkat!</h3>
+
+<p>Global değişken kullanmanın yazılımın tasarımı açısından kötü olduğu konusunda 
+birçok yazılım geliştirici uzun zamandır hemfikir. 
+ThreadLocal kavramı da global variable kavramına çok yakın olduğu için zorunlu kalınmadıkça kullanılmamalıdır.
+Mümkün olduğunda ThreadLocal kullanmak yerine 
+methodlara ilgili değerler parametre geçilebilir, 
+cache kütüphaneleri kullanılabilir 
+veya çeşitli dependency injection yöntemleri kullanılabilir.</p>
+
+<p>Yazılım geliştirirken fark ettiğim problemlerden birisi de 
+ThreadLocal kullanılan sınıfların unit testini yazmanın
+dependency injection ile yazılmış sınıfların testini yazmaktan daha zor olduğudur.</p>
+
+<p>Ayrıca ThreadLocal’lerin kullanıldıkları context’lere göre
+dikkat edilmesi gereken bazı hususlar ortaya çıkmaktadır.</p>
+
+<p>Bunlardan en yaygınları memory leak’ler 
+ve yanlış değerlerin yanlış Thread’lerde bulunması durumlarıdır.</p>
+
+<p>Öncelikle memory leak oluşma durumuna bir bakalım.</p>
+
+<h4 id="classloader-leak">ClassLoader Leak</h4>
+
+<p>Application Server dediğimiz tomcat, weblogic ve jboss gibi uygulamalara 
+birden fazla farklı uygulamayı yükleyebiliyoruz.
+Application Server’lar kendileri de bir java process’i olduğu için 
+bir Application Server’a yüklediğimiz tüm bu uygulamalar tek bir JVM içerisinde çalışıyorlar.</p>
+
+<p>Application Server ise uygulamaların arasındaki ayrımı sağlayabilmek için 
+hepsine ayrı ClassLoader nesnesi yaratır. 
+Bu uygulamalar ve onların bağımlı olduğu kütüphaneler bu ClassLoader tarafından JVM’e yüklenir.</p>
+
+<p>Belirli bir uygulamayı kapatıp açarken veya yeni bir versiyonunu canlıya alırken
+Application Server ilgili uygulamayı kapatır 
+ve bağlı olduğu ClassLoader da Garbage Collector tarafından yok edilir.</p>
+
+<p>Application Server’larda gelen HTTP istekleri işlemek için kullandığı bir Thread Pool bulunur.
+Bu ThreadPool’daki Thread’ler genellikle Application Server ayakta olduğu sürece yaşarlar.
+Eğer Application Server’a yüklü bir uygulama HTTP isteğini yorumlarken ThreadLocal’e bir şey yazarsa 
+ve bu isteğe cevap verirken ThreadLocal’e yazdığı değerleri silmezse 
+bu değer Application Server’a ait olan Thread’in üzerinde kalır.</p>
+
+<p>Application Server üzerindeki bir uygulamayı kapatırken eğer Application Server’ın ThreadLocal’i üzerinde
+kapatılmakta olan uygulanın ClassLoader’ı tarafından JVM’e yüklenmiş bir sınıfa ait bir nesne kaldıysa,
+bu nesne tüm ClassLoader’ın Garbage Collector tarafından silinmesini engeller.
+Bir ClassLoader belki binlerce sınıfı memory’ye yükleyeceği için Garbage Collect olmaması çok büyük problemdir.
+Uygulama Application Server üzerinde tekrar ayağa kaldırılırken yepyeni bir ClassLoader oluşturulur
+ve yeniden tüm class’lar load edilir.
+Bu şekilde uygulamalar aç/kapa yaptıkça Application Server üzerinde ClassLoader’lar birikecektir
+ve nihayetinde <code class="highlighter-rouge">java.lang.OutOfMemoryError: PermGen space</code> hatası alınacaktır.
+Bu noktadan sonra artık Application Server’ın restart edilmesi gerekecektir.</p>
+
+<p>Eğer Application Server Thread’lerinin üzerine bir ThreadLocal yazılıyorsa
+bunun iş biterken silindiğinden emin olunması gerekir.</p>
+
+<p>Bu sebeple ThreadLocal yazıldıktan sonraki işlem <code class="highlighter-rouge">try/finally</code> bloğu ile yazılmalı.
+Ben aşağıdaki gibi yazıyorum genellikle:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">ThreadLocal</span><span class="o">&lt;</span><span class="nc">UserContext</span><span class="o">&gt;</span> <span class="no">USER_CONTEXT_THREAD_LOCAL</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ThreadLocal</span><span class="o">&lt;&gt;();</span>
+
+<span class="nd">@Override</span>
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">doFilter</span><span class="o">(</span><span class="nc">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="nc">ServletResponse</span> <span class="n">response</span><span class="o">,</span> <span class="nc">FilterChain</span> <span class="n">chain</span><span class="o">)</span> 
+  <span class="kd">throws</span> <span class="nc">IOException</span><span class="o">,</span> <span class="nc">ServletException</span> <span class="o">{</span>
+  
+  <span class="k">try</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="nc">UserContext</span> <span class="n">userContext</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">UserContext</span><span class="o">();</span>
+    <span class="c1">// do some work to fill userContext...</span>
+    <span class="c1">// other stuff...</span>
+    <span class="c1">// things...</span>
+    <span class="no">USER_CONTEXT_THREAD_LOCAL</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">userContext</span><span class="o">);</span>
+    <span class="n">chain</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+  <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+    <span class="no">USER_CONTEXT_THREAD_LOCAL</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="threadlocal-değerinin-i̇stenmeyen-yerlere-gitmesi">ThreadLocal Değerinin İstenmeyen Yerlere Gitmesi</h4>
+
+<p>Yukarıdaki ClassLoader leak konusuna çok benziyor. 
+Eğer bir ThreadLocal set ediyorsak çok büyük ihtimalle aynı method içerisinde onu silme fırsatımız olacaktır.</p>
+
+<p>Örneğin bir ExecutorService kullanıyorsak ve ona çalıştırması için verdiğimiz Runnable sınıfında ThreadLocal
+kullanımı yapıyorsak, aynı Runnable içerisinde bu ThreadLocal’i silmeliyiz.
+Yoksa ExecutorService aynı thread’leri kullanarak başka işleri de koşacağı için 
+ThreadLocal’e set ettiğimiz değer alakasız başka işler tarafından erişilebilir olacaktır.</p>
+
+<p>Aynı zamanda executorService’e submit ettiğimiz Runnable ayrı bir thread tarafından çalıştırılacağı için,
+<code class="highlighter-rouge">executorService.submit()</code> methodunu çağırdığımız thread’deki ThreadLocal’leri görmeyecektir.</p>
+
+<p>Aşağıdaki kodda executorService’e bir task verilmeden önce oradaki iş parçacığı ile paylaşmak istediğimiz
+ThreadLocal değeri önce bir değişkene aktarılıyor.
+Daha sonra executorService’in içerisinde işi çalıştıran Thread’in ThreadLocal’ine tekrar set ediliyor.
+Daha önemlisi, executorService’deki işimiz bittiğinde <code class="highlighter-rouge">finally</code> bloğu içerisinde ThreadLocal’i tekrar temizliyoruz.
+Bu sayede ExecutorService tarafından yapılan diğer işlere fazladan bilgi vermemiş oluyoruz.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kt">void</span> <span class="nf">executeBatchTask</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="nc">UserContext</span> <span class="n">userContext</span> <span class="o">=</span> <span class="no">USER_CONTEXT_THREAD_LOCAL</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+    
+    <span class="n">executorService</span><span class="o">.</span><span class="na">submit</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="no">USER_CONTEXT_THREAD_LOCAL</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">userContext</span><span class="o">);</span>
+            <span class="c1">// Do work in executor thread </span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="no">USER_CONTEXT_THREAD_LOCAL</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">});</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="bitiriyoruz">Bitiriyoruz</h3>
+
+<p>ThreadLocal hakkında söylenebilecek her şey bu kadar değildir elbette.
+Elimden geldiğince hakkında bildiklerimi anlatmaya çalıştım.</p>
+
+<p>Her ne kadar hatalı kullandığımız bir ThreadLocal ile production sistemlerinde başımızı belaya sokabilecek olsak da,
+meşhur büyüğümüz <a href="https://en.wikipedia.org/wiki/Joshua_Bloch">Joshua Bloch</a> array ile de bunu yapabilirsiniz demiş :)</p>
+
+<p>Bu sebeple Joshua Bloch’un bu konudaki aşağıdaki meşhur alıntısıyla bitiriyorum:</p>
+
+<blockquote>
+  <p>“Can you cause unintended object retention with thread locals? 
+Sure you can. 
+But you can do this with arrays too. 
+That doesn’t mean that thread locals (or arrays) are bad things. 
+Merely that you have to use them with some care. 
+The use of thread pools demands extreme care. 
+Sloppy use of thread pools in combination with sloppy use of thread locals can cause unintended object retention, 
+as has been noted in many places. 
+But placing the blame on thread locals is unwarranted.” 
+    - Joshua Bloch</p>
+</blockquote>
+
+<h3 id="kaynaklar">Kaynaklar</h3>
+
+<ul>
+  <li><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/ThreadLocal.html">https://docs.oracle.com/javase/8/docs/api/java/lang/ThreadLocal.html</a></li>
+  <li><a href="https://docs.oracle.com/javase/8/docs/api/java/lang/InheritableThreadLocal.html">https://docs.oracle.com/javase/8/docs/api/java/lang/InheritableThreadLocal.html</a></li>
+  <li><a href="http://tutorials.jenkov.com/java-concurrency/threadlocal.html">http://tutorials.jenkov.com/java-concurrency/threadlocal.html</a></li>
+  <li><a href="https://www.baeldung.com/java-threadlocal">https://www.baeldung.com/java-threadlocal</a></li>
+  <li><a href="https://stackoverflow.com/questions/40079616/what-is-classloader-leak">https://stackoverflow.com/questions/40079616/what-is-classloader-leak</a></li>
+  <li><a href="https://stackoverflow.com/questions/817856/when-and-how-should-i-use-a-threadlocal-variable">https://stackoverflow.com/questions/817856/when-and-how-should-i-use-a-threadlocal-variable</a></li>
+  <li><a href="https://stackoverflow.com/questions/17008906/what-is-the-use-and-need-of-thread-local">https://stackoverflow.com/questions/17008906/what-is-the-use-and-need-of-thread-local</a></li>
+  <li><a href="https://plumbr.io/blog/locked-threads/how-to-shoot-yourself-in-foot-with-threadlocals">https://plumbr.io/blog/locked-threads/how-to-shoot-yourself-in-foot-with-threadlocals</a></li>
+</ul>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/slf4j-mdc-kullanarak-log-takibini-kolaylastirma/">&laquo; Slf4j: MDC Kullanarak Log Takibini Kolaylaştırma</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+  </div>
+</div>
+
+
+  <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://serdarkuzucu.com/2020/04/13/thread-local-nedir-java/';
+        this.page.identifier = 'thread-local-nedir-java';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>
