@@ -41,6 +41,8 @@ layout: default
   </div>
 </div>
 
-{% if page.comments %}
-  {% include disqus.html %}
+{% if jekyll.environment != "development" %}
+  {% if page.comments %}
+    {% include disqus.html %}
+  {% endif %}
 {% endif %}
