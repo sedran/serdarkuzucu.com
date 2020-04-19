@@ -6,9 +6,392 @@
 </description>
     <link>https://serdarkuzucu.com/</link>
     <atom:link href="https://serdarkuzucu.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 12 Apr 2020 22:23:25 +0000</pubDate>
-    <lastBuildDate>Sun, 12 Apr 2020 22:23:25 +0000</lastBuildDate>
+    <pubDate>Sun, 19 Apr 2020 13:32:35 +0000</pubDate>
+    <lastBuildDate>Sun, 19 Apr 2020 13:32:35 +0000</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
+    
+      <item>
+        <title>Git Commit Mesajı Nasıl Yazılmalı</title>
+        <description>&lt;p&gt;Kaynak kodda yaptığımız bir değişikliği versiyon kontrol sistemine kaydederken yapmamız gereken en önemli
+maddelerden bir tanesi bu değişikliği iyi yazılmış bir mesaj ile açıklamaktır. Peki iyi bir commit mesajını
+diğerlerinden ayıran özellikler nelerdir? Bu yazıda dünya genelinde kabul görmüş bazı standartları göreceğiz.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;p&gt;Öncelikle iyi yazılmış bir commit mesajı daha sonra ne işimize yarar? Güzel bir alıntı ile başlamak istiyorum.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Any software project is a collaborative project. It has at least two developers, the original developer and the
+original developer a few weeks or months later when the train of thought has long left the station. This later self
+needs to reestablish the context of a particular piece of code each time a new bug occurs or a new feature needs to 
+be implemented.&lt;/p&gt;
+
+  &lt;p&gt;Peter Hutterer - &lt;a href=&quot;http://who-t.blogspot.com/2009/12/on-commit-messages.html&quot;&gt;On commit messages&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Özetle iyi yazılmış bir commit mesajı;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Kodda yapılan bir değişikliğin üzerinden zaman geçtikten sonra 
+bu değişikliğin sebebini kodu okuyarak anlamaya çalışmak 
+oldukça zaman alan bir eylemdir.
+İyi bir commit mesajı kodu tekrar okumadan değişikliğin neden yapıldığını bize söyler.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Projenin versiyon geçmişinin düzenli ve tutarlı görünmesini sağlar.
+Hangi özellik ne zaman geliştirildi, 
+bir hata hangi commit ile düzeltildi 
+veya ilgili release hangi değişiklikleri içeriyor
+gibi kıymetli bilgilere versiyon geçmişinde sadece commit mesajlarını okuyarak ulaşabiliriz.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Yazılan kodu asıl branch’e merge etmeden önce gözden geçiren kişilere yardımcı olur.
+Code-review sürecini hızlandırır.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Son olarak bu benim kişisel yorumum, 
+iyi yazılmış bir commit mesajı bir yazılımcının işini özenerek yaptığını gösterir.
+Yaptığı değişiklikleri commit mesajında güzelce açıklamayan bir geliştiriciye bir gün
+“Bu satırı niçin bu şekilde değiştirdin?” diye sormamız gerekebilir 
+ve muhtemelen sebebini o da unutmuş olacaktır. 
+Bu sefer hatırlamak için onun kodu açıp okuması gerekecektir.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Çeşitli kaynaklardan toparladığım kuralları birer birer açıklamadan önce
+iyi bir commit mesajı bulup örnek olarak panoya asmanın güzel olacağını düşünüyorum.&lt;/p&gt;
+
+&lt;p&gt;Aşağıda spring-boot projesinin github repository’sinden aldığım 
+&lt;a href=&quot;https://github.com/spring-projects/spring-boot/commit/70d4994502c848b3db82845c97a033448356c938&quot;&gt;bir commit&lt;/a&gt; 
+mesajını göstermek istiyorum. 
+Bu commit’i gönderen &lt;a href=&quot;https://github.com/scottfrederick&quot;&gt;Scott Frederick&lt;/a&gt; abimiz 
+aşağıda yazacağım bütün iyi commit mesajı yazma kurallarını, adeta ibret-i alem için, uygulamış.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Disable exception details on default error views
+
+Prior to this commit, default error responses included the message
+from a handled exception. When the exception was a BindException, the
+error responses could also include an errors attribute containing the
+details of the binding failure. These details could leak information
+about the application.
+
+This commit removes the exception message and binding errors detail
+from error responses by default, and introduces a
+`server.error.include-details` property that can be used to cause
+these details to be included in the response.
+
+Fixes gh-20505
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Kötü yazılmış mesajlara da örnekler vermeyi düşündüm 
+fakat iyi yazılmış mesajlar o kadar nadir projelerde bulunuyor ki
+rastgele açtığım projelerin çoğunda kötü örnekler mevcut.
+Kötü örnekleri çok iyi bildiğiniz için burayı hiç kirletmeyeceğim.&lt;/p&gt;
+
+&lt;h2 id=&quot;kurallar&quot;&gt;Kurallar&lt;/h2&gt;
+
+&lt;p&gt;Artık kuralları incelemeye başlayabiliriz.
+İyi bir commit mesajının kuralları:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;#bos-satir&quot;&gt;Başlık ve gövdeyi boş bir satır ile birbirinden ayırın&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#baslik-50-karakter&quot;&gt;Başlığı 50 karakter ile sınırlandırın&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#baslik-buyuk-harf&quot;&gt;Başlığa büyük harf ile başlayın&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#baslik-nokta&quot;&gt;Başlık satırını nokta ile sonlandırmayın&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#baslik-emir-kipi&quot;&gt;Başlığı emir kipi ile yazın&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#govde-72-karakter&quot;&gt;Gövde satırlarında 72 karakter uzunluğunu geçmeyin&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#govde-ne-neden&quot;&gt;Gövdede neyi niçin değiştirdiğinizi açıklayın&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;bos-satir&quot;&gt;Başlık ve gövdeyi boş bir satır ile birbirinden ayırın&lt;/h3&gt;
+
+&lt;p&gt;Git versiyon kontrol sistemi yazdığınız mesajı başlık ve gövde olmak üzere iki parça olarak düşünür.
+Versiyon geçmişi üzerinde çalışan birçok git komutu bu ayrımı kullanır. 
+Örneğin &lt;code class=&quot;highlighter-rouge&quot;&gt;git log&lt;/code&gt; komutu tüm commit’lerin mesajlarını tam haliyle listelerken,
+&lt;code class=&quot;highlighter-rouge&quot;&gt;git shortlog&lt;/code&gt; ve &lt;code class=&quot;highlighter-rouge&quot;&gt;git log --oneline&lt;/code&gt; komutları commit’lerin sadece başlıklarını listeler.&lt;/p&gt;
+
+&lt;p&gt;Git’in bu ayrımı yapabilmesinin tek yolu başlık olarak yazdığınız satır ile
+gövde olarak yazdığınız ilk satırın arasında bir boş satır bulunmasıdır.
+Boş satır bulunmadığı takdirde Git iki satırı birleştirir ve tek satır gibi düşünür.&lt;/p&gt;
+
+&lt;h3 id=&quot;baslik-50-karakter&quot;&gt;Başlığı 50 karakter ile sınırlandırın&lt;/h3&gt;
+
+&lt;p&gt;Commit mesajını kısa tutmak okunabilirliğini arttıracaktır.
+Aynı zamanda sizi yaptığınız değişiklikleri kısaca özetlemeye zorlayacağı için
+yaptığınız değişiklikleri bir kez daha düşünmenizi sağlayacaktır.&lt;/p&gt;
+
+&lt;p&gt;Eğer yaptığınız değişiklikleri özetleme konusunda zorluk yaşıyorsanız
+gerekenden fazla değişikliği tek bir commit’e yüklemeye çalışıyor olabilirsiniz.
+Bu durumda yaptığınız değişiklikleri birden fazla commit’e paylaştırmayı düşünebilirsiniz.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git commit --help&lt;/code&gt; komutunu kullanarak &lt;code class=&quot;highlighter-rouge&quot;&gt;git commit&lt;/code&gt; hakkında yardım istediğimizde
+terminalimize dökülen uzun yazıda aşağıdaki gibi bir bölüm var:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Though not required, it's a good idea to begin the commit message with a single short 
+(less than 50 character) line summarizing the change, followed by a blank line and then 
+a more thorough description. The text up to the first blank line in a commit message is 
+treated as the commit title, and that title is used throughout Git. For example, 
+git-format-patch(1) turns a commit into email, and it uses the title on the Subject 
+line and the rest of the commit in the body.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Yani git de başlık satırının 50 karakterden kısa olmasının iyi olacağını söylüyor.&lt;/p&gt;
+
+&lt;h3 id=&quot;baslik-buyuk-harf&quot;&gt;Başlığa büyük harf ile başlayın&lt;/h3&gt;
+
+&lt;p&gt;Adından anlaşılacağı gibi ilk satırımız commit mesajımızın başlığı görevi görecek.
+Tüm başlıklar gibi bu başlığımıza da büyük harf ile başlayalım.&lt;/p&gt;
+
+&lt;h3 id=&quot;baslik-nokta&quot;&gt;Başlık satırını nokta ile sonlandırmayın&lt;/h3&gt;
+
+&lt;p&gt;Nihayetinde commit mesajının başlığı da bir başlıktır 
+ve başlıklar nokta ile bitmemeli.&lt;/p&gt;
+
+&lt;p&gt;Ek olarak başlık satırına koyacağınız her bir karakter
+kendimize koyduğumuz 50 karakter başlık kotasından tüketmekte.&lt;/p&gt;
+
+&lt;h3 id=&quot;baslik-emir-kipi&quot;&gt;Başlığı emir kipi ile yazın&lt;/h3&gt;
+
+&lt;p&gt;Git kendisi de commit mesajı üretirken emir kipi (Imperative) kullanmakta.&lt;/p&gt;
+
+&lt;p&gt;Örneğin otomatik olarak merge commit oluşturken:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Merge branch 'release/awesome-feature'
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Bu durumda emir kipi ile yazmanın birinci faydası 
+git ile aynı kuralları kullanmış oluyoruz.
+Bu da versiyon geçmişimizde tutarlılık sağlıyor.&lt;/p&gt;
+
+&lt;p&gt;Git’in kendi repository’sinde de aşağıdaki gibi emir kipi ile yazılmasını istemişler.
+Sanki koda davranışını değiştirmesi için emir veriyormuş gibi yazın diyorlar.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Describe your changes in imperative mood, e.g. “make xyzzy do frotz”
+  instead of “[This patch] makes xyzzy do frotz” or “[I] changed xyzzy
+  to do frotz”, as if you are giving orders to the codebase to change
+  its behavior.&lt;/p&gt;
+
+  &lt;p&gt;&lt;a href=&quot;https://git.kernel.org/pub/scm/git/git.git/tree/Documentation/SubmittingPatches?id=HEAD#n133&quot;&gt;Git Docs&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Bir diğer faydası da emir kipi ile yazdığımızda özne kullanmayacağımız 
+ve fiillere -ed veya -s gibi ekler gelmeyeceği için mesajımızın kısalması.
+Böylece başlık satırımızda 50 karakter limiti kuralımızı delmeden daha fazla bilgi verebileceğiz.&lt;/p&gt;
+
+&lt;h5 id=&quot;yanlış&quot;&gt;Yanlış&lt;/h5&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Fixes NullPointerException in SubscriptionRestController&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Fixed NullPointerException in SubscriptionRestController&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;I added direct charging capability for internal partners&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;This commit adds direct charging capability for internal partners&lt;/code&gt;&lt;/p&gt;
+
+&lt;h5 id=&quot;doğru&quot;&gt;Doğru&lt;/h5&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Fix NullPointerException in SubscriptionRestController&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Add direct charging capability for internal partners&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;govde-72-karakter&quot;&gt;Gövde satırlarında 72 karakter uzunluğunu geçmeyin&lt;/h3&gt;
+
+&lt;p&gt;Kod yazarken de kitap yazarken de okunabilirliğin artması için
+bir satıra yazılabilcek maksimum karakter sayısı kısıtlanır.
+Çok kısa satırlar sürekli satır atlamak zorunda kalacağımız için okumayı zorlaştırır.
+Çok uzun satırlar ise okuyanın alt satıra geçeceği zaman satırın başını kaçırmasına sebep olur.&lt;/p&gt;
+
+&lt;p&gt;Bilgisayar dünyasında geçmişin teknolojik kısıtlamalarının günümüze bıraktığı bir armağan olan
+80 karakter limiti bir çok alanda hala kullanılmakta. 
+Bu 80 karakter limitinin nereden geldiği ile ilgili çok güzel bir stackexchange yazısı buldum
+linki şuraya bırakıyorum boş vaktiniz olur ve merak ederseniz buyrun:
+&lt;a href=&quot;https://softwareengineering.stackexchange.com/questions/148677/why-is-80-characters-the-standard-limit-for-code-width&quot;&gt;Why is 80 characters the ‘standard’ limit for code width?&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Peki neden 72 karakter? Çünkü bazı git komutlarında commit mesajlarımıza indentation uygulanır.
+Bu indentation 72 karakter olarak yazdığımız satırlarımıza bir miktar boşluk ekler
+ve mesajlarımız ekranda yazdığımızdan daha fazla yer kaplar.&lt;/p&gt;
+
+&lt;p&gt;Kendimizi 72 karakter ile kısıtladığımızda oluşan çıktı hala 80 karakter limitini aşmamış olur.
+80 karakterlik bir terminalde yatay scrollbar’ın görünmesine 
+veya yazdığımız satırın terminal tarafından wrap edilmesine sebep olmamış oluruz.&lt;/p&gt;
+
+&lt;h3 id=&quot;govde-ne-neden&quot;&gt;Gövdede neyi neden değiştirdiğinizi açıklayın&lt;/h3&gt;
+
+&lt;p&gt;Commit mesajımızın gövde kısmında, kodda ne değişiklik yaptığımızı
+ve bu değişikliği neden yaptığımızı görmek isteriz.
+Değişikliğin nasıl yapıldığı veya kodun nasıl çalıştığını merak edenler kodu okumalı.
+Commit mesajında “nasıl” sorusuna cevap aramamalıyız.&lt;/p&gt;
+
+&lt;p&gt;Kaliteli bir kod kendisini açıklayabilmelidir.
+Eğer açıklayamayacak kadar kompleks bir kodsa, koda yorum yazılmalı.&lt;/p&gt;
+
+&lt;p&gt;Koda bakarak anlayamayacağımız şey, bağlamıdır (context). 
+Yani bu kod neden yazıldı?
+Hangi bug çözülmeye çalışılırken bu satır değiştirildi?
+Bu methodun içine bu koşul hangi özellik geliştirilirken eklendi?
+İyi bir commit mesajının bunlar gibi sorulara cevap vermesini bekleriz.&lt;/p&gt;
+
+&lt;p&gt;Beğendiğim bir diğer mesaj içeriği de yazının başlarında verdiğim örnekteki gibi,
+“Bu değişiklikten önce kodun davranışı şu şekildeydi,
+bu commit sonrasında artık kodun davranışı bu şekilde olacaktır.”
+şeklinde anlatmaktır. 
+Gördüğüm kadarıyla Spring Boot projesi geliştiricileri bu kuralı uyguluyorlar.&lt;/p&gt;
+
+&lt;p&gt;Gövdede değinilebilecek bir diğer konu ise ilgili commit sonrası nelerin eksik kaldığıdır.
+Bu commit ile geliştirilecek özelliğin ne kadarı geliştirildi, ne kadarı başka commit’lere adreslendi?
+Bu bilginin de commit mesajında çok kıymetli bir veri olacağını düşünüyorum.&lt;/p&gt;
+
+&lt;h2 id=&quot;öneriler&quot;&gt;Öneriler&lt;/h2&gt;
+
+&lt;p&gt;Bu kısımda herkesin kabul ettiği genel geçer kuralların dışında kalan kendi görüşlerime
+veya fikir ayrılıklarının olduğu konularda savunduğum görüşe yer vereceğim.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;a href=&quot;#ingilizce-yazin&quot;&gt;İngilizce yazın&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#proje-yonetim-id&quot;&gt;Proje yönetim aracı ID’lerini sona ekleyin&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;#pair-programming&quot;&gt;Pair programming yaptığınız kişileri de mesaja dahil edin&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;ingilizce-yazin&quot;&gt;İngilizce yazın&lt;/h3&gt;
+
+&lt;p&gt;Bu madde ile ilgili yazılmış bir şey pek bulamadım o yüzden kendi görüşüm olduğunu belirteyim.
+Artık herkes her yerde.
+Şu anda çalıştığınız projedeki tüm ekibin Türk olması her zaman böyle kalacağını göstermiyor.
+Her an yabancı bir iş arkadaşınız olabilir,
+yurt dışından danışmanlık alabilir,
+veya projeyi silikon vadisindeki bir firmaya satabilirsiniz.
+Daha da güzeli açık kaynak kodlu deyip kaynak kodunuzu dünyanın dört bir yanındaki geliştiricilere açabilirsiniz.&lt;/p&gt;
+
+&lt;p&gt;Birçok sektörde olduğu gibi yazılım sektöründe de iletişim dili olarak İngilizce kullanılıyor.
+Nasıl ki kodumuzdaki değişkenleri, fonksiyonları, sınıfları, vs Türkçe isimlendirmiyorsak 
+(ki aksini savunanlar da yapanlar da var)
+versiyon geçmişini de Türkçe tutmamalıyız.&lt;/p&gt;
+
+&lt;p&gt;Bu 3-4 sene önce benim de yaptığım bir hataydı.
+Şimdi versiyon geçmişinde eskiden Türkçe yazdığım mesajları gördükçe sinirleniyorum.
+En kötüsü de üzerine epey commit geldikten sonra o mesajları düzeltememek. :)&lt;/p&gt;
+
+&lt;h3 id=&quot;proje-yonetim-id&quot;&gt;Proje yönetim aracı ID’lerini Sona Ekleyin&lt;/h3&gt;
+
+&lt;p&gt;Eğer bir proje yönetim aracı, issue tracker, vs kullanıyorsanuz, 
+commit mesajının en sonunda, gövde bittikten sonra yine bir satır boşluk bırakıp,
+proje yönetim sistemi ID’mizi yazabiliriz.&lt;/p&gt;
+
+&lt;p&gt;Bu şekilde kullandığımız farklı tool’ların birbirinden haberinin olmasını sağlayabiliriz.
+Daha ileriki zamanlarda commit mesajını inceleyen arkadaşlara 
+bu iş ile ilgili daha fazla detayın bulunduğu bir kaynak daha sunmuş oluruz.&lt;/p&gt;
+
+&lt;p&gt;Örneğin yazının başında örnek verdiğim commit mesajındaki &lt;code class=&quot;highlighter-rouge&quot;&gt;Fixes gh-20505&lt;/code&gt; yazan satırda
+Github’daki issue ID’sinin referans verildiğini görebiliriz.&lt;/p&gt;
+
+&lt;p&gt;Bunu yaparken dikkat edilmesi gereken husus bu issue id’nin commit mesajının
+başlığında değil gövdesinde yer almasıdır.&lt;/p&gt;
+
+&lt;p&gt;Bunu başlığın başına koyanları gördüm. 
+Sonuna koyanları gördüm.
+Başlık satırına issue id dışında başka hiçbir şey yazmayanlar olduğunu gördüm.
+Başlığın hem başına hem sonuna koyanını bile gördü bu gözler hey gidi.
+Bu konuda çok hassasım çünkü çalıştığım ekipte buna direnen gençler var :)&lt;/p&gt;
+
+&lt;p&gt;Commit mesajının en sonlarında bir satırda issue id aşağıdakilere benzer bir formatta kullanılabilir:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Fixes: FCB-8473
+Resolves: FCB-3123
+Issue: TEAM-432
+Ticket: TKT-83823242
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Ayrıca issue id yazıyorum nasıl olsa gidip ordan okusunlar diyip de 
+commit mesajını açıklayıcı yazmamak çok ayıptır.
+Issue tracking sisteminiz o anda hizmet veremiyor olabilir, 
+projede çalışan geliştiricilerden birisinin o anda o sisteme erişimi olmayabilir,
+veya bizim gibi ara sıra proje yönetim programınızı değiştirebilirsiniz.
+Bu sebeple issue id versek dahi commit mesajında yeteri kadar detayı paylaştığımızdan emin olmalıyız.&lt;/p&gt;
+
+&lt;p&gt;Issue id eğer commit mesajı başlığında olursa ilgili özellik ile ilgili
+tüm commit mesajlarında aşağıdaki gibi aynı issue id kendini tekrar eder
+ve görüntü kirliliğine yol açar:&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;gp&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;git log &lt;span class=&quot;nt&quot;&gt;--oneline&lt;/span&gt;
+&lt;span class=&quot;go&quot;&gt;cb5515d21 Merge branch 'fea/FCB-1126-customer-history-report' into 'release/024-port-out-customer-information'
+b5d572d32 FCB-1126 Fix test
+c7c80cda3 FCB-1126 Change msisdn-history pojo class
+ab68a1d7c FCB-1126 Add customer-history page
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Başlık satırımızdaki 50 karakterlik alan oldukça kıymetli bir alan olduğu için 
+issue id yazarak boşa karakter harcamak israf olmaz mı?&lt;/p&gt;
+
+&lt;p&gt;Issue ID’ler branch isimlerinde kullanıldığında daha anlamlı olduğunu düşünenlerdenim.
+Böylece sadece merge commit’inin başlığında görürüz kendilerini.
+Yukarıdaki kötü örnekte bu şekilde yazılmış bir adet de merge commiti göreceksiniz.&lt;/p&gt;
+
+&lt;h3 id=&quot;pair-programming&quot;&gt;Pair programming yaptığınız kişileri de mesaja dahil edin&lt;/h3&gt;
+
+&lt;p&gt;Eğer pair programming gibi kodu iki kişinin birlikte yazdığı 
+fakat klavyeyi tek bir kişinin kullandığı bir yöntem uyguluyorsanız,
+birlikte çalıştığınız arkadaşınızın ismini de bir şekilde commit mesajına dahil edin.&lt;/p&gt;
+
+&lt;p&gt;Bunu yapmak çok kolay.
+Sadece üşenmeyip aşağıdakine benzer bir satırı commit mesajının sonuna ekleyebilirsiniz.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Co-authored-by: Foo Bar &amp;lt;foo.bar@example.com&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Veya birden fazla kişi ile birlikte çalışıyorsanız bunu iki satırda yapabilirsiniz:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Co-authored-by: Foo Bar &amp;lt;foo.bar@example.com&amp;gt;
+Co-authored-by: John Bob &amp;lt;john.bob@example.com&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Bu şekilde çalışma arkadaşlarınıza da hak ettikleri krediyi vermiş olursunuz.&lt;/p&gt;
+
+&lt;p&gt;Unutmayın ki kodu ne kadar oturup birlikte yazarsanız yazın
+commit’i kimin hesabı ile yaparsanız tüm kodu o kişi yazmış gibi görünecektir.
+Bu sebeple commit atarken birlikte çalıştığımız arkadaşlarımızı da unutmamak lazım.&lt;/p&gt;
+
+&lt;h2 id=&quot;bitti&quot;&gt;Bitti&lt;/h2&gt;
+
+&lt;p&gt;Bu yazıda yazdığım maddelerin büyük çoğunluğunu 
+&lt;a href=&quot;https://chris.beams.io/&quot;&gt;Chris Beams&lt;/a&gt;‘in 2014 yılında yazdığı 
+&lt;a href=&quot;https://chris.beams.io/posts/git-commit/&quot;&gt;How to Write a Git Commit Message&lt;/a&gt;
+yazısından öğrendim. 
+Bu yazı yıllardır web tarayıcımda yer imi olarak durmaktaydı.
+Çalıştığım projelerde gelen Merge Request’leri gözden geçirirken
+eğer kötü bir commit mesajı görürsem bu linki yapıştırırdım hemen yorum olarak.&lt;/p&gt;
+
+&lt;p&gt;Bu yazıyı Türkçe şekliyle tekrar yazarak 
+ve birlikte çalıştığım ekibimle kullandığımız 
+veya kullanmayı arzuladığım pratikleri de dahil ederek 
+ülkemizde üretilen yazılımların kalitesinde pozitif bir etki oluşturabilmek en büyük temennim.&lt;/p&gt;
+
+&lt;p&gt;Kaliteli yazılımcı yaptığı işin dökümantasyonunu da iyi yapar.
+Commit mesajları da bana göre en güzel dökümantasyon araçlarından biridir.&lt;/p&gt;
+
+&lt;p&gt;Sağlıklı kalın.&lt;/p&gt;
+
+&lt;h2 id=&quot;kaynaklar&quot;&gt;Kaynaklar&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://chris.beams.io/posts/git-commit/&quot;&gt;https://chris.beams.io/posts/git-commit/&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://who-t.blogspot.com/2009/12/on-commit-messages.html&quot;&gt;http://who-t.blogspot.com/2009/12/on-commit-messages.html&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://corgibytes.com/blog/2019/03/20/commit-messages/&quot;&gt;https://corgibytes.com/blog/2019/03/20/commit-messages/&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://yvonnickfrin.dev/a-guide-on-commit-messages&quot;&gt;https://yvonnickfrin.dev/a-guide-on-commit-messages&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://hackernoon.com/power-up-your-pair-programming-with-co-authored-commits-on-github-ffb5d049aed3&quot;&gt;https://hackernoon.com/power-up-your-pair-programming-with-co-authored-commits-on-github-ffb5d049aed3&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://help.github.com/en/github/committing-changes-to-your-project/creating-a-commit-with-multiple-authors&quot;&gt;https://help.github.com/en/github/committing-changes-to-your-project/creating-a-commit-with-multiple-authors&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html&quot;&gt;https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Sun, 19 Apr 2020 13:25:00 +0000</pubDate>
+        <link>https://serdarkuzucu.com/2020/04/19/git-commit-mesaji-nasil-yazilmali/</link>
+        <guid isPermaLink="true">https://serdarkuzucu.com/2020/04/19/git-commit-mesaji-nasil-yazilmali/</guid>
+        
+        
+        <category>Git</category>
+        
+      </item>
     
       <item>
         <title>Thread Local Nedir?</title>
@@ -769,9 +1152,13 @@ Peki kimdir bu daemon?&lt;/p&gt;
 
 &lt;!--more--&gt;
 
-&lt;blockquote class=&quot;blockquote&quot;&gt;
-&lt;p class=&quot;mb-0&quot;&gt;In multitasking computer operating systems, a daemon is a computer program that runs as a background process, rather than being under the direct control of an interactive user.&lt;/p&gt;
-&lt;footer class=&quot;blockquote-footer&quot;&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Daemon_(computing)&quot; target=&quot;_blank&quot; rel=&quot;nofollow&quot;&gt;Wikipedia, &lt;cite title=&quot;Daemon&quot;&gt;Daemon (Computing)&lt;/cite&gt;&lt;/a&gt;&lt;/footer&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;In multitasking computer operating systems, a daemon is a computer program that runs as a background
+process, rather than being under the direct control of an interactive user.&lt;/p&gt;
+  &lt;footer class=&quot;blockquote-footer&quot;&gt;
+  &lt;a href=&quot;https://en.wikipedia.org/wiki/Daemon_(computing)&quot; target=&quot;_blank&quot; rel=&quot;nofollow&quot;&gt;Wikipedia, &lt;cite title=&quot;Daemon&quot;&gt;Daemon (Computing)&lt;/cite&gt;
+  &lt;/a&gt;
+&lt;/footer&gt;
 &lt;/blockquote&gt;
 
 &lt;h2 id=&quot;user-threads-vs-daemon-threads&quot;&gt;User Threads vs Daemon Threads&lt;/h2&gt;
@@ -992,17 +1379,16 @@ Artık Bootstrap kullanarak da default HTML stilini tüm tarayıcılarda aynı g
 geliştirirken bolca kullandım. Bu yazıda Bootstrap kütüphanesinde kullanmaktan en çok zevk aldığım özellik olan 
 &lt;a href=&quot;https://getbootstrap.com/docs/4.2/layout/grid/&quot;&gt;Grid yapısını&lt;/a&gt; ele alacağım.&lt;/p&gt;
 
-&lt;div class=&quot;card mb-2&quot;&gt;
-  &lt;div class=&quot;card-body&quot;&gt;
-    &lt;blockquote class=&quot;blockquote mb-0&quot;&gt;
-&lt;h5&gt;Grid system&lt;/h5&gt;
-&lt;p class=&quot;mb-0&quot;&gt;Use our powerful mobile-first flexbox grid to build layouts of all shapes and sizes thanks to a twelve column system, five default responsive tiers, Sass variables and mixins, and dozens of predefined classes.&lt;/p&gt;
-&lt;footer class=&quot;blockquote-footer&quot;&gt;
-&lt;cite title=&quot;Bootstrap Grid System&quot;&gt;&lt;a href=&quot;https://getbootstrap.com/docs/4.2/layout/grid/&quot; target=&quot;_blank&quot; rel=&quot;nofollow&quot;&gt;Bootstrap Grid System&lt;/a&gt;&lt;/cite&gt;
+&lt;blockquote&gt;
+  &lt;h5&gt;Grid system&lt;/h5&gt;
+  &lt;p&gt;Use our powerful mobile-first flexbox grid to build layouts of all shapes and sizes thanks to a
+twelve column system, five default responsive tiers, Sass variables and mixins, and dozens of predefined classes.&lt;/p&gt;
+  &lt;footer class=&quot;blockquote-footer&quot;&gt;
+  &lt;cite title=&quot;Bootstrap Grid System&quot;&gt;
+    &lt;a href=&quot;https://getbootstrap.com/docs/4.2/layout/grid/&quot; target=&quot;_blank&quot; rel=&quot;nofollow&quot;&gt;Bootstrap Grid System&lt;/a&gt;
+  &lt;/cite&gt;
 &lt;/footer&gt;
 &lt;/blockquote&gt;
-  &lt;/div&gt;
-&lt;/div&gt;
 
 &lt;p&gt;Grid yapısında en beğendiğim özelliklerden birisi mobile-first mottosuyla geliştirilmiş olması ve bize 5 adet 
 responsive kırılım sunması. Bu kırılımların 4 tanesinin kendi isimleri varken, en küçük ekranlar için kullanacağımız 
@@ -3575,234 +3961,6 @@ yine 1 senelik bir ara vermek durumunda kalırsam, 1 sene sonraya kim öle kim k
         <category>Java</category>
         
         <category>Programlama</category>
-        
-      </item>
-    
-      <item>
-        <title>Shell Scripts: Case Komutu</title>
-        <description>&lt;p&gt;&lt;a href=&quot;/linux-shell-script-gelistirmek&quot;&gt;Linux Shell Script Geliştirmek&lt;/a&gt; diye başladığım yazı dizisinin 
-bir diğer yazısında daha birlikteyiz. &lt;code class=&quot;highlighter-rouge&quot;&gt;if/elif/else&lt;/code&gt; komutlarını sık sık kullanmaya başladığınızda farkedeceksiniz ki, 
-bir çok zaman tek bir değişkenin değerini kontrol ediyoruz. 
-Örneğin komut satırından gelen parametrenin değeri 1 ise şunu yap, 2 ise bunu yap, 3 ise başka birşey yap. 
-Böyle tek bir değişkeni kontrol etmemiz gerektiğinde &lt;code class=&quot;highlighter-rouge&quot;&gt;if/elif/else&lt;/code&gt; yazmak çok sıkıcı bir hale dönüşebiliyor. 
-Peki değişkenin ismini sadece bir kere yazsak ve alabileceği her değer için sadece çalışacak kodları söylesek?&lt;/p&gt;
-
-&lt;!--more--&gt;
-
-&lt;p&gt;Bu gibi durumlarda işimizi kolaylaştırması için &lt;code class=&quot;highlighter-rouge&quot;&gt;case&lt;/code&gt; adında hoş bir kontrol komutumuz var. 
-Örneğin komut satırından geçilen bir parametrenin değeri “disk” ise disk istatistiklerini, 
-“memory” ise bellek istatistiklerini göstermek istiyorsunuz.
-Şu şekilde yazabilirsiniz bu programı:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# HelloWorld Application 7&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# case&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in
-    &lt;/span&gt;disk   &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-    memory &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; free &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;      &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Please enter disk or memory&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;esac&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Bu programı case ismiyle kaydedip daha sonra &lt;code class=&quot;highlighter-rouge&quot;&gt;./case disk&lt;/code&gt; diye çalıştırırsak, &lt;code class=&quot;highlighter-rouge&quot;&gt;df&lt;/code&gt; komutu çalışacak. 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;./case memory&lt;/code&gt; şeklinde çalıştırırsak, &lt;code class=&quot;highlighter-rouge&quot;&gt;free&lt;/code&gt; komutu çalışacak.&lt;/p&gt;
-
-&lt;p&gt;Eğer başka bir parametre ile çağırırsak, hata mesajı gösterilecek. 
-En sonraki “*” anahtar kelimesi, disk ve memory dışındaki herşeyle eşleşiyor.&lt;/p&gt;
-
-&lt;p&gt;Aşağıdaki şekilde uzun uzun yazmak da mümkün. 
-Her bir durum için birden fazla komut girilebilir.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# HelloWorld Application 8&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# case&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in
-    &lt;/span&gt;disk &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Disk stats will be printed.&quot;&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;df 
-        echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Disk stats were printed.&quot;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-    memory &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Memory stats were printed.&quot;&lt;/span&gt;
-        free
-        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Memory stats were printed.&quot;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Please enter disk or memory&quot;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;esac&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Örneğin komut satırından alacağımız 5 tane parametre olsun fakat bu parametrelerin sırası bizi hiç ilgilendirmesin. 
-Mesela bilgisayarımızda o anda çalışan işlemlerin kaydını bir dosyaya yazalım.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Programımızın ismi processes olsun&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-f filename&lt;/code&gt; parametresi geçilirse kullanıcının girdiği isimde bir dosya yaratılsın ve output oraya kaydedilsin.&lt;/li&gt;
-  &lt;li&gt;Dosya ismi parametre geçilmezse, şu anki tarih ve saat ile bir dosya yaratalım.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-z&lt;/code&gt; parametresi geçilirse outputu kaydettiğimiz dosyayı gzip ile zipleyelim.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-p&lt;/code&gt; parametresi geçilirse outputu ekrana da yazdıralım.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-q searchString&lt;/code&gt; parametresi girilirse, içinde sadece aranan keyword geçen processlerin outputu alalım.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;--help&lt;/code&gt; parametresi girilirse, programın nasıl kullanılacağını anlatan bir metin gösterip diğer parametreleri yoksayacağız.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Anlayacağınız üzere, komut satırından birkaç tane parametre gelişigüzel girilecek. 
-Girilip girilmemeleri ve hangi sırayla girilecekleri tamamen kullanıcıya kalmış.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# Learning case/esac&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;DATE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;date&lt;/span&gt; +&lt;span class=&quot;s2&quot;&gt;&quot;%Y_%m_%d-%H_%M_%S&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;output_file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;proc_&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$DATE&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-
-&lt;span class=&quot;nv&quot;&gt;useGzip&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;false&quot;&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;printOutput&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;false&quot;&lt;/span&gt;
-&lt;span class=&quot;nv&quot;&gt;searchText&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# Read all parameters&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;until&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;$#&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;0&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do
-    case&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;nb&quot;&gt;shift
-            &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;output_file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;-z&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;nv&quot;&gt;useGzip&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;true&quot;&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;nv&quot;&gt;printOutput&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;true&quot;&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;-q&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;nb&quot;&gt;shift
-            &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;searchText&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;--help&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-            &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Welcome to our little processes program&quot;&lt;/span&gt;
-            &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Here are some options you may like:&quot;&lt;/span&gt;
-            &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;    -f &amp;lt;filename&amp;gt;  : change the name of output file&quot;&lt;/span&gt;
-            &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;    -z             : gzip the output file&quot;&lt;/span&gt;
-            &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;    -p             : print the output to the console&quot;&lt;/span&gt;
-            &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;    -q &amp;lt;searchTxt&amp;gt; : show lines only containing searchTxt&quot;&lt;/span&gt;
-            &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;    --help         : prints this help message&quot;&lt;/span&gt;
-            &lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;
-            &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;esac&lt;/span&gt;
-    
-    &lt;span class=&quot;nb&quot;&gt;shift
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;done
-
-&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;processes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# Does user want filtering the output?&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$searchText&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# No filtering&lt;/span&gt;
-    &lt;span class=&quot;nv&quot;&gt;processes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;ps &lt;span class=&quot;nt&quot;&gt;-ef&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# Filter lines using grep and searchText&lt;/span&gt;
-    &lt;span class=&quot;nv&quot;&gt;processes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;ps &lt;span class=&quot;nt&quot;&gt;-ef&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$searchText&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;fi&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# Should I print output to console?&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$printOutput&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;true&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then
-    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$processes&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;fi&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# Write output to the file&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$processes&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$output_file&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-
-&lt;span class=&quot;c&quot;&gt;# Should I use gzip?&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[[&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$useGzip&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;true&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# Gzip the output file&lt;/span&gt;
-    &lt;span class=&quot;nb&quot;&gt;gzip&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$output_file&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;fi&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Döngü ile parametreleri okuyup parametreleri &lt;code class=&quot;highlighter-rouge&quot;&gt;shift&lt;/code&gt; komutuyla kaydırmayı 
-&lt;a href=&quot;/shell-scripts-while-ve-until-donguleri&quot;&gt;While ve Until Döngüleri&lt;/a&gt; isimli yazımda yazmıştım. 
-Yukarıdaki until döngüsü de aynı şekilde shift yöntemi ile tüm parametreleri okuyor 
-ve parametrelerin değerini kontrol etmek için &lt;code class=&quot;highlighter-rouge&quot;&gt;case&lt;/code&gt; komutunu kullanıyor. 
-Parametrelerin değerlerini kontrol ettikten sonra uygun değişkenlerin değerlerini değiştiriyoruz. 
-Örneğin &lt;code class=&quot;highlighter-rouge&quot;&gt;-p&lt;/code&gt; parametresini gördüğümüzde, &lt;code class=&quot;highlighter-rouge&quot;&gt;printOutput&lt;/code&gt; isimli değişkenin değerini &lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt; yapıyoruz. 
-Programın ilerleyen kısımlarında bu değişkeni kontrol ediyoruz ve değeri &lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt; ise çıktıyı ekrana yazdırıyoruz.&lt;/p&gt;
-
-&lt;p&gt;Nasıl buldunuz &lt;code class=&quot;highlighter-rouge&quot;&gt;case&lt;/code&gt; komutunu?
-Parametreleri bu şekilde okuduğumuzda hem kullanıcıyı parametreleri belli bir sırayla girmek zorunda bırakmıyoruz, 
-hem de kodumuz daha şık görünüyor. 
-Bu programı aşağıdaki kombinasyonlarla kullanabilirsiniz:&lt;/p&gt;
-
-&lt;div class=&quot;language-text highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./processes -f myoutput.txt
-./processes -z -p
-./processes -q java -p -f javaprocesses.out
-./processes --help
-./processes -p -f somefile.log -z -q chrome
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Eğer aynı bir işlemi birden fazla değerle yapmak istiyorsanız, 
-bunu da pipe(&lt;code class=&quot;highlighter-rouge&quot;&gt;|&lt;/code&gt;) işareti kullanarak belirtebiliyorsunuz. 
-Mesela yukarıdaki kodda bazı alternatifler ekleyebiliriz. 
-Aşağıdaki gibi, parametre seçeneklerimize eşanlamlı seçenekler ekleyelim:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-f&lt;/code&gt; yerine &lt;code class=&quot;highlighter-rouge&quot;&gt;--file&lt;/code&gt; kullanılabilsin.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-p&lt;/code&gt; yerine &lt;code class=&quot;highlighter-rouge&quot;&gt;--print&lt;/code&gt; kullanılabilsin.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-q&lt;/code&gt; yerine &lt;code class=&quot;highlighter-rouge&quot;&gt;--query&lt;/code&gt; kullanılabilsin.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-z&lt;/code&gt; yerine &lt;code class=&quot;highlighter-rouge&quot;&gt;--zip&lt;/code&gt; kullanılabilsin.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Bu durumda yukarıdaki kodun &lt;code class=&quot;highlighter-rouge&quot;&gt;case&lt;/code&gt; kısmı aşağıdaki gibi şekillenecek:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;--file&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;shift
-        &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;output_file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;-z&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;--zip&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;nv&quot;&gt;useGzip&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;true&quot;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;--print&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;nv&quot;&gt;printOutput&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;true&quot;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;-q&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;--query&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;shift
-        &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;searchText&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;--help&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Welcome to our little processes program&quot;&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Here are some options you may like:&quot;&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;    -f | --file &amp;lt;filename&amp;gt;    : change the name of output file&quot;&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;    -z | --zip                : gzip the output file&quot;&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;    -p | --print              : print the output to the console&quot;&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;    -q | --query &amp;lt;searchTxt&amp;gt;  : show lines only containing searchTxt&quot;&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;    --help                    : prints this help message&quot;&lt;/span&gt;
-        &lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;esac&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Ve bu programı aşağıdaki şekillerde de kullanabiliyoruz artık:&lt;/p&gt;
-
-&lt;div class=&quot;language-text highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;./processes --file myoutput.txt
-./processes --zip --print
-./processes --query java --print --file javaprocesses.out
-./processes --help
-./processes --print -f somefile.log -z --query chrome
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Bu gecelik anlatmak istediklerim de bu kadar sayın seyirciler. 
-Umarım işlerinizi çılgınca hızlandırabilecek Shell Script’ler yazabilirsiniz.&lt;/p&gt;
-</description>
-        <pubDate>Tue, 07 Jul 2015 23:41:00 +0000</pubDate>
-        <link>https://serdarkuzucu.com/shell-scripts-case-komutu/</link>
-        <guid isPermaLink="true">https://serdarkuzucu.com/shell-scripts-case-komutu/</guid>
-        
-        
-        <category>Bash</category>
-        
-        <category>Programlama</category>
-        
-        <category>Linux</category>
         
       </item>
     

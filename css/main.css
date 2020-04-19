@@ -1,3 +1,4 @@
+@import url(//fonts.googleapis.com/css?family=PT+Sans|Ubuntu:300,400,700);
 /** Set `margin-bottom` to maintain vertical rhythm */
 .highlight { margin-bottom: 15px; }
 
@@ -288,7 +289,7 @@ mark, .mark { padding: 0.2em; background-color: #fcf8e3; }
 
 .initialism { font-size: 90%; text-transform: uppercase; }
 
-.blockquote, blockquote { margin-bottom: 1rem; font-size: 1.25rem; }
+.blockquote { margin-bottom: 1rem; font-size: 1.25rem; }
 
 .blockquote-footer { display: block; font-size: 0.875rem; color: #6c757d; }
 
@@ -6292,5 +6293,9 @@ body { display: flex; flex-direction: column; height: 100%; min-height: 100%; ba
 .about-social-rss { background-color: #ee802f !important; }
 
 .about-social-gh { background-color: #ffffff !important; color: #24292e !important; }
+
+blockquote { display: block; border-width: 2px 0; border-style: solid; border-color: #6c757d; padding: 1.5em 1.5em 0.5em; margin: 1.5em 0; position: relative; font-size: 1.1em; }
+
+blockquote:before { content: '\201C'; position: absolute; top: 0em; left: 50%; transform: translate(-50%, -50%); background: #fff; width: 3rem; height: 2rem; font: 6em/1.08em 'PT Sans', sans-serif; color: #666; text-align: center; }
 
 /*# sourceMappingURL=main.css.map */

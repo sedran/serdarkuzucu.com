@@ -88,6 +88,8 @@
             
             <a href="/category/html" class="dropdown-item">HTML (1)</a>
             
+            <a href="/category/git" class="dropdown-item">Git (1)</a>
+            
           </div>
         </li>
 
@@ -113,6 +115,37 @@
     <div class="container blog-content">
       <div class="home">
   <div class="post-list">
+    
+    <div class="media mb-5">
+      <img class="post-featured-image mr-3" src="/assets/category/bash.png" alt="Shell Scripts: Case Komutu">
+      <div class="media-body">
+        <h5 class="mt-0">
+          <a class="text-dark" href="/shell-scripts-case-komutu/" rel="bookmark">
+            <u>Shell Scripts: Case Komutu</u>
+          </a>
+        </h5>
+        <span class="post-meta">Jul 7, 2015</span>
+        
+        <div>
+          
+          <a class="btn btn-outline-dark btn-sm" href="/category/bash">Bash</a>
+          
+          <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+          
+          <a class="btn btn-outline-dark btn-sm" href="/category/linux">Linux</a>
+          
+        </div>
+        
+        <p><p><a href="/linux-shell-script-gelistirmek">Linux Shell Script Geliştirmek</a> diye başladığım yazı dizisinin 
+bir diğer yazısında daha birlikteyiz. <code class="highlighter-rouge">if/elif/else</code> komutlarını sık sık kullanmaya başladığınızda farkedeceksiniz ki, 
+bir çok zaman tek bir değişkenin değerini kontrol ediyoruz. 
+Örneğin komut satırından gelen parametrenin değeri 1 ise şunu yap, 2 ise bunu yap, 3 ise başka birşey yap. 
+Böyle tek bir değişkeni kontrol etmemiz gerektiğinde <code class="highlighter-rouge">if/elif/else</code> yazmak çok sıkıcı bir hale dönüşebiliyor. 
+Peki değişkenin ismini sadece bir kere yazsak ve alabileceği her değer için sadece çalışacak kodları söylesek?</p>
+
+</p>
+      </div>
+    </div>
     
     <div class="media mb-5">
       <img class="post-featured-image mr-3" src="/assets/category/bash.png" alt="Bellek ve Disk İstatistiklerini Gösteren Shell Script Geliştirelim">
@@ -378,37 +411,6 @@ ve bu arayüzden gelen eventleri dinlemek için tek thread kullanılır.
 Bu thread’e “event dispatch thread” ismini vermişler. 
 Bu thread’in içinde uzun sürecek bir işlem yapmayı şiddetle önermiyoruz 
 çünkü bu thread’in kilitlenmesi kullanıcı arayüzünün kilitlenmesi anlamına geliyor.</p>
-
-</p>
-      </div>
-    </div>
-    
-    <div class="media mb-5">
-      <img class="post-featured-image mr-3" src="/assets/posts/java-threads.jpg" alt="Kendi Thread Pool'umuzu Yaratalım">
-      <div class="media-body">
-        <h5 class="mt-0">
-          <a class="text-dark" href="/kendi-thread-poolumuzu-yaratalim/" rel="bookmark">
-            <u>Kendi Thread Pool'umuzu Yaratalım</u>
-          </a>
-        </h5>
-        <span class="post-meta">Jun 6, 2014</span>
-        
-        <div>
-          
-          <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
-          
-          <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
-          
-        </div>
-        
-        <p><p><a href="/thread-mantigi-java-ornekleri">Thread nedir, nasıl kullanılır</a>
-konusuna uzun zaman önce değinmiştim. 
-Peki multithread bir uygulamada sürekli yeni Thread yaratmak ne kadar iyi bir yöntemdir?
-Sık sık Thread yaratmak bazen performansı arttırmak yerine düşürebilir 
-çünkü yeni bir Thread yaratmak işletim sistemi için masraflı bir iştir. 
-Hem yeni bir Thread’in yaratılması, bu Thread için gerekli kaynakların ayrılması, 
-hem de yüzlerce Thread’i yönetmek ve bunlar arasında geçişler yapmak JVM için masraflı işlerdir.
-Bu yazıda Thread kullanımını nasıl kontrol altında tutarız buna bakıyor olacağız.</p>
 
 </p>
       </div>

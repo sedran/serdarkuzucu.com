@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Git Commit Mesajı Nasıl Yazılmalı</title>
+  <meta name="description" content="Kaynak kodda yaptığımız bir değişikliği versiyon kontrol sistemine kaydederken yapmamız gereken en önemlimaddelerden bir tanesi bu değişikliği iyi yazılmış b...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="https://serdarkuzucu.com/2020/04/19/git-commit-mesaji-nasil-yazilmali/">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2260086-7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-2260086-7');
+  </script>
+  
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (41)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (6)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (5)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (4)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (6)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (20)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+            <a href="/category/git" class="dropdown-item">Git (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Git Commit Mesajı Nasıl Yazılmalı</h1>
+    <p class="post-meta">
+      <time datetime="2020-04-19T13:25:00+00:00" itemprop="datePublished">Apr 19, 2020</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/git">Git</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Kaynak kodda yaptığımız bir değişikliği versiyon kontrol sistemine kaydederken yapmamız gereken en önemli
+maddelerden bir tanesi bu değişikliği iyi yazılmış bir mesaj ile açıklamaktır. Peki iyi bir commit mesajını
+diğerlerinden ayıran özellikler nelerdir? Bu yazıda dünya genelinde kabul görmüş bazı standartları göreceğiz.</p>
+
+<!--more-->
+
+<p>Öncelikle iyi yazılmış bir commit mesajı daha sonra ne işimize yarar? Güzel bir alıntı ile başlamak istiyorum.</p>
+
+<blockquote>
+  <p>Any software project is a collaborative project. It has at least two developers, the original developer and the
+original developer a few weeks or months later when the train of thought has long left the station. This later self
+needs to reestablish the context of a particular piece of code each time a new bug occurs or a new feature needs to 
+be implemented.</p>
+
+  <p>Peter Hutterer - <a href="http://who-t.blogspot.com/2009/12/on-commit-messages.html">On commit messages</a></p>
+</blockquote>
+
+<p>Özetle iyi yazılmış bir commit mesajı;</p>
+
+<ol>
+  <li>
+    <p>Kodda yapılan bir değişikliğin üzerinden zaman geçtikten sonra 
+bu değişikliğin sebebini kodu okuyarak anlamaya çalışmak 
+oldukça zaman alan bir eylemdir.
+İyi bir commit mesajı kodu tekrar okumadan değişikliğin neden yapıldığını bize söyler.</p>
+  </li>
+  <li>
+    <p>Projenin versiyon geçmişinin düzenli ve tutarlı görünmesini sağlar.
+Hangi özellik ne zaman geliştirildi, 
+bir hata hangi commit ile düzeltildi 
+veya ilgili release hangi değişiklikleri içeriyor
+gibi kıymetli bilgilere versiyon geçmişinde sadece commit mesajlarını okuyarak ulaşabiliriz.</p>
+  </li>
+  <li>
+    <p>Yazılan kodu asıl branch’e merge etmeden önce gözden geçiren kişilere yardımcı olur.
+Code-review sürecini hızlandırır.</p>
+  </li>
+  <li>
+    <p>Son olarak bu benim kişisel yorumum, 
+iyi yazılmış bir commit mesajı bir yazılımcının işini özenerek yaptığını gösterir.
+Yaptığı değişiklikleri commit mesajında güzelce açıklamayan bir geliştiriciye bir gün
+“Bu satırı niçin bu şekilde değiştirdin?” diye sormamız gerekebilir 
+ve muhtemelen sebebini o da unutmuş olacaktır. 
+Bu sefer hatırlamak için onun kodu açıp okuması gerekecektir.</p>
+  </li>
+</ol>
+
+<p>Çeşitli kaynaklardan toparladığım kuralları birer birer açıklamadan önce
+iyi bir commit mesajı bulup örnek olarak panoya asmanın güzel olacağını düşünüyorum.</p>
+
+<p>Aşağıda spring-boot projesinin github repository’sinden aldığım 
+<a href="https://github.com/spring-projects/spring-boot/commit/70d4994502c848b3db82845c97a033448356c938">bir commit</a> 
+mesajını göstermek istiyorum. 
+Bu commit’i gönderen <a href="https://github.com/scottfrederick">Scott Frederick</a> abimiz 
+aşağıda yazacağım bütün iyi commit mesajı yazma kurallarını, adeta ibret-i alem için, uygulamış.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Disable exception details on default error views
+
+Prior to this commit, default error responses included the message
+from a handled exception. When the exception was a BindException, the
+error responses could also include an errors attribute containing the
+details of the binding failure. These details could leak information
+about the application.
+
+This commit removes the exception message and binding errors detail
+from error responses by default, and introduces a
+`server.error.include-details` property that can be used to cause
+these details to be included in the response.
+
+Fixes gh-20505
+</code></pre></div></div>
+
+<p>Kötü yazılmış mesajlara da örnekler vermeyi düşündüm 
+fakat iyi yazılmış mesajlar o kadar nadir projelerde bulunuyor ki
+rastgele açtığım projelerin çoğunda kötü örnekler mevcut.
+Kötü örnekleri çok iyi bildiğiniz için burayı hiç kirletmeyeceğim.</p>
+
+<h2 id="kurallar">Kurallar</h2>
+
+<p>Artık kuralları incelemeye başlayabiliriz.
+İyi bir commit mesajının kuralları:</p>
+
+<ol>
+  <li><a href="#bos-satir">Başlık ve gövdeyi boş bir satır ile birbirinden ayırın</a></li>
+  <li><a href="#baslik-50-karakter">Başlığı 50 karakter ile sınırlandırın</a></li>
+  <li><a href="#baslik-buyuk-harf">Başlığa büyük harf ile başlayın</a></li>
+  <li><a href="#baslik-nokta">Başlık satırını nokta ile sonlandırmayın</a></li>
+  <li><a href="#baslik-emir-kipi">Başlığı emir kipi ile yazın</a></li>
+  <li><a href="#govde-72-karakter">Gövde satırlarında 72 karakter uzunluğunu geçmeyin</a></li>
+  <li><a href="#govde-ne-neden">Gövdede neyi niçin değiştirdiğinizi açıklayın</a></li>
+</ol>
+
+<h3 id="bos-satir">Başlık ve gövdeyi boş bir satır ile birbirinden ayırın</h3>
+
+<p>Git versiyon kontrol sistemi yazdığınız mesajı başlık ve gövde olmak üzere iki parça olarak düşünür.
+Versiyon geçmişi üzerinde çalışan birçok git komutu bu ayrımı kullanır. 
+Örneğin <code class="highlighter-rouge">git log</code> komutu tüm commit’lerin mesajlarını tam haliyle listelerken,
+<code class="highlighter-rouge">git shortlog</code> ve <code class="highlighter-rouge">git log --oneline</code> komutları commit’lerin sadece başlıklarını listeler.</p>
+
+<p>Git’in bu ayrımı yapabilmesinin tek yolu başlık olarak yazdığınız satır ile
+gövde olarak yazdığınız ilk satırın arasında bir boş satır bulunmasıdır.
+Boş satır bulunmadığı takdirde Git iki satırı birleştirir ve tek satır gibi düşünür.</p>
+
+<h3 id="baslik-50-karakter">Başlığı 50 karakter ile sınırlandırın</h3>
+
+<p>Commit mesajını kısa tutmak okunabilirliğini arttıracaktır.
+Aynı zamanda sizi yaptığınız değişiklikleri kısaca özetlemeye zorlayacağı için
+yaptığınız değişiklikleri bir kez daha düşünmenizi sağlayacaktır.</p>
+
+<p>Eğer yaptığınız değişiklikleri özetleme konusunda zorluk yaşıyorsanız
+gerekenden fazla değişikliği tek bir commit’e yüklemeye çalışıyor olabilirsiniz.
+Bu durumda yaptığınız değişiklikleri birden fazla commit’e paylaştırmayı düşünebilirsiniz.</p>
+
+<p><code class="highlighter-rouge">git commit --help</code> komutunu kullanarak <code class="highlighter-rouge">git commit</code> hakkında yardım istediğimizde
+terminalimize dökülen uzun yazıda aşağıdaki gibi bir bölüm var:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Though not required, it's a good idea to begin the commit message with a single short 
+(less than 50 character) line summarizing the change, followed by a blank line and then 
+a more thorough description. The text up to the first blank line in a commit message is 
+treated as the commit title, and that title is used throughout Git. For example, 
+git-format-patch(1) turns a commit into email, and it uses the title on the Subject 
+line and the rest of the commit in the body.
+</code></pre></div></div>
+
+<p>Yani git de başlık satırının 50 karakterden kısa olmasının iyi olacağını söylüyor.</p>
+
+<h3 id="baslik-buyuk-harf">Başlığa büyük harf ile başlayın</h3>
+
+<p>Adından anlaşılacağı gibi ilk satırımız commit mesajımızın başlığı görevi görecek.
+Tüm başlıklar gibi bu başlığımıza da büyük harf ile başlayalım.</p>
+
+<h3 id="baslik-nokta">Başlık satırını nokta ile sonlandırmayın</h3>
+
+<p>Nihayetinde commit mesajının başlığı da bir başlıktır 
+ve başlıklar nokta ile bitmemeli.</p>
+
+<p>Ek olarak başlık satırına koyacağınız her bir karakter
+kendimize koyduğumuz 50 karakter başlık kotasından tüketmekte.</p>
+
+<h3 id="baslik-emir-kipi">Başlığı emir kipi ile yazın</h3>
+
+<p>Git kendisi de commit mesajı üretirken emir kipi (Imperative) kullanmakta.</p>
+
+<p>Örneğin otomatik olarak merge commit oluşturken:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Merge branch 'release/awesome-feature'
+</code></pre></div></div>
+
+<p>Bu durumda emir kipi ile yazmanın birinci faydası 
+git ile aynı kuralları kullanmış oluyoruz.
+Bu da versiyon geçmişimizde tutarlılık sağlıyor.</p>
+
+<p>Git’in kendi repository’sinde de aşağıdaki gibi emir kipi ile yazılmasını istemişler.
+Sanki koda davranışını değiştirmesi için emir veriyormuş gibi yazın diyorlar.</p>
+
+<blockquote>
+  <p>Describe your changes in imperative mood, e.g. “make xyzzy do frotz”
+  instead of “[This patch] makes xyzzy do frotz” or “[I] changed xyzzy
+  to do frotz”, as if you are giving orders to the codebase to change
+  its behavior.</p>
+
+  <p><a href="https://git.kernel.org/pub/scm/git/git.git/tree/Documentation/SubmittingPatches?id=HEAD#n133">Git Docs</a></p>
+</blockquote>
+
+<p>Bir diğer faydası da emir kipi ile yazdığımızda özne kullanmayacağımız 
+ve fiillere -ed veya -s gibi ekler gelmeyeceği için mesajımızın kısalması.
+Böylece başlık satırımızda 50 karakter limiti kuralımızı delmeden daha fazla bilgi verebileceğiz.</p>
+
+<h5 id="yanlış">Yanlış</h5>
+
+<p><code class="highlighter-rouge">Fixes NullPointerException in SubscriptionRestController</code></p>
+
+<p><code class="highlighter-rouge">Fixed NullPointerException in SubscriptionRestController</code></p>
+
+<p><code class="highlighter-rouge">I added direct charging capability for internal partners</code></p>
+
+<p><code class="highlighter-rouge">This commit adds direct charging capability for internal partners</code></p>
+
+<h5 id="doğru">Doğru</h5>
+
+<p><code class="highlighter-rouge">Fix NullPointerException in SubscriptionRestController</code></p>
+
+<p><code class="highlighter-rouge">Add direct charging capability for internal partners</code></p>
+
+<h3 id="govde-72-karakter">Gövde satırlarında 72 karakter uzunluğunu geçmeyin</h3>
+
+<p>Kod yazarken de kitap yazarken de okunabilirliğin artması için
+bir satıra yazılabilcek maksimum karakter sayısı kısıtlanır.
+Çok kısa satırlar sürekli satır atlamak zorunda kalacağımız için okumayı zorlaştırır.
+Çok uzun satırlar ise okuyanın alt satıra geçeceği zaman satırın başını kaçırmasına sebep olur.</p>
+
+<p>Bilgisayar dünyasında geçmişin teknolojik kısıtlamalarının günümüze bıraktığı bir armağan olan
+80 karakter limiti bir çok alanda hala kullanılmakta. 
+Bu 80 karakter limitinin nereden geldiği ile ilgili çok güzel bir stackexchange yazısı buldum
+linki şuraya bırakıyorum boş vaktiniz olur ve merak ederseniz buyrun:
+<a href="https://softwareengineering.stackexchange.com/questions/148677/why-is-80-characters-the-standard-limit-for-code-width">Why is 80 characters the ‘standard’ limit for code width?</a></p>
+
+<p>Peki neden 72 karakter? Çünkü bazı git komutlarında commit mesajlarımıza indentation uygulanır.
+Bu indentation 72 karakter olarak yazdığımız satırlarımıza bir miktar boşluk ekler
+ve mesajlarımız ekranda yazdığımızdan daha fazla yer kaplar.</p>
+
+<p>Kendimizi 72 karakter ile kısıtladığımızda oluşan çıktı hala 80 karakter limitini aşmamış olur.
+80 karakterlik bir terminalde yatay scrollbar’ın görünmesine 
+veya yazdığımız satırın terminal tarafından wrap edilmesine sebep olmamış oluruz.</p>
+
+<h3 id="govde-ne-neden">Gövdede neyi neden değiştirdiğinizi açıklayın</h3>
+
+<p>Commit mesajımızın gövde kısmında, kodda ne değişiklik yaptığımızı
+ve bu değişikliği neden yaptığımızı görmek isteriz.
+Değişikliğin nasıl yapıldığı veya kodun nasıl çalıştığını merak edenler kodu okumalı.
+Commit mesajında “nasıl” sorusuna cevap aramamalıyız.</p>
+
+<p>Kaliteli bir kod kendisini açıklayabilmelidir.
+Eğer açıklayamayacak kadar kompleks bir kodsa, koda yorum yazılmalı.</p>
+
+<p>Koda bakarak anlayamayacağımız şey, bağlamıdır (context). 
+Yani bu kod neden yazıldı?
+Hangi bug çözülmeye çalışılırken bu satır değiştirildi?
+Bu methodun içine bu koşul hangi özellik geliştirilirken eklendi?
+İyi bir commit mesajının bunlar gibi sorulara cevap vermesini bekleriz.</p>
+
+<p>Beğendiğim bir diğer mesaj içeriği de yazının başlarında verdiğim örnekteki gibi,
+“Bu değişiklikten önce kodun davranışı şu şekildeydi,
+bu commit sonrasında artık kodun davranışı bu şekilde olacaktır.”
+şeklinde anlatmaktır. 
+Gördüğüm kadarıyla Spring Boot projesi geliştiricileri bu kuralı uyguluyorlar.</p>
+
+<p>Gövdede değinilebilecek bir diğer konu ise ilgili commit sonrası nelerin eksik kaldığıdır.
+Bu commit ile geliştirilecek özelliğin ne kadarı geliştirildi, ne kadarı başka commit’lere adreslendi?
+Bu bilginin de commit mesajında çok kıymetli bir veri olacağını düşünüyorum.</p>
+
+<h2 id="öneriler">Öneriler</h2>
+
+<p>Bu kısımda herkesin kabul ettiği genel geçer kuralların dışında kalan kendi görüşlerime
+veya fikir ayrılıklarının olduğu konularda savunduğum görüşe yer vereceğim.</p>
+
+<ol>
+  <li><a href="#ingilizce-yazin">İngilizce yazın</a></li>
+  <li><a href="#proje-yonetim-id">Proje yönetim aracı ID’lerini sona ekleyin</a></li>
+  <li><a href="#pair-programming">Pair programming yaptığınız kişileri de mesaja dahil edin</a></li>
+</ol>
+
+<h3 id="ingilizce-yazin">İngilizce yazın</h3>
+
+<p>Bu madde ile ilgili yazılmış bir şey pek bulamadım o yüzden kendi görüşüm olduğunu belirteyim.
+Artık herkes her yerde.
+Şu anda çalıştığınız projedeki tüm ekibin Türk olması her zaman böyle kalacağını göstermiyor.
+Her an yabancı bir iş arkadaşınız olabilir,
+yurt dışından danışmanlık alabilir,
+veya projeyi silikon vadisindeki bir firmaya satabilirsiniz.
+Daha da güzeli açık kaynak kodlu deyip kaynak kodunuzu dünyanın dört bir yanındaki geliştiricilere açabilirsiniz.</p>
+
+<p>Birçok sektörde olduğu gibi yazılım sektöründe de iletişim dili olarak İngilizce kullanılıyor.
+Nasıl ki kodumuzdaki değişkenleri, fonksiyonları, sınıfları, vs Türkçe isimlendirmiyorsak 
+(ki aksini savunanlar da yapanlar da var)
+versiyon geçmişini de Türkçe tutmamalıyız.</p>
+
+<p>Bu 3-4 sene önce benim de yaptığım bir hataydı.
+Şimdi versiyon geçmişinde eskiden Türkçe yazdığım mesajları gördükçe sinirleniyorum.
+En kötüsü de üzerine epey commit geldikten sonra o mesajları düzeltememek. :)</p>
+
+<h3 id="proje-yonetim-id">Proje yönetim aracı ID’lerini Sona Ekleyin</h3>
+
+<p>Eğer bir proje yönetim aracı, issue tracker, vs kullanıyorsanuz, 
+commit mesajının en sonunda, gövde bittikten sonra yine bir satır boşluk bırakıp,
+proje yönetim sistemi ID’mizi yazabiliriz.</p>
+
+<p>Bu şekilde kullandığımız farklı tool’ların birbirinden haberinin olmasını sağlayabiliriz.
+Daha ileriki zamanlarda commit mesajını inceleyen arkadaşlara 
+bu iş ile ilgili daha fazla detayın bulunduğu bir kaynak daha sunmuş oluruz.</p>
+
+<p>Örneğin yazının başında örnek verdiğim commit mesajındaki <code class="highlighter-rouge">Fixes gh-20505</code> yazan satırda
+Github’daki issue ID’sinin referans verildiğini görebiliriz.</p>
+
+<p>Bunu yaparken dikkat edilmesi gereken husus bu issue id’nin commit mesajının
+başlığında değil gövdesinde yer almasıdır.</p>
+
+<p>Bunu başlığın başına koyanları gördüm. 
+Sonuna koyanları gördüm.
+Başlık satırına issue id dışında başka hiçbir şey yazmayanlar olduğunu gördüm.
+Başlığın hem başına hem sonuna koyanını bile gördü bu gözler hey gidi.
+Bu konuda çok hassasım çünkü çalıştığım ekipte buna direnen gençler var :)</p>
+
+<p>Commit mesajının en sonlarında bir satırda issue id aşağıdakilere benzer bir formatta kullanılabilir:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Fixes: FCB-8473
+Resolves: FCB-3123
+Issue: TEAM-432
+Ticket: TKT-83823242
+</code></pre></div></div>
+
+<p>Ayrıca issue id yazıyorum nasıl olsa gidip ordan okusunlar diyip de 
+commit mesajını açıklayıcı yazmamak çok ayıptır.
+Issue tracking sisteminiz o anda hizmet veremiyor olabilir, 
+projede çalışan geliştiricilerden birisinin o anda o sisteme erişimi olmayabilir,
+veya bizim gibi ara sıra proje yönetim programınızı değiştirebilirsiniz.
+Bu sebeple issue id versek dahi commit mesajında yeteri kadar detayı paylaştığımızdan emin olmalıyız.</p>
+
+<p>Issue id eğer commit mesajı başlığında olursa ilgili özellik ile ilgili
+tüm commit mesajlarında aşağıdaki gibi aynı issue id kendini tekrar eder
+ve görüntü kirliliğine yol açar:</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>git log <span class="nt">--oneline</span>
+<span class="go">cb5515d21 Merge branch 'fea/FCB-1126-customer-history-report' into 'release/024-port-out-customer-information'
+b5d572d32 FCB-1126 Fix test
+c7c80cda3 FCB-1126 Change msisdn-history pojo class
+ab68a1d7c FCB-1126 Add customer-history page
+</span></code></pre></div></div>
+
+<p>Başlık satırımızdaki 50 karakterlik alan oldukça kıymetli bir alan olduğu için 
+issue id yazarak boşa karakter harcamak israf olmaz mı?</p>
+
+<p>Issue ID’ler branch isimlerinde kullanıldığında daha anlamlı olduğunu düşünenlerdenim.
+Böylece sadece merge commit’inin başlığında görürüz kendilerini.
+Yukarıdaki kötü örnekte bu şekilde yazılmış bir adet de merge commiti göreceksiniz.</p>
+
+<h3 id="pair-programming">Pair programming yaptığınız kişileri de mesaja dahil edin</h3>
+
+<p>Eğer pair programming gibi kodu iki kişinin birlikte yazdığı 
+fakat klavyeyi tek bir kişinin kullandığı bir yöntem uyguluyorsanız,
+birlikte çalıştığınız arkadaşınızın ismini de bir şekilde commit mesajına dahil edin.</p>
+
+<p>Bunu yapmak çok kolay.
+Sadece üşenmeyip aşağıdakine benzer bir satırı commit mesajının sonuna ekleyebilirsiniz.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Co-authored-by: Foo Bar &lt;foo.bar@example.com&gt;
+</code></pre></div></div>
+
+<p>Veya birden fazla kişi ile birlikte çalışıyorsanız bunu iki satırda yapabilirsiniz:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Co-authored-by: Foo Bar &lt;foo.bar@example.com&gt;
+Co-authored-by: John Bob &lt;john.bob@example.com&gt;
+</code></pre></div></div>
+
+<p>Bu şekilde çalışma arkadaşlarınıza da hak ettikleri krediyi vermiş olursunuz.</p>
+
+<p>Unutmayın ki kodu ne kadar oturup birlikte yazarsanız yazın
+commit’i kimin hesabı ile yaparsanız tüm kodu o kişi yazmış gibi görünecektir.
+Bu sebeple commit atarken birlikte çalıştığımız arkadaşlarımızı da unutmamak lazım.</p>
+
+<h2 id="bitti">Bitti</h2>
+
+<p>Bu yazıda yazdığım maddelerin büyük çoğunluğunu 
+<a href="https://chris.beams.io/">Chris Beams</a>‘in 2014 yılında yazdığı 
+<a href="https://chris.beams.io/posts/git-commit/">How to Write a Git Commit Message</a>
+yazısından öğrendim. 
+Bu yazı yıllardır web tarayıcımda yer imi olarak durmaktaydı.
+Çalıştığım projelerde gelen Merge Request’leri gözden geçirirken
+eğer kötü bir commit mesajı görürsem bu linki yapıştırırdım hemen yorum olarak.</p>
+
+<p>Bu yazıyı Türkçe şekliyle tekrar yazarak 
+ve birlikte çalıştığım ekibimle kullandığımız 
+veya kullanmayı arzuladığım pratikleri de dahil ederek 
+ülkemizde üretilen yazılımların kalitesinde pozitif bir etki oluşturabilmek en büyük temennim.</p>
+
+<p>Kaliteli yazılımcı yaptığı işin dökümantasyonunu da iyi yapar.
+Commit mesajları da bana göre en güzel dökümantasyon araçlarından biridir.</p>
+
+<p>Sağlıklı kalın.</p>
+
+<h2 id="kaynaklar">Kaynaklar</h2>
+
+<ul>
+  <li><a href="https://chris.beams.io/posts/git-commit/">https://chris.beams.io/posts/git-commit/</a></li>
+  <li><a href="http://who-t.blogspot.com/2009/12/on-commit-messages.html">http://who-t.blogspot.com/2009/12/on-commit-messages.html</a></li>
+  <li><a href="https://corgibytes.com/blog/2019/03/20/commit-messages/">https://corgibytes.com/blog/2019/03/20/commit-messages/</a></li>
+  <li><a href="https://yvonnickfrin.dev/a-guide-on-commit-messages">https://yvonnickfrin.dev/a-guide-on-commit-messages</a></li>
+  <li><a href="https://hackernoon.com/power-up-your-pair-programming-with-co-authored-commits-on-github-ffb5d049aed3">https://hackernoon.com/power-up-your-pair-programming-with-co-authored-commits-on-github-ffb5d049aed3</a></li>
+  <li><a href="https://help.github.com/en/github/committing-changes-to-your-project/creating-a-commit-with-multiple-authors">https://help.github.com/en/github/committing-changes-to-your-project/creating-a-commit-with-multiple-authors</a></li>
+  <li><a href="https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html">https://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html</a></li>
+</ul>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/2020/04/13/thread-local-nedir-java/">&laquo; Thread Local Nedir?</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+  </div>
+</div>
+
+
+  
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://serdarkuzucu.com/2020/04/19/git-commit-mesaji-nasil-yazilmali/';
+        this.page.identifier = 'git-commit-mesaji-nasil-yazilmali';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+  
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>
