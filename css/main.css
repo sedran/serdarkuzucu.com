@@ -6262,13 +6262,7 @@ readers do not read off random characters that represent icons */
 
 .fab { font-family: 'Font Awesome 5 Brands'; font-weight: 400; }
 
-html { position: relative; height: 100%; }
-
-body { display: flex; flex-direction: column; height: 100%; min-height: 100%; background-color: #ffffff; }
-
-.blog-content { flex: 1 0 auto; /* 2 */ padding: 0; width: 100%; }
-
-.blog-content::after { content: '\00a0'; /* &nbsp; */ display: block; margin-top: 0; height: 0; visibility: hidden; }
+.blog-content { word-break: break-word; }
 
 .sk-logo img { width: 60px; height: 30px; object-fit: cover; }
 
