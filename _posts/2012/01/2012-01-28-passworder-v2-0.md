@@ -28,26 +28,22 @@ Arayüze dokunmadım.
 Arayüz zaten ilk versiyonda en çok vakit harcadığım kısmıydı, güzel de oldu diye düşünüyorum.
 İlk versiyonun algoritmasını da programı kıran arkadaşımın ağzından sizlerle paylaşayım:
 
-<div class="card">
-<div class="card-body">
-<blockquote class="blockquote">
-arkadaslar sifreyi bulmak çok basit. 
-dosyayı bir hex editorle açın. 
-ilk 4 byte bir offset. 
-sonraki 4 byte sifrenin uzunluğu. 
-sonra sifrenin uzunluğu kadar geriye sayma şeklinde byte yazılmış.
-(mesela 00 00 00 02 ise ondan sonra 01 00 gelir.) 
-bundan sonra 15lik unicode char arrayi(uzantıyı tutuyor.) 
-bu yerden offset kadar giderseniz de, sifreyi görürsünüz. 
-sifreden sonra datanın kalan kısmı geliyor. 
-Data ise 0xFF ile xorlanarak gizlenmeye çalışılmıştır.
+
+> arkadaslar sifreyi bulmak çok basit. 
+> dosyayı bir hex editorle açın. 
+> ilk 4 byte bir offset. 
+> sonraki 4 byte sifrenin uzunluğu. 
+> sonra sifrenin uzunluğu kadar geriye sayma şeklinde byte yazılmış.
+> (mesela 00 00 00 02 ise ondan sonra 01 00 gelir.) 
+> bundan sonra 15lik unicode char arrayi(uzantıyı tutuyor.) 
+> bu yerden offset kadar giderseniz de, sifreyi görürsünüz. 
+> sifreden sonra datanın kalan kısmı geliyor. 
+> Data ise 0xFF ile xorlanarak gizlenmeye çalışılmıştır.
 
 aslında 02 01 00 kısım şifre harflerin yerini söylüyormuş mesela 
 "02 01 00 03 04" ile "m h a e t" eşleştirirseniz, 
 a=00 h=01 m=02 e=03 t=04 olur ve şifre ahmet olarak bulursunuz.
-</blockquote>
-</div>
-</div>
+
 
 Evet ilk versiyonda çıplak gözle görülebilen bu şeylere bu versiyonda pek rastlayamayacaksınız.
 Rastlasanız da anlamayacaksınız.

@@ -22,10 +22,13 @@ Peki kimdir bu daemon?
 
 <!--more-->
 
-<blockquote class="blockquote">
-<p class="mb-0">In multitasking computer operating systems, a daemon is a computer program that runs as a background process, rather than being under the direct control of an interactive user.</p>
-<footer class="blockquote-footer"><a href="https://en.wikipedia.org/wiki/Daemon_(computing)" target="_blank" rel="nofollow">Wikipedia, <cite title="Daemon">Daemon (Computing)</cite></a></footer>
-</blockquote>
+> In multitasking computer operating systems, a daemon is a computer program that runs as a background
+> process, rather than being under the direct control of an interactive user.
+> <footer class="blockquote-footer">
+>   <a href="https://en.wikipedia.org/wiki/Daemon_(computing)" target="_blank" 
+>     rel="nofollow">Wikipedia, <cite title="Daemon">Daemon (Computing)</cite>
+>   </a>
+> </footer>
 
 
 ## User Threads vs Daemon Threads

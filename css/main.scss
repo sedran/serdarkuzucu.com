@@ -2,6 +2,7 @@
 # Only the main Sass file needs front matter (the dashes are enough)
 ---
 @charset "UTF-8";
+@import url(//fonts.googleapis.com/css?family=PT+Sans|Ubuntu:300,400,700);
 
 
 
@@ -168,5 +169,25 @@ body {
 }
 
 blockquote {
-  @extend .blockquote;
+  display: block;
+  border-width: 2px 0;
+  border-style: solid;
+  border-color: $secondary;
+  padding: 1.5em 1.5em 0.5em;
+  margin: 1.5em 0;
+  position: relative;
+  font-size: 1.1em;
+}
+blockquote:before {
+  content: '\201C';
+  position: absolute;
+  top: 0em;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  width: 3rem;
+  height: 2rem;
+  font: 6em/1.08em 'PT Sans', sans-serif;
+  color: #666;
+  text-align: center;
 }

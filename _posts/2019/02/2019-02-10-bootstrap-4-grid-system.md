@@ -40,17 +40,16 @@ CSS reset dışında kullanabileceğiniz birçok güzel özellik ile donatılmı
 geliştirirken bolca kullandım. Bu yazıda Bootstrap kütüphanesinde kullanmaktan en çok zevk aldığım özellik olan 
 [Grid yapısını](https://getbootstrap.com/docs/4.2/layout/grid/) ele alacağım. 
 
-<div class="card mb-2">
-  <div class="card-body">
-    <blockquote class="blockquote mb-0">
-<h5>Grid system</h5>
-<p class="mb-0">Use our powerful mobile-first flexbox grid to build layouts of all shapes and sizes thanks to a twelve column system, five default responsive tiers, Sass variables and mixins, and dozens of predefined classes.</p>
-<footer class="blockquote-footer">
-<cite title="Bootstrap Grid System"><a href="https://getbootstrap.com/docs/4.2/layout/grid/" target="_blank" rel="nofollow">Bootstrap Grid System</a></cite>
-</footer>
-</blockquote>
-  </div>
-</div>
+
+> <h5>Grid system</h5>
+> Use our powerful mobile-first flexbox grid to build layouts of all shapes and sizes thanks to a
+> twelve column system, five default responsive tiers, Sass variables and mixins, and dozens of predefined classes.
+> <footer class="blockquote-footer">
+>   <cite title="Bootstrap Grid System">
+>     <a href="https://getbootstrap.com/docs/4.2/layout/grid/" target="_blank" 
+>       rel="nofollow">Bootstrap Grid System</a>
+>   </cite>
+> </footer>
 
 Grid yapısında en beğendiğim özelliklerden birisi mobile-first mottosuyla geliştirilmiş olması ve bize 5 adet 
 responsive kırılım sunması. Bu kırılımların 4 tanesinin kendi isimleri varken, en küçük ekranlar için kullanacağımız 
