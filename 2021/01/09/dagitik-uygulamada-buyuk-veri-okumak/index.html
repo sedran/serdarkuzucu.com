@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Dağıtık Uygulamada Büyük Veri Okumak</title>
+
+  <meta name="description" content="2020 senesi içerisinde Inomera‘da Telekom sektörü için geliştirdiğimiz devasa bir projeyi başarıyla canlıya aldık.Oldukça güncel teknolojiler kullandığımız v...">
+
+<meta content="Serdar Kuzucu" property="og:site_name">
+
+
+<meta content="Dağıtık Uygulamada Büyük Veri Okumak" property="og:title">
+
+
+
+<meta content="article" property="og:type">
+
+
+<meta content="2020 senesi içerisinde Inomera‘da Telekom sektörü için geliştirdiğimiz devasa bir projeyi başarıyla canlıya aldık.Oldukça güncel teknolojiler kullandığımız v..." property="og:description">
+
+
+<meta content="https://serdarkuzucu.com/2021/01/09/dagitik-uygulamada-buyuk-veri-okumak/" property="og:url">
+
+
+
+<meta content="2021-01-08T22:48:20+00:00" property="article:published_time">
+<meta content="https://serdarkuzucu.com/about/" property="article:author">
+
+
+
+<meta content="https://serdarkuzucu.com/assets/category/java.png" property="og:image">
+
+
+
+
+<meta content="Java" property="article:section">
+
+
+
+
+
+
+
+<meta name="twitter:creator" content="@sedran"/>
+<meta name="twitter:site" content="@sedran"/>
+<meta name="twitter:card" content="summary"/>
+
+
+  <link rel="stylesheet" href="/css/main.css?v=201904191944">
+  <link rel="canonical" href="https://serdarkuzucu.com/2021/01/09/dagitik-uygulamada-buyuk-veri-okumak/">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2260086-7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-2260086-7');
+  </script>
+  
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (42)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (6)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (5)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (4)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (6)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (21)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+            <a href="/category/git" class="dropdown-item">Git (2)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Dağıtık Uygulamada Büyük Veri Okumak</h1>
+    <p class="post-meta">
+      <time datetime="2021-01-08T22:48:20+00:00" itemprop="datePublished">Jan 8, 2021</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>2020 senesi içerisinde <a href="https://inomera.com/">Inomera</a>‘da Telekom sektörü için geliştirdiğimiz 
+devasa bir projeyi başarıyla canlıya aldık.
+Oldukça güncel teknolojiler kullandığımız ve mikroservis mimarisi ile
+geliştirdiğimiz bu sistem Kubernetes ortamı üzerinde çalışmakta. 
+Bu yazıda bu sistemde yaklaşık <u>22 milyon</u> satır 
+kullanıcı verisini veritabanından okuyup dağıtık bir cache Map’ine
+dolduran küçük bir mikroserviste uyguladığımız
+dağıtık veri okuma yöntemini anlatmaya çalışacağım.</p>
+
+<!--more-->
+
+<h3 id="önbilgi">Önbilgi</h3>
+
+<p>Öncelikle kullandığımız araçlardan ve veri yapısından bahsedelim.</p>
+
+<ul>
+  <li>
+    <p>Belleğe doldurmaya çalıştığımız veri her bir <a href="https://tr.wikipedia.org/wiki/MSISDN">msisdn</a>, 
+yani müşterinin cep telefonu numarası, için müşterinin izin verdiği kategorilerin
+ID’lerinden oluşmakta olup Oracle DB üzerinde başka sistemler tarafından 
+yönetilen bir view’dan bize sağlanmakta. 
+Burada işin içinde çok fazla farklı müşteri sistemi olduğu için daha performanslı
+bir veritabanı veya tablo yapısına geçemiyoruz.</p>
+  </li>
+  <li>
+    <p>Veriyi belleğe çeken uygulamamız kubernetes üzerinde çalışmakta. 
+Dinamik olarak kaynak ihtiyacına göre Kubernetes tarafından
+instance sayısı arttırılıp azaltılabilmekte bu sebeple herhangi bir
+anda uygulamamızdan kaç adet instance’ın eş zamanlı çalışıyor olabileceği
+bilgisi elimizde yok. 
+Kubernetes API’lerini kullanarak bu bilgiyi elde edebilecek olsak da
+uygulamanın içerisinde Kubernetes bağımlılığı oluşturmak istemedik.</p>
+  </li>
+  <li>
+    <p>Dağıtık cache olarak Kubernetes dışında kurulmuş bir <a href="https://hazelcast.org/">Hazelcast</a> cluster’ımız var.
+Herhangi bir müşterinin verisine herhangi bir mikroservisten çok hızlı bir şekilde
+ulaşabilmek için Hazelcast üzerindeki bir Map’de tutuyoruz.
+Hazelcast’in ayrıca bu işte Queue ve Lock özelliklerini de kullandık.</p>
+  </li>
+</ul>
+
+<p>Bu boyutta bir veriyi hızlı bir şekilde az bellek kullanarak sorgulayıp, işleyip, Hazelcast’e
+doldurmak için uygun bir yol ararken bu yazıda anlatacağım yöntemin 
+ihtiyacımızı karşılayacağını öngördük.</p>
+
+<h3 id="bellek-kullanımı">Bellek Kullanımı</h3>
+
+<p>Bir veritabanına büyük bir veri için sorgu atılacağı zaman düşünülmesi gereken
+en önemli şeylerden birisi veritabanından sonuçlar geldiği zaman uygulamanın bellek
+tüketiminin nasıl artacağıdır.</p>
+
+<p>Eğer veriyi işlemeye başlamak için verinin tamamına ihtiyacımız yoksa, 
+verileri parça parça alıp, aldıkça işlemeliyiz.</p>
+
+<p>Bunun için en bilindik yöntemlerden birisi offset/limit sorgusunu offset’i arttırarak tekrar tekrar
+atarak sayfalama (pagination) yapmak fakat bu yöntem her seferinde veritabanına yeniden sorgu atmayı
+gerektirdiği için faydasından çok zararı oluyor.</p>
+
+<p>Verileri parça parça çekmek ve işledikçe devamını okumak için Hibernate’deki <code class="highlighter-rouge">scroll</code> özelliğini kullandık.
+Sorgunun envai çeşit hibernate kontrolünden ve transaction yönetiminden geçmemesi için
+Hibernate’deki <code class="highlighter-rouge">StatelessSession</code> sınıfı üzerinden sorgumuzu <code class="highlighter-rouge">read-only</code> modda attık.</p>
+
+<p>Ek olarak bir ORM aracı ile sorgu sonuçlarının otomatik olarak entity sınıfına
+çevirilmesi özelliğinden de çok fazla reflection ve nesne kullanımının olmaması için
+feragat ediyoruz. Garbage Collector ve CPU biraz rahatlamış oluyor bu sayede.</p>
+
+<p>Hibernate’de bu şekilde bir sorgu nasıl atılır aşağıda ufak bir örnek paylaşıyorum.
+Buradaki <code class="highlighter-rouge">fetchSize</code> parametresi veritabanından sonuçların kaçar kaçar belleğe alınacağını belirliyor.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">fetchMsisdnCategories</span><span class="o">(</span><span class="nc">QueryState</span> <span class="n">queryState</span><span class="o">,</span> <span class="kt">int</span> <span class="n">fetchSize</span><span class="o">,</span> <span class="nc">Consumer</span><span class="o">&lt;</span><span class="nc">MsisdnCategoriesRecord</span><span class="o">&gt;</span> <span class="n">processor</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">try</span> <span class="o">(</span><span class="kd">final</span> <span class="nc">StatelessSession</span> <span class="n">statelessSession</span> <span class="o">=</span> <span class="n">sessionFactory</span><span class="o">.</span><span class="na">openStatelessSession</span><span class="o">())</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="nc">String</span> <span class="n">nativeSql</span> <span class="o">=</span> <span class="n">buildNativeSql</span><span class="o">(</span><span class="n">queryState</span><span class="o">);</span>
+        <span class="kd">final</span> <span class="nc">NativeQuery</span> <span class="n">query</span> <span class="o">=</span> <span class="n">statelessSession</span><span class="o">.</span><span class="na">createNativeQuery</span><span class="o">(</span><span class="n">nativeSql</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">setFetchSize</span><span class="o">(</span><span class="n">fetchSize</span><span class="o">);</span>
+        <span class="n">query</span><span class="o">.</span><span class="na">setReadOnly</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+    
+        <span class="kd">final</span> <span class="nc">ScrollableResults</span> <span class="n">scrollableResults</span> <span class="o">=</span> <span class="n">nativeQuery</span><span class="o">.</span><span class="na">scroll</span><span class="o">(</span><span class="nc">ScrollMode</span><span class="o">.</span><span class="na">FORWARD_ONLY</span><span class="o">);</span>
+        <span class="k">while</span> <span class="o">(</span><span class="n">scrollableResults</span><span class="o">.</span><span class="na">next</span><span class="o">())</span> <span class="o">{</span>
+            <span class="kd">final</span> <span class="nc">Object</span><span class="o">[]</span> <span class="n">rawRowData</span> <span class="o">=</span> <span class="n">scrollableResults</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+            <span class="kd">final</span> <span class="nc">Long</span> <span class="n">msisdn</span> <span class="o">=</span> <span class="nc">Long</span><span class="o">.</span><span class="na">valueOf</span><span class="o">((</span><span class="nc">String</span><span class="o">)</span> <span class="n">rawRowData</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+            <span class="kd">final</span> <span class="kt">byte</span><span class="o">[]</span> <span class="n">categoryIds</span> <span class="o">=</span> <span class="n">parseCategoryIdsAsByteArray</span><span class="o">(</span><span class="n">rawRowData</span><span class="o">[</span><span class="mi">1</span><span class="o">]);</span>
+            <span class="cm">/* Caller processes the result in `rawRowData` */</span>
+            <span class="n">processor</span><span class="o">.</span><span class="na">apply</span><span class="o">(</span><span class="k">new</span> <span class="nc">MsisdnCategoriesRecord</span><span class="o">(</span><span class="n">msisdn</span><span class="o">,</span> <span class="n">categoryIds</span><span class="o">));</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Bu method içerisinde çektiğimiz her satırı hemen sonuçları işleyecek olan <code class="highlighter-rouge">Consumer</code> sınıfına gönderiyoruz.
+Böylece herhangi bir şekilde uygulamanın belleğinde aşırı birikme yaratmamış oluyoruz.</p>
+
+<p>Yukarıdaki methodu çağıran sınıf <code class="highlighter-rouge">Consumer</code> arayüzünden oluşturulmuş bir sınıfı parametre olarak gönderiyor.
+Yani DAO katmanından çıkacak olan her bir <code class="highlighter-rouge">MsisdnCategoriesRecord</code> nesnesinin nasıl işleneceğini DAO katmanına
+yazmamış oluyoruz.</p>
+
+<p>DAO katmanındaki methodumuzu çağıran servis katmanı ise gelen her bir sonucu doğrudan Hazelcast’e atıyor.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Hazelcast Map</span>
+<span class="kd">private</span> <span class="kd">final</span> <span class="nc">IMap</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="kt">byte</span><span class="o">[]&gt;</span> <span class="n">msisdnCategoriesMap</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">reloadMsisdnCategories</span><span class="o">(</span><span class="nc">QueryState</span> <span class="n">queryState</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">fetchMsisdnCategories</span><span class="o">(</span><span class="n">queryState</span><span class="o">,</span> <span class="n">fetchSize</span><span class="o">,</span> <span class="o">(</span><span class="n">record</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
+        <span class="n">msisdnCategoriesMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">record</span><span class="o">.</span><span class="na">getMsisdn</span><span class="o">(),</span> <span class="n">record</span><span class="o">.</span><span class="na">getCategoryIds</span><span class="o">());</span>
+    <span class="o">});</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="sorgunun-dağıtılması">Sorgunun Dağıtılması</h3>
+
+<p>Yukarıdaki kod ile bir uygulama instance’ı tek başına DB’deki tüm datayı çekip Hazelcast Map’ine atabilir değil mi?
+Peki birden fazla uygulama instance’ı ayakta olduğu durumda datayı nasıl dağıtıyoruz?</p>
+
+<p>Açık konuşmam gerekirse çözüm bulmakta en çok zorlandığımız kısım burası oldu.
+Bir öğle yemeğinde tartışırken aklımıza gelen şu çözümü beğendik ve o günden beri kullanıyoruz.</p>
+
+<p>Öncelikle atılacak sorguları modüler aritmetik kullanarak parçalara bölüyoruz.
+Cep telefon numarası 905XXXXXXXXX formatında 12 adet rakamdan oluşan bir sayı olduğu için 
+modüler aritmetik işlemlerinde msisdn alanını tercih ettik.</p>
+
+<p>Sorgumuzdaki <code class="highlighter-rouge">WHERE</code> cümleciğinde ise şu şekilde modüler aritmetik koşuluna yer verdik:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span>
+  <span class="cm">/*+ parallel(%s) */</span>
+  <span class="n">MSISDN</span><span class="p">,</span>
+  <span class="n">listagg</span><span class="p">(</span><span class="n">CATEGORY_ID</span><span class="p">,</span> <span class="s1">','</span><span class="p">)</span> <span class="n">within</span> <span class="k">group</span><span class="p">(</span><span class="k">order</span> <span class="k">by</span> <span class="n">MSISDN</span><span class="p">)</span> <span class="n">CATEGORY_IDS</span>
+<span class="k">from</span> <span class="n">VIEW_MSISDN_CATEGORIES</span>
+<span class="k">where</span>
+    <span class="n">MSISDN</span> <span class="k">is</span> <span class="k">not</span> <span class="k">null</span> <span class="k">and</span>
+    <span class="n">CATEGORY_ID</span> <span class="k">is</span> <span class="k">not</span> <span class="k">null</span> <span class="k">and</span>
+    <span class="k">MOD</span><span class="p">(</span><span class="n">MSISDN</span><span class="p">,</span> <span class="o">%</span><span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="o">%</span><span class="n">s</span>
+<span class="k">group</span> <span class="k">by</span> <span class="n">MSISDN</span>
+</code></pre></div></div>
+
+<p>Yukarıdaki methodlarda belki dikkatinizi çekmiştir <code class="highlighter-rouge">QueryState</code> isminde bir sınıf kullanıyoruz sorguları oluştururken.
+Bu sınıf atılacak olan sorgunun hangi modda hangi kalana göre atılacağı bilgisini taşıyor.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">QueryState</span> <span class="kd">implements</span> <span class="nc">Serializable</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="mi">1L</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">mod</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">remainder</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">QueryState</span><span class="o">(</span><span class="kt">int</span> <span class="n">mod</span><span class="o">,</span> <span class="kt">int</span> <span class="n">remainder</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">mod</span> <span class="o">=</span> <span class="n">mod</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">remainder</span> <span class="o">=</span> <span class="n">remainder</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Böylece mikroservisimizin her bir instance’ının belli bir QueryState için 
+sorgu atmasını sağlayabilirsek problem çözülmüş olacaktı.</p>
+
+<p>Peki o anda mikroservisimizden kaç instance ayakta bilgisini bilmeden 
+nasıl tüm instance’lara görev dağıtabiliriz? 
+Bu noktada zorlandığımız nokta şuydu, instance sayısı kadar mod almaya çalışıyorduk.
+Hiçbir instance’ın boş yatmaması için tüm instance’ların işin bir ucundan tutması gerekiyordu.
+Çözümü bulduğumuz gün bunun için instance sayısını bilmeye ihtiyacımız olmadığını keşfettik.</p>
+
+<p>Aşağıdaki diagramda olduğu gibi, tüm DB’yi okuyup veriyi belleğe yükleme görevini alan mikroservis,
+belirli bir mod değerine karar verip, bir hazelcast queue’suna mod sayısı kadar <code class="highlighter-rouge">QueryState</code> nesnesini
+farklı kalan değerleri ile dolduruyor. Tüm mikroservis instance’ları hali hazırda açık duran 
+birer Thread ile bu belirli Queue’dan gelecek olan mesajları dinlemekteler. 
+Her instance Queue’dan kendine düşen <code class="highlighter-rouge">QueryState</code> nesnesindeki mod ve kalan bilgisine göre sorgusunu atıyor
+ve veritabanından gelen sonuçları Hazelcast Map’ine dolduruyor.</p>
+
+<p><img src="/assets/posts/queue-mod-query.png" alt="hazelcast queue modular_query" /></p>
+
+<p>Burada queue’ya attığımız <code class="highlighter-rouge">QueryState</code> nesnelerinin sayısı (ya da mod değerimiz) instance sayısına tam bölünmüyorsa 
+bazı instance’lar diğerlerinden daha fazla sorgu atabilirler veritabanına. 
+Eğer mod değerimiz instance sayısından küçük ise bazı instance’larımız hiç sorgu atmayabilirler.
+Biz mikroservisin instance sayısının alabileceği maksimum değer civarında 
+bir sayıyı mod değeri olarak kullanıyoruz 
+ve bu değeri runtime’da değiştirebileceğimiz konfigüratif bir yapıda tutuyoruz.</p>
+
+<h3 id="ufak-i̇yileştirmeler">Ufak İyileştirmeler</h3>
+
+<p>Tüm mikroservislerin işi belli ölçülerde paylaşıp üzerlerine düşen görevi yaptıklarından emin olduktan sonra
+artık her bir mikroservisin elindeki işi yaparken daha performanslı çalışması için ne yapabiliriz bunu düşünmenin
+zamanı geldi.</p>
+
+<p>Bu tip uygulamalarda en büyük zaman kaybı genellikle IO (network veya disk) kaynaklı olur.
+Veritabanından veriyi okuma kısmındaki git-gel işlemlerini sorguları scroll özelliğiyle atarak oldukça azalttık.
+Geriye hazelcast’e verileri gönderdiğimiz yer kalıyor. Hazelcast aracını da uygulamadan ayrı bir cluster şeklinde
+kurduğumuz için hazelcast operasyonları da network işlemlerinin büyük çoğunluğunu oluşturmakta.</p>
+
+<p>DAO katmanından gelen her bir satır için hazelcast’e bir <code class="highlighter-rouge">.put</code> işlemi çağırmak yerine öncelikle
+gelen satırları küçük gruplar halinde (1000 adet gibi) toparlayıp sonrasında <code class="highlighter-rouge">.putAll</code> methodunu çağırarak
+tek seferde network’e çıkarak küçük bir iyileştirme sağlayabildik. Burada önemli nokta elimizdeki verinin
+karakteristiğine göre memory üzerinde fazla birikme oluşturmayacak doğru sayıyı seçmek.</p>
+
+<p>Sonraki aşamada hazelcast dökümantasyonlarını karıştırırken bildiğimiz java Map’lerinde olmayan 
+<code class="highlighter-rouge">.set</code> ve <code class="highlighter-rouge">.setAll</code> isimli methodlarının Hazelcast’in IMap arayüzünde bulunduğunu fark ettik.
+<code class="highlighter-rouge">put*</code> türevi methodlar veriyi hazelcast’e koyduktan sonra Map’de ilgili key’e ait varolan eski veriyi dönerken
+<code class="highlighter-rouge">set*</code> türevi methodlar herhangi bir şey dönmüyorlar. 
+Bu methodları kullandığımız durumda network katmanını kullanmayacağımız bir veri için boşuna meşgul etmemiş oluyoruz.</p>
+
+<h1 id="sonuç">Sonuç</h1>
+
+<p>Bu yazıda anlattığım yöntemleri kullanarak tek bir instance’da çalışan, 
+tüm veriyi veritabanından hazelcast’e doldurması bir saati bulan bir görevi
+10 dakikanın altında çalışır hale getirdik. Sorgu attığımız veritabanı yapısında
+değişiklik yapma şansımız olsaydı daha iyi süreler de elde edebilirdik 
+fakat o yapıyı bizden başka birçok farklı sistem kullandığından öyle bir şansımız malesef bulunmamakta.</p>
+
+<p>Özetlemek gerekirse bu tip bir görev için kullanmaktan çok keyif aldığım şu teknikleri uyguladık:</p>
+
+<ul>
+  <li>Modüler aritmetik kullanarak sorguları dağıtma</li>
+  <li>Bilinen ORM yapısından çıkıp daha native tarafa yakın sorgular kullanmak</li>
+  <li>Veritabanı sorgusunun sonuçlarını scroll ederek okumak</li>
+  <li>Aynı uygulamanın birbirini görmeyen/bilmeyen instance’ları arasında görev dağılımı</li>
+  <li>Verinin bellekte minimum yer kaplayacak formatta tutulması</li>
+</ul>
+
+<p>Bu yöntemlerin bu yazıda gösterdiklerimden çok fazla sayıda farklı implementasyonları vardır
+fakat büyük işlerde önemli olan yöntemlerdir. Araçlar değişir.</p>
+
+<p>Bu yazı 2020 Ağustos ayında başladığım fakat bir türlü vakit ayırıp bitiremediğim bir yazıydı.
+Anlatımda kopukluklar varsa sebebi budur, hatalarım olduysa affola.</p>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/2020/04/26/daha-tatli-bir-git-log/">&laquo; Daha Tatlı Bir Git Log</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+  </div>
+</div>
+
+
+  
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://serdarkuzucu.com/2021/01/09/dagitik-uygulamada-buyuk-veri-okumak/';
+        this.page.identifier = 'dagitik-uygulamada-buyuk-veri-okumak';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+  
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>

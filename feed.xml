@@ -6,9 +6,242 @@
 </description>
     <link>https://serdarkuzucu.com/</link>
     <atom:link href="https://serdarkuzucu.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 26 Apr 2020 02:51:36 +0000</pubDate>
-    <lastBuildDate>Sun, 26 Apr 2020 02:51:36 +0000</lastBuildDate>
+    <pubDate>Fri, 08 Jan 2021 22:58:45 +0000</pubDate>
+    <lastBuildDate>Fri, 08 Jan 2021 22:58:45 +0000</lastBuildDate>
     <generator>Jekyll v4.0.0</generator>
+    
+      <item>
+        <title>Dağıtık Uygulamada Büyük Veri Okumak</title>
+        <description>&lt;p&gt;2020 senesi içerisinde &lt;a href=&quot;https://inomera.com/&quot;&gt;Inomera&lt;/a&gt;‘da Telekom sektörü için geliştirdiğimiz 
+devasa bir projeyi başarıyla canlıya aldık.
+Oldukça güncel teknolojiler kullandığımız ve mikroservis mimarisi ile
+geliştirdiğimiz bu sistem Kubernetes ortamı üzerinde çalışmakta. 
+Bu yazıda bu sistemde yaklaşık &lt;u&gt;22 milyon&lt;/u&gt; satır 
+kullanıcı verisini veritabanından okuyup dağıtık bir cache Map’ine
+dolduran küçük bir mikroserviste uyguladığımız
+dağıtık veri okuma yöntemini anlatmaya çalışacağım.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h3 id=&quot;önbilgi&quot;&gt;Önbilgi&lt;/h3&gt;
+
+&lt;p&gt;Öncelikle kullandığımız araçlardan ve veri yapısından bahsedelim.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Belleğe doldurmaya çalıştığımız veri her bir &lt;a href=&quot;https://tr.wikipedia.org/wiki/MSISDN&quot;&gt;msisdn&lt;/a&gt;, 
+yani müşterinin cep telefonu numarası, için müşterinin izin verdiği kategorilerin
+ID’lerinden oluşmakta olup Oracle DB üzerinde başka sistemler tarafından 
+yönetilen bir view’dan bize sağlanmakta. 
+Burada işin içinde çok fazla farklı müşteri sistemi olduğu için daha performanslı
+bir veritabanı veya tablo yapısına geçemiyoruz.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Veriyi belleğe çeken uygulamamız kubernetes üzerinde çalışmakta. 
+Dinamik olarak kaynak ihtiyacına göre Kubernetes tarafından
+instance sayısı arttırılıp azaltılabilmekte bu sebeple herhangi bir
+anda uygulamamızdan kaç adet instance’ın eş zamanlı çalışıyor olabileceği
+bilgisi elimizde yok. 
+Kubernetes API’lerini kullanarak bu bilgiyi elde edebilecek olsak da
+uygulamanın içerisinde Kubernetes bağımlılığı oluşturmak istemedik.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Dağıtık cache olarak Kubernetes dışında kurulmuş bir &lt;a href=&quot;https://hazelcast.org/&quot;&gt;Hazelcast&lt;/a&gt; cluster’ımız var.
+Herhangi bir müşterinin verisine herhangi bir mikroservisten çok hızlı bir şekilde
+ulaşabilmek için Hazelcast üzerindeki bir Map’de tutuyoruz.
+Hazelcast’in ayrıca bu işte Queue ve Lock özelliklerini de kullandık.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Bu boyutta bir veriyi hızlı bir şekilde az bellek kullanarak sorgulayıp, işleyip, Hazelcast’e
+doldurmak için uygun bir yol ararken bu yazıda anlatacağım yöntemin 
+ihtiyacımızı karşılayacağını öngördük.&lt;/p&gt;
+
+&lt;h3 id=&quot;bellek-kullanımı&quot;&gt;Bellek Kullanımı&lt;/h3&gt;
+
+&lt;p&gt;Bir veritabanına büyük bir veri için sorgu atılacağı zaman düşünülmesi gereken
+en önemli şeylerden birisi veritabanından sonuçlar geldiği zaman uygulamanın bellek
+tüketiminin nasıl artacağıdır.&lt;/p&gt;
+
+&lt;p&gt;Eğer veriyi işlemeye başlamak için verinin tamamına ihtiyacımız yoksa, 
+verileri parça parça alıp, aldıkça işlemeliyiz.&lt;/p&gt;
+
+&lt;p&gt;Bunun için en bilindik yöntemlerden birisi offset/limit sorgusunu offset’i arttırarak tekrar tekrar
+atarak sayfalama (pagination) yapmak fakat bu yöntem her seferinde veritabanına yeniden sorgu atmayı
+gerektirdiği için faydasından çok zararı oluyor.&lt;/p&gt;
+
+&lt;p&gt;Verileri parça parça çekmek ve işledikçe devamını okumak için Hibernate’deki &lt;code class=&quot;highlighter-rouge&quot;&gt;scroll&lt;/code&gt; özelliğini kullandık.
+Sorgunun envai çeşit hibernate kontrolünden ve transaction yönetiminden geçmemesi için
+Hibernate’deki &lt;code class=&quot;highlighter-rouge&quot;&gt;StatelessSession&lt;/code&gt; sınıfı üzerinden sorgumuzu &lt;code class=&quot;highlighter-rouge&quot;&gt;read-only&lt;/code&gt; modda attık.&lt;/p&gt;
+
+&lt;p&gt;Ek olarak bir ORM aracı ile sorgu sonuçlarının otomatik olarak entity sınıfına
+çevirilmesi özelliğinden de çok fazla reflection ve nesne kullanımının olmaması için
+feragat ediyoruz. Garbage Collector ve CPU biraz rahatlamış oluyor bu sayede.&lt;/p&gt;
+
+&lt;p&gt;Hibernate’de bu şekilde bir sorgu nasıl atılır aşağıda ufak bir örnek paylaşıyorum.
+Buradaki &lt;code class=&quot;highlighter-rouge&quot;&gt;fetchSize&lt;/code&gt; parametresi veritabanından sonuçların kaçar kaçar belleğe alınacağını belirliyor.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fetchMsisdnCategories&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;QueryState&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queryState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fetchSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Consumer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;MsisdnCategoriesRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;processor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StatelessSession&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;statelessSession&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;openStatelessSession&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nativeSql&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buildNativeSql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;queryState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;NativeQuery&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;statelessSession&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;createNativeQuery&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nativeSql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setFetchSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fetchSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setReadOnly&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    
+        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ScrollableResults&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scrollableResults&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nativeQuery&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;scroll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ScrollMode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;FORWARD_ONLY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scrollableResults&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rawRowData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scrollableResults&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;msisdn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;valueOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rawRowData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categoryIds&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parseCategoryIdsAsByteArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rawRowData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
+            &lt;span class=&quot;cm&quot;&gt;/* Caller processes the result in `rawRowData` */&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;processor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;apply&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MsisdnCategoriesRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;msisdn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categoryIds&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Bu method içerisinde çektiğimiz her satırı hemen sonuçları işleyecek olan &lt;code class=&quot;highlighter-rouge&quot;&gt;Consumer&lt;/code&gt; sınıfına gönderiyoruz.
+Böylece herhangi bir şekilde uygulamanın belleğinde aşırı birikme yaratmamış oluyoruz.&lt;/p&gt;
+
+&lt;p&gt;Yukarıdaki methodu çağıran sınıf &lt;code class=&quot;highlighter-rouge&quot;&gt;Consumer&lt;/code&gt; arayüzünden oluşturulmuş bir sınıfı parametre olarak gönderiyor.
+Yani DAO katmanından çıkacak olan her bir &lt;code class=&quot;highlighter-rouge&quot;&gt;MsisdnCategoriesRecord&lt;/code&gt; nesnesinin nasıl işleneceğini DAO katmanına
+yazmamış oluyoruz.&lt;/p&gt;
+
+&lt;p&gt;DAO katmanındaki methodumuzu çağıran servis katmanı ise gelen her bir sonucu doğrudan Hazelcast’e atıyor.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// Hazelcast Map&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;IMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;msisdnCategoriesMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;reloadMsisdnCategories&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;QueryState&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queryState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;fetchMsisdnCategories&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;queryState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fetchSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;msisdnCategoriesMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getMsisdn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getCategoryIds&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;sorgunun-dağıtılması&quot;&gt;Sorgunun Dağıtılması&lt;/h3&gt;
+
+&lt;p&gt;Yukarıdaki kod ile bir uygulama instance’ı tek başına DB’deki tüm datayı çekip Hazelcast Map’ine atabilir değil mi?
+Peki birden fazla uygulama instance’ı ayakta olduğu durumda datayı nasıl dağıtıyoruz?&lt;/p&gt;
+
+&lt;p&gt;Açık konuşmam gerekirse çözüm bulmakta en çok zorlandığımız kısım burası oldu.
+Bir öğle yemeğinde tartışırken aklımıza gelen şu çözümü beğendik ve o günden beri kullanıyoruz.&lt;/p&gt;
+
+&lt;p&gt;Öncelikle atılacak sorguları modüler aritmetik kullanarak parçalara bölüyoruz.
+Cep telefon numarası 905XXXXXXXXX formatında 12 adet rakamdan oluşan bir sayı olduğu için 
+modüler aritmetik işlemlerinde msisdn alanını tercih ettik.&lt;/p&gt;
+
+&lt;p&gt;Sorgumuzdaki &lt;code class=&quot;highlighter-rouge&quot;&gt;WHERE&lt;/code&gt; cümleciğinde ise şu şekilde modüler aritmetik koşuluna yer verdik:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt;
+  &lt;span class=&quot;cm&quot;&gt;/*+ parallel(%s) */&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;MSISDN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;listagg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CATEGORY_ID&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;','&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;within&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;order&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;by&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MSISDN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CATEGORY_IDS&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;VIEW_MSISDN_CATEGORIES&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;where&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;MSISDN&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;CATEGORY_ID&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;MOD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MSISDN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;group&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;by&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MSISDN&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Yukarıdaki methodlarda belki dikkatinizi çekmiştir &lt;code class=&quot;highlighter-rouge&quot;&gt;QueryState&lt;/code&gt; isminde bir sınıf kullanıyoruz sorguları oluştururken.
+Bu sınıf atılacak olan sorgunun hangi modda hangi kalana göre atılacağı bilgisini taşıyor.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;QueryState&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Serializable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;serialVersionUID&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1L&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;remainder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;QueryState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;remainder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;remainder&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;remainder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Böylece mikroservisimizin her bir instance’ının belli bir QueryState için 
+sorgu atmasını sağlayabilirsek problem çözülmüş olacaktı.&lt;/p&gt;
+
+&lt;p&gt;Peki o anda mikroservisimizden kaç instance ayakta bilgisini bilmeden 
+nasıl tüm instance’lara görev dağıtabiliriz? 
+Bu noktada zorlandığımız nokta şuydu, instance sayısı kadar mod almaya çalışıyorduk.
+Hiçbir instance’ın boş yatmaması için tüm instance’ların işin bir ucundan tutması gerekiyordu.
+Çözümü bulduğumuz gün bunun için instance sayısını bilmeye ihtiyacımız olmadığını keşfettik.&lt;/p&gt;
+
+&lt;p&gt;Aşağıdaki diagramda olduğu gibi, tüm DB’yi okuyup veriyi belleğe yükleme görevini alan mikroservis,
+belirli bir mod değerine karar verip, bir hazelcast queue’suna mod sayısı kadar &lt;code class=&quot;highlighter-rouge&quot;&gt;QueryState&lt;/code&gt; nesnesini
+farklı kalan değerleri ile dolduruyor. Tüm mikroservis instance’ları hali hazırda açık duran 
+birer Thread ile bu belirli Queue’dan gelecek olan mesajları dinlemekteler. 
+Her instance Queue’dan kendine düşen &lt;code class=&quot;highlighter-rouge&quot;&gt;QueryState&lt;/code&gt; nesnesindeki mod ve kalan bilgisine göre sorgusunu atıyor
+ve veritabanından gelen sonuçları Hazelcast Map’ine dolduruyor.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/queue-mod-query.png&quot; alt=&quot;hazelcast queue modular_query&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Burada queue’ya attığımız &lt;code class=&quot;highlighter-rouge&quot;&gt;QueryState&lt;/code&gt; nesnelerinin sayısı (ya da mod değerimiz) instance sayısına tam bölünmüyorsa 
+bazı instance’lar diğerlerinden daha fazla sorgu atabilirler veritabanına. 
+Eğer mod değerimiz instance sayısından küçük ise bazı instance’larımız hiç sorgu atmayabilirler.
+Biz mikroservisin instance sayısının alabileceği maksimum değer civarında 
+bir sayıyı mod değeri olarak kullanıyoruz 
+ve bu değeri runtime’da değiştirebileceğimiz konfigüratif bir yapıda tutuyoruz.&lt;/p&gt;
+
+&lt;h3 id=&quot;ufak-i̇yileştirmeler&quot;&gt;Ufak İyileştirmeler&lt;/h3&gt;
+
+&lt;p&gt;Tüm mikroservislerin işi belli ölçülerde paylaşıp üzerlerine düşen görevi yaptıklarından emin olduktan sonra
+artık her bir mikroservisin elindeki işi yaparken daha performanslı çalışması için ne yapabiliriz bunu düşünmenin
+zamanı geldi.&lt;/p&gt;
+
+&lt;p&gt;Bu tip uygulamalarda en büyük zaman kaybı genellikle IO (network veya disk) kaynaklı olur.
+Veritabanından veriyi okuma kısmındaki git-gel işlemlerini sorguları scroll özelliğiyle atarak oldukça azalttık.
+Geriye hazelcast’e verileri gönderdiğimiz yer kalıyor. Hazelcast aracını da uygulamadan ayrı bir cluster şeklinde
+kurduğumuz için hazelcast operasyonları da network işlemlerinin büyük çoğunluğunu oluşturmakta.&lt;/p&gt;
+
+&lt;p&gt;DAO katmanından gelen her bir satır için hazelcast’e bir &lt;code class=&quot;highlighter-rouge&quot;&gt;.put&lt;/code&gt; işlemi çağırmak yerine öncelikle
+gelen satırları küçük gruplar halinde (1000 adet gibi) toparlayıp sonrasında &lt;code class=&quot;highlighter-rouge&quot;&gt;.putAll&lt;/code&gt; methodunu çağırarak
+tek seferde network’e çıkarak küçük bir iyileştirme sağlayabildik. Burada önemli nokta elimizdeki verinin
+karakteristiğine göre memory üzerinde fazla birikme oluşturmayacak doğru sayıyı seçmek.&lt;/p&gt;
+
+&lt;p&gt;Sonraki aşamada hazelcast dökümantasyonlarını karıştırırken bildiğimiz java Map’lerinde olmayan 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;.set&lt;/code&gt; ve &lt;code class=&quot;highlighter-rouge&quot;&gt;.setAll&lt;/code&gt; isimli methodlarının Hazelcast’in IMap arayüzünde bulunduğunu fark ettik.
+&lt;code class=&quot;highlighter-rouge&quot;&gt;put*&lt;/code&gt; türevi methodlar veriyi hazelcast’e koyduktan sonra Map’de ilgili key’e ait varolan eski veriyi dönerken
+&lt;code class=&quot;highlighter-rouge&quot;&gt;set*&lt;/code&gt; türevi methodlar herhangi bir şey dönmüyorlar. 
+Bu methodları kullandığımız durumda network katmanını kullanmayacağımız bir veri için boşuna meşgul etmemiş oluyoruz.&lt;/p&gt;
+
+&lt;h1 id=&quot;sonuç&quot;&gt;Sonuç&lt;/h1&gt;
+
+&lt;p&gt;Bu yazıda anlattığım yöntemleri kullanarak tek bir instance’da çalışan, 
+tüm veriyi veritabanından hazelcast’e doldurması bir saati bulan bir görevi
+10 dakikanın altında çalışır hale getirdik. Sorgu attığımız veritabanı yapısında
+değişiklik yapma şansımız olsaydı daha iyi süreler de elde edebilirdik 
+fakat o yapıyı bizden başka birçok farklı sistem kullandığından öyle bir şansımız malesef bulunmamakta.&lt;/p&gt;
+
+&lt;p&gt;Özetlemek gerekirse bu tip bir görev için kullanmaktan çok keyif aldığım şu teknikleri uyguladık:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Modüler aritmetik kullanarak sorguları dağıtma&lt;/li&gt;
+  &lt;li&gt;Bilinen ORM yapısından çıkıp daha native tarafa yakın sorgular kullanmak&lt;/li&gt;
+  &lt;li&gt;Veritabanı sorgusunun sonuçlarını scroll ederek okumak&lt;/li&gt;
+  &lt;li&gt;Aynı uygulamanın birbirini görmeyen/bilmeyen instance’ları arasında görev dağılımı&lt;/li&gt;
+  &lt;li&gt;Verinin bellekte minimum yer kaplayacak formatta tutulması&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Bu yöntemlerin bu yazıda gösterdiklerimden çok fazla sayıda farklı implementasyonları vardır
+fakat büyük işlerde önemli olan yöntemlerdir. Araçlar değişir.&lt;/p&gt;
+
+&lt;p&gt;Bu yazı 2020 Ağustos ayında başladığım fakat bir türlü vakit ayırıp bitiremediğim bir yazıydı.
+Anlatımda kopukluklar varsa sebebi budur, hatalarım olduysa affola.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 08 Jan 2021 22:48:20 +0000</pubDate>
+        <link>https://serdarkuzucu.com/2021/01/09/dagitik-uygulamada-buyuk-veri-okumak/</link>
+        <guid isPermaLink="true">https://serdarkuzucu.com/2021/01/09/dagitik-uygulamada-buyuk-veri-okumak/</guid>
+        
+        
+        <category>Java</category>
+        
+        <category>Programlama</category>
+        
+      </item>
     
       <item>
         <title>Daha Tatlı Bir Git Log</title>
@@ -2985,335 +3218,6 @@ elime geçmesini sabırsızlıkla bekliyorum.&lt;/p&gt;
         <pubDate>Sun, 28 May 2017 02:12:00 +0000</pubDate>
         <link>https://serdarkuzucu.com/visitor-design-pattern/</link>
         <guid isPermaLink="true">https://serdarkuzucu.com/visitor-design-pattern/</guid>
-        
-        
-        <category>Java</category>
-        
-        <category>Programlama</category>
-        
-      </item>
-    
-      <item>
-        <title>Adapter Pattern: Farklı Sistemler, Aynı Arayüz</title>
-        <description>&lt;p&gt;Bir sistem geliştirirsiniz ve bu sistemin işlevini görebilmesi için başka sistemlere entegre olması gerekir. 
-Bazen o kadar eski teknolojiler ile geliştirilmiş sistemlere entegre olmak zorundasınızdır ki, 
-bu amaç için yazdığınız kod geliştirmekte olduğunuz projeye hiç yakışmaz, 
-sürekli gözünüzü tırmalar. 
-Özetle, elinizde başka bir sisteme ait bir interface vardır 
-ve bu interface’in yapısı sizin projenizin yapısına uygun değildir.&lt;/p&gt;
-
-&lt;!--more--&gt;
-
-&lt;p&gt;Aşağıdaki görsel durumu gerçek hayatta karşılaştığımız temel bir problemle özetlemektedir. 
-Amerika’dan bir laptop aldınız ve Avrupa’da bir ülkeye gittiniz. 
-Elinizde sağdaki nesne, duvarda ise soldaki interface var. 
-Bu durumda bilgisayarınızı şarj edebilmek için ortadaki adaptöre ihtiyaç duyarsınız. 
-Adapter pattern’ın ismi de aslında gerçek hayattaki adaptörlerden geliyor.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/posts/blog-realworld-adapters-300x138.jpg&quot; alt=&quot;/assets/posts/blog-realworld-adapters-300x138.jpg&quot; width=&quot;400px&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;kullanım-amaçları&quot;&gt;Kullanım Amaçları&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Birbirine uyumlu olmayan iki farklı interface’in birlikte çalışmasının sağlanması.&lt;/li&gt;
-  &lt;li&gt;Varolan bir interface’in yeni bir interface’e çevirilmesi.&lt;/li&gt;
-  &lt;li&gt;Eski bir interface’in yeni bir sisteme entegre edilmesi.&lt;/li&gt;
-  &lt;li&gt;Benzer işlevli farklı sistemlerin aynı interface ile kullanılabilmesi.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Kodlarını inceleyeceğimiz örneğe gelmeden önce birkaç gerçek hayat örneği vereyim.&lt;/p&gt;
-
-&lt;p&gt;Mobil cihazlara bildirim göndermek istediğinizde, 
-Android cihazlar için Google Cloud Messaging (veya artık Firebase) kullanırken, 
-iOS cihazlar için Apple Push Notification Service (apns) kullanmanız gerekmektedir. 
-Microsoft cihazlar için de vardı bir servis birkaç sene önce kullanmıştım, şimdi hatırlayamadım. 
-Bu durumda &lt;code class=&quot;highlighter-rouge&quot;&gt;PushNotificationAdapter&lt;/code&gt; gibi bir interface tasarlayıp, 
-bu interface’den &lt;code class=&quot;highlighter-rouge&quot;&gt;FirebasePushNotificationAdapter&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;ApplePushNotificationAdapter&lt;/code&gt; 
-ve &lt;code class=&quot;highlighter-rouge&quot;&gt;MicrosoftPushNotificationAdapter&lt;/code&gt; gibi 3 farklı sınıf oluşturabilirsiniz. 
-Hatta sadece test ortamınızda veya kendi bilgisayarınızda çalışacak &lt;code class=&quot;highlighter-rouge&quot;&gt;DummyPushNotificationAdapter&lt;/code&gt; 
-gibi bir sınıf tasarlayıp sistemin göndermeye çalıştığı bildirimleri 
-bambaşka bir yere (log dosyası, veritabanı, vb.) gönderebilirsiniz.&lt;/p&gt;
-
-&lt;p&gt;Ücretlendirme yapmak için &lt;code class=&quot;highlighter-rouge&quot;&gt;PaymentAdapter&lt;/code&gt; interface’ini tanımlayıp, 
-farklı ödeme yöntemleri için &lt;code class=&quot;highlighter-rouge&quot;&gt;PaypalPaymentAdapter&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;VisaPaymentAdapter&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;MasterCardPaymentAdapter&lt;/code&gt; 
-veya &lt;code class=&quot;highlighter-rouge&quot;&gt;MobilePaymentAdapter&lt;/code&gt; gibi sınıflar oluşturabilirsiniz.&lt;/p&gt;
-
-&lt;h3 id=&quot;sosyal-medyada-paylaşım-yapmak&quot;&gt;Sosyal Medya’da Paylaşım Yapmak&lt;/h3&gt;
-
-&lt;p&gt;Bu yazıda aynı içeriği farklı sosyal medya platformlarında 
-paylaşmak için adapter pattern kullanarak bir çözüm geliştireceğiz.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Talep:&lt;/strong&gt; Sistemimizin Facebook, Twitter ve Google Plus adındaki 
-üç farklı sosyal medya platformunda paylaşım yapabilmesi istenmektedir. 
-Paylaşılacak olan içerikler her zaman bir adet metin ve bir adet URL içerecek.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Sorun:&lt;/strong&gt; 3 tane birbirinden farklı sosyal medya platformumuz var. 
-Hepsi farklı şirketler tarafından geliştirilmekte, 
-hepsinin interface’leri farklı. 
-Twitter’ın meşhur bir REST API’ı var 
-ve bu API için geliştirilmiş Java kütüphaneleri de açık kaynak kodlu olarak mevcut. 
-Facebook bu işler için bize REST tabanlı Graph API sunuyor. 
-Google Plus biraz daha ileri gitmiş ve kendileri Java kütüphanesi paylaşmışlar.&lt;/p&gt;
-
-&lt;p&gt;Bu sistemlerin hepsi REST de olsa, hepsi Java kütüphanesi de paylaşsa, sorun devam edecekti.&lt;/p&gt;
-
-&lt;p&gt;Her sistem için yazacağımız kodlar tamamen birbirinden farklı olmak zorunda 
-ve tüm bu kodları yazacak &lt;strong&gt;güzel bir yere ihtiyacımız var&lt;/strong&gt;. 
-Kodları yazacak güzel bir yer aramaya başlamadan önce, birkaç interface ve enumeration yazalım.&lt;/p&gt;
-
-&lt;p&gt;Öncelikle sosyal medya platformlarını belirlemek için &lt;code class=&quot;highlighter-rouge&quot;&gt;Platform&lt;/code&gt; adında bir &lt;code class=&quot;highlighter-rouge&quot;&gt;enum&lt;/code&gt; tanımlayalım.&lt;/p&gt;
-
-&lt;h5 id=&quot;platform&quot;&gt;Platform&lt;/h5&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;com.asosyalbebe.blog.adapterpattern&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;enum&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Platform&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;no&quot;&gt;FACEBOOK&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;TWITTER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;GOOGLE_PLUS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Paylaşılacak olan içeriği ve hangi platformda(yada hepsinde) paylaşılacağını gönderdiğimiz 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;SocialMediaShareClient&lt;/code&gt; interface’ini oluşturalım. 
-Bu interface’i kullanan kişi, esas işi bunun yaptığını düşünecek.&lt;/p&gt;
-
-&lt;h5 id=&quot;socialmediashareclient&quot;&gt;SocialMediaShareClient&lt;/h5&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;com.asosyalbebe.blog.adapterpattern&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SocialMediaShareClient&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;/**
-     * Shares the given text and link on a specified social media platform
-     *
-     * @param platform social media platform on which the text and link will be shared
-     * @param text     text to share on the specified social media platform
-     * @param link     link to share on the specified social media platform
-     */&lt;/span&gt;
-    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;share&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Platform&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;platform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-    &lt;span class=&quot;cm&quot;&gt;/**
-     * Shares the given text and link on all social media platform defined in this client
-     *
-     * @param text text to share on all social media platforms
-     * @param link link to share on all social media platforms
-     */&lt;/span&gt;
-    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;share&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;En amatör zamanlarımda &lt;code class=&quot;highlighter-rouge&quot;&gt;interface&lt;/code&gt; bile tanımlamazdım :)
-Az amatör zamanlarımda ise bu interface’in implementasyonunda tüm sosyal medya platformları için &lt;code class=&quot;highlighter-rouge&quot;&gt;if/else&lt;/code&gt; 
-veya &lt;code class=&quot;highlighter-rouge&quot;&gt;switch/case&lt;/code&gt; kullanır, tüm kodu oraya kitle olarak yazardım :)&lt;/p&gt;
-
-&lt;p&gt;Böyle bir çirkinlik yapmamamız için birileri çıkmış ve &lt;strong&gt;adapter pattern&lt;/strong&gt;‘ı icat etmiş.&lt;/p&gt;
-
-&lt;p&gt;Çok özendim, önce bir UML diagram çizdim. Hemen şöyle orta yere bırakayım onu:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/posts/blog-uml-adapter-pattern.png&quot; alt=&quot;Adapter Pattern UML&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Diagramı yorumlayalım. Herkes UML bilmek zorunda değil. 
-Ben de bildiğimi iddia edemiyorum zaten. 
-Mezun olduğumdan beri UML diagram çizmemiştim. 
-Hatalı çizgiler falan koyduysam, okların yönü falan ters olduysa kusura bakmayın.&lt;/p&gt;
-
-&lt;p&gt;Öncelikle yukarıda kodunu paylaştığım &lt;code class=&quot;highlighter-rouge&quot;&gt;SocialMediaShareClient&lt;/code&gt; arayüzünden 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;DefaultSocialMediaShareClient&lt;/code&gt; adında bir implementasyon sınıfı yazacağız. 
-Arayüzünde iki method olan bu sınıfın görevi verilen belli bir platformda 
-veya tüm platformlarda ilgili içeriğin paylaşılması olacak. 
-Hangi platformda nasıl paylaşılacağı ile ilgili detayları ise 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;SocialMediaShareAdapter&lt;/code&gt; arayüzünün implementasyonları içeriyor olacak.&lt;/p&gt;
-
-&lt;p&gt;Bu sebeple aşağıdaki &lt;code class=&quot;highlighter-rouge&quot;&gt;SocialMediaShareAdapter&lt;/code&gt; arayüzünü geliştiriyor olacağız:&lt;/p&gt;
-
-&lt;h5 id=&quot;socialmediashareadapter&quot;&gt;SocialMediaShareAdapter&lt;/h5&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;com.asosyalbebe.blog.adapterpattern&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SocialMediaShareAdapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;cm&quot;&gt;/**
-     * Share a text and link on the social media platform
-     *
-     * @param text text to share on the social media platform
-     * @param link link to share on the social media platform
-     * @return unique identifier of the post returned by the social media platform
-     */&lt;/span&gt;
-    &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;share&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Bu arayüz üzerinde bulunan &lt;code class=&quot;highlighter-rouge&quot;&gt;String share(String text, String link)&lt;/code&gt; methodu, 
-ilgili sosyal medyada verilen text ve linkin paylaşılmasını sağlayacak 
-ve paylaşılan gönderinin unique id’sini dönecek. 
-Her sosyal medya platformu bizden farklı formatta data bekliyor 
-ve cevap olarak da farklı formatta data dönüyor. 
-Data türleri arasındaki tüm çeviri işlemleri 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;SocialMediaShareAdapter&lt;/code&gt; arayüzünün implementasyonları içerisine gömülecek 
-ve böylece adaptörleri kullanan sınıfların (&lt;code class=&quot;highlighter-rouge&quot;&gt;DefaultSocialMediaShareClient&lt;/code&gt;) 
-bu işlemlerden haberi olmayacak.&lt;/p&gt;
-
-&lt;p&gt;Bir sonraki aşamada Facebook, Twitter ve Google Plus için üç ayrı adaptörü aşağıdaki gibi tanımlıyoruz.&lt;/p&gt;
-
-&lt;h5 id=&quot;facebookshareadapter&quot;&gt;FacebookShareAdapter&lt;/h5&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;com.asosyalbebe.blog.adapterpattern&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FacebookShareAdapter&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SocialMediaShareAdapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;share&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// Facebook specific code...&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Sharing %s %s on facebook\n&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;// Post item to facebook and get post_id from response&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;example_post_id&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h5 id=&quot;twittershareadapter&quot;&gt;TwitterShareAdapter&lt;/h5&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;com.asosyalbebe.blog.adapterpattern&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TwitterShareAdapter&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SocialMediaShareAdapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;share&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// Twitter specific code here...&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Sharing %s %s on twitter\n&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;// Post item to Twitter and get tweet id&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;example_tweet_id&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h5 id=&quot;googleplusshareadapter&quot;&gt;GooglePlusShareAdapter&lt;/h5&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;com.asosyalbebe.blog.adapterpattern&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GooglePlusShareAdapter&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SocialMediaShareAdapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;share&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;c1&quot;&gt;// Google Plus related code here...&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Sharing %s %s on Google+\n&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;// Post item to Google+ and get post id&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;example_post_id_g+&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Bu yazdığım 3 sınıfın içerisine tüm sosyal medya platformu spesifik detayları gizliyoruz. 
-&lt;strong&gt;Abstraction&lt;/strong&gt;‘ın dibine vuruyoruz. 
-Daha abstract olsun diye adaptörlerin içine gerçek kodları yazmadım, siz yazdığımı varsayın :)&lt;/p&gt;
-
-&lt;p&gt;Son olarak &lt;code class=&quot;highlighter-rouge&quot;&gt;DefaultSocialMediaShareClient&lt;/code&gt; sınıfını yazıyoruz. 
-Bu sınıf hangi platform için hangi adaptörü kullanması gerektiğini bilen sınıf oluyor.&lt;/p&gt;
-
-&lt;h5 id=&quot;defaultsocialmediashareclient&quot;&gt;DefaultSocialMediaShareClient&lt;/h5&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;com.asosyalbebe.blog.adapterpattern&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DefaultSocialMediaShareClient&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SocialMediaShareClient&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Platform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SocialMediaShareAdapter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adapters&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;DefaultSocialMediaShareClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;adapters&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;HashMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;adapters&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Platform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;FACEBOOK&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FacebookShareAdapter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;adapters&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Platform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;TWITTER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TwitterShareAdapter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;adapters&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Platform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;GOOGLE_PLUS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GooglePlusShareAdapter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;share&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Platform&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;platform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;SocialMediaShareAdapter&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adapter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adapters&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;platform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postIdentifier&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adapter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;share&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;storePost&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;platform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;postIdentifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;nd&quot;&gt;@Override&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;share&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;adapters&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;forEach&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;platform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;adapter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;share&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;platform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;storePost&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Platform&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;platform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;identifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;storePost::platform=%s::text=%s::link=%s::identifier=%s\n&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;platform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;identifier&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Bu şekilde sistemimizin mimari tasarımını tamamlamış oluyoruz. 
-Yukarıdaki kodda gördüğünüz &lt;code class=&quot;highlighter-rouge&quot;&gt;storePost&lt;/code&gt; methodunun işlevinin 
-paylaşılan içerikler ile ilgili kayıtların veritabanına yazılması olduğunu varsayabilirsiniz. 
-Böylece hangi sosyal medya platformuna giderse gitsin 
-bir içeriği düzgün şekilde paylaşabilen 
-ve platformdan cevap olarak dönen ID’yi veritabanında saklayabilen 
-bir yapıyı gayet temiz bir şekilde kurmuş olduk. 
-Bu arayüzü kullanan bir main method ile yazımızı taçlandıralım:&lt;/p&gt;
-
-&lt;h5 id=&quot;adaptertutorialmain&quot;&gt;AdapterTutorialMain&lt;/h5&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;com.asosyalbebe.blog.adapterpattern&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;AdapterTutorialMain&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;SocialMediaShareClient&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;socialMediaShareClient&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;DefaultSocialMediaShareClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;// Share on all social media platforms&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Have you read my latest blog post about builder pattern?&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;http://blog.asosyalbebe.com/2017/05/builder-pattern-temiz-kod-yazmak.html&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;socialMediaShareClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;share&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;// Only share on Facebook&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Last night, we had lots of fun!&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;https://www.youtube.com/watch?v=Sv6dMFF_yts&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;socialMediaShareClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;share&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Platform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;FACEBOOK&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;// Only share on Twitter&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;My current mode #happy #happiness&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;https://www.youtube.com/watch?v=Sv6dMFF_yts&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;socialMediaShareClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;share&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Platform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;TWITTER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;c1&quot;&gt;// Only share on Google Plus&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;My current mode #happy #happiness&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;https://www.youtube.com/watch?v=Sv6dMFF_yts&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;socialMediaShareClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;share&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Platform&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;GOOGLE_PLUS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;kapanış&quot;&gt;Kapanış&lt;/h3&gt;
-
-&lt;p&gt;Bu yazıda Design Pattern’larından Adapter Pattern’a değinmeye çalıştım dilim döndüğünce. 
-Yapısı sistemimizin yapısından oldukça farklı olan 
-başka bir sistemle entegre olmanın getirdiği iğrenç detayları 
-bu sayede çeşitli adaptörlerin içine gizleyebiliyoruz. 
-Hoşumuza gitmeyen bir arayüzü hoşumuza giden 
-ve projemiz için daha uygun bir arayüze çevirebiliyoruz.&lt;/p&gt;
-
-&lt;p&gt;Aynı zamanda nesne tabanlı programlamanın en önemli bileşenlerinden olan &lt;strong&gt;Polymorphism&lt;/strong&gt;, 
-&lt;strong&gt;Inheritance&lt;/strong&gt; ve &lt;strong&gt;Abstraction&lt;/strong&gt; gibi baba konseptleri de çok güzel uygulamış oluyor, 
-kodumuzu bizden sonra okuyanlardan tam puan alıyoruz.&lt;/p&gt;
-
-&lt;p&gt;Bir önceki yazımda temiz ve kaliteli yazılım geliştirme konusundaki takıntılarımı dile getirmiştim. 
-Bu gibi hassasiyetlerimiz olmasa biz yazılımcılar için mesleğimiz 
-internetten çalışan bir kodu kopyalayıp projenin orta yerine yapıştırmaktan ibaret oluyor çoğu zaman. 
-Çeşitli Design Pattern’ları öğrenmek ve bunları doğru yerlerde uygulamayı amaç edinmek de 
-kaliteli kod yazma sürecinin olmazsa olmazlarından.&lt;/p&gt;
-
-&lt;p&gt;Hatasız kul olmaz. 
-Benim de bu yazıda yaptığım hatalar olmuştur elbet. 
-Eğer görürsen, lütfen yorum yap sayın okuyucum. 
-Bu vesileyle yazımı şu güzel cümle ile kapatayım:&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Yazılım ustalığı (Software Craftsmanship) ulaşılacak bir varış noktası değil, 
-insanın sürekli kendisini geliştirdiği bir yolculuktur.&lt;/p&gt;
-&lt;/blockquote&gt;
-</description>
-        <pubDate>Sat, 13 May 2017 01:03:00 +0000</pubDate>
-        <link>https://serdarkuzucu.com/adapter-pattern-farkli-sistemler-ayni-arayuz/</link>
-        <guid isPermaLink="true">https://serdarkuzucu.com/adapter-pattern-farkli-sistemler-ayni-arayuz/</guid>
         
         
         <category>Java</category>
