@@ -7,7 +7,7 @@ author: Serdar Kuzucu
 permalink: /2021/01/09/dagitik-uygulamada-buyuk-veri-okumak/
 comments: true
 post_identifier: dagitik-uygulamada-buyuk-veri-okumak
-featured_image: /assets/category/java.png
+featured_image: /assets/posts/export-database.png
 ---
 
 2020 senesi içerisinde [Inomera](https://inomera.com/)'da Telekom sektörü için geliştirdiğimiz 
@@ -104,11 +104,12 @@ yazmamış oluyoruz.
 DAO katmanındaki methodumuzu çağıran servis katmanı ise gelen her bir sonucu doğrudan Hazelcast'e atıyor.
 
 ```java
+private final MsisdnCategoriesDao msisdnCategoriesDao;
 // Hazelcast Map
 private final IMap<Long, byte[]> msisdnCategoriesMap;
 
 public void reloadMsisdnCategories(QueryState queryState) {
-    fetchMsisdnCategories(queryState, fetchSize, (record) -> {
+    msisdnCategoriesDao.fetchMsisdnCategories(queryState, fetchSize, (record) -> {
         msisdnCategoriesMap.put(record.getMsisdn(), record.getCategoryIds());
     });
 }
@@ -142,7 +143,8 @@ where
 group by MSISDN
 ```
  
-Yukarıdaki methodlarda belki dikkatinizi çekmiştir `QueryState` isminde bir sınıf kullanıyoruz sorguları oluştururken.
+Yukarıdaki `reloadMsisdnCategories` ve `fetchMsisdnCategories` isimli methodlarda belki dikkatinizi çekmiştir 
+`QueryState` isminde bir sınıf kullanıyoruz sorguları oluştururken.
 Bu sınıf atılacak olan sorgunun hangi modda hangi kalana göre atılacağı bilgisini taşıyor.
 
 ```java
