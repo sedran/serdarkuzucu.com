@@ -32,7 +32,7 @@
 
 
 
-<meta content="https://serdarkuzucu.com/assets/category/java.png" property="og:image">
+<meta content="https://serdarkuzucu.com/assets/posts/export-database.png" property="og:image">
 
 
 
@@ -274,11 +274,12 @@ yazmamış oluyoruz.</p>
 
 <p>DAO katmanındaki methodumuzu çağıran servis katmanı ise gelen her bir sonucu doğrudan Hazelcast’e atıyor.</p>
 
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Hazelcast Map</span>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">final</span> <span class="nc">MsisdnCategoriesDao</span> <span class="n">msisdnCategoriesDao</span><span class="o">;</span>
+<span class="c1">// Hazelcast Map</span>
 <span class="kd">private</span> <span class="kd">final</span> <span class="nc">IMap</span><span class="o">&lt;</span><span class="nc">Long</span><span class="o">,</span> <span class="kt">byte</span><span class="o">[]&gt;</span> <span class="n">msisdnCategoriesMap</span><span class="o">;</span>
 
 <span class="kd">public</span> <span class="kt">void</span> <span class="nf">reloadMsisdnCategories</span><span class="o">(</span><span class="nc">QueryState</span> <span class="n">queryState</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">fetchMsisdnCategories</span><span class="o">(</span><span class="n">queryState</span><span class="o">,</span> <span class="n">fetchSize</span><span class="o">,</span> <span class="o">(</span><span class="n">record</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="n">msisdnCategoriesDao</span><span class="o">.</span><span class="na">fetchMsisdnCategories</span><span class="o">(</span><span class="n">queryState</span><span class="o">,</span> <span class="n">fetchSize</span><span class="o">,</span> <span class="o">(</span><span class="n">record</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
         <span class="n">msisdnCategoriesMap</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">record</span><span class="o">.</span><span class="na">getMsisdn</span><span class="o">(),</span> <span class="n">record</span><span class="o">.</span><span class="na">getCategoryIds</span><span class="o">());</span>
     <span class="o">});</span>
 <span class="o">}</span>
@@ -310,7 +311,8 @@ modüler aritmetik işlemlerinde msisdn alanını tercih ettik.</p>
 <span class="k">group</span> <span class="k">by</span> <span class="n">MSISDN</span>
 </code></pre></div></div>
 
-<p>Yukarıdaki methodlarda belki dikkatinizi çekmiştir <code class="highlighter-rouge">QueryState</code> isminde bir sınıf kullanıyoruz sorguları oluştururken.
+<p>Yukarıdaki <code class="highlighter-rouge">reloadMsisdnCategories</code> ve <code class="highlighter-rouge">fetchMsisdnCategories</code> isimli methodlarda belki dikkatinizi çekmiştir 
+<code class="highlighter-rouge">QueryState</code> isminde bir sınıf kullanıyoruz sorguları oluştururken.
 Bu sınıf atılacak olan sorgunun hangi modda hangi kalana göre atılacağı bilgisini taşıyor.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">QueryState</span> <span class="kd">implements</span> <span class="nc">Serializable</span> <span class="o">{</span>
