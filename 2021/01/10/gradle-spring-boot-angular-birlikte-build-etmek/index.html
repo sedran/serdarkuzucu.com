@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Gradle: Spring Boot &amp; Angular Uygulamalarını Birlikte Build Edelim</title>
+
+  <meta name="description" content="Yeni bir projeye başlamanın en sıkıcı maddelerinden birisi de projeyi oluşturup her projede kullandığımız basmakalıp (boilerplate) kodları yazmaktır.Build ar...">
+
+<meta content="Serdar Kuzucu" property="og:site_name">
+
+
+<meta content="Gradle: Spring Boot & Angular Uygulamalarını Birlikte Build Edelim" property="og:title">
+
+
+
+<meta content="article" property="og:type">
+
+
+<meta content="Yeni bir projeye başlamanın en sıkıcı maddelerinden birisi de projeyi oluşturup her projede kullandığımız basmakalıp (boilerplate) kodları yazmaktır.Build ar..." property="og:description">
+
+
+<meta content="https://serdarkuzucu.com/2021/01/10/gradle-spring-boot-angular-birlikte-build-etmek/" property="og:url">
+
+
+
+<meta content="2021-01-10T14:04:26+00:00" property="article:published_time">
+<meta content="https://serdarkuzucu.com/about/" property="article:author">
+
+
+
+<meta content="https://serdarkuzucu.com/assets/posts/2021-01-10-spring-boot-angular-gradle/00-post-logo.png" property="og:image">
+
+
+
+
+<meta content="Java" property="article:section">
+
+
+
+
+
+
+
+<meta name="twitter:creator" content="@sedran"/>
+<meta name="twitter:site" content="@sedran"/>
+<meta name="twitter:card" content="summary"/>
+
+
+  <link rel="stylesheet" href="/css/main.css?v=201904191944">
+  <link rel="canonical" href="https://serdarkuzucu.com/2021/01/10/gradle-spring-boot-angular-birlikte-build-etmek/">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2260086-7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-2260086-7');
+  </script>
+  
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (43)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (6)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (5)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (4)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (6)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (22)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+            <a href="/category/git" class="dropdown-item">Git (2)</a>
+            
+            <a href="/category/spring-boot" class="dropdown-item">Spring Boot (1)</a>
+            
+            <a href="/category/angular" class="dropdown-item">Angular (1)</a>
+            
+            <a href="/category/gradle" class="dropdown-item">Gradle (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Gradle: Spring Boot & Angular Uygulamalarını Birlikte Build Edelim</h1>
+    <p class="post-meta">
+      <time datetime="2021-01-10T14:04:26+00:00" itemprop="datePublished">Jan 10, 2021</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/spring-boot">Spring Boot</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/angular">Angular</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/gradle">Gradle</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Yeni bir projeye başlamanın en sıkıcı maddelerinden birisi de projeyi oluşturup 
+her projede kullandığımız basmakalıp (boilerplate) kodları yazmaktır.
+Build aracını (maven, gradle, vs) seçmek, bağımlılıkları build aracına eklemek,
+kullanılan frameworklerin (spring, angular, vs) konfigürasyonlarının yapılması gibi
+her projede tekrar tekrar yaptığımız işler vardır 
+ve bir kişi o işi yapıp projeyi repository’ye atmazsa 
+ekibin geri kalanı projede yazılım geliştirmeye başlayamaz.
+Genellikle bu işlem varolan bir projeyi kopyalayıp içinde yeni projeye lazım olmayan
+ne var ne yok silmek şeklinde yapılsa da 
+bazen yeni bir proje yapısını gerektiren durumlar oluşabilir.
+2018 yılında backend için Spring Boot ve frontend için Angular framework’lerini
+kullanmaya karar verdiğimizde ekip için bu yeni bir proje yapısıydı 
+ve biraz araştırıp bu iki arkadaşı bir arada kullanmanın proje için 
+en uygun yolunu bulmam gerekmişti. 
+O günden beri ekip olarak birçok projede kullandığımız bu proje yapısını 
+sıfırdan bir proje oluşturarak anlatmaya çalışacağım.</p>
+
+<!--more-->
+
+<div class="alert alert-info">
+Tüm yazıyı okumak istemeyen arkadaşlar doğrudan şu linke tıklayarak 
+bu yazıyı yazarken geliştirdiğim örnek uygulamayı Github hesabımda inceleyebilirsiniz:
+<a href="https://github.com/sedran/spring-boot-angular-gradle-example">sedran/spring-boot-angular-gradle-example</a> 
+</div>
+
+<p>Aşağıda adım adım projeyi sıfırdan nasıl oluşturduğumu anlatıyor olacağım.
+Ben bu projeyi oluştururken IDE olarak Intellij IDEA kullanıyorum.
+Başka bir IDE kullanarak denemek istiyorsanız anlatacaklarımın o IDE’deki
+karşılıklarını bilmeniz veya bir şekilde bulmanız gerekecektir.</p>
+
+<p>Ek olarak projeyi build edebilmek ve bazı adımları tamamlayabilmek için
+bilgisayarınızda “npm” ve “ng” (Angular CLI) araçlarının da yüklü olması gerekmektedir.</p>
+
+<h2 id="adım-1-gradle-projesi-oluşturalım">Adım 1: Gradle Projesi Oluşturalım</h2>
+
+<p>Öncelikle Intellij IDEA menüsünden <code class="highlighter-rouge">File &gt; New &gt; Project</code> 
+yolunu takip ederek yeni proje oluşturma diyaloğunu açıyoruz 
+ve bu diyalogda sol tarafta “Gradle” seçeneğini işaretliyoruz.
+Sağ tarafta ise hiçbir seçeneği işaretlemeden Next butonuna basıyoruz.</p>
+
+<p><a href="/assets/posts/2021-01-10-spring-boot-angular-gradle/01-new-gradle-project.png" target="_blank">
+  <img border="0" height="600" src="/assets/posts/2021-01-10-spring-boot-angular-gradle/01-new-gradle-project.png" />
+</a></p>
+
+<p>Sonraki adımda proje ile ilgili bazı temel bilgiler soruluyor. 
+Bunları keyfimize göre doldurup proje oluşturmayı tamamlıyoruz.</p>
+
+<p><a href="/assets/posts/2021-01-10-spring-boot-angular-gradle/02-new-gradle-project.png" target="_blank">
+  <img border="0" height="600" src="/assets/posts/2021-01-10-spring-boot-angular-gradle/02-new-gradle-project.png" />
+</a></p>
+
+<h2 id="adım-2-angular-uygulaması-oluşturalım">Adım 2: Angular Uygulaması Oluşturalım</h2>
+
+<p>Bu adımda frontend tarafı olan angular uygulamasını yaratacağız.
+Bir terminal açıp projenin olduğu dizine gidelim 
+ve Angular CLI aracılığıyla frontend isimli projemizi oluşturalım.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> ~/path-to-project
+ng new frontend
+</code></pre></div></div>
+
+<p>Komutu çalıştırdığımızda Angular CLI bir takım sorular soracak.
+Bu soruları tercihimize göre cevaplıyoruz.
+Uygulama oluşturma tamamlandığında frontend isimli bir klasör
+ve içerisinde boş bir Angular hello world uygulamasının oluştuğunu göreceğiz.</p>
+
+<p>Ana projemizi zaten versiyon kontrol sisteminde tutacağımız için frontend klasöründe
+otomatik olarak oluşturulan git repository’sine ihtiyacımız yok.
+<code class="highlighter-rouge">frontend/.git</code> klasörünü hiç düşünmeden silebiliriz.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>frontend
+<span class="nb">rm</span> <span class="nt">-rf</span> .git
+</code></pre></div></div>
+
+<p>Terminalde frontend klasörünün içerisinde <code class="highlighter-rouge">ng serve</code> komutunu yazdığımızda
+projenin “Angular Live Development Server” üzerinde ayağa kalktığını ve
+<a href="http://localhost:4200/">http://localhost:4200/</a> adresinden otomatik olarak üretilmiş
+Welcome sayfasına ulaşabildiğimizi görüyoruz.</p>
+
+<p>Angular projeleri npm paket yöneticisini kullanır ve Angular CLI denen
+nodejs ile çalışan bir araç tarafından build edilirler.
+Biz “frontend” projesini de gradle ile build etmek istediğimiz için
+frontend klasörünün içerisinde aşağıdaki gibi bir <code class="highlighter-rouge">build.gradle</code> dosyası oluşturuyoruz.</p>
+
+<div class="language-gradle highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">def</span> <span class="n">frontendProjectDir</span> <span class="o">=</span> <span class="s2">"${rootProject.projectDir}/frontend"</span>
+
+<span class="c1">// Bu dosyalar değişmediği sürece gradle up-to-date check sayesinde </span>
+<span class="c1">// ng build komutu tetiklenmeyecek. Ön yüz tarafında değişiklik olmadığı</span>
+<span class="c1">// build'lerde build süresini oldukça kısaltacaktır.</span>
+<span class="kt">def</span> <span class="n">angularFiles</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="na">fileTree</span><span class="o">(</span><span class="nl">dir:</span> <span class="n">frontendProjectDir</span><span class="o">,</span> <span class="nl">includes:</span> <span class="o">[</span>
+  <span class="s2">"src/**/*.ts"</span><span class="o">,</span>
+  <span class="s2">"src/**/*.html"</span><span class="o">,</span>
+  <span class="s2">"src/**/*.json"</span><span class="o">,</span>
+  <span class="s2">"src/**/*.css"</span><span class="o">,</span>
+  <span class="s2">"src/**/*.scss"</span><span class="o">,</span>
+  <span class="s2">"package.json"</span><span class="o">,</span>
+  <span class="s2">"package-lock.json"</span><span class="o">,</span>
+  <span class="s2">"angular.json"</span><span class="o">,</span>
+  <span class="s2">"tsconfig.json"</span><span class="o">,</span>
+  <span class="s2">"src/assets/**"</span><span class="o">,</span>
+  <span class="s2">"node_modules/**"</span>
+<span class="o">])</span>
+
+<span class="n">task</span> <span class="nf">buildAngular</span><span class="o">(</span><span class="nl">type:</span> <span class="n">Exec</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">inputs</span><span class="o">.</span><span class="na">files</span><span class="o">(</span><span class="n">angularFiles</span><span class="o">)</span>
+  <span class="n">outputs</span><span class="o">.</span><span class="na">dir</span><span class="o">(</span><span class="s2">"${frontendProjectDir}/dist"</span><span class="o">)</span>
+
+  <span class="c1">// installAngular should be run prior to this task</span>
+  <span class="n">dependsOn</span> <span class="s2">"npmInstall"</span>
+  <span class="n">workingDir</span> <span class="s2">"${frontendProjectDir}"</span>
+  <span class="c1">// Add task to the standard build group</span>
+  <span class="n">group</span> <span class="o">=</span> <span class="n">BasePlugin</span><span class="o">.</span><span class="na">BUILD_GROUP</span>
+  <span class="c1">// ng doesn't exist as a file in windows -&gt; ng.cmd</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s2">"os.name"</span><span class="o">).</span><span class="na">toUpperCase</span><span class="o">(</span><span class="n">Locale</span><span class="o">.</span><span class="na">ROOT</span><span class="o">).</span><span class="na">contains</span><span class="o">(</span><span class="s2">"WINDOWS"</span><span class="o">))</span> <span class="o">{</span>
+    <span class="n">commandLine</span> <span class="s2">"npm.cmd"</span><span class="o">,</span> <span class="s2">"run"</span><span class="o">,</span> <span class="s2">"buildProd"</span>
+  <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+    <span class="n">commandLine</span> <span class="s2">"npm"</span><span class="o">,</span> <span class="s2">"run"</span><span class="o">,</span> <span class="s2">"buildProd"</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">task</span> <span class="nf">npmInstall</span><span class="o">(</span><span class="nl">type:</span> <span class="n">Exec</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">inputs</span><span class="o">.</span><span class="na">files</span><span class="o">(</span><span class="s2">"${frontendProjectDir}/package.json"</span><span class="o">)</span>
+  <span class="n">outputs</span><span class="o">.</span><span class="na">dir</span><span class="o">(</span><span class="s2">"${frontendProjectDir}/node_modules"</span><span class="o">)</span>
+
+  <span class="n">workingDir</span> <span class="s2">"${frontendProjectDir}"</span>
+  <span class="n">group</span> <span class="o">=</span> <span class="n">BasePlugin</span><span class="o">.</span><span class="na">BUILD_GROUP</span>
+  <span class="k">if</span> <span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s2">"os.name"</span><span class="o">).</span><span class="na">toUpperCase</span><span class="o">(</span><span class="n">Locale</span><span class="o">.</span><span class="na">ROOT</span><span class="o">).</span><span class="na">contains</span><span class="o">(</span><span class="s2">"WINDOWS"</span><span class="o">))</span> <span class="o">{</span>
+    <span class="n">commandLine</span> <span class="s2">"npm.cmd"</span><span class="o">,</span> <span class="s2">"install"</span>
+  <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+    <span class="n">commandLine</span> <span class="s2">"npm"</span><span class="o">,</span> <span class="s2">"install"</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="n">task</span> <span class="n">build</span> <span class="o">{</span>
+  <span class="n">dependsOn</span> <span class="s2">"buildAngular"</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>“frontend” klasöründeki <code class="highlighter-rouge">package.json</code> dosyasında <code class="highlighter-rouge">scripts</code> anahtarının içerisine
+aşağıdaki gibi <code class="highlighter-rouge">buildProd</code> komutunu ekliyoruz. 
+Dosyayı aşağıdaki gibi değiştirmeyin komple, sadece bir kısmını yazdım.</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"frontend"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.0.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"ng"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ng"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ng serve"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"build"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ng build"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"buildProd"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ng build --prod"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"test"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ng test"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"lint"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ng lint"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"e2e"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ng e2e"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>“package.json” dosyasına eklediğimiz <code class="highlighter-rouge">ng build --prod</code> komutu build.gradle
+dosyasındaki <code class="highlighter-rouge">buildAngular</code> gradle taskı tarafından tetikleniyor.
+Asıl build işini sistemimize daha önceden kurduğumuz “Angular CLI” aracı yapıyor.
+Gradle burada sadece bir tetikleyici durumunda fakat backend projesi gradle
+tarafından build edileceği için ikisini birbirine bağlamamızda 
+bu konfigürasyonun oldukça faydası olacak.</p>
+
+<p>“frontend” projesinin bir gradle projesi olarak ana proje tarafından görülmesi için
+ana proje klasöründeki <code class="highlighter-rouge">settings.gradle</code> dosyasını da şu şekilde düzenliyoruz:</p>
+
+<div class="language-gradle highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rootProject</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="s1">'springangulardemo'</span>
+<span class="n">include</span> <span class="s1">':frontend'</span>
+</code></pre></div></div>
+
+<p>En sonunda ana proje dizininde <code class="highlighter-rouge">./gradlew build</code> komutunu çalıştırdığımızda 
+aşağıdaki gibi bir çıktı verince angular projemizin gradle ile build olduğunu
+görmüş oluyoruz.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; Task :frontend:npmInstall
+audited 1460 packages in 5.331s
+
+67 packages are looking for funding
+  run `npm fund` for details
+
+found 2 low severity vulnerabilities
+  run `npm audit fix` to fix them, or `npm audit` for details
+
+&gt; Task :frontend:buildAngular
+
+&gt; frontend@0.0.0 buildProd /Users/serdarkuzucu/projects/personal/blog/springangulardemo/frontend
+&gt; ng build --prod
+
+Generating ES5 bundles for differential loading...
+ES5 bundle generation complete.
+
+chunk {0} runtime-es2015.0dae8cbc97194c7caed4.js (runtime) 1.45 kB [entry] [rendered]
+chunk {0} runtime-es5.0dae8cbc97194c7caed4.js (runtime) 1.45 kB [entry] [rendered]
+chunk {2} polyfills-es2015.f332a089ad1600448873.js (polyfills) 36.1 kB [initial] [rendered]
+chunk {3} polyfills-es5.177e85a9724683782539.js (polyfills-es5) 129 kB [initial] [rendered]
+chunk {1} main-es2015.05e26c45cc5c75825871.js (main) 217 kB [initial] [rendered]
+chunk {1} main-es5.05e26c45cc5c75825871.js (main) 259 kB [initial] [rendered]
+chunk {4} styles.09e2c710755c8867a460.css (styles) 0 bytes [initial] [rendered]
+Date: 2021-01-10T17:21:55.929Z - Hash: 1d60d39f7d1df34a5244 - Time: 32218ms
+
+BUILD SUCCESSFUL in 47s
+2 actionable tasks: 2 executed
+</code></pre></div></div>
+
+<p>Angular kısmı bu kadar. 
+Sonraki adıma geçebiliriz.</p>
+
+<h2 id="adım-3-spring-boot-uygulaması-oluşturalım">Adım 3: Spring Boot Uygulaması Oluşturalım</h2>
+
+<p>Yeni bir Spring Boot uygulaması oluştururken yaptığım şey genellikle çoğu insan gibi
+https://start.spring.io/ adresine girip ihtiyacım olan bağımlılıkları seçip 
+projeyi zip olarak indirmek. 
+Bu sefer onun yerine ihtiyacım olan bağımlılıkları seçip sadece <code class="highlighter-rouge">build.gradle</code>
+dosyasını kopyalayacağım.</p>
+
+<p>Spring Boot projesini aşağıdaki gibi starter arayüzünden konfigüre ettim:</p>
+
+<p><a href="/assets/posts/2021-01-10-spring-boot-angular-gradle/03-start-spring-io.png" target="_blank">
+  <img border="0" height="500" src="/assets/posts/2021-01-10-spring-boot-angular-gradle/03-start-spring-io.png" />
+</a></p>
+
+<p>Daha sonra sayfanın altında bulunan “EXPLORE” butonuna basarak 
+<code class="highlighter-rouge">build.gradle</code> dosyasının içeriğini kopyalıyoruz.</p>
+
+<p>Ana projenin içerisinde “frontend” klasörüne komşu olacak şekilde 
+“backend” isminde bir klasör oluşturuyoruz.
+“backend” klasörünün içerisinde <code class="highlighter-rouge">build.gradle</code> isimli bir dosya oluşturuyoruz
+ve Spring Boot starter sitesinden kopyaladığımız “build.gradle” dosya içeriğini
+bu yeni dosyanın içerisine yapıştırıyoruz.</p>
+
+<p>Daha sonra bu dosyanın sonuna aşağıdaki satırları da ekliyoruz:</p>
+
+<div class="language-gradle highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">bootJar</span> <span class="o">{</span>
+    <span class="n">dependsOn</span> <span class="s1">':frontend:buildAngular'</span>
+
+    <span class="n">into</span><span class="o">(</span><span class="s1">'BOOT-INF/classes'</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">from</span> <span class="s2">"${project(':frontend').projectDir}/dist"</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>“dependsOn” ile backend projesi build edilmeden önce 
+frontend projesinin build edilmiş olması gerektiğini gradle’a bildirmiş oluyoruz.
+Böylece frontend projesinin backend projesinden önce build edileceğini
+garanti altına almış oluyoruz.</p>
+
+<p>Angular projesi build olduğunda ortaya “dist” isimli bir klasör çıkar.
+Bu klasör Angular projesindeki tüm dosyaların build + uglify edilmiş halini içerir.</p>
+
+<p>“build.gradle” dosyasına <code class="highlighter-rouge">into(</code> ile başlayan satırda yaptığımız ilave 
+ile “dist” klasörünü Spring Boot uygulamasının ürettiği jar’ın içerisine
+JVM’in classpath’inde olacak şekilde eklemiş oluyoruz.
+“BOOT-INF/classes” klasörü spring uygulamasının classpath’inin root dizinidir.</p>
+
+<p>Ayrıca Spring Boot starter sitesinde yine otomatik olarak üretilmiş olan 
+main sınıfı da projede uygun klasör yapısını oluşturup projeye eklemeyi ihmal etmeyelim.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Proje ana dizininde çalıştıralım:</span>
+<span class="nb">mkdir</span> <span class="nt">-p</span> backend/src/main/java/com/serdarkuzucu/springangulardemo
+</code></pre></div></div>
+
+<p>Yukarıda oluşturduğumuz klasöre SpringAngularDemoApplication.java isminde
+aşağıdaki içerikte bir dosya oluşturalım.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.serdarkuzucu.springangulardemo</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.boot.SpringApplication</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.boot.autoconfigure.SpringBootApplication</span><span class="o">;</span>
+
+<span class="nd">@SpringBootApplication</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpringAngularDemoApplication</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">SpringApplication</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="nc">SpringAngularDemoApplication</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Son olarak ana projedeki <code class="highlighter-rouge">settings.gradle</code> dosyasına aşağıdaki gibi
+backend projesini de eklememiz gerekiyor:</p>
+
+<div class="language-gradle highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rootProject</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="s1">'springangulardemo'</span>
+
+<span class="n">include</span> <span class="s1">':frontend'</span>
+<span class="n">include</span> <span class="s1">':backend'</span>
+</code></pre></div></div>
+
+<p>Bu noktadan sonra <code class="highlighter-rouge">./gradlew build</code> komutunu çalıştırdığımızda
+hata almamamız gerekiyor.</p>
+
+<p>Spring uygulamasını ayağa kaldırmak için de <code class="highlighter-rouge">./gradlew bootRun</code> 
+komutunu çalıştırıyoruz. 
+Bu komutta da bir hata almamamız gerekiyor.</p>
+
+<p>İleriki adımlarda test amaçlı kullanılmak üzere projeye 
+bir adet örnek REST API ekliyoruz:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.serdarkuzucu.springangulardemo.controller</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RequestMapping</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.RestController</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.HashMap</span><span class="o">;</span>
+
+<span class="nd">@RestController</span>
+<span class="nd">@RequestMapping</span><span class="o">(</span><span class="s">"api/users"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserController</span> <span class="o">{</span>
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"me"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Object</span><span class="o">&gt;</span> <span class="nf">getCurrentUser</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">HashMap</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">,</span> <span class="nc">Object</span><span class="o">&gt;();</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"firstName"</span><span class="o">,</span> <span class="s">"Serdar"</span><span class="o">);</span>
+        <span class="n">user</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"lastName"</span><span class="o">,</span> <span class="s">"Kuzucu"</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">user</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="adım-4-spring-bootun-statik-dosya-sunumu-ayarları">Adım 4: Spring Boot’un Statik Dosya Sunumu Ayarları</h2>
+
+<p>Angular uygulamasını Spring Boot’un ayağa kalktığı port üzerinde 
+sunmaya başlayabilmek için bazı konfigürasyonları yapmak gerekiyor.</p>
+
+<p>Öncelikle frontend klasörünü bir önceki adımda classpath’e kopyalamıştık.
+Angular projesinin “dist” klasörünün içerisinde “frontend” isminde bir klasör
+oluşmakta ve biz de o klasörü Spring Boot uygulamasının classpath’ine eklemiş olduk.
+Bu sebeple Spring’e ResourceHandler olarak <code class="highlighter-rouge">classpath:/frontend/</code>
+dizinini aşağıdaki gibi ekliyoruz.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.serdarkuzucu.springangulardemo.configuration</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.servlet.config.annotation.WebMvcConfigurer</span><span class="o">;</span>
+
+<span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebMvcConfiguration</span> <span class="kd">implements</span> <span class="nc">WebMvcConfigurer</span> <span class="o">{</span>
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">addResourceHandlers</span><span class="o">(</span><span class="nc">ResourceHandlerRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">registry</span><span class="o">.</span><span class="na">addResourceHandler</span><span class="o">(</span><span class="s">"/**"</span><span class="o">).</span><span class="na">addResourceLocations</span><span class="o">(</span><span class="s">"classpath:/frontend/"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Bu şekilde index.html, main.js, styles.css gibi istekler Spring’e ulaştığında
+classpath’deki frontend klasörünün içerisinde o dosyaları araması gerektiğini
+söylemiş olmaktayız.</p>
+
+<p>Yukarıdaki ResourceHandler <a href="http://localhost:8080/index.html">http://localhost:8080/index.html</a> 
+şeklinde gelen istekleri yakalayıp frontend/index.html dosyasını sunabiliyor fakat 
+<a href="http://localhost:8080/">http://localhost:8080/</a>
+şeklinde gelen isteklerde “404 Not Found” hatası dönüyor.</p>
+
+<p>Uygulamamızın root adresini de index.html dosyasına bağlayabilmek için
+aşağıdaki gibi bir <code class="highlighter-rouge">IndexController</code> sınıfı yazmamız yeterli.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.serdarkuzucu.springangulardemo.controller</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.stereotype.Controller</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.web.bind.annotation.GetMapping</span><span class="o">;</span>
+
+<span class="nd">@Controller</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">IndexController</span> <span class="o">{</span>
+    <span class="nd">@GetMapping</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
+    <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getIndex</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="s">"forward:index.html"</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="adım-5-angular-proxy-ayarları">Adım 5: Angular Proxy Ayarları</h2>
+
+<p>Bir geliştirici kendi bilgisayarında projeyi geliştirme amaçlı çalıştığında
+Spring Boot jar’ının içerisine gömülmüş Angular projesini çalıştırmamalı.
+Geliştiriciler Spring Boot uygulamasını IDE’lerindeki Run Configuration ile main
+sınıftan çalıştırmalı veya <code class="highlighter-rouge">./gradlew bootRun</code> komutuyla ayağa kaldırmalılar.
+Angular uygulamasını ise frontend klasöründe <code class="highlighter-rouge">ng serve</code> komutunu çalıştırarak
+<code class="highlighter-rouge">Angular Live Development Server</code> üzerinde ayağa kaldırmalılar.</p>
+
+<p>Bu durumda frontend 4200, backend ise 8080 portlarında ayağa kalkmış oluyor.
+Bu da bazı tarayıcılarda ön yüzden backend uygulamasına atılan isteklerin
+CORS politikası sebebiyle bloklanmasına sebep oluyor.</p>
+
+<p>Bu problemi de ortadan kaldırmak için sadece geliştirici (DEV) ortamında çalışan
+Angular proxy ayarlarını yapmamız gerekiyor.
+Öncelikle ana projemizin altındaki “frontend” klasörünün içerisine 
+“proxy.conf.json” isminde bir dosya oluşturuyoruz, dosyanın içeriği şu şekilde:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"/api"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"target"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:8080"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"logLevel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"debug"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"secure"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Bu konfigürasyon adresi Angular Live Development Server uygulamasına
+<code class="highlighter-rouge">http://localhost:4200/api</code> şeklinde gelecek olan tüm istekleri 
+<code class="highlighter-rouge">http://localhost:8080</code> uygulamasına gönderecek.</p>
+
+<p>Proxy ayarını “frontend” klasöründeki “angular.json” 
+dosyasında da şu şekilde yapıyoruz:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="err">...</span><span class="w">
+  </span><span class="nl">"projects"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"frontend"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="err">...</span><span class="w">
+      </span><span class="nl">"architect"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="err">...</span><span class="w">
+        </span><span class="nl">"serve"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="err">...</span><span class="w">
+          </span><span class="nl">"options"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="err">...</span><span class="w">
+            </span><span class="nl">"proxyConfig"</span><span class="p">:</span><span class="w"> </span><span class="s2">"proxy.conf.json"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Düzenli bir API standardınızın olması ve proxy ayarlarının temiz kalması için
+backend tarafındaki tüm REST API’lere burda yaptığımız gibi <code class="highlighter-rouge">api/**</code> ön eki ile
+veya kendi belirleyeceğiniz başka tek bir ön ek ile başlamanızı tavsiye ederim.
+Spring Security konfigürasyonları, custom servlet filtreleri gibi başka işlerde de
+oldukça işe yaradığını göreceksiniz ileride.</p>
+
+<h2 id="uçtan-uca-testler">Uçtan Uca Testler</h2>
+
+<p>Yaptığımız bunca konfigürasyonun çalışıp çalışmadığını uçtan uca test etmek 
+için aşağıdaki değişiklikleri yapıyoruz:</p>
+
+<p><code class="highlighter-rouge">app.module.ts</code> dosyasında <code class="highlighter-rouge">HttpClientModule</code> modülünü import edelim:</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span><span class="nx">BrowserModule</span><span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@angular/platform-browser</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span><span class="nx">NgModule</span><span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@angular/core</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="k">import</span> <span class="p">{</span><span class="nx">AppRoutingModule</span><span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./app-routing.module</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span><span class="nx">AppComponent</span><span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./app.component</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span><span class="nx">HttpClientModule</span><span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@angular/common/http</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="p">@</span><span class="nd">NgModule</span><span class="p">({</span>
+  <span class="na">declarations</span><span class="p">:</span> <span class="p">[</span>
+    <span class="nx">AppComponent</span>
+  <span class="p">],</span>
+  <span class="na">imports</span><span class="p">:</span> <span class="p">[</span>
+    <span class="nx">BrowserModule</span><span class="p">,</span>
+    <span class="nx">AppRoutingModule</span><span class="p">,</span>
+    <span class="nx">HttpClientModule</span><span class="p">,</span> <span class="c1">// &lt;-- Bu satır</span>
+  <span class="p">],</span>
+  <span class="na">providers</span><span class="p">:</span> <span class="p">[],</span>
+  <span class="na">bootstrap</span><span class="p">:</span> <span class="p">[</span><span class="nx">AppComponent</span><span class="p">]</span>
+<span class="p">})</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">AppModule</span> <span class="p">{</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">app.module.ts</code> dosyası ile aynı dizinde bir adet <code class="highlighter-rouge">user.service.ts</code> dosyası oluşturalım.
+Bu dosyanın içeriği aşağıdaki gibi olsun.
+Backend’de açtığımız <code class="highlighter-rouge">api/users/me</code> REST API’sini çağırsın.</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span><span class="nx">Injectable</span><span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@angular/core</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span><span class="nx">HttpClient</span><span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@angular/common/http</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span><span class="nx">Observable</span><span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">rxjs</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="p">@</span><span class="nd">Injectable</span><span class="p">({</span><span class="na">providedIn</span><span class="p">:</span> <span class="dl">'</span><span class="s1">root</span><span class="dl">'</span><span class="p">})</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">UserService</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">http</span><span class="p">:</span> <span class="nx">HttpClient</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">}</span>
+
+  <span class="kr">public</span> <span class="nx">getCurrentUser</span><span class="p">():</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">User</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="o">&lt;</span><span class="nx">User</span><span class="o">&gt;</span><span class="p">(</span><span class="dl">'</span><span class="s1">api/users/me</span><span class="dl">'</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">export</span> <span class="kr">interface</span> <span class="nx">User</span> <span class="p">{</span>
+  <span class="na">firstName</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">lastName</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">app.component.ts</code> dosyasını aşağıdaki şekilde değiştirelim.
+<code class="highlighter-rouge">UserService</code> üzerinden backend’den kullanıcı bilgilerini çeksin.</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span><span class="nx">Component</span><span class="p">,</span> <span class="nx">OnInit</span><span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@angular/core</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span><span class="nx">User</span><span class="p">,</span> <span class="nx">UserService</span><span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">./user.service</span><span class="dl">"</span><span class="p">;</span>
+
+<span class="p">@</span><span class="nd">Component</span><span class="p">({</span>
+  <span class="na">selector</span><span class="p">:</span> <span class="dl">'</span><span class="s1">app-root</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">templateUrl</span><span class="p">:</span> <span class="dl">'</span><span class="s1">./app.component.html</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">styleUrls</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">./app.component.scss</span><span class="dl">'</span><span class="p">]</span>
+<span class="p">})</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">AppComponent</span> <span class="kr">implements</span> <span class="nx">OnInit</span> <span class="p">{</span>
+  <span class="nx">title</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">frontend</span><span class="dl">'</span><span class="p">;</span>
+  <span class="nl">user</span><span class="p">:</span> <span class="nx">User</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+
+  <span class="kd">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">userService</span><span class="p">:</span> <span class="nx">UserService</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">}</span>
+
+  <span class="nx">ngOnInit</span><span class="p">():</span> <span class="k">void</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">userService</span><span class="p">.</span><span class="nx">getCurrentUser</span><span class="p">()</span>
+      <span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">user</span> <span class="o">=&gt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">user</span> <span class="o">=</span> <span class="nx">user</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">app.component.html</code> dosyasında da <code class="highlighter-rouge">&lt;span&gt;Welcome&lt;/span&gt;</code> yazan satırı 
+aşağıdaki gibi değiştirelim:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;span&gt;</span>Welcome <span class="nt">&lt;span</span> <span class="na">*ngIf=</span><span class="s">"user"</span><span class="nt">&gt;</span> <span class="nt">&lt;/span&gt;&lt;/span&gt;</span>
+</code></pre></div></div>
+
+<h3 id="geliştirici-ortamı-testleri">Geliştirici Ortamı Testleri</h3>
+
+<p>Spring Boot ve Angular uygulamalarının ikisini de yeniden başlattıktan sonra 
+<a href="http://localhost:4200">http://localhost:4200</a> adresini açtığımızda önceden
+sadece Welcome yazan yerde artık “Welcome Serdar Kuzucu” yazdığını 
+(backend tarafından dönen firstName ve lastName değerleri) görüyoruz.</p>
+
+<p><a href="/assets/posts/2021-01-10-spring-boot-angular-gradle/04-angular-frontend-home.png" target="_blank">
+  <img border="0" height="400" src="/assets/posts/2021-01-10-spring-boot-angular-gradle/04-angular-frontend-home.png" />
+</a></p>
+
+<p>Bu şekilde geliştiricilerin frontend ve backend uygulamalarını kendi bilgisayarlarında
+ayrı ayrı çalıştırarak iki farklı framework’ün geliştirici ortamı nimetlerinden
+faydalanabileceklerini görmüş oluyoruz.</p>
+
+<h3 id="production-ortamı-testleri">Production Ortamı Testleri</h3>
+
+<p>Production build almak için ana projenin dizininde <code class="highlighter-rouge">./gradlew build</code> 
+komutunu çalıştırmamız yeterli.</p>
+
+<p>Gradle dosyalarındaki versiyonlarda bir değişiklik yapmadıysanız build işlemi
+sonrasında proje içerisinde şu isimde bir dosya üreyecektir:
+<code class="highlighter-rouge">backend/build/libs/backend-0.0.1-SNAPSHOT.jar</code></p>
+
+<p>Bu dosya Spring Boot uygulamasının son çıktısıdır.
+Bu dosyanın içerisinde compile olmuş java sınıflarının yanı sıra
+Angular projesinin de production build çıktısı yer almaktadır.</p>
+
+<p>Bu dosyayı doğrudan <code class="highlighter-rouge">java -jar</code> ile aşağıdaki gibi çalıştırabiliriz:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>java <span class="nt">-jar</span> backend/build/libs/backend-0.0.1-SNAPSHOT.jar
+</code></pre></div></div>
+
+<p>Bu şekilde uygulamayı ayağa kaldırdığımızda
+<a href="http://localhost:8080">http://localhost:8080</a> adresinden
+uygulamayı açabiliriz.</p>
+
+<p>“Geliştirici Ortamı Testleri” başlığında elde ettiğimiz görüntü 
+ile aynı görüntüyü elde ediyorsak başarmışız demektir.</p>
+
+<h2 id="kaynak-kod">Kaynak Kod</h2>
+
+<p>Bu yazıyı yazarken geliştirdiğim örnek uygulamayı Github hesabımdan
+siz de inceleyebilirsiniz: 
+<a href="https://github.com/sedran/spring-boot-angular-gradle-example">sedran/spring-boot-angular-gradle-example</a></p>
+
+<h2 id="sonuç">Sonuç</h2>
+
+<p>Son 3 yıl içerisinde bu proje yapısını ekipçe 10’dan fazla projede kullandık.
+Build sonrasında üretilen jar dosyasını JVM imajından türetilmiş bir docker imajı 
+içerisine koyarak uygulamamızı çok rahat dockerize edebiliyoruz.
+Bu sayede bu yapı kubernetes/openshift gibi ortamlarda da sıkıntısız çalışıyor.</p>
+
+<p>Birbiri ile sürekli iletişim halinde olan frontend 
+ve backend uygulamalarının kaynak kodlarının bu şekilde 
+bir arada olması bazı uygulamalar ve ekipler için oldukça faydalı. 
+Özellikle bir işin frontend tarafı ile backend tarafını 
+aynı geliştiricinin geliştirdiği projelerde/ekiplerde 
+bu yöntemin daha iyi olduğunu düşünüyorum.</p>
+
+<p>Bu yöntemle ilgili söyleyebileceğim tek bir negatif düşüncem var,
+o da projenin ön yüz kısmı büyüdükçe build sürelerinin aşırı uzaması.</p>
+
+<p>Ona da ekipçe bir çözüm bulduğumuzda blogumda paylaşıyor olurum.
+İnşallah bir gün bulabiliriz.</p>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/2021/01/09/dagitik-uygulamada-buyuk-veri-okumak/">&laquo; Dağıtık Uygulamada Büyük Veri Okumak</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+  </div>
+</div>
+
+
+  
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://serdarkuzucu.com/2021/01/10/gradle-spring-boot-angular-birlikte-build-etmek/';
+        this.page.identifier = 'gradle-spring-boot-angular-birlikte-build-etmek';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+  
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>
