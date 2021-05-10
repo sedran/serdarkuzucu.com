@@ -3,6 +3,7 @@ ruby RUBY_VERSION
 
 # We'll need rake to build our site in TravisCI
 gem "rake", "~> 12"
+gem "webrick", "~> 1.7"
 gem "jekyll"
 
 # Optional: Add any custom plugins here.
