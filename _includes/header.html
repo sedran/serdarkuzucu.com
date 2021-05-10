@@ -15,7 +15,8 @@
             <i class="fa fa-tags"></i> Kategoriler
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            {% for category in site.categories %}
+            {% assign sorted_categories = site.categories | sk_sort_categories %}
+            {% for category in sorted_categories %}
             <a href="/category/{{ category[0] | slugify }}" class="dropdown-item">{{ category[0] }} ({{ category[1].size }})</a>
             {% endfor %}
           </div>
