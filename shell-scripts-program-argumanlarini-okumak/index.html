@@ -194,7 +194,7 @@ Bu yazıda, program argümanlarını okumayı göreceğiz.</p>
 
 <p>Birçok program, çalışmadan önce bir takım parametreleri kullanıcıdan alır. 
 Bu yöntem programa esneklik kazandırır. 
-Örneğin dosya kopyalarken kullandığımız <code class="highlighter-rouge">cp</code> komutu, 
+Örneğin dosya kopyalarken kullandığımız <code class="language-plaintext highlighter-rouge">cp</code> komutu, 
 en yaygın kullanımında iki tane parametre alır. 
 Bunlardan ilki hangi dosyayı kopyalayacağıdır. 
 Diğeri ise o dosyayı nereye kopyalayacağıdır.</p>
@@ -203,13 +203,13 @@ Diğeri ise o dosyayı nereye kopyalayacağıdır.</p>
 
 <p>Shell scriptlerinde, programa geçilen argümanları okuyabilmemiz için 
 otomatik olarak tanımlanan değişkenler vardır. 
-Bunların ilki <code class="highlighter-rouge">$#</code> isimli parametredir. 
+Bunların ilki <code class="language-plaintext highlighter-rouge">$#</code> isimli parametredir. 
 Bu parametre, programa kaç tane parametre geçildiğini söyler.</p>
 
 <p>Programa geçilen parametreleri ise sırasıyla şu değişkenlerden okuyabiliriz: 
-<code class="highlighter-rouge">$1</code>, <code class="highlighter-rouge">$2</code>, <code class="highlighter-rouge">$3</code>, …</p>
+<code class="language-plaintext highlighter-rouge">$1</code>, <code class="language-plaintext highlighter-rouge">$2</code>, <code class="language-plaintext highlighter-rouge">$3</code>, …</p>
 
-<p><code class="highlighter-rouge">$0</code> parametresi ise, çalıştırdığımız programın ismini söylüyor bize.</p>
+<p><code class="language-plaintext highlighter-rouge">$0</code> parametresi ise, çalıştırdığımız programın ismini söylüyor bize.</p>
 
 <p>Şimdi bir örnek verelim. 
 Diyelim ki aşağıdaki Shell Scriptini yazdık.</p>
@@ -226,8 +226,8 @@ Diyelim ki aşağıdaki Shell Scriptini yazdık.</p>
 <span class="nb">echo</span> <span class="s2">"First parameter is </span><span class="nv">$3</span><span class="s2">"</span>
 </code></pre></div></div>
 
-<p>Bu programı helloworld ismiyle kaydettik ve <code class="highlighter-rouge">chmod +x helloworld</code> komutuyla çalıştırılabilme yetkisini verdik.
-Daha sonra bu programı <code class="highlighter-rouge">./helloworld a1 b2 c3</code> şeklinde çağıracak olursak, programın çıktısı aşağıdaki gibi olacak:</p>
+<p>Bu programı helloworld ismiyle kaydettik ve <code class="language-plaintext highlighter-rouge">chmod +x helloworld</code> komutuyla çalıştırılabilme yetkisini verdik.
+Daha sonra bu programı <code class="language-plaintext highlighter-rouge">./helloworld a1 b2 c3</code> şeklinde çağıracak olursak, programın çıktısı aşağıdaki gibi olacak:</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>./helloworld a1 b2 c3
 <span class="go">There are 3 parameters
@@ -241,11 +241,11 @@ First parameter is c3
 
 <p>Bu komutu daha ileriki başlıklarda daha etkin kullanmayı göstereceğim 
 fakat şimdilik konuyla alakası olduğu için ufaktan değineyim diyorum.
-<code class="highlighter-rouge">shift</code> komutu, program argümanlarını bir sola kaydırır. 
-Yani <code class="highlighter-rouge">$1</code> değişkeninde “a” değeri, <code class="highlighter-rouge">$2</code> değişkeninde “b”, <code class="highlighter-rouge">$3</code> değişkeninde de “c” değeri varken, 
-shift komutunu çalıştırırsak, <code class="highlighter-rouge">$1</code> değişkenine “b” değeri, <code class="highlighter-rouge">$2</code> değişkenine “c” değeri gelir.
-<code class="highlighter-rouge">$3</code> değişkeni ise kaybolur. 
-Bu bize döngüler yazmayı öğrendiğimiz zaman tüm parametre değerlerini <code class="highlighter-rouge">$1</code> ile okuyabilmenin yolunu açacak. 
+<code class="language-plaintext highlighter-rouge">shift</code> komutu, program argümanlarını bir sola kaydırır. 
+Yani <code class="language-plaintext highlighter-rouge">$1</code> değişkeninde “a” değeri, <code class="language-plaintext highlighter-rouge">$2</code> değişkeninde “b”, <code class="language-plaintext highlighter-rouge">$3</code> değişkeninde de “c” değeri varken, 
+shift komutunu çalıştırırsak, <code class="language-plaintext highlighter-rouge">$1</code> değişkenine “b” değeri, <code class="language-plaintext highlighter-rouge">$2</code> değişkenine “c” değeri gelir.
+<code class="language-plaintext highlighter-rouge">$3</code> değişkeni ise kaybolur. 
+Bu bize döngüler yazmayı öğrendiğimiz zaman tüm parametre değerlerini <code class="language-plaintext highlighter-rouge">$1</code> ile okuyabilmenin yolunu açacak. 
 Şimdilik basitçe bir örnekle geçiştireyim.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
@@ -260,7 +260,7 @@ echo</span> <span class="s2">"Parameter 1 is </span><span class="nv">$1</span><s
 echo</span> <span class="s2">"Parameter 1 is </span><span class="nv">$1</span><span class="s2">"</span>
 </code></pre></div></div>
 
-<p>Bu programı <code class="highlighter-rouge">shiftexample</code> olarak kaydedip <code class="highlighter-rouge">./shiftexample a b c d e</code> şeklinde çalıştırdığımızda, 
+<p>Bu programı <code class="language-plaintext highlighter-rouge">shiftexample</code> olarak kaydedip <code class="language-plaintext highlighter-rouge">./shiftexample a b c d e</code> şeklinde çalıştırdığımızda, 
 çıktı aşağıdaki gibi olacak:</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">$</span><span class="w"> </span>./shiftexample a b c d e
@@ -270,7 +270,7 @@ Parameter 1 is c
 Parameter 1 is d
 </span></code></pre></div></div>
 
-<p>Görüldüğü gibi, verdiğimiz tüm parametreleri <code class="highlighter-rouge">$1</code> değişkenini kullanarak okuyabildik.</p>
+<p>Görüldüğü gibi, verdiğimiz tüm parametreleri <code class="language-plaintext highlighter-rouge">$1</code> değişkenini kullanarak okuyabildik.</p>
 
 <p>Efendim bir sonraki yazımıza kadar esen kalın.
 Kodlu geceler.</p>

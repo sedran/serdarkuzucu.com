@@ -213,7 +213,7 @@ Formda dikkat etmemiz gereken hususlar nelerdir?</p>
 <ol>
   <li>
     <p>Öncelikle <em>Checkbox</em> elementlerinin <em>name</em> özellikleri bir dizinin elemanlarını oluşturacak şekilde ayarlanmalı. 
-Yani <code class="highlighter-rouge">name="dizi_ismi[eleman_no]"</code> şeklinde. 
+Yani <code class="language-plaintext highlighter-rouge">name="dizi_ismi[eleman_no]"</code> şeklinde. 
 Her Checkbox aynı dizi ismine sahip olmalı 
 ve o dizinin farklı bir eleman numarasına sahip olmalı, 
 yukarıda görüldüğü gibi.</p>
@@ -237,13 +237,13 @@ Get methodunu da pek sevmediğim için <em>Post methodu</em>nu kullandım.</p>
 Öncelikle şu ayrıntıya dikkat edelim; 
 formun olduğu sayfa ile formdan gelen verilerin yazdırılacağı sayfa aynı olacağı için, 
 PHP kodlarımız Gönder butonuna basıldığı zaman form’u gizleyecek ve gelen verileri işleyecek. 
-Bunun için <code class="highlighter-rouge">if(!isset($_POST['send']))</code> koduyla başlayacağız php dosyamıza. 
-<code class="highlighter-rouge">$_POST['send']</code> değişkeni ismi(<em>name</em>) <strong>send</strong> olan <em>Submit</em> butonuna bastığımızda yaratılır, 
+Bunun için <code class="language-plaintext highlighter-rouge">if(!isset($_POST['send']))</code> koduyla başlayacağız php dosyamıza. 
+<code class="language-plaintext highlighter-rouge">$_POST['send']</code> değişkeni ismi(<em>name</em>) <strong>send</strong> olan <em>Submit</em> butonuna bastığımızda yaratılır, 
 biz de kodumuzu eğer butona basılmamışsa formu göster, 
 eğer basılmışsa verileri ekrana yaz şeklinde ikiye böleriz. 
 Şimdi geldiğimiz yeri bir görelim:</p>
 
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'send'</span><span class="p">]))</span> <span class="p">{</span> <span class="cp">?&gt;</span>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'send'</span><span class="p">]))</span> <span class="p">{</span> <span class="cp">?&gt;</span>
 <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"checkboxes.php"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"checkbox"</span> <span class="na">name=</span><span class="s">"secenek[1]"</span> <span class="na">value=</span><span class="s">"Arkadaşlık"</span> <span class="nt">/&gt;</span> Arkadaşlık<span class="nt">&lt;br&gt;</span>
   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"checkbox"</span> <span class="na">name=</span><span class="s">"secenek[2]"</span> <span class="na">value=</span><span class="s">"İlişki"</span> <span class="nt">/&gt;</span> İlişki<span class="nt">&lt;br&gt;</span>
@@ -260,17 +260,17 @@ Gönder butonuna bastığımızda kaybolan bir form elde etmiş olursunuz.
 Şu ana kadar yazdığımız kodlara aynen devam ediyoruz. 
 <strong>else</strong> diyerek başlıyoruz çünkü “<strong>eğer butona basılmamışsa formu göster</strong>” şeklinde bir koşul girdik. 
 Şimdi bu koşulun zıttı için kod yazıyoruz. 
-İlk olarak <code class="highlighter-rouge">$secenek</code> isminde bir değişken yaratıyoruz 
+İlk olarak <code class="language-plaintext highlighter-rouge">$secenek</code> isminde bir değişken yaratıyoruz 
 ve onu post methodu ile gelen <strong>secenek</strong> isimli <em>dizi</em>ye eşitliyoruz. 
 Yani:</p>
 
 <div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$secenek</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'secenek'</span><span class="p">];</span>
 </code></pre></div></div>
 
-<p>Daha sonra <code class="highlighter-rouge">foreach</code> döngüsünü kullanarak elimize geçen dizinin tüm elemanlarını ekrana yazıyoruz. 
+<p>Daha sonra <code class="language-plaintext highlighter-rouge">foreach</code> döngüsünü kullanarak elimize geçen dizinin tüm elemanlarını ekrana yazıyoruz. 
 Geldiğimiz son noktayı da kodlarımıza eklersek:</p>
 
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'send'</span><span class="p">]))</span> <span class="p">{</span> <span class="cp">?&gt;</span>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span> <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="k">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'send'</span><span class="p">]))</span> <span class="p">{</span> <span class="cp">?&gt;</span>
 <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"checkboxes.php"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"checkbox"</span> <span class="na">name=</span><span class="s">"secenek[1]"</span> <span class="na">value=</span><span class="s">"Arkadaşlık"</span> <span class="nt">/&gt;</span> Arkadaşlık<span class="nt">&lt;br&gt;</span>
   <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"checkbox"</span> <span class="na">name=</span><span class="s">"secenek[2]"</span> <span class="na">value=</span><span class="s">"İlişki"</span> <span class="nt">/&gt;</span> İlişki<span class="nt">&lt;br&gt;</span>

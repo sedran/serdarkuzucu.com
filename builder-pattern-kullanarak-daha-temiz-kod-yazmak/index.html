@@ -196,7 +196,7 @@ Bu yazıyı yazarken <em>Uzi Landsmann</em>‘ın <a href="http://blog.jayway.co
 <!--more-->
 
 <p>Diyelim ki ücretli servisleriniz olan bir sistemde müşterilere aylık/haftalık abonelikler yaratıyorsunuz 
-ve bu abonelikleri aşağıdaki <code class="highlighter-rouge">Subscription</code> sınıfı ile temsil ediyorsunuz.</p>
+ve bu abonelikleri aşağıdaki <code class="language-plaintext highlighter-rouge">Subscription</code> sınıfı ile temsil ediyorsunuz.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.builderpattern</span><span class="o">;</span>
 
@@ -301,14 +301,14 @@ Yani önce aşağıdaki gibi bir sınıf tanımlanıyor:</p>
 </code></pre></div></div>
 
 <p>Gördüğünüz gibi metodun imzası nasıl da rahatladı, nasıl da küçüldü. 
-Sıradaki problem, <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfından bir nesne nasıl yaratılacak 
+Sıradaki problem, <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> sınıfından bir nesne nasıl yaratılacak 
 ve üzerindeki bu 14 alan nasıl doldurulacak? 
 Aşağıda (bana göre) kötüden iyiye bu tarz durumlarda uygulanan çeşitli yöntemleri sıralamış bulundum.</p>
 
-<h3 id="1-tüm-parametreleri-constructor-ile-almak">1. Tüm Parametreleri <code class="highlighter-rouge">constructor</code> ile Almak</h3>
+<h3 id="1-tüm-parametreleri-constructor-ile-almak">1. Tüm Parametreleri <code class="language-plaintext highlighter-rouge">constructor</code> ile Almak</h3>
 
 <p>Bildiğim en kötü yöntem bu. 
-14 parametreli bir <code class="highlighter-rouge">constructor</code> yazmanın, listeleme yapan metodun 14 parametreye sahip olmasından hiçbir farkı yok. 
+14 parametreli bir <code class="language-plaintext highlighter-rouge">constructor</code> yazmanın, listeleme yapan metodun 14 parametreye sahip olmasından hiçbir farkı yok. 
 Aşağıda gözünüzü tırmalaması için örneğini de utanmadan gösteriyorum.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">SubscriptionSearchQuery</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SubscriptionSearchQuery</span><span class="o">(</span><span class="mi">123312L</span><span class="o">,</span> <span class="mi">3178236L</span><span class="o">,</span> <span class="mi">572734L</span><span class="o">,</span>
@@ -322,11 +322,11 @@ Aşağıda gözünüzü tırmalaması için örneğini de utanmadan gösteriyoru
 
 <p>Yazarken parmaklarım ağladı vallahi.</p>
 
-<h3 id="2-tüm-parametreleri-setter-ile-doldurmak">2. Tüm Parametreleri <code class="highlighter-rouge">Setter</code> ile Doldurmak</h3>
+<h3 id="2-tüm-parametreleri-setter-ile-doldurmak">2. Tüm Parametreleri <code class="language-plaintext highlighter-rouge">Setter</code> ile Doldurmak</h3>
 
 <p>Yukarıdakine göre nispeten daha çok kullanılan bir yöntem. 
-Nesne türetilirken <code class="highlighter-rouge">constructor</code> hiç parametre almaz. 
-Nesne türetildikten sonra tüm alanlar <code class="highlighter-rouge">setter</code> metodlar kullanılarak doldurulur. 
+Nesne türetilirken <code class="language-plaintext highlighter-rouge">constructor</code> hiç parametre almaz. 
+Nesne türetildikten sonra tüm alanlar <code class="language-plaintext highlighter-rouge">setter</code> metodlar kullanılarak doldurulur. 
 Bu yöntemin kötü tarafı basit bir nesneyi oluşturup doldurmak için 15 satır kod yazıyor olmak bence. 
 Yazılım geliştirme esnasında böyle bir kod bloğu ile karşılaştığımda genellikle 
 durup bu durumu nasıl düzeltebileceğimi düşünürüm. 
@@ -352,19 +352,19 @@ Düzeltmek çok efor gerektiriyorsa, kodu ilk yazanın arkasından okkalı bir k
     <span class="o">.</span><span class="na">searchSubscriptions</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
 </code></pre></div></div>
 
-<h3 id="3-zorunlu-parametreleri-constructor-ile-almak-ve-gerisini-setter-ile-doldurmak">3. Zorunlu Parametreleri <code class="highlighter-rouge">constructor</code> ile Almak ve Gerisini <code class="highlighter-rouge">Setter</code> ile Doldurmak</h3>
+<h3 id="3-zorunlu-parametreleri-constructor-ile-almak-ve-gerisini-setter-ile-doldurmak">3. Zorunlu Parametreleri <code class="language-plaintext highlighter-rouge">constructor</code> ile Almak ve Gerisini <code class="language-plaintext highlighter-rouge">Setter</code> ile Doldurmak</h3>
 
 <p>Diyelim ki kullandığımız veritabanının limitasyonları nedeniyle 
 aboneliklerin oluşturma tarihini sorgularda mutlaka kullanmamız gerekiyor. 
 Bu durumda sayfa tasarımında da bu alanları zorunlu yaptık, 
 sayfayı kullananlar bu alanları doldurmadan abonelik listeleyemiyorlar. 
-Bu alanları <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfımızda da zorunlu alan yapabiliriz 
-ve bunun için <code class="highlighter-rouge">constructor</code> kullanabiliriz. 
-Ayrıca sayfalama için kullandığımız <code class="highlighter-rouge">offset</code> ve <code class="highlighter-rouge">limit</code> parametrelerini de 
-zorunlu alan varsayıp <code class="highlighter-rouge">constructor</code>‘a koyabiliriz. 
-Geri kalan tüm alanları da zorunlu olmadıkları için <code class="highlighter-rouge">setter</code> metodlar yardımıyla doldururuz. 
+Bu alanları <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> sınıfımızda da zorunlu alan yapabiliriz 
+ve bunun için <code class="language-plaintext highlighter-rouge">constructor</code> kullanabiliriz. 
+Ayrıca sayfalama için kullandığımız <code class="language-plaintext highlighter-rouge">offset</code> ve <code class="language-plaintext highlighter-rouge">limit</code> parametrelerini de 
+zorunlu alan varsayıp <code class="language-plaintext highlighter-rouge">constructor</code>‘a koyabiliriz. 
+Geri kalan tüm alanları da zorunlu olmadıkları için <code class="language-plaintext highlighter-rouge">setter</code> metodlar yardımıyla doldururuz. 
 Aşağıdaki gibi bir kod ortaya çıkar. 
-Ard arda bu kadar çok <code class="highlighter-rouge">setter</code> çağrısı görmek, 
+Ard arda bu kadar çok <code class="language-plaintext highlighter-rouge">setter</code> çağrısı görmek, 
 birçok kişinin kodu okurken kodun yaptığı esas işe odaklanmasını zorlaştıracaktır.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">SubscriptionSearchQuery</span> <span class="n">query</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">SubscriptionSearchQuery</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">20</span><span class="o">,</span> <span class="n">createDateBegin</span><span class="o">,</span> <span class="n">createDateEnd</span><span class="o">);</span>
@@ -383,10 +383,10 @@ birçok kişinin kodu okurken kodun yaptığı esas işe odaklanmasını zorlaş
     <span class="o">.</span><span class="na">searchSubscriptions</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
 </code></pre></div></div>
 
-<h3 id="4-builder-pattern-kullanarak-nesneyi-oluşturmak">4. <code class="highlighter-rouge">Builder Pattern</code> Kullanarak Nesneyi Oluşturmak</h3>
+<h3 id="4-builder-pattern-kullanarak-nesneyi-oluşturmak">4. <code class="language-plaintext highlighter-rouge">Builder Pattern</code> Kullanarak Nesneyi Oluşturmak</h3>
 
-<p><code class="highlighter-rouge">Builder Pattern</code>, builder adında ikinci bir sınıf tanımlayarak esas nesnenin oluşturulma işini bu sınıfa bırakmaktır. 
-Builder sınıfları genellikle <code class="highlighter-rouge">Method Chaining</code> kurgusuna uygun tasarlanmaktadır. 
+<p><code class="language-plaintext highlighter-rouge">Builder Pattern</code>, builder adında ikinci bir sınıf tanımlayarak esas nesnenin oluşturulma işini bu sınıfa bırakmaktır. 
+Builder sınıfları genellikle <code class="language-plaintext highlighter-rouge">Method Chaining</code> kurgusuna uygun tasarlanmaktadır. 
 Yani builder sınıfındaki bir setter method çağırıldığında, bu method üzerinde bulunduğu builder nesnesini döner. 
 Böylelikle setter metodları ard arda dizebiliriz. 
 Böylece hiçbir zaman builder sınıfının türünde bir değişken tutmak zorunda kalmıyoruz.</p>
@@ -397,7 +397,7 @@ oluşturma süreci tamamlanıncaya kadar elimizde olmamasıdır.
 Yani Builder sınıfının nesnesi ile işimiz bitinceye kadar alanları henüz tamamlanmamış, 
 yarım yamalak bir objeye asla sahip olmuyoruz.</p>
 
-<p><code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfı için bir builder sınıfı nasıl tanımlanmış, 
+<p><code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> sınıfı için bir builder sınıfı nasıl tanımlanmış, 
 aşağıdaki kodda hep birlikte inceleyelim.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.builderpattern</span><span class="o">;</span>
@@ -543,30 +543,30 @@ aşağıdaki kodda hep birlikte inceleyelim.</p>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>Öncelikle <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfının içerisinde <code class="highlighter-rouge">static</code> bir <code class="highlighter-rouge">Builder</code> sınıfı tanımladık 
-ve <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfındaki tüm alanları bu sınıfın içerisine de yazdık. 
+<p>Öncelikle <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> sınıfının içerisinde <code class="language-plaintext highlighter-rouge">static</code> bir <code class="language-plaintext highlighter-rouge">Builder</code> sınıfı tanımladık 
+ve <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> sınıfındaki tüm alanları bu sınıfın içerisine de yazdık. 
 Tüm alanları kopyalama işlemi sizi rahatsız ettiyse normal. 
 İlerleyen kısımlarda bu kısımları da refactor edeceğiz.</p>
 
-<p><code class="highlighter-rouge">Builder</code> sınıfında ilk dikkatinizi çekmesi gereken nokta, <code class="highlighter-rouge">private constructor</code> sahibi olması. 
-Yani <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfının dışından <code class="highlighter-rouge">new</code> anahtar kelimesi ile bu sınıfın nesnesi türetilemez. 
-Onun yerine, <code class="highlighter-rouge">SubscriptionSearchQuery</code> içerisindeki <code class="highlighter-rouge">builder()</code> <code class="highlighter-rouge">static</code> metodu ile 
-istenilen yerden bir <code class="highlighter-rouge">Builder</code> nesnesi alabileceğiz.</p>
+<p><code class="language-plaintext highlighter-rouge">Builder</code> sınıfında ilk dikkatinizi çekmesi gereken nokta, <code class="language-plaintext highlighter-rouge">private constructor</code> sahibi olması. 
+Yani <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> sınıfının dışından <code class="language-plaintext highlighter-rouge">new</code> anahtar kelimesi ile bu sınıfın nesnesi türetilemez. 
+Onun yerine, <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> içerisindeki <code class="language-plaintext highlighter-rouge">builder()</code> <code class="language-plaintext highlighter-rouge">static</code> metodu ile 
+istenilen yerden bir <code class="language-plaintext highlighter-rouge">Builder</code> nesnesi alabileceğiz.</p>
 
-<p>İkinci önemli nokta ise <code class="highlighter-rouge">Builder</code> sınıfının tüm setter metodlarının dönüş tipinin <code class="highlighter-rouge">Builder</code> olması 
-ve her metodun <code class="highlighter-rouge">Builder</code> nesnesi dönmesi. 
-Bu da <code class="highlighter-rouge">Builder</code>‘ı kullanarak <code class="highlighter-rouge">SubscriptionSearchQuery</code> nesnesi üretmeye çalışan kişinin çok işine yarayacak.</p>
+<p>İkinci önemli nokta ise <code class="language-plaintext highlighter-rouge">Builder</code> sınıfının tüm setter metodlarının dönüş tipinin <code class="language-plaintext highlighter-rouge">Builder</code> olması 
+ve her metodun <code class="language-plaintext highlighter-rouge">Builder</code> nesnesi dönmesi. 
+Bu da <code class="language-plaintext highlighter-rouge">Builder</code>‘ı kullanarak <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> nesnesi üretmeye çalışan kişinin çok işine yarayacak.</p>
 
-<p>Üçüncü önemli nokta, <code class="highlighter-rouge">Builder</code> sınıfının içindeki <code class="highlighter-rouge">build()</code> metodu. 
-Bu metod artık <code class="highlighter-rouge">Builder</code> sınıfı ile işimiz bittiğinde 
-ve <code class="highlighter-rouge">SubscriptionSearchQuery</code> nesnesini oluşturmak istediğimizde çağıracağımız metod.</p>
+<p>Üçüncü önemli nokta, <code class="language-plaintext highlighter-rouge">Builder</code> sınıfının içindeki <code class="language-plaintext highlighter-rouge">build()</code> metodu. 
+Bu metod artık <code class="language-plaintext highlighter-rouge">Builder</code> sınıfı ile işimiz bittiğinde 
+ve <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> nesnesini oluşturmak istediğimizde çağıracağımız metod.</p>
 
-<p>Son önemli nokta da <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfındaki <code class="highlighter-rouge">constructor</code>‘ı <code class="highlighter-rouge">private</code> yapmış olmamız. 
-Böylece <code class="highlighter-rouge">Builder</code> sınıfının <code class="highlighter-rouge">build()</code> metodu dışında kimse <code class="highlighter-rouge">SubscriptionSearchQuery</code> nesnesi türetemeyecek. 
-Bu <code class="highlighter-rouge">constructor</code> kısaca bir <code class="highlighter-rouge">Builder</code> nesnesini parametre olarak alıyor 
+<p>Son önemli nokta da <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> sınıfındaki <code class="language-plaintext highlighter-rouge">constructor</code>‘ı <code class="language-plaintext highlighter-rouge">private</code> yapmış olmamız. 
+Böylece <code class="language-plaintext highlighter-rouge">Builder</code> sınıfının <code class="language-plaintext highlighter-rouge">build()</code> metodu dışında kimse <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> nesnesi türetemeyecek. 
+Bu <code class="language-plaintext highlighter-rouge">constructor</code> kısaca bir <code class="language-plaintext highlighter-rouge">Builder</code> nesnesini parametre olarak alıyor 
 ve üzerindeki tüm alanları kendisine kopyalıyor.</p>
 
-<p>Aşağıdaki kod bu <code class="highlighter-rouge">Builder</code> sınıfının nasıl kullanıldığını göstermektedir.</p>
+<p>Aşağıdaki kod bu <code class="language-plaintext highlighter-rouge">Builder</code> sınıfının nasıl kullanıldığını göstermektedir.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">SubscriptionSearchQuery</span> <span class="n">query</span> <span class="o">=</span> <span class="nc">SubscriptionSearchQuery</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
         <span class="o">.</span><span class="na">subscriptionId</span><span class="o">(</span><span class="mi">1231231L</span><span class="o">).</span><span class="na">serviceId</span><span class="o">(</span><span class="mi">123123L</span><span class="o">).</span><span class="na">customerId</span><span class="o">(</span><span class="mi">123123L</span><span class="o">)</span>
@@ -582,25 +582,25 @@ ve üzerindeki tüm alanları kendisine kopyalıyor.</p>
 <span class="nc">SearchResult</span><span class="o">&lt;</span><span class="nc">Subscription</span><span class="o">&gt;</span> <span class="n">subscriptions</span> <span class="o">=</span> <span class="n">subscriptionService</span><span class="o">.</span><span class="na">searchSubscriptions</span><span class="o">(</span><span class="n">query</span><span class="o">);</span>
 </code></pre></div></div>
 
-<p>Önce <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfının <code class="highlighter-rouge">static</code> bir metodu olan 
-<code class="highlighter-rouge">builder()</code> metodunu çağırarak bir <code class="highlighter-rouge">Builder</code> nesnesi türettik. 
-Daha sonra <code class="highlighter-rouge">Builder</code> nesnesi üzerindeki tüm setter metodları çağırdık 
-ve en sonunda da <code class="highlighter-rouge">Builder</code> sınıfının <code class="highlighter-rouge">build()</code> metodunu çağırarak verdiğimiz değerler ile 
-<code class="highlighter-rouge">SubscriptionSearchQuery</code> nesnesi oluşmasını sağladık.</p>
+<p>Önce <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> sınıfının <code class="language-plaintext highlighter-rouge">static</code> bir metodu olan 
+<code class="language-plaintext highlighter-rouge">builder()</code> metodunu çağırarak bir <code class="language-plaintext highlighter-rouge">Builder</code> nesnesi türettik. 
+Daha sonra <code class="language-plaintext highlighter-rouge">Builder</code> nesnesi üzerindeki tüm setter metodları çağırdık 
+ve en sonunda da <code class="language-plaintext highlighter-rouge">Builder</code> sınıfının <code class="language-plaintext highlighter-rouge">build()</code> metodunu çağırarak verdiğimiz değerler ile 
+<code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> nesnesi oluşmasını sağladık.</p>
 
-<h3 id="5-builder-pattern-ile-zorunlu-parametrelerin-ayrılması">5. <code class="highlighter-rouge">Builder Pattern</code> ile Zorunlu Parametrelerin Ayrılması</h3>
+<h3 id="5-builder-pattern-ile-zorunlu-parametrelerin-ayrılması">5. <code class="language-plaintext highlighter-rouge">Builder Pattern</code> ile Zorunlu Parametrelerin Ayrılması</h3>
 
 <p>Yukarıdaki çirkin örneklerden birisinde kurguladığımız zorunlu parametreler senaryosunu düşünelim. 
-Örneğin <code class="highlighter-rouge">offset</code>, <code class="highlighter-rouge">limit</code>, <code class="highlighter-rouge">createDateAfter</code> ve <code class="highlighter-rouge">createDateBefore</code> parametreleri yine zorunlu olsun. 
-Yani bu alanlara ait setter metodlar <code class="highlighter-rouge">Builder</code> nesnesi üzerinde çağırılmak zorunda. 
-Bunu basitçe <code class="highlighter-rouge">SubscriptionSearchQuery.builder()</code> metoduna bu parametreleri yazarak yapabiliriz 
+Örneğin <code class="language-plaintext highlighter-rouge">offset</code>, <code class="language-plaintext highlighter-rouge">limit</code>, <code class="language-plaintext highlighter-rouge">createDateAfter</code> ve <code class="language-plaintext highlighter-rouge">createDateBefore</code> parametreleri yine zorunlu olsun. 
+Yani bu alanlara ait setter metodlar <code class="language-plaintext highlighter-rouge">Builder</code> nesnesi üzerinde çağırılmak zorunda. 
+Bunu basitçe <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery.builder()</code> metoduna bu parametreleri yazarak yapabiliriz 
 ama böyle yapmak istemiyoruz. 
-Setter metodlarımız olsun ama çağırılmadıklarında build metodundan <code class="highlighter-rouge">Exception</code> fırlatalım? 
+Setter metodlarımız olsun ama çağırılmadıklarında build metodundan <code class="language-plaintext highlighter-rouge">Exception</code> fırlatalım? 
 Bu da güzel bir karar değil. 
-Yazının girişinde referans verdiğim <code class="highlighter-rouge">"Builder pattern with a twist"</code> yazısı 
+Yazının girişinde referans verdiğim <code class="language-plaintext highlighter-rouge">"Builder pattern with a twist"</code> yazısı 
 tam olarak içine düştüğümüz bu duruma değiniyor.</p>
 
-<p>Önce <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfını nasıl değiştirdiğimizi bir görelim. 
+<p>Önce <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> sınıfını nasıl değiştirdiğimizi bir görelim. 
 Sonra kodu birlikte inceleyelim.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.blog.builderpattern</span><span class="o">;</span>
@@ -770,25 +770,25 @@ Sonra kodu birlikte inceleyelim.</p>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>Builder sınıfından sonra <code class="highlighter-rouge">Pagination</code>, <code class="highlighter-rouge">CreateDateInterval</code> 
-ve <code class="highlighter-rouge">OptionalParameters</code> adında 3 adet <code class="highlighter-rouge">interface</code> tanımı yaptık. 
-Bu <code class="highlighter-rouge">interface</code>‘lerin hepsi <code class="highlighter-rouge">Builder</code> sınıfı tarafından <code class="highlighter-rouge">implement</code> ediliyor.</p>
+<p>Builder sınıfından sonra <code class="language-plaintext highlighter-rouge">Pagination</code>, <code class="language-plaintext highlighter-rouge">CreateDateInterval</code> 
+ve <code class="language-plaintext highlighter-rouge">OptionalParameters</code> adında 3 adet <code class="language-plaintext highlighter-rouge">interface</code> tanımı yaptık. 
+Bu <code class="language-plaintext highlighter-rouge">interface</code>‘lerin hepsi <code class="language-plaintext highlighter-rouge">Builder</code> sınıfı tarafından <code class="language-plaintext highlighter-rouge">implement</code> ediliyor.</p>
 
-<p><code class="highlighter-rouge">SubscriptionSearchQuery.builder()</code> metodunun dönüş tipini <code class="highlighter-rouge">Pagination</code> yaptık. 
-Aslında yine <code class="highlighter-rouge">Builder</code> sınıfının bir nesnesini dönüyor 
-fakat metodu çağıran kişi kendisine <code class="highlighter-rouge">Pagination</code> nesnesi gelmiş gibi görüyor. 
+<p><code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery.builder()</code> metodunun dönüş tipini <code class="language-plaintext highlighter-rouge">Pagination</code> yaptık. 
+Aslında yine <code class="language-plaintext highlighter-rouge">Builder</code> sınıfının bir nesnesini dönüyor 
+fakat metodu çağıran kişi kendisine <code class="language-plaintext highlighter-rouge">Pagination</code> nesnesi gelmiş gibi görüyor. 
 Bu sayede method chain yaparken elimize gelen ilk nesnenin üzerinde 
-sadece <code class="highlighter-rouge">pagination(int offset, int limit)</code> metodu bulunuyor. 
-Mecburen bu metodu çağırıyoruz, böylece <code class="highlighter-rouge">offset</code> ve <code class="highlighter-rouge">limiti</code> belirtmiş oluyoruz. 
-<code class="highlighter-rouge">pagination(int, int)</code> metodunun dönüş tipi ise <code class="highlighter-rouge">CreateDateInterval</code>. 
-Yani <code class="highlighter-rouge">offset</code> ve <code class="highlighter-rouge">limiti</code> belirttikten sonra bize dönen nesnede 
-sadece <code class="highlighter-rouge">createDate(Date after, Date before)</code> metodu var, 
+sadece <code class="language-plaintext highlighter-rouge">pagination(int offset, int limit)</code> metodu bulunuyor. 
+Mecburen bu metodu çağırıyoruz, böylece <code class="language-plaintext highlighter-rouge">offset</code> ve <code class="language-plaintext highlighter-rouge">limiti</code> belirtmiş oluyoruz. 
+<code class="language-plaintext highlighter-rouge">pagination(int, int)</code> metodunun dönüş tipi ise <code class="language-plaintext highlighter-rouge">CreateDateInterval</code>. 
+Yani <code class="language-plaintext highlighter-rouge">offset</code> ve <code class="language-plaintext highlighter-rouge">limiti</code> belirttikten sonra bize dönen nesnede 
+sadece <code class="language-plaintext highlighter-rouge">createDate(Date after, Date before)</code> metodu var, 
 yani sadece aboneliğin oluşturulma tarih aralığını girebiliyoruz. 
-Bu <code class="highlighter-rouge">createDate(Date, Date)</code> metodunun dönüş tipi ise <code class="highlighter-rouge">OptionalParameters</code>. 
-Bu <code class="highlighter-rouge">interface</code> üzerindeki tüm metodlar <code class="highlighter-rouge">OptionalParameters</code> türünde dönüş yapıyor ta ki <code class="highlighter-rouge">build()</code> metoduna kadar.</p>
+Bu <code class="language-plaintext highlighter-rouge">createDate(Date, Date)</code> metodunun dönüş tipi ise <code class="language-plaintext highlighter-rouge">OptionalParameters</code>. 
+Bu <code class="language-plaintext highlighter-rouge">interface</code> üzerindeki tüm metodlar <code class="language-plaintext highlighter-rouge">OptionalParameters</code> türünde dönüş yapıyor ta ki <code class="language-plaintext highlighter-rouge">build()</code> metoduna kadar.</p>
 
-<p>Kurduğumuz bu yapı sayesinde <code class="highlighter-rouge">Builder</code> üzerinde önce <code class="highlighter-rouge">offset</code> ve <code class="highlighter-rouge">limit</code>‘in, 
-sonra da <code class="highlighter-rouge">createDateAfter</code> ve <code class="highlighter-rouge">createDateBefore</code> parametrelerinin doldurulmasını sağlamış olduk. 
+<p>Kurduğumuz bu yapı sayesinde <code class="language-plaintext highlighter-rouge">Builder</code> üzerinde önce <code class="language-plaintext highlighter-rouge">offset</code> ve <code class="language-plaintext highlighter-rouge">limit</code>‘in, 
+sonra da <code class="language-plaintext highlighter-rouge">createDateAfter</code> ve <code class="language-plaintext highlighter-rouge">createDateBefore</code> parametrelerinin doldurulmasını sağlamış olduk. 
 Zorunlu olmayan parametrelerden ise istenildiği kadarı doldurulabilir.</p>
 
 <p>Bu yapının da kullanımı aşağıdaki gibi:</p>
@@ -809,33 +809,33 @@ Zorunlu olmayan parametrelerden ise istenildiği kadarı doldurulabilir.</p>
 
 <h3 id="6-refactoring">6. Refactoring</h3>
 
-<p><code class="highlighter-rouge">SubscriptionSearchQuery</code> nesnesi oluşturabilmek için güzele yakın bir arayüz tasarlamış olduk. 
+<p><code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> nesnesi oluşturabilmek için güzele yakın bir arayüz tasarlamış olduk. 
 Bu blog yazısının amacı temiz kod yazımının özendirilmesi olduğu için, 
 yapılabilecek birkaç geliştirmeyi de es geçmek istemedim.</p>
 
-<p>Mesela zorunlu parametreleri alırken <code class="highlighter-rouge">offset</code> ve <code class="highlighter-rouge">limit</code> parametrelerinin 
+<p>Mesela zorunlu parametreleri alırken <code class="language-plaintext highlighter-rouge">offset</code> ve <code class="language-plaintext highlighter-rouge">limit</code> parametrelerinin 
 setter metodlarını bire düşürerek güzel bir iş yaptığımızı düşünüyorum. 
-<code class="highlighter-rouge">createDate(Date,Date)</code> metodunda ise abonelik oluşturma tarihi için 
+<code class="language-plaintext highlighter-rouge">createDate(Date,Date)</code> metodunda ise abonelik oluşturma tarihi için 
 ayrı ayrı girmekte olduğumuz iki parametreyi birleştirdik. 
 Bunu tarih aralığı girilen diğer metodlara da uyarlayabiliriz. 
-Böylece <code class="highlighter-rouge">Builder</code> nesnesi üzerinden de fazladan iki metod atabiliriz.</p>
+Böylece <code class="language-plaintext highlighter-rouge">Builder</code> nesnesi üzerinden de fazladan iki metod atabiliriz.</p>
 
-<p>Ek olarak, her ne kadar <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfı <code class="highlighter-rouge">Set&lt;SubscriptionStatus&gt;</code> nesnesi tutuyor olsa da, 
-<code class="highlighter-rouge">Builder</code> sınıfının setter metodunda biz kullanıcıdan <code class="highlighter-rouge">Set</code> nesnesi beklemek zorunda değiliz. 
-Java’daki <code class="highlighter-rouge">varargs</code> yapısını kullanarak bu metodu istenildiği kadar 
-<code class="highlighter-rouge">SubscriptionStatus</code> geçilebilir hale getirebiliriz. 
-Metodu çağıran kişiyi de <code class="highlighter-rouge">Set</code> nesnesi oluşturmaya zorlamamış oluruz.</p>
+<p>Ek olarak, her ne kadar <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> sınıfı <code class="language-plaintext highlighter-rouge">Set&lt;SubscriptionStatus&gt;</code> nesnesi tutuyor olsa da, 
+<code class="language-plaintext highlighter-rouge">Builder</code> sınıfının setter metodunda biz kullanıcıdan <code class="language-plaintext highlighter-rouge">Set</code> nesnesi beklemek zorunda değiliz. 
+Java’daki <code class="language-plaintext highlighter-rouge">varargs</code> yapısını kullanarak bu metodu istenildiği kadar 
+<code class="language-plaintext highlighter-rouge">SubscriptionStatus</code> geçilebilir hale getirebiliriz. 
+Metodu çağıran kişiyi de <code class="language-plaintext highlighter-rouge">Set</code> nesnesi oluşturmaya zorlamamış oluruz.</p>
 
-<p>Ayrıca <code class="highlighter-rouge">Builder</code> sınıfı üzerinde <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfının 
+<p>Ayrıca <code class="language-plaintext highlighter-rouge">Builder</code> sınıfı üzerinde <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> sınıfının 
 tüm alanlarının kopyasını tuttuğumuzu hatırlarsınız. 
-Bazı sınıfların <code class="highlighter-rouge">Builder</code>‘larını tasarlarken bu şekilde yapmak zorunda kalabilirsiniz 
-ama <code class="highlighter-rouge">SubscriptionSearchQuery</code> çok basit bir sınıf olduğu için, burada <code class="highlighter-rouge">Builder</code> sınıfımızı da basitleştirebiliriz. 
-<code class="highlighter-rouge">Builder</code> sınıfının içinde <code class="highlighter-rouge">SubscriptionSearchQuery</code> nesnesi oluşturacağız 
+Bazı sınıfların <code class="language-plaintext highlighter-rouge">Builder</code>‘larını tasarlarken bu şekilde yapmak zorunda kalabilirsiniz 
+ama <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> çok basit bir sınıf olduğu için, burada <code class="language-plaintext highlighter-rouge">Builder</code> sınıfımızı da basitleştirebiliriz. 
+<code class="language-plaintext highlighter-rouge">Builder</code> sınıfının içinde <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> nesnesi oluşturacağız 
 ve setter metodlar onun üzerinde işlem yapacaklar. 
-<code class="highlighter-rouge">build()</code> metodu da içerde tutulan <code class="highlighter-rouge">SubscriptionSearchQuery</code> nesnesini dönecek. 
-Bunun en büyük dezavantajı aynı <code class="highlighter-rouge">Builder</code> nesnesi ikinci defa kullanıldığında 
-yeni bir <code class="highlighter-rouge">SubscriptionSearchQuery</code> türetmek yerine aynı nesne referansını dönmesi, 
-yani aynı özelliklerde farklı nesneler üretmeye çalıştığınızda her seferinde yeniden <code class="highlighter-rouge">Builder</code> tanımlamanız gerekmesi. 
+<code class="language-plaintext highlighter-rouge">build()</code> metodu da içerde tutulan <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> nesnesini dönecek. 
+Bunun en büyük dezavantajı aynı <code class="language-plaintext highlighter-rouge">Builder</code> nesnesi ikinci defa kullanıldığında 
+yeni bir <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> türetmek yerine aynı nesne referansını dönmesi, 
+yani aynı özelliklerde farklı nesneler üretmeye çalıştığınızda her seferinde yeniden <code class="language-plaintext highlighter-rouge">Builder</code> tanımlamanız gerekmesi. 
 Eğer bu sizin durumunuzda bir dezavantaj olmayacaksa, 
 kodun temiz olması açısından bunu şekilde yazmayı tercih edebilirsiniz.</p>
 
@@ -971,7 +971,7 @@ kodun temiz olması açısından bunu şekilde yazmayı tercih edebilirsiniz.</p
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>Refactor edilmiş <code class="highlighter-rouge">SubscriptionSearchQuery</code> sınıfının nesnesi de aşağıdaki gibi oluşturuluyor:</p>
+<p>Refactor edilmiş <code class="language-plaintext highlighter-rouge">SubscriptionSearchQuery</code> sınıfının nesnesi de aşağıdaki gibi oluşturuluyor:</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">SubscriptionSearchQuery</span> <span class="n">query</span> <span class="o">=</span> <span class="nc">SubscriptionSearchQuery</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
         <span class="o">.</span><span class="na">pagination</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">20</span><span class="o">)</span>

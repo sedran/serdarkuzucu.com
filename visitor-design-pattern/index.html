@@ -195,8 +195,8 @@ bu güçlü araçları yeterince doğru kullanabiliyor muyuz?</p>
 
 <p>Misal, bir arayüzün farklı implementasyonlarının nesnelerinden oluşan bir listenin 
 elemanları üzerinde çeşitli işlemler yapıyorsunuz ve her sınıf için yapacağınız işlemler 
-farklılık gösteriyor. Örneğin aşağıdaki <code class="highlighter-rouge">Shape</code> arayüzü ve onun altındaki <code class="highlighter-rouge">Circle</code>, <code class="highlighter-rouge">Rectangle</code> 
-ve <code class="highlighter-rouge">Square</code> sınıflarını hayalimize yükleyelim.</p>
+farklılık gösteriyor. Örneğin aşağıdaki <code class="language-plaintext highlighter-rouge">Shape</code> arayüzü ve onun altındaki <code class="language-plaintext highlighter-rouge">Circle</code>, <code class="language-plaintext highlighter-rouge">Rectangle</code> 
+ve <code class="language-plaintext highlighter-rouge">Square</code> sınıflarını hayalimize yükleyelim.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Shape</span>
 <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Shape</span> <span class="o">{</span>
@@ -297,9 +297,9 @@ ve <code class="highlighter-rouge">Square</code> sınıflarını hayalimize yük
 </code></pre></div></div>
 
 <p>Çok acil bir durumda bunu yazmamız istenirse belki böyle yazardık. 
-Bir diğer yöntem de her <code class="highlighter-rouge">Shape</code> arayüzüne <code class="highlighter-rouge">String explainYourself();</code> gibi bir method ekleyip, 
+Bir diğer yöntem de her <code class="language-plaintext highlighter-rouge">Shape</code> arayüzüne <code class="language-plaintext highlighter-rouge">String explainYourself();</code> gibi bir method ekleyip, 
 bu açıklama metinlerini nesnelerin kendilerinin dönmesini sağlayabilirdik. 
-Böylece <code class="highlighter-rouge">if/else</code> ve <code class="highlighter-rouge">instanceof</code> kullanımlarından kurtulurduk. 
+Böylece <code class="language-plaintext highlighter-rouge">if/else</code> ve <code class="language-plaintext highlighter-rouge">instanceof</code> kullanımlarından kurtulurduk. 
 Aşağıdaki gibi bir kod ile konsola yazdırma işlemi tamamlanırdı:</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">printShapes</span><span class="o">(</span><span class="nc">List</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="nc">Shape</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">shapes</span><span class="o">,</span> <span class="nc">PrintStream</span> <span class="n">out</span><span class="o">)</span> <span class="o">{</span>
@@ -309,9 +309,9 @@ Aşağıdaki gibi bir kod ile konsola yazdırma işlemi tamamlanırdı:</p>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>Peki sonra sizden <code class="highlighter-rouge">java.awt.Graphics</code> kullanarak tüm bu şekilleri ekrana çizmeniz istenirse? 
-O zaman da <code class="highlighter-rouge">Shape</code> arayüzünün üzerine <code class="highlighter-rouge">paintYourself(Graphics g)</code> methodunu mu ekleyecektiniz? 
-Yoksa bu sefer eski usül aşağıdaki gibi <code class="highlighter-rouge">if/else</code> ve <code class="highlighter-rouge">instanceof</code> kullanarak mı çözmeyi uygun bulacaktınız?</p>
+<p>Peki sonra sizden <code class="language-plaintext highlighter-rouge">java.awt.Graphics</code> kullanarak tüm bu şekilleri ekrana çizmeniz istenirse? 
+O zaman da <code class="language-plaintext highlighter-rouge">Shape</code> arayüzünün üzerine <code class="language-plaintext highlighter-rouge">paintYourself(Graphics g)</code> methodunu mu ekleyecektiniz? 
+Yoksa bu sefer eski usül aşağıdaki gibi <code class="language-plaintext highlighter-rouge">if/else</code> ve <code class="language-plaintext highlighter-rouge">instanceof</code> kullanarak mı çözmeyi uygun bulacaktınız?</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ShapeDrawerPanel</span> <span class="kd">extends</span> <span class="nc">JPanel</span> <span class="o">{</span>
   <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Shape</span><span class="o">&gt;</span> <span class="n">shapes</span><span class="o">;</span>
@@ -345,28 +345,28 @@ Yoksa bu sefer eski usül aşağıdaki gibi <code class="highlighter-rouge">if/e
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p><code class="highlighter-rouge">Shape</code> arayüzüne sahip sınıflar ile yapacağımız her farklı işlem için tekrar tekrar 
+<p><code class="language-plaintext highlighter-rouge">Shape</code> arayüzüne sahip sınıflar ile yapacağımız her farklı işlem için tekrar tekrar 
 bu if/else bloklarını yazmak oldukça kötü. Bunu zaten tartışmaya açık görmüyorum.</p>
 
 <p>Her yeni işlem için tüm sınıflara yeni birer method eklemek ise bu sınıfları bir hayli kirletiyor. 
 Her yeni operasyonda sisteminizdeki tüm data sınıflarınızı modifiye etmek zorunda kalıyorsunuz. 
 Bu da data sınıflarınız ile bu sınıfları kullanan diğer sınıflar arasında yanlış bir bağımlılık oluşturuyor. 
 Bir sınıfın kendisini kullanan sınıflara ait detayları bilmemesi gerekiyor. 
-<code class="highlighter-rouge">Shape</code> sınıfına <code class="highlighter-rouge">Graphics</code> kullanarak kendisini ekrana nasıl çizmesi gerektiği detayını eklersek, 
+<code class="language-plaintext highlighter-rouge">Shape</code> sınıfına <code class="language-plaintext highlighter-rouge">Graphics</code> kullanarak kendisini ekrana nasıl çizmesi gerektiği detayını eklersek, 
 ona geometrik bir şeklin yerini ve boyutlarını tanımlama amacının dışında farklı bir özellik kazandırmış oluyoruz 
 ve sistemi bu şekilde tasarlamaya başlarsak ileride birisi tüm şekilleri XML dosyasına çevir dediğinde 
-yazılımın tutarlı olması için bu fonksiyonaliteyi de <code class="highlighter-rouge">Shape</code> üzerine eklemek zorunda kalırız.</p>
+yazılımın tutarlı olması için bu fonksiyonaliteyi de <code class="language-plaintext highlighter-rouge">Shape</code> üzerine eklemek zorunda kalırız.</p>
 
 <p>Ben biraz düşünerek bu şekilde bir yazılım tasarladığımızda <a href="https://scotch.io/bar-talk/s-o-l-i-d-the-first-five-principles-of-object-oriented-design">SOLID</a> kurallarının 3 tanesini 
 çiğneyebileceğimizi gördüm. Diğer 2 kuralı da bir şekilde bozuyorsak yorum olarak iletebilirsiniz.</p>
 
 <ul>
-  <li><strong>Single Responsibility:</strong> <code class="highlighter-rouge">Shape</code> arayüzüne bu kadar fazla sorumluluk ekleyerek ilk önce bu kuralı çiğnemiş oluruz.</li>
-  <li><strong>Open-Closed Principle:</strong> Her yeni talepte <code class="highlighter-rouge">Shape</code> arayüzüne ve ondan türeyen sınıflara doğrudan müdahale etmek 
+  <li><strong>Single Responsibility:</strong> <code class="language-plaintext highlighter-rouge">Shape</code> arayüzüne bu kadar fazla sorumluluk ekleyerek ilk önce bu kuralı çiğnemiş oluruz.</li>
+  <li><strong>Open-Closed Principle:</strong> Her yeni talepte <code class="language-plaintext highlighter-rouge">Shape</code> arayüzüne ve ondan türeyen sınıflara doğrudan müdahale etmek 
 zorunda kaldığımız için bu kuralı da ezip geçmiş oluyoruz.</li>
   <li><strong>Interface segregation principle:</strong> Bu kural bir sınıfın kullanmayacağı bir arayüzü implement etmek zorunda 
-bırakılmaması gerektiğini söylüyor. Bizim örneğimizde de belki bazı <code class="highlighter-rouge">Shape</code> türü sınıfların ekranda çizilmemesi 
-veya konsola yazılmaması gerekiyordur fakat ilgili methodları <code class="highlighter-rouge">Shape</code> arayüzüne koyduğumuz için tüm geometrik 
+bırakılmaması gerektiğini söylüyor. Bizim örneğimizde de belki bazı <code class="language-plaintext highlighter-rouge">Shape</code> türü sınıfların ekranda çizilmemesi 
+veya konsola yazılmaması gerekiyordur fakat ilgili methodları <code class="language-plaintext highlighter-rouge">Shape</code> arayüzüne koyduğumuz için tüm geometrik 
 şekiller bu methodları barındırmak zorunda kalıyor. Bu şekilde zorlarsak bu kuralı da ezmiş oluyoruz.</li>
 </ul>
 
@@ -376,12 +376,12 @@ veya konsola yazılmaması gerekiyordur fakat ilgili methodları <code class="hi
 Visitor pattern’ın en önemli avantajı üzerinde çeşitli operasyonlar yapacağımız sınıfları 
 hiç modifiye etmeden yeni operasyonlar tanımlayabiliyor olmamız. 
 Diğer avantajı ise arayüz kullanarak kaybettiğimiz nesne tiplerini 
-(Örneğin <code class="highlighter-rouge">Shape</code> türündeki değişkende aslında hangi nesne tipi olduğunu bilmiyoruz) 
-<code class="highlighter-rouge">instanceof</code> kontrolü yapmadan geri kazanabiliyor olmamız. 
+(Örneğin <code class="language-plaintext highlighter-rouge">Shape</code> türündeki değişkende aslında hangi nesne tipi olduğunu bilmiyoruz) 
+<code class="language-plaintext highlighter-rouge">instanceof</code> kontrolü yapmadan geri kazanabiliyor olmamız. 
 Böylece nesnenin tipine uygun işlemin yapılmasını sağlıyor.</p>
 
 <p>Bu design pattern’ı uygulayabilmek için öncelikle tüm şekilleri ziyaret edebilecek 
-bir <code class="highlighter-rouge">Visitor</code> arayüzüne ihtiyacımız var. Bunu aşağıdaki şekilde tanımlıyoruz:</p>
+bir <code class="language-plaintext highlighter-rouge">Visitor</code> arayüzüne ihtiyacımız var. Bunu aşağıdaki şekilde tanımlıyoruz:</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ShapeVisitor</span> <span class="o">{</span>
     <span class="kt">void</span> <span class="nf">visit</span><span class="o">(</span><span class="nc">Circle</span> <span class="n">circle</span><span class="o">);</span>
@@ -392,16 +392,16 @@ bir <code class="highlighter-rouge">Visitor</code> arayüzüne ihtiyacımız var
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p><code class="highlighter-rouge">ShapeVisitor</code> arayüzünün <code class="highlighter-rouge">Shape</code> türü nesneleri ziyaret edebilmesi için, 
-<code class="highlighter-rouge">Shape</code> sınıfına aşağıdaki gibi <code class="highlighter-rouge">accept</code> methodunu ekliyoruz.</p>
+<p><code class="language-plaintext highlighter-rouge">ShapeVisitor</code> arayüzünün <code class="language-plaintext highlighter-rouge">Shape</code> türü nesneleri ziyaret edebilmesi için, 
+<code class="language-plaintext highlighter-rouge">Shape</code> sınıfına aşağıdaki gibi <code class="language-plaintext highlighter-rouge">accept</code> methodunu ekliyoruz.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Shape</span> <span class="o">{</span>
     <span class="kt">void</span> <span class="nf">accept</span><span class="o">(</span><span class="nc">ShapeVisitor</span> <span class="n">visitor</span><span class="o">);</span>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>Bu method <code class="highlighter-rouge">Shape</code> alt sınıflarının hepsinde aynı şekilde implement ediliyor. 
-O nedenle sadece <code class="highlighter-rouge">Circle</code> sınıfını burada örnek olarak gösteriyorum.</p>
+<p>Bu method <code class="language-plaintext highlighter-rouge">Shape</code> alt sınıflarının hepsinde aynı şekilde implement ediliyor. 
+O nedenle sadece <code class="language-plaintext highlighter-rouge">Circle</code> sınıfını burada örnek olarak gösteriyorum.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Circle</span> <span class="kd">implements</span> <span class="nc">Shape</span> <span class="o">{</span>
     <span class="kd">private</span> <span class="kt">int</span> <span class="n">centerX</span><span class="o">;</span>
@@ -435,13 +435,13 @@ O nedenle sadece <code class="highlighter-rouge">Circle</code> sınıfını bura
 </code></pre></div></div>
 
 <p>Ve bitti. 
-Bundan sonra <code class="highlighter-rouge">Shape</code> ve ondan türeyen tüm sınıflara bir daha müdahale etmiyoruz. 
-Ne zaman <code class="highlighter-rouge">Shape</code> nesneleri ile nesne tipine bağımlı bir işlem yapmak gerekirse 
-o zaman <code class="highlighter-rouge">ShapeVisitor</code> arayüzünden yeni bir sınıf yaratıp işlemleri onun içinde hallediyoruz. 
-Böylece ne <code class="highlighter-rouge">Shape</code> nesnelerinin kendilerini kullanan koda bağımlılığı kalıyor, 
+Bundan sonra <code class="language-plaintext highlighter-rouge">Shape</code> ve ondan türeyen tüm sınıflara bir daha müdahale etmiyoruz. 
+Ne zaman <code class="language-plaintext highlighter-rouge">Shape</code> nesneleri ile nesne tipine bağımlı bir işlem yapmak gerekirse 
+o zaman <code class="language-plaintext highlighter-rouge">ShapeVisitor</code> arayüzünden yeni bir sınıf yaratıp işlemleri onun içinde hallediyoruz. 
+Böylece ne <code class="language-plaintext highlighter-rouge">Shape</code> nesnelerinin kendilerini kullanan koda bağımlılığı kalıyor, 
 ne de ana kodun nesne tiplerini bilmeye ihtiyacı kalıyor.</p>
 
-<p>Örneğin aşağıda şekillerin açıklamalarını konsola yazan kodu <code class="highlighter-rouge">ShapeVisitor</code> kullanarak yeniden yazalım:</p>
+<p>Örneğin aşağıda şekillerin açıklamalarını konsola yazan kodu <code class="language-plaintext highlighter-rouge">ShapeVisitor</code> kullanarak yeniden yazalım:</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PrinterShapeVisitor</span> <span class="kd">implements</span> <span class="nc">ShapeVisitor</span> <span class="o">{</span>
   <span class="kd">private</span> <span class="nc">PrintStream</span> <span class="n">out</span><span class="o">;</span>
@@ -470,8 +470,8 @@ ne de ana kodun nesne tiplerini bilmeye ihtiyacı kalıyor.</p>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>Bunun kullanımı ana kodda aşağıdaki şekilde yapılıyor ve tüm <code class="highlighter-rouge">if/else</code> 
-ve <code class="highlighter-rouge">instanceof</code> kontrollerinden bizi kurtarıyor.</p>
+<p>Bunun kullanımı ana kodda aşağıdaki şekilde yapılıyor ve tüm <code class="language-plaintext highlighter-rouge">if/else</code> 
+ve <code class="language-plaintext highlighter-rouge">instanceof</code> kontrollerinden bizi kurtarıyor.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">printShapes</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Shape</span><span class="o">&gt;</span> <span class="n">shapes</span><span class="o">,</span> <span class="nc">PrintStream</span> <span class="n">out</span><span class="o">)</span> <span class="o">{</span>
     <span class="nc">PrinterShapeVisitor</span> <span class="n">visitor</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PrinterShapeVisitor</span><span class="o">(</span><span class="n">out</span><span class="o">);</span>
@@ -479,7 +479,7 @@ ve <code class="highlighter-rouge">instanceof</code> kontrollerinden bizi kurtar
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>Verdiğim bir diğer örnek ise <code class="highlighter-rouge">Graphics</code> sınıfına çizim yapmaktı. 
+<p>Verdiğim bir diğer örnek ise <code class="language-plaintext highlighter-rouge">Graphics</code> sınıfına çizim yapmaktı. 
 Bunu da aşağıdaki sınıfı yaratarak halledebiliriz:</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">GraphicsShapeVisitor</span> <span class="kd">implements</span> <span class="nc">ShapeVisitor</span> <span class="o">{</span>
@@ -510,8 +510,8 @@ Bunu da aşağıdaki sınıfı yaratarak halledebiliriz:</p>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>Ve bunun kullanımı da aşağıdaki şekilde tüm <code class="highlighter-rouge">if/else</code> 
-ve <code class="highlighter-rouge">instanceof</code> kontrollerinden kurtulmuş halde yapılabiliyor:</p>
+<p>Ve bunun kullanımı da aşağıdaki şekilde tüm <code class="language-plaintext highlighter-rouge">if/else</code> 
+ve <code class="language-plaintext highlighter-rouge">instanceof</code> kontrollerinden kurtulmuş halde yapılabiliyor:</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ShapeDrawerPanel</span> <span class="kd">extends</span> <span class="nc">JPanel</span> <span class="o">{</span>
   <span class="kd">private</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Shape</span><span class="o">&gt;</span> <span class="n">shapes</span><span class="o">;</span>

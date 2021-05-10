@@ -241,16 +241,16 @@ verileri parça parça alıp, aldıkça işlemeliyiz.</p>
 atarak sayfalama (pagination) yapmak fakat bu yöntem her seferinde veritabanına yeniden sorgu atmayı
 gerektirdiği için faydasından çok zararı oluyor.</p>
 
-<p>Verileri parça parça çekmek ve işledikçe devamını okumak için Hibernate’deki <code class="highlighter-rouge">scroll</code> özelliğini kullandık.
+<p>Verileri parça parça çekmek ve işledikçe devamını okumak için Hibernate’deki <code class="language-plaintext highlighter-rouge">scroll</code> özelliğini kullandık.
 Sorgunun envai çeşit hibernate kontrolünden ve transaction yönetiminden geçmemesi için
-Hibernate’deki <code class="highlighter-rouge">StatelessSession</code> sınıfı üzerinden sorgumuzu <code class="highlighter-rouge">read-only</code> modda attık.</p>
+Hibernate’deki <code class="language-plaintext highlighter-rouge">StatelessSession</code> sınıfı üzerinden sorgumuzu <code class="language-plaintext highlighter-rouge">read-only</code> modda attık.</p>
 
 <p>Ek olarak bir ORM aracı ile sorgu sonuçlarının otomatik olarak entity sınıfına
 çevirilmesi özelliğinden de çok fazla reflection ve nesne kullanımının olmaması için
 feragat ediyoruz. Garbage Collector ve CPU biraz rahatlamış oluyor bu sayede.</p>
 
 <p>Hibernate’de bu şekilde bir sorgu nasıl atılır aşağıda ufak bir örnek paylaşıyorum.
-Buradaki <code class="highlighter-rouge">fetchSize</code> parametresi veritabanından sonuçların kaçar kaçar belleğe alınacağını belirliyor.</p>
+Buradaki <code class="language-plaintext highlighter-rouge">fetchSize</code> parametresi veritabanından sonuçların kaçar kaçar belleğe alınacağını belirliyor.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">fetchMsisdnCategories</span><span class="o">(</span><span class="nc">QueryState</span> <span class="n">queryState</span><span class="o">,</span> <span class="kt">int</span> <span class="n">fetchSize</span><span class="o">,</span> <span class="nc">Consumer</span><span class="o">&lt;</span><span class="nc">MsisdnCategoriesRecord</span><span class="o">&gt;</span> <span class="n">processor</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">try</span> <span class="o">(</span><span class="kd">final</span> <span class="nc">StatelessSession</span> <span class="n">statelessSession</span> <span class="o">=</span> <span class="n">sessionFactory</span><span class="o">.</span><span class="na">openStatelessSession</span><span class="o">())</span> <span class="o">{</span>
@@ -271,11 +271,11 @@ Buradaki <code class="highlighter-rouge">fetchSize</code> parametresi veritaban�
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>Bu method içerisinde çektiğimiz her satırı hemen sonuçları işleyecek olan <code class="highlighter-rouge">Consumer</code> sınıfına gönderiyoruz.
+<p>Bu method içerisinde çektiğimiz her satırı hemen sonuçları işleyecek olan <code class="language-plaintext highlighter-rouge">Consumer</code> sınıfına gönderiyoruz.
 Böylece herhangi bir şekilde uygulamanın belleğinde aşırı birikme yaratmamış oluyoruz.</p>
 
-<p>Yukarıdaki methodu çağıran sınıf <code class="highlighter-rouge">Consumer</code> arayüzünden oluşturulmuş bir sınıfı parametre olarak gönderiyor.
-Yani DAO katmanından çıkacak olan her bir <code class="highlighter-rouge">MsisdnCategoriesRecord</code> nesnesinin nasıl işleneceğini DAO katmanına
+<p>Yukarıdaki methodu çağıran sınıf <code class="language-plaintext highlighter-rouge">Consumer</code> arayüzünden oluşturulmuş bir sınıfı parametre olarak gönderiyor.
+Yani DAO katmanından çıkacak olan her bir <code class="language-plaintext highlighter-rouge">MsisdnCategoriesRecord</code> nesnesinin nasıl işleneceğini DAO katmanına
 yazmamış oluyoruz.</p>
 
 <p>DAO katmanındaki methodumuzu çağıran servis katmanı ise gelen her bir sonucu doğrudan Hazelcast’e atıyor.</p>
@@ -303,7 +303,7 @@ Bir öğle yemeğinde tartışırken aklımıza gelen şu çözümü beğendik v
 Cep telefon numarası 905XXXXXXXXX formatında 12 adet rakamdan oluşan bir sayı olduğu için 
 modüler aritmetik işlemlerinde msisdn alanını tercih ettik.</p>
 
-<p>Sorgumuzdaki <code class="highlighter-rouge">WHERE</code> cümleciğinde ise şu şekilde modüler aritmetik koşuluna yer verdik:</p>
+<p>Sorgumuzdaki <code class="language-plaintext highlighter-rouge">WHERE</code> cümleciğinde ise şu şekilde modüler aritmetik koşuluna yer verdik:</p>
 
 <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">select</span>
   <span class="cm">/*+ parallel(%s) */</span>
@@ -317,8 +317,8 @@ modüler aritmetik işlemlerinde msisdn alanını tercih ettik.</p>
 <span class="k">group</span> <span class="k">by</span> <span class="n">MSISDN</span>
 </code></pre></div></div>
 
-<p>Yukarıdaki <code class="highlighter-rouge">reloadMsisdnCategories</code> ve <code class="highlighter-rouge">fetchMsisdnCategories</code> isimli methodlarda belki dikkatinizi çekmiştir 
-<code class="highlighter-rouge">QueryState</code> isminde bir sınıf kullanıyoruz sorguları oluştururken.
+<p>Yukarıdaki <code class="language-plaintext highlighter-rouge">reloadMsisdnCategories</code> ve <code class="language-plaintext highlighter-rouge">fetchMsisdnCategories</code> isimli methodlarda belki dikkatinizi çekmiştir 
+<code class="language-plaintext highlighter-rouge">QueryState</code> isminde bir sınıf kullanıyoruz sorguları oluştururken.
 Bu sınıf atılacak olan sorgunun hangi modda hangi kalana göre atılacağı bilgisini taşıyor.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">QueryState</span> <span class="kd">implements</span> <span class="nc">Serializable</span> <span class="o">{</span>
@@ -344,15 +344,15 @@ Hiçbir instance’ın boş yatmaması için tüm instance’ların işin bir uc
 Çözümü bulduğumuz gün bunun için instance sayısını bilmeye ihtiyacımız olmadığını keşfettik.</p>
 
 <p>Aşağıdaki diagramda olduğu gibi, tüm DB’yi okuyup veriyi belleğe yükleme görevini alan mikroservis,
-belirli bir mod değerine karar verip, bir hazelcast queue’suna mod sayısı kadar <code class="highlighter-rouge">QueryState</code> nesnesini
+belirli bir mod değerine karar verip, bir hazelcast queue’suna mod sayısı kadar <code class="language-plaintext highlighter-rouge">QueryState</code> nesnesini
 farklı kalan değerleri ile dolduruyor. Tüm mikroservis instance’ları hali hazırda açık duran 
 birer Thread ile bu belirli Queue’dan gelecek olan mesajları dinlemekteler. 
-Her instance Queue’dan kendine düşen <code class="highlighter-rouge">QueryState</code> nesnesindeki mod ve kalan bilgisine göre sorgusunu atıyor
+Her instance Queue’dan kendine düşen <code class="language-plaintext highlighter-rouge">QueryState</code> nesnesindeki mod ve kalan bilgisine göre sorgusunu atıyor
 ve veritabanından gelen sonuçları Hazelcast Map’ine dolduruyor.</p>
 
 <p><img src="/assets/posts/queue-mod-query.png" alt="hazelcast queue modular_query" /></p>
 
-<p>Burada queue’ya attığımız <code class="highlighter-rouge">QueryState</code> nesnelerinin sayısı (ya da mod değerimiz) instance sayısına tam bölünmüyorsa 
+<p>Burada queue’ya attığımız <code class="language-plaintext highlighter-rouge">QueryState</code> nesnelerinin sayısı (ya da mod değerimiz) instance sayısına tam bölünmüyorsa 
 bazı instance’lar diğerlerinden daha fazla sorgu atabilirler veritabanına. 
 Eğer mod değerimiz instance sayısından küçük ise bazı instance’larımız hiç sorgu atmayabilirler.
 Biz mikroservisin instance sayısının alabileceği maksimum değer civarında 
@@ -370,15 +370,15 @@ Veritabanından veriyi okuma kısmındaki git-gel işlemlerini sorguları scroll
 Geriye hazelcast’e verileri gönderdiğimiz yer kalıyor. Hazelcast aracını da uygulamadan ayrı bir cluster şeklinde
 kurduğumuz için hazelcast operasyonları da network işlemlerinin büyük çoğunluğunu oluşturmakta.</p>
 
-<p>DAO katmanından gelen her bir satır için hazelcast’e bir <code class="highlighter-rouge">.put</code> işlemi çağırmak yerine öncelikle
-gelen satırları küçük gruplar halinde (1000 adet gibi) toparlayıp sonrasında <code class="highlighter-rouge">.putAll</code> methodunu çağırarak
+<p>DAO katmanından gelen her bir satır için hazelcast’e bir <code class="language-plaintext highlighter-rouge">.put</code> işlemi çağırmak yerine öncelikle
+gelen satırları küçük gruplar halinde (1000 adet gibi) toparlayıp sonrasında <code class="language-plaintext highlighter-rouge">.putAll</code> methodunu çağırarak
 tek seferde network’e çıkarak küçük bir iyileştirme sağlayabildik. Burada önemli nokta elimizdeki verinin
 karakteristiğine göre memory üzerinde fazla birikme oluşturmayacak doğru sayıyı seçmek.</p>
 
 <p>Sonraki aşamada hazelcast dökümantasyonlarını karıştırırken bildiğimiz java Map’lerinde olmayan 
-<code class="highlighter-rouge">.set</code> ve <code class="highlighter-rouge">.setAll</code> isimli methodlarının Hazelcast’in IMap arayüzünde bulunduğunu fark ettik.
-<code class="highlighter-rouge">put*</code> türevi methodlar veriyi hazelcast’e koyduktan sonra Map’de ilgili key’e ait varolan eski veriyi dönerken
-<code class="highlighter-rouge">set*</code> türevi methodlar herhangi bir şey dönmüyorlar. 
+<code class="language-plaintext highlighter-rouge">.set</code> ve <code class="language-plaintext highlighter-rouge">.setAll</code> isimli methodlarının Hazelcast’in IMap arayüzünde bulunduğunu fark ettik.
+<code class="language-plaintext highlighter-rouge">put*</code> türevi methodlar veriyi hazelcast’e koyduktan sonra Map’de ilgili key’e ait varolan eski veriyi dönerken
+<code class="language-plaintext highlighter-rouge">set*</code> türevi methodlar herhangi bir şey dönmüyorlar. 
 Bu methodları kullandığımız durumda network katmanını kullanmayacağımız bir veri için boşuna meşgul etmemiş oluyoruz.</p>
 
 <h1 id="sonuç">Sonuç</h1>

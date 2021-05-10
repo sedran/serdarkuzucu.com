@@ -189,8 +189,8 @@ Haydi java’da <a href="https://docs.oracle.com/javase/7/docs/api/javax/swing/p
 
 <!--more-->
 
-<p>Bu yazıda, <a href="https://docs.oracle.com/javase/7/docs/api/javax/swing/JFrame.html">JFrame</a> sınıfından birkaç method kullanmayı, <code class="highlighter-rouge">JFrame</code> ile oluşturulan pencereye 
-<a href="https://docs.oracle.com/javase/7/docs/api/javax/swing/JLabel.html">JLabel</a> ve <a href="https://docs.oracle.com/javase/7/docs/api/javax/swing/JButton.html">JButton</a> eklemeyi, <code class="highlighter-rouge">JLabel</code> ögesinin font özelliklerini ayarlamayı ve <code class="highlighter-rouge">JButton</code> ögesine 
+<p>Bu yazıda, <a href="https://docs.oracle.com/javase/7/docs/api/javax/swing/JFrame.html">JFrame</a> sınıfından birkaç method kullanmayı, <code class="language-plaintext highlighter-rouge">JFrame</code> ile oluşturulan pencereye 
+<a href="https://docs.oracle.com/javase/7/docs/api/javax/swing/JLabel.html">JLabel</a> ve <a href="https://docs.oracle.com/javase/7/docs/api/javax/swing/JButton.html">JButton</a> eklemeyi, <code class="language-plaintext highlighter-rouge">JLabel</code> ögesinin font özelliklerini ayarlamayı ve <code class="language-plaintext highlighter-rouge">JButton</code> ögesine 
 <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/event/ActionListener.html">ActionListener</a> objesini eklemeyi göreceğiz. 
 Layout olarak da <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/BorderLayout.html">BorderLayout</a> objesinden biraz bahsedeceğim.</p>
 
@@ -252,28 +252,28 @@ burada böyle yaptım. Yoksa ben de yıldızlı yöntemi kullanıyorum :)</p>
 <p>Ana methoda(public static void main) bakacak olursak, içerisinde Pencere objesini çağırdığımızı görüyoruz. 
 Diğer elemanları neden main’in içinde değil de constructor’un içinde yarattığımın şu anda pek bir önemi yok, 
 fakat ileri düzeyde programlar yazmaya çalışırken böyle olması daha müsait oluyor diyelim, 
-<code class="highlighter-rouge">main</code> methodun <code class="highlighter-rouge">static</code> olması nedeniyle çeşitli yerlerde istenmedik problemler çıkıyor :)</p>
+<code class="language-plaintext highlighter-rouge">main</code> methodun <code class="language-plaintext highlighter-rouge">static</code> olması nedeniyle çeşitli yerlerde istenmedik problemler çıkıyor :)</p>
 
 <p>Gelelim Pencere isimli sınıfımızın constructor’ına. 
 Burada ilk olarak bir pencere yaratmamız gerekiyor. 
-Bunu <code class="highlighter-rouge">JFrame</code> nesnesi ile sağlıyoruz. 
-<code class="highlighter-rouge">JFrame</code> nesnesini tanımlarken ona penceremizin başlık çubuğunda görüntülenecek olan 
-<code class="highlighter-rouge">String</code>‘i parametre olarak gönderiyoruz. 
+Bunu <code class="language-plaintext highlighter-rouge">JFrame</code> nesnesi ile sağlıyoruz. 
+<code class="language-plaintext highlighter-rouge">JFrame</code> nesnesini tanımlarken ona penceremizin başlık çubuğunda görüntülenecek olan 
+<code class="language-plaintext highlighter-rouge">String</code>‘i parametre olarak gönderiyoruz. 
 Bu uygulamada başlık çubuğumuzda “Basit Bir Pencere Yapıyoruz” metni görünecek.</p>
 
-<p>Daha sonra <code class="highlighter-rouge">JFrame</code> nesnemize verdiğimiz ismi kullanarak onun özelliklerini tanımlıyoruz. 
+<p>Daha sonra <code class="language-plaintext highlighter-rouge">JFrame</code> nesnemize verdiğimiz ismi kullanarak onun özelliklerini tanımlıyoruz. 
 Ben pencere ismini vermiştim. 
 Öyle devam edelim.</p>
 
-<p>Penceremizin boyutunu ayarlamak için <code class="highlighter-rouge">JFrame</code>‘in bize sunduğu <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/Component.html#setSize(int,%20int)">setSize</a> methodunu kullanıyoruz. 
+<p>Penceremizin boyutunu ayarlamak için <code class="language-plaintext highlighter-rouge">JFrame</code>‘in bize sunduğu <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/Component.html#setSize(int,%20int)">setSize</a> methodunu kullanıyoruz. 
 Parametre olarak iki tane tamsayıyı sırasıyla genişlik ve yükseklik olarak giriyoruz.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pencere</span><span class="o">.</span><span class="na">setSize</span><span class="o">(</span><span class="kt">int</span> <span class="n">width</span><span class="o">,</span> <span class="kt">int</span> <span class="n">height</span><span class="o">);</span>
 </code></pre></div></div>
 
-<p>Penceremizin sağ üst köşesindeki çarpı tuşuna tıklandığında gerçekleşecek olan eylemi ayarlamak için <code class="highlighter-rouge">JFrame</code>‘in 
+<p>Penceremizin sağ üst köşesindeki çarpı tuşuna tıklandığında gerçekleşecek olan eylemi ayarlamak için <code class="language-plaintext highlighter-rouge">JFrame</code>‘in 
 <a href="https://docs.oracle.com/javase/7/docs/api/javax/swing/JFrame.html#setDefaultCloseOperation(int)">setDefaultCloseOperation</a> methodunu kullanıyoruz. 
-Bu methoda parametre olarak <code class="highlighter-rouge">JFrame.EXIT_ON_CLOSE</code> sabit değerini atadık. 
+Bu methoda parametre olarak <code class="language-plaintext highlighter-rouge">JFrame.EXIT_ON_CLOSE</code> sabit değerini atadık. 
 Bu sayede çarpı butonuna tıklandığında program kapatılacak. 
 Bunu ayarlamayı unutursanız eğer, pencereniz kapatmaya çalıştığınızda kapanmak yerine gizlenir, 
 arkaplanda çalışmaya devam eder.</p>
@@ -282,12 +282,12 @@ arkaplanda çalışmaya devam eder.</p>
 </code></pre></div></div>
 
 <p>Şimdi geldik penceremize layout ayarlamaya. 
-Bunun için <code class="highlighter-rouge">JFrame</code>‘in <a href="https://docs.oracle.com/javase/7/docs/api/javax/swing/JFrame.html#getContentPane()">getContentPane()</a> methodunu 
-kullanarak bize bir <code class="highlighter-rouge">Container</code> nesnesi return etmesini sağlayacak, daha sonra da o 
+Bunun için <code class="language-plaintext highlighter-rouge">JFrame</code>‘in <a href="https://docs.oracle.com/javase/7/docs/api/javax/swing/JFrame.html#getContentPane()">getContentPane()</a> methodunu 
+kullanarak bize bir <code class="language-plaintext highlighter-rouge">Container</code> nesnesi return etmesini sağlayacak, daha sonra da o 
 <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/Container.html">Container</a> nesnesinin <a href="https://docs.oracle.com/javase/7/docs/api/javax/swing/JFrame.html#setLayout(java.awt.LayoutManager)">setLayout</a> methodunu kullanıp ona bir layout atayacağız. 
 Ben burada <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/BorderLayout.html">BorderLayout</a> kullandım. 
-<code class="highlighter-rouge">BorderLayout</code> nedir diye merak edenler <a href="https://docs.oracle.com/javase/tutorial/uiswing/layout/border.html">şuradan</a> detaylı anlatımına bakabilir. 
-Ben kısaca bahsedecek olursam, efenim şimdi, <code class="highlighter-rouge">BorderLayout</code> ekranı 5 parçaya böler. 
+<code class="language-plaintext highlighter-rouge">BorderLayout</code> nedir diye merak edenler <a href="https://docs.oracle.com/javase/tutorial/uiswing/layout/border.html">şuradan</a> detaylı anlatımına bakabilir. 
+Ben kısaca bahsedecek olursam, efenim şimdi, <code class="language-plaintext highlighter-rouge">BorderLayout</code> ekranı 5 parçaya böler. 
 Bu parçalara “North”, “South”, “Center”, “East”, ve “West” isimlerini verir. 
 BorderLayout ile şekillendirilmiş bir alana bir element ekleyeceğimiz zaman hangi alanına ekleyeceğimizi 
 parametre olarak belirtmemiz gerekir. 
@@ -303,16 +303,16 @@ ve yaratırken kullandığımız parametre onun içeriğindeki metin olacak.</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">JLabel</span> <span class="n">metin</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JLabel</span><span class="o">(</span><span class="s">"İlk penceremizi yaptık."</span><span class="o">);</span>
 </code></pre></div></div>
 
-<p>Yarattığımız <code class="highlighter-rouge">JLabel</code> nesnesini metin isimli değişkene verdiğimize göre, şimdi onun üzerinde bir iki oynama yapabiliriz. 
+<p>Yarattığımız <code class="language-plaintext highlighter-rouge">JLabel</code> nesnesini metin isimli değişkene verdiğimize göre, şimdi onun üzerinde bir iki oynama yapabiliriz. 
 Şimdi yazı tipiyle biraz oynamak istiyorum ben. 
-Bunun için <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/Font.html">Font</a> nesnesini ve <code class="highlighter-rouge">JLabel</code> nesnesinin <a href="https://docs.oracle.com/javase/7/docs/api/javax/swing/JComponent.html#setFont(java.awt.Font)">setFont</a> methodunu kullanacağız.</p>
+Bunun için <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/Font.html">Font</a> nesnesini ve <code class="language-plaintext highlighter-rouge">JLabel</code> nesnesinin <a href="https://docs.oracle.com/javase/7/docs/api/javax/swing/JComponent.html#setFont(java.awt.Font)">setFont</a> methodunu kullanacağız.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">metin</span><span class="o">.</span><span class="na">setFont</span><span class="o">(</span><span class="k">new</span> <span class="nc">Font</span><span class="o">(</span><span class="s">"Serif"</span><span class="o">,</span> <span class="nc">Font</span><span class="o">.</span><span class="na">BOLD</span><span class="o">,</span> <span class="mi">25</span><span class="o">));</span>
 </code></pre></div></div>
 
-<p><code class="highlighter-rouge">JLabel</code> nesnemiz üzerindeki düzenlemelerimiz bittiğine göre, şimdi onu penceremize ekleyebiliriz. 
-Bunun için <code class="highlighter-rouge">JFrame</code> içindeki <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/Container.html#add(java.awt.Component)">add</a> methodunu kullanacağız. 
-Ben bu <code class="highlighter-rouge">JLabel</code> ögesini pencerenin üst kısmına eklemeyi uygun gördüm, siz değiştirebilirsiniz tabi ki :)</p>
+<p><code class="language-plaintext highlighter-rouge">JLabel</code> nesnemiz üzerindeki düzenlemelerimiz bittiğine göre, şimdi onu penceremize ekleyebiliriz. 
+Bunun için <code class="language-plaintext highlighter-rouge">JFrame</code> içindeki <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/Container.html#add(java.awt.Component)">add</a> methodunu kullanacağız. 
+Ben bu <code class="language-plaintext highlighter-rouge">JLabel</code> ögesini pencerenin üst kısmına eklemeyi uygun gördüm, siz değiştirebilirsiniz tabi ki :)</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pencere</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"North"</span><span class="o">,</span> <span class="n">metin</span><span class="o">);</span>
 </code></pre></div></div>
@@ -320,18 +320,18 @@ Ben bu <code class="highlighter-rouge">JLabel</code> ögesini pencerenin üst k�
 <p>Şimdi bir buton oluşturalım ve üzerinde çıkış yazsın. 
 Tıklanıldığı zaman da program kapansın. 
 Gelişmiş butonlar oluşturabilmemiz için swing kütüphanemiz bize <a href="https://docs.oracle.com/javase/7/docs/api/javax/swing/JButton.html">JButton</a> nesnesini sunar. 
-Bir <code class="highlighter-rouge">JButton</code> nesnesi yaratırken kullandığımız parametre onun üzerindeki metni belirler. 
-Şimdi üzerinde çıkış yazan bir <code class="highlighter-rouge">JButton</code> nesnesi yaratıp onu buton isimli değişkenimize verelim.</p>
+Bir <code class="language-plaintext highlighter-rouge">JButton</code> nesnesi yaratırken kullandığımız parametre onun üzerindeki metni belirler. 
+Şimdi üzerinde çıkış yazan bir <code class="language-plaintext highlighter-rouge">JButton</code> nesnesi yaratıp onu buton isimli değişkenimize verelim.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">JButton</span> <span class="n">buton</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">JButton</span><span class="o">(</span><span class="s">"Çıkış"</span><span class="o">);</span>
 </code></pre></div></div>
 
 <p>Şimdi bu butonumuza <a href="https://docs.oracle.com/javase/7/docs/api/javax/swing/AbstractButton.html#addActionListener(java.awt.event.ActionListener)">addActionListener</a> methodunu ve <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/event/ActionListener.html">ActionListener</a> 
 sınıfını kullanarak bir dinleyici ekleyelim. 
-<code class="highlighter-rouge">ActionListener</code> methodundaki <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/event/ActionListener.html#actionPerformed(java.awt.event.ActionEvent)">actionPerformed</a> methodu, bir action gerçekleştiği zaman bir 
+<code class="language-plaintext highlighter-rouge">ActionListener</code> methodundaki <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/event/ActionListener.html#actionPerformed(java.awt.event.ActionEvent)">actionPerformed</a> methodu, bir action gerçekleştiği zaman bir 
 <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/event/ActionEvent.html">ActionEvent</a> parametresi ile çağırılır. 
-Biz de <code class="highlighter-rouge">actionPerformed</code> methodunun içerisine butona tıklandığında gerçekleşecek olan eylemleri kodlayacağız. 
-Ben burada <code class="highlighter-rouge">System.exit(1);</code> komutu ile programı kapatmayı tercih ettim, basit bir şey olsun diye.</p>
+Biz de <code class="language-plaintext highlighter-rouge">actionPerformed</code> methodunun içerisine butona tıklandığında gerçekleşecek olan eylemleri kodlayacağız. 
+Ben burada <code class="language-plaintext highlighter-rouge">System.exit(1);</code> komutu ile programı kapatmayı tercih ettim, basit bir şey olsun diye.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">buton</span><span class="o">.</span><span class="na">addActionListener</span><span class="o">(</span><span class="k">new</span> <span class="nc">ActionListener</span><span class="o">()</span> <span class="o">{</span>
   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">actionPerformed</span><span class="o">(</span><span class="nc">ActionEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
@@ -346,7 +346,7 @@ Yine aynı işlem, fakat bunu pencerenin aşağı kısmına ekliyoruz.</p>
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pencere</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"South"</span><span class="o">,</span> <span class="n">buton</span><span class="o">);</span>
 </code></pre></div></div>
 
-<p>Ve en son olarak da penceremizin görünür olması için <code class="highlighter-rouge">JFrame</code> nesnesinin 
+<p>Ve en son olarak da penceremizin görünür olması için <code class="language-plaintext highlighter-rouge">JFrame</code> nesnesinin 
 <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/Component.html#setVisible(boolean)">setVisible</a> methodunu kullanacağız. 
 Bunu penceremize bütün eklemeleri yaptıktan sonra çalıştırmamızda fayda varmış. 
 Hiç çalıştırmazsak da penceremiz görünmüyor.</p>

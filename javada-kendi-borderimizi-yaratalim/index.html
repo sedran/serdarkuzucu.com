@@ -253,7 +253,7 @@ ve fonksiyonlarını kodlayacağım, daha sonra Border interface’inin beni yaz
 Hadi başlayalım.</p>
 
 <p>Öncelikle Border’ımıza bir isim vermeliyiz. 
-Ben bu Border’a <code class="highlighter-rouge">TextBorder</code> ismini veriyorum ve class’ımı açıyorum. 
+Ben bu Border’a <code class="language-plaintext highlighter-rouge">TextBorder</code> ismini veriyorum ve class’ımı açıyorum. 
 Daha sonra Border’ın o an geçerli olan özelliklerini tutacak olan 6 tane private değişkenimi tanımlıyor, 
 ve constructor’ımı yazıyorum. 
 Görelim:</p>
@@ -353,7 +353,7 @@ ne kadar içerde dizildiğini görürsünüz. (Pencereden ama, Border çizgisind
 Bir JComponent veya Border yaratırken opaklık söz konusu olduğunda ben hep basitçe true değerini veririm.</p>
 
 <p>Şimdi gelelim zurnanın zırt dediği yere. 
-<code class="highlighter-rouge">paintBorder</code> methodu ile Border’ımızı Component’a çizeceğiz.
+<code class="language-plaintext highlighter-rouge">paintBorder</code> methodu ile Border’ımızı Component’a çizeceğiz.
 Burada hazır çizilmişi var:</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">paintBorder</span><span class="o">(</span><span class="nc">Component</span> <span class="n">c</span><span class="o">,</span> <span class="nc">Graphics</span> <span class="n">g</span><span class="o">,</span> <span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="kt">int</span> <span class="n">width</span><span class="o">,</span> <span class="kt">int</span> <span class="n">height</span><span class="o">)</span> <span class="o">{</span>

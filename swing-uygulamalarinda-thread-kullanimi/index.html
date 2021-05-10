@@ -320,7 +320,7 @@ bir thread yaratıp yapılacak işlemi bu thread’e yaptırmak.</p>
 <p>Yukarıdaki kod sorunumuzu önemli bir ölçüde çözdü.
 Lakin bir büyük hata yaptık.
 Event dispatcher thread dışında başka bir thread üzerinden bir arayüz elementine(label) müdahale ettik.
-Yukarıda yarattığımız thread’in içerisinde <code class="highlighter-rouge">label.setText("Task Status: Run")</code> kodunu çağırmak 
+Yukarıda yarattığımız thread’in içerisinde <code class="language-plaintext highlighter-rouge">label.setText("Task Status: Run")</code> kodunu çağırmak 
 bu proje için bir sorun teşkil etmeyebilir fakat büyük sistemler için büyük bir sorundur.
 Çünkü arayüz elemanlarının sadece arayüz thread’i tarafından değiştirilmesi gerekir.
 Aksi takdirde birden fazla threadin aynı anda modifikasyonu 
@@ -403,7 +403,7 @@ Kod örneğimizi yine gösterelim.</p>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>Yukarıdaki kod örneğinde gördüğümüz gibi, <code class="highlighter-rouge">SwingUtilities.invokeLater(Runnable r)</code> methodunu kullandık.
+<p>Yukarıdaki kod örneğinde gördüğümüz gibi, <code class="language-plaintext highlighter-rouge">SwingUtilities.invokeLater(Runnable r)</code> methodunu kullandık.
 Bu method, parametre olarak verdiğimiz Runnable objesini 
 event dispatcher thread’inin işlem sırasına(EventQueue) sokuyor.
 Bu queue’daki işlemler de sırayla event dispatcher thread tarafından çalıştırıldığı için,
@@ -420,7 +420,7 @@ Evet, kullanıcı arayüzünün startup kodunu da bu şekilde çalıştırmamız
   <li>Uzun süren işlemler event dispatcher thread içerisinde yapılmamalıdır! Ayrı thread kullanılmalıdır.</li>
   <li>Arayüz elementlerini modifiye eden işlemlerin event dispatcher thread dışından çağırılmaması gerekiyor.</li>
   <li>Event dispatcher thread tarafından çalıştırılmasını istediğimiz işlemleri 
-<code class="highlighter-rouge">SwingUtilities.invokeLater(Runnable r)</code> methodunu kullanarak çalıştırıyoruz.</li>
+<code class="language-plaintext highlighter-rouge">SwingUtilities.invokeLater(Runnable r)</code> methodunu kullanarak çalıştırıyoruz.</li>
 </ol>
 
 <h4 id="kaynaklar">Kaynaklar</h4>

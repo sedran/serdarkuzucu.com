@@ -237,7 +237,7 @@ mesajını göstermek istiyorum.
 Bu commit’i gönderen <a href="https://github.com/scottfrederick">Scott Frederick</a> abimiz 
 aşağıda yazacağım bütün iyi commit mesajı yazma kurallarını, adeta ibret-i alem için, uygulamış.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Disable exception details on default error views
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Disable exception details on default error views
 
 Prior to this commit, default error responses included the message
 from a handled exception. When the exception was a BindException, the
@@ -277,8 +277,8 @@ Kötü örnekleri çok iyi bildiğiniz için burayı hiç kirletmeyeceğim.</p>
 
 <p>Git versiyon kontrol sistemi yazdığınız mesajı başlık ve gövde olmak üzere iki parça olarak düşünür.
 Versiyon geçmişi üzerinde çalışan birçok git komutu bu ayrımı kullanır. 
-Örneğin <code class="highlighter-rouge">git log</code> komutu tüm commit’lerin mesajlarını tam haliyle listelerken,
-<code class="highlighter-rouge">git shortlog</code> ve <code class="highlighter-rouge">git log --oneline</code> komutları commit’lerin sadece başlıklarını listeler.</p>
+Örneğin <code class="language-plaintext highlighter-rouge">git log</code> komutu tüm commit’lerin mesajlarını tam haliyle listelerken,
+<code class="language-plaintext highlighter-rouge">git shortlog</code> ve <code class="language-plaintext highlighter-rouge">git log --oneline</code> komutları commit’lerin sadece başlıklarını listeler.</p>
 
 <p>Git’in bu ayrımı yapabilmesinin tek yolu başlık olarak yazdığınız satır ile
 gövde olarak yazdığınız ilk satırın arasında bir boş satır bulunmasıdır.
@@ -294,10 +294,10 @@ yaptığınız değişiklikleri bir kez daha düşünmenizi sağlayacaktır.</p>
 gerekenden fazla değişikliği tek bir commit’e yüklemeye çalışıyor olabilirsiniz.
 Bu durumda yaptığınız değişiklikleri birden fazla commit’e paylaştırmayı düşünebilirsiniz.</p>
 
-<p><code class="highlighter-rouge">git commit --help</code> komutunu kullanarak <code class="highlighter-rouge">git commit</code> hakkında yardım istediğimizde
+<p><code class="language-plaintext highlighter-rouge">git commit --help</code> komutunu kullanarak <code class="language-plaintext highlighter-rouge">git commit</code> hakkında yardım istediğimizde
 terminalimize dökülen uzun yazıda aşağıdaki gibi bir bölüm var:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Though not required, it's a good idea to begin the commit message with a single short 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Though not required, it's a good idea to begin the commit message with a single short 
 (less than 50 character) line summarizing the change, followed by a blank line and then 
 a more thorough description. The text up to the first blank line in a commit message is 
 treated as the commit title, and that title is used throughout Git. For example, 
@@ -326,7 +326,7 @@ kendimize koyduğumuz 50 karakter başlık kotasından tüketmekte.</p>
 
 <p>Örneğin otomatik olarak merge commit oluşturken:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Merge branch 'release/awesome-feature'
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Merge branch 'release/awesome-feature'
 </code></pre></div></div>
 
 <p>Bu durumda emir kipi ile yazmanın birinci faydası 
@@ -351,19 +351,19 @@ Böylece başlık satırımızda 50 karakter limiti kuralımızı delmeden daha 
 
 <h5 id="yanlış">Yanlış</h5>
 
-<p><code class="highlighter-rouge">Fixes NullPointerException in SubscriptionRestController</code></p>
+<p><code class="language-plaintext highlighter-rouge">Fixes NullPointerException in SubscriptionRestController</code></p>
 
-<p><code class="highlighter-rouge">Fixed NullPointerException in SubscriptionRestController</code></p>
+<p><code class="language-plaintext highlighter-rouge">Fixed NullPointerException in SubscriptionRestController</code></p>
 
-<p><code class="highlighter-rouge">I added direct charging capability for internal partners</code></p>
+<p><code class="language-plaintext highlighter-rouge">I added direct charging capability for internal partners</code></p>
 
-<p><code class="highlighter-rouge">This commit adds direct charging capability for internal partners</code></p>
+<p><code class="language-plaintext highlighter-rouge">This commit adds direct charging capability for internal partners</code></p>
 
 <h5 id="doğru">Doğru</h5>
 
-<p><code class="highlighter-rouge">Fix NullPointerException in SubscriptionRestController</code></p>
+<p><code class="language-plaintext highlighter-rouge">Fix NullPointerException in SubscriptionRestController</code></p>
 
-<p><code class="highlighter-rouge">Add direct charging capability for internal partners</code></p>
+<p><code class="language-plaintext highlighter-rouge">Add direct charging capability for internal partners</code></p>
 
 <h3 id="govde-72-karakter">Gövde satırlarında 72 karakter uzunluğunu geçmeyin</h3>
 
@@ -452,7 +452,7 @@ proje yönetim sistemi ID’mizi yazabiliriz.</p>
 Daha ileriki zamanlarda commit mesajını inceleyen arkadaşlara 
 bu iş ile ilgili daha fazla detayın bulunduğu bir kaynak daha sunmuş oluruz.</p>
 
-<p>Örneğin yazının başında örnek verdiğim commit mesajındaki <code class="highlighter-rouge">Fixes gh-20505</code> yazan satırda
+<p>Örneğin yazının başında örnek verdiğim commit mesajındaki <code class="language-plaintext highlighter-rouge">Fixes gh-20505</code> yazan satırda
 Github’daki issue ID’sinin referans verildiğini görebiliriz.</p>
 
 <p>Bunu yaparken dikkat edilmesi gereken husus bu issue id’nin commit mesajının
@@ -466,7 +466,7 @@ Bu konuda çok hassasım çünkü çalıştığım ekipte buna direnen gençler 
 
 <p>Commit mesajının en sonlarında bir satırda issue id aşağıdakilere benzer bir formatta kullanılabilir:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Fixes: FCB-8473
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Fixes: FCB-8473
 Resolves: FCB-3123
 Issue: TEAM-432
 Ticket: TKT-83823242
@@ -506,12 +506,12 @@ birlikte çalıştığınız arkadaşınızın ismini de bir şekilde commit mes
 <p>Bunu yapmak çok kolay.
 Sadece üşenmeyip aşağıdakine benzer bir satırı commit mesajının sonuna ekleyebilirsiniz.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Co-authored-by: Foo Bar &lt;foo.bar@example.com&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Co-authored-by: Foo Bar &lt;foo.bar@example.com&gt;
 </code></pre></div></div>
 
 <p>Veya birden fazla kişi ile birlikte çalışıyorsanız bunu iki satırda yapabilirsiniz:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Co-authored-by: Foo Bar &lt;foo.bar@example.com&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Co-authored-by: Foo Bar &lt;foo.bar@example.com&gt;
 Co-authored-by: John Bob &lt;john.bob@example.com&gt;
 </code></pre></div></div>
 

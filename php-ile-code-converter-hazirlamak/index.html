@@ -184,7 +184,7 @@
 
   <div class="post-content" itemprop="articleBody">
     <p>Hani bazen sayfanıza kod yazmak istersiniz de o kod sayfada metin olarak görünmek yerine işlevsel olarak iş yapar. 
-Yani siz sayfanızda <code class="highlighter-rouge">&lt;br/&gt;</code> kodunu yazmak istersiniz fakat sayfada <code class="highlighter-rouge">&lt;br/&gt;</code> olarak görünmez de 
+Yani siz sayfanızda <code class="language-plaintext highlighter-rouge">&lt;br/&gt;</code> kodunu yazmak istersiniz fakat sayfada <code class="language-plaintext highlighter-rouge">&lt;br/&gt;</code> olarak görünmez de 
 alt satıra geçme işlevini gerçekleştirir. 
 Bu durumda kodlarınızı çevirmeniz gerekir. 
 Sizin yazdığınız kodları çevirmek için hazırlanmış çeşitli web siteleri var. 
@@ -208,7 +208,7 @@ Bunların en sağlam örneklerinden birisi de <a href="http://www.eblogtemplates
 <span class="nt">&lt;/form&gt;</span>
 
 <span class="cp">&lt;?php</span>
-<span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'conv'</span><span class="p">]))</span> <span class="p">{</span>
+<span class="k">if</span><span class="p">(</span><span class="k">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'conv'</span><span class="p">]))</span> <span class="p">{</span>
   <span class="nv">$normal</span> <span class="o">=</span> <span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nb">htmlspecialchars</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'normal'</span><span class="p">]));</span>
   <span class="nv">$degismis</span> <span class="o">=</span> <span class="nb">nl2br</span><span class="p">(</span><span class="nb">stripslashes</span><span class="p">(</span><span class="nv">$normal</span><span class="p">));</span> 
 
@@ -225,15 +225,15 @@ Bunların en sağlam örneklerinden birisi de <a href="http://www.eblogtemplates
 <p>Şimdi, kodumuzu inceleyelim biraz. 
 Formumuzu oluşturduk, formumuzdaki <strong>textarea</strong> elementi ile kullanıcıdan kodu alıyoruz. 
 Gönder butonuna bastığı zaman PHP kodumuz çalışmaya başlıyor. 
-PHP kodumuz gelen kodu <code class="highlighter-rouge">$normal</code> isimli değişkene içindeki 
+PHP kodumuz gelen kodu <code class="language-plaintext highlighter-rouge">$normal</code> isimli değişkene içindeki 
 özel html karakterlerini istediğimiz şekilde çevirip aktarıyor. 
 Daha sonra bu çevirmeden kaynaklanan slash karakterlerini temizleyip veriyi 
-<code class="highlighter-rouge">$degismis</code> isimli değişkene aktarıyor. 
+<code class="language-plaintext highlighter-rouge">$degismis</code> isimli değişkene aktarıyor. 
 Ve son olarak da ekrana yazıyor kodumuzun son halini.</p>
 
 <p>Burada dikkat etmemiz gereken şey sayfayı <strong>code_convert.php</strong> ismiyle kaydetmek 
-veya sayfayı hangi isimle kaydedersek o ismi <code class="highlighter-rouge">&lt;form action=“code_convert.php” method=“post”&gt;</code> kısmında 
-<code class="highlighter-rouge">action</code> özelliğinin içerisine yazmak.</p>
+veya sayfayı hangi isimle kaydedersek o ismi <code class="language-plaintext highlighter-rouge">&lt;form action=“code_convert.php” method=“post”&gt;</code> kısmında 
+<code class="language-plaintext highlighter-rouge">action</code> özelliğinin içerisine yazmak.</p>
 
   </div>
 </article>

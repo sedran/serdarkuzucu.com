@@ -195,10 +195,10 @@ Bu yazıda da, değişken tanımlama konusuna değineceğim.</p>
 <p>Birçok programlama dilinin olmazsa olmazı değişkenler, 
 Shell Script geliştirirken de olmazsa olmazımız.
 Değişken tanımlamak için yapacağımız şey oldukça basit. 
-Aşağıdaki kod, önce <code class="highlighter-rouge">BLOG_NAME</code> isminde bir değişken tanımlayıp ona AsosyalBebe değerini veriyor. 
-Daha sonra <code class="highlighter-rouge">CURRENT_DIR</code> ismindeki değişkene, <code class="highlighter-rouge">pwd</code> komutunun sonucunu veriyor. 
+Aşağıdaki kod, önce <code class="language-plaintext highlighter-rouge">BLOG_NAME</code> isminde bir değişken tanımlayıp ona AsosyalBebe değerini veriyor. 
+Daha sonra <code class="language-plaintext highlighter-rouge">CURRENT_DIR</code> ismindeki değişkene, <code class="language-plaintext highlighter-rouge">pwd</code> komutunun sonucunu veriyor. 
 Burada dikkat etmemiz gereken, bir komutun sonucunu bir değişkene vereceğimiz zaman, 
-komutu <code class="highlighter-rouge">$(komut)</code> şeklinde yazıyoruz.</p>
+komutu <code class="language-plaintext highlighter-rouge">$(komut)</code> şeklinde yazıyoruz.</p>
 
 <p>Bir sonraki değişkenimiz de, ilk iki değişkeni birleştirerek başka bir metin oluşturuyor. 
 Değişkenleri kullanırken, başlarına dolar işareti koymamız gerekiyor. 
@@ -228,9 +228,9 @@ AsosyalBebe/home/sedrik/lesson
 <h3 id="sabitconstant-tanımlamak">Sabit(Constant) Tanımlamak</h3>
 
 <p>Bazen değişken tanımlamalarımızın değerinin program içerisinde değişmesini istemeyiz.
-Bu durumlarda o değişkeni <code class="highlighter-rouge">readonly</code> anahtar kelimesi ile tanımayarak, 
+Bu durumlarda o değişkeni <code class="language-plaintext highlighter-rouge">readonly</code> anahtar kelimesi ile tanımayarak, 
 değerinin program boyunca sabit kalmasını sağlayabiliyoruz. 
-Aşağıdaki kodda tanımladığım <code class="highlighter-rouge">MY_VARIABLE</code> isimli değişkenin değerini değiştirmeye çalıştığımda, 
+Aşağıdaki kodda tanımladığım <code class="language-plaintext highlighter-rouge">MY_VARIABLE</code> isimli değişkenin değerini değiştirmeye çalıştığımda, 
 kodun o satırı hata veriyor ve değişkenin değerini tekrar ekrana yazdırdığımızda, değişmemiş olduğunu görüyoruz.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
@@ -256,8 +256,8 @@ Google’ın “<a href="https://google.github.io/styleguide/shellguide.html">Sh
   <li>Değişken isimleri küçük harfle yazılır ve tüm kelimeler alt çizgi (_) karakteri ile ayrılır.</li>
   <li>Sabitler(Constants) tamamen büyük harfle yazılır ve kelimeler alt çizgi ile ayrılır. 
 Ayrıca dosyanın en başında tanımlanmalıdırlar.</li>
-  <li>Sabitleri <code class="highlighter-rouge">readonly</code> anahtar kelimesiyle belirterek program boyunca değerinin değişmeyeceğinden emin olunmalıdır.</li>
-  <li>Fonksiyonların içerisindeki değişkenler <code class="highlighter-rouge">local</code> anahtar kelimesi ile tanımlanmalıdır. 
+  <li>Sabitleri <code class="language-plaintext highlighter-rouge">readonly</code> anahtar kelimesiyle belirterek program boyunca değerinin değişmeyeceğinden emin olunmalıdır.</li>
+  <li>Fonksiyonların içerisindeki değişkenler <code class="language-plaintext highlighter-rouge">local</code> anahtar kelimesi ile tanımlanmalıdır. 
 Gereksiz değişkenler fonksiyon dışına çıkmamalıdırlar.</li>
 </ol>
 

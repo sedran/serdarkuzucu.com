@@ -184,25 +184,25 @@
 
   <div class="post-content" itemprop="articleBody">
     <p>Merhaba arkadaşlar. 
-Bu yazımda Java’daki <code class="highlighter-rouge">Timer</code> ve <code class="highlighter-rouge">TimerTask</code> sınıflarının kullanımından bahsedeceğim. 
+Bu yazımda Java’daki <code class="language-plaintext highlighter-rouge">Timer</code> ve <code class="language-plaintext highlighter-rouge">TimerTask</code> sınıflarının kullanımından bahsedeceğim. 
 Bu sınıfların ne gibi dertlerimize derman olduğunu kısaca anlatmaya çalışacağım 
 ve nacizene birkaç örnek uygulama göstereceğim. 
 Öncelikle kemerlerimizi bağlayalım.</p>
 
 <!--more-->
 
-<h3 id="1-javautiltimer-sınıfı">1. <code class="highlighter-rouge">java.util.Timer</code> Sınıfı</h3>
+<h3 id="1-javautiltimer-sınıfı">1. <code class="language-plaintext highlighter-rouge">java.util.Timer</code> Sınıfı</h3>
 
-<p><code class="highlighter-rouge">Timer</code> sınıfı, bize belirli görevlerin belirtilen zamanda bir seferliğine 
+<p><code class="language-plaintext highlighter-rouge">Timer</code> sınıfı, bize belirli görevlerin belirtilen zamanda bir seferliğine 
 veya tekrarlayan aralıklarla arkaplanda (ayrı thread’de) çalıştırılmasını sağlayan 
 single-thread bir yapı sunmaktadır. 
-Yani yaratacağımız her <code class="highlighter-rouge">Timer</code> objesi yeni bir <code class="highlighter-rouge">Thread</code> anlamına geliyor.</p>
+Yani yaratacağımız her <code class="language-plaintext highlighter-rouge">Timer</code> objesi yeni bir <code class="language-plaintext highlighter-rouge">Thread</code> anlamına geliyor.</p>
 
-<h3 id="2-javautiltimertask-sınıfı">2. <code class="highlighter-rouge">java.util.TimerTask</code> Sınıfı</h3>
+<h3 id="2-javautiltimertask-sınıfı">2. <code class="language-plaintext highlighter-rouge">java.util.TimerTask</code> Sınıfı</h3>
 
-<p><code class="highlighter-rouge">Timer</code> nesnelerine yapması gereken işleri Runnable interface’inin bir implementasyonu olan 
-<code class="highlighter-rouge">TimerTask</code> nesneleri şeklinde veriyoruz. 
-Bir <code class="highlighter-rouge">Timer</code> nesnesine birden fazla <code class="highlighter-rouge">TimerTask</code> nesnesini zamanlayabiliyoruz.
+<p><code class="language-plaintext highlighter-rouge">Timer</code> nesnelerine yapması gereken işleri Runnable interface’inin bir implementasyonu olan 
+<code class="language-plaintext highlighter-rouge">TimerTask</code> nesneleri şeklinde veriyoruz. 
+Bir <code class="language-plaintext highlighter-rouge">Timer</code> nesnesine birden fazla <code class="language-plaintext highlighter-rouge">TimerTask</code> nesnesini zamanlayabiliyoruz.
 Aşağıya hemen bir örnek kod koyayım:</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.timers</span><span class="o">;</span>
@@ -265,15 +265,15 @@ Aşağıya hemen bir örnek kod koyayım:</p>
 Timer objelerinin constructor’ına verdiğim parametreler, çalışacak olan Thread’lere verilecek olan isimler. 
 Hani demiştim ya her Timer objesi bir yeni Thread yaratır diye, işte o hesap. 
 SimpleTimerTask isminde bir sınıf oluşturdum, TimerTask’ı extend edecek şekilde. 
-TimerTask sınıfını extend eden bir sınıfın yapmak zorunda olduğu tek şey <code class="highlighter-rouge">run()</code> methodunu override etmektir. 
-Ben bu yazım için geliştirdiğim <code class="highlighter-rouge">SimpleTimerTask</code> sınıfının <code class="highlighter-rouge">run()</code> methodunda Task’e verdiğim isimi, 
+TimerTask sınıfını extend eden bir sınıfın yapmak zorunda olduğu tek şey <code class="language-plaintext highlighter-rouge">run()</code> methodunu override etmektir. 
+Ben bu yazım için geliştirdiğim <code class="language-plaintext highlighter-rouge">SimpleTimerTask</code> sınıfının <code class="language-plaintext highlighter-rouge">run()</code> methodunda Task’e verdiğim isimi, 
 o anki zamanı ve Task’i çalıştıran Thread’in ismini konsola yazdırmayı tercih ettim. 
 Task’lere ve Thread’lere isim vermemin sebebi outputu kolayca takip edebilmemizdi.</p>
 
-<p>Timer nesnelerinin üzerinde TimerTask objelerini <code class="highlighter-rouge">schedule(...)</code> 
-veya <code class="highlighter-rouge">scheduleAtFixedRate(...)</code> methodlarıyla schedule ediyoruz. 
-<code class="highlighter-rouge">schedule(...)</code> methoduyla zamanlanan task’ler belirtilen zamanda sadece bir kere çalışırken, 
-<code class="highlighter-rouge">scheduleAtFixedRate(...)</code> methoduyla zamanlanan task’ler belirtilen zamanda başlar, 
+<p>Timer nesnelerinin üzerinde TimerTask objelerini <code class="language-plaintext highlighter-rouge">schedule(...)</code> 
+veya <code class="language-plaintext highlighter-rouge">scheduleAtFixedRate(...)</code> methodlarıyla schedule ediyoruz. 
+<code class="language-plaintext highlighter-rouge">schedule(...)</code> methoduyla zamanlanan task’ler belirtilen zamanda sadece bir kere çalışırken, 
+<code class="language-plaintext highlighter-rouge">scheduleAtFixedRate(...)</code> methoduyla zamanlanan task’ler belirtilen zamanda başlar, 
 belirtilen aralıklarla tekrar tekrar çalışırlar. 
 Mesela yukarıdaki kod örneğinde ilk task’i 0 milisaniye sonra çalıştır, 
 50 milisaniyede bir tekrar et şeklinde ayarladım. 
@@ -378,7 +378,7 @@ Aşağıda bir örnek kod göstereyim de tam olsun.</p>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>Biliyorum, <code class="highlighter-rouge">run()</code> methodunda çalıştırdığım kod tam bir amelelik, 
+<p>Biliyorum, <code class="language-plaintext highlighter-rouge">run()</code> methodunda çalıştırdığım kod tam bir amelelik, 
 fakat sadece yapılacak işin uzun süreceği hissini vermesi için o şekilde yazdım. 
 Bu kod çalıştırıldığında vereceği output da şunun gibi birşey olacaktır:</p>
 
@@ -399,7 +399,7 @@ TimePassed = 1205
 Timer üzerinde 100 milisaniyede bir çalış dediğimiz görev çok uzun olduğu için gecikmeler meydana gelmiş.
 100 milisaniyede bir çalışacak olan görev ortalama 1.5 saniyede bir çalışmış.
 Ayrıca burada farkına varmanızı istediğim bir diğer nokta da, 
-Timer <code class="highlighter-rouge">cancel()</code> methoduyla iptal edilir edilmez thread sonlanmıyor. 
+Timer <code class="language-plaintext highlighter-rouge">cancel()</code> methoduyla iptal edilir edilmez thread sonlanmıyor. 
 O an çalıştırmakta olduğu bir task varsa, o bittikten sonra Timer kapanıyor.</p>
 
 <p>Yav bu Timer iyiymiş, hoşmuş da, ne işimize yarayacak bu diye soranlar vardır.
@@ -413,7 +413,7 @@ Fakat bu bana eğlenceli gelmedi.
 Hadi kısa süreliğine odun bir developer olmayı bir kenara bırakıp sevgilimize 
 iki Task’li basit bir Java süprizi hazırlayalım.</p>
 
-<p>Aşağıdaki kod <code class="highlighter-rouge">I love you ${sevgilinizin adı}</code> yazısını önce harf harf ekrana yazdıracak,
+<p>Aşağıdaki kod <code class="language-plaintext highlighter-rouge">I love you ${sevgilinizin adı}</code> yazısını önce harf harf ekrana yazdıracak,
 sonra da bu yazının farklı renklerde görünmesini sağlayacak:</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.asosyalbebe.timers</span><span class="o">;</span>

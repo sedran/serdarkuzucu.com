@@ -226,14 +226,14 @@ listeye sonradan eklediklerim oldu, sırası bozuldu falan filan.
 kendinden sonra gelen kendinden küçük elemanların en küçüğü ile yer değiştiriyoruz. 
 Örneğin aşağıdaki diziyi 3. elemanına kadar sıraladığımızı düşünelim ve daha sonra ne yapacağımıza bakalım.</p>
 
-<p><code class="highlighter-rouge">{1, 2, 3, 10, 6, 4, 7}</code></p>
+<p><code class="language-plaintext highlighter-rouge">{1, 2, 3, 10, 6, 4, 7}</code></p>
 
 <p>Gördüğümüz gibi, 3. elemana kadar sıralanmış bir dizimiz var. 
 Bu durumda şu anda 4. eleman olan 10’a bakmaktayız ve kuralımıza göre, 
 10’dan sonra gelen ve 10’dan küçük olan en küçük elemanı bulup 10 ile yerini değiştirmemiz gerekiyor. 
 Bu adımda bu kurala uyan sayımız 4. Yerlerini değiştirdiğimizde dizimiz şu hale geliyor:</p>
 
-<p><code class="highlighter-rouge">{1, 2, 3, 4, 6, 10, 7}</code></p>
+<p><code class="language-plaintext highlighter-rouge">{1, 2, 3, 4, 6, 10, 7}</code></p>
 
 <p>Üçüncü elemana baktığımıza göre bir sonraki adımda da dördüncü elemana bakıyoruz ve kuralı uyguluyoruz. 
 Dizinin sonuna kadar böyle devam ettiğimizde tüm diziyi sıralamış oluyoruz.</p>
@@ -274,16 +274,16 @@ Birkaç elemandan oluşan dizileri sıralarken hızlı kod yazmak açısından b
 o elemandan önce gelip de o elemandan büyük olan elemanlarla yer değiştirir. 
 Bu durumda işlem sırasında üzerine geldiğimiz bir elemanın solunda kalan elemanlar sıralı, 
 sağındakiler ise karışık düzende olacaktır. 
-Örneğin <code class="highlighter-rouge">a = {2,4,5,3,1,6}</code> şeklinde bir dizimiz olsun 
-ve üzerine geldiğimiz eleman da <code class="highlighter-rouge">a[3] = 3</code> olsun. 
+Örneğin <code class="language-plaintext highlighter-rouge">a = {2,4,5,3,1,6}</code> şeklinde bir dizimiz olsun 
+ve üzerine geldiğimiz eleman da <code class="language-plaintext highlighter-rouge">a[3] = 3</code> olsun. 
 Görüldüğü gibi, üzerine geldiğimiz elemanın sol tarafı sıralı 
 ve sağ tarafı karışık düzende. 
 Bu durumda algoritma 3’ün solunda olup da 3’ten büyük olan elemanları birer eleman sağa kaydıracak 
 ve açılan boşluğa da 3’ü yerleştirecek. 
 Adım adım gidecek olursak: 
-<code class="highlighter-rouge">{2,4,5,3,1,6}</code> -&gt; <code class="highlighter-rouge">{2,4,5,5,1,6}</code> -&gt; <code class="highlighter-rouge">{2,4,4,5,1,6}</code> -&gt; <code class="highlighter-rouge">{2,3,4,5,1,6}.</code> 
-Daha sonra bir sonraki elemana geçilerek <code class="highlighter-rouge">a[4] = 1</code> elemanına gelinir 
-ve o da sola kaydırılarak <code class="highlighter-rouge">{1,2,3,4,5,6}</code> şeklindeki sıralı dizimizi buluruz.
+<code class="language-plaintext highlighter-rouge">{2,4,5,3,1,6}</code> -&gt; <code class="language-plaintext highlighter-rouge">{2,4,5,5,1,6}</code> -&gt; <code class="language-plaintext highlighter-rouge">{2,4,4,5,1,6}</code> -&gt; <code class="language-plaintext highlighter-rouge">{2,3,4,5,1,6}.</code> 
+Daha sonra bir sonraki elemana geçilerek <code class="language-plaintext highlighter-rouge">a[4] = 1</code> elemanına gelinir 
+ve o da sola kaydırılarak <code class="language-plaintext highlighter-rouge">{1,2,3,4,5,6}</code> şeklindeki sıralı dizimizi buluruz.
 Son eleman zaten dizideki en büyük eleman olduğu için herhangi bir yer değiştirme işlemi yapılmadı.</p>
 
 <p><img src="/assets/posts/insertion-sort.gif" alt="Insertion Sort" /></p>
@@ -337,7 +337,7 @@ ve o sütunu da eklemeli sıralama mantığıyla sıraladığında sıralama iş
 Bunu bu şekilde anlatmak çok zor olduğu için şimdi örnek bir dizi üzerinde düşünelim. 
 Dizimiz şu şekilde olsun:</p>
 
-<p><code class="highlighter-rouge">{13, 14, 94, 33, 82, 25, 59, 94, 65, 23, 45, 27, 73, 25, 39}</code></p>
+<p><code class="language-plaintext highlighter-rouge">{13, 14, 94, 33, 82, 25, 59, 94, 65, 23, 45, 27, 73, 25, 39}</code></p>
 
 <p>Bu diziyi ilk olarak 5’e böldüğümüzü varsayalım. Aşağıdaki tabloyu elde ediyoruz:</p>
 
@@ -355,7 +355,7 @@ Dizimiz şu şekilde olsun:</p>
 
 <p>Bu durumda dizimizin yeni hali şu oluyor:</p>
 
-<p><code class="highlighter-rouge">{14, 73, 25, 23, 13, 27, 94, 33, 39, 25, 59, 94, 65, 82, 45}</code></p>
+<p><code class="language-plaintext highlighter-rouge">{14, 73, 25, 23, 13, 27, 94, 33, 39, 25, 59, 94, 65, 82, 45}</code></p>
 
 <p>Şimdi bu diziyi 3’e böldüğümüzü düşünelim. 
 Aşağıdaki tabloyu elde ediyoruz.</p>
@@ -376,7 +376,7 @@ Aşağıdaki tabloyu elde ediyoruz.</p>
 94 82 94
 </code></pre></div></div>
 
-<p><code class="highlighter-rouge">{14, 13, 25, 23, 33, 27, 25, 59, 39, 65, 73, 45, 94, 82, 94}</code></p>
+<p><code class="language-plaintext highlighter-rouge">{14, 13, 25, 23, 33, 27, 25, 59, 39, 65, 73, 45, 94, 82, 94}</code></p>
 
 <p>Son olarak da dizimizi 1’e böldüğümüzü düşünürsek, basit bir eklemeli sıralama işlemi yaptığımızı 
 ve elemanların neredeyse sıralanmış olduğunu görüyoruz. 

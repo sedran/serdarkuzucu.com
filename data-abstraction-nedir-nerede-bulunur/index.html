@@ -244,7 +244,7 @@ sınıflar bu kütüphaneden soyutladı.</p>
 Yazılım mimarisine eklenen her bir soyutlama seviyesi, yazılımı makine anlayacak seviyeden insan anlayacak seviyeye 
 bir adım daha yaklaştırır.</p>
 
-<p>Bir excel dosyası tonla bilgi taşıyan zengin bir içeriğe sahiptir. <code class="highlighter-rouge">HSSFWorkbook</code> sınıfı bu bilgilerin çoğunu 
+<p>Bir excel dosyası tonla bilgi taşıyan zengin bir içeriğe sahiptir. <code class="language-plaintext highlighter-rouge">HSSFWorkbook</code> sınıfı bu bilgilerin çoğunu 
 ve nasıl manipüle edileceğine ait detayları bizden gizler, bu sayede bu kütüphanede ileriki zamanlarda 
 yapılabilecek performans iyileştirmeleri yada refactoring gibi işlemlerde bizim kodumuzu güncellememiz gerekmez. 
 Encapsulation da burada bu şekilde kullanıldı.</p>
@@ -270,17 +270,17 @@ Bir karmaşık sayı kutupsal ve düzlemsel(bu kelime doğru mu emin değilim) o
 <p>Örneğin yukarıdaki resimdeki z karmaşık sayısı aşağıdaki iki farklı biçimde gösterilebilir 
 ve ikisi de sayısal olarak aynıdır:</p>
 
-<p><code class="highlighter-rouge">z = r ∠ θ</code></p>
+<p><code class="language-plaintext highlighter-rouge">z = r ∠ θ</code></p>
 
-<p><code class="highlighter-rouge">z = a + bi</code></p>
+<p><code class="language-plaintext highlighter-rouge">z = a + bi</code></p>
 
-<p>Buradan anlaşılıyor ki <code class="highlighter-rouge">ComplexNumber</code> diye bir sınıf geliştirmek istesek, 
+<p>Buradan anlaşılıyor ki <code class="language-plaintext highlighter-rouge">ComplexNumber</code> diye bir sınıf geliştirmek istesek, 
 bu sınıf içerisinde veriyi iki farklı şekilde tutabiliriz. Birinci yöntem bir açı ve bir büyüklük içeren yani iki adet 
-<code class="highlighter-rouge">double</code> alandan oluşan bir sınıf tasarlamak. İkinci yöntem ise karmaşık sayının reel eksendeki izdüşümünü 
-ve sanal eksendeki izdüşümünü tutan yine iki adet <code class="highlighter-rouge">double</code> alandan oluşan bir sınıf tasarlamak.</p>
+<code class="language-plaintext highlighter-rouge">double</code> alandan oluşan bir sınıf tasarlamak. İkinci yöntem ise karmaşık sayının reel eksendeki izdüşümünü 
+ve sanal eksendeki izdüşümünü tutan yine iki adet <code class="language-plaintext highlighter-rouge">double</code> alandan oluşan bir sınıf tasarlamak.</p>
 
 <p>Şimdi tek tek iki yöntemin de nasıl tasarlanabileceğine bakalım. 
-Öncelikle <code class="highlighter-rouge">ComplexNumber</code> isimli bir <em>interface</em> tanımlayıp, karmaşık sayılar üzerinde yapılabilecek işlemleri 
+Öncelikle <code class="language-plaintext highlighter-rouge">ComplexNumber</code> isimli bir <em>interface</em> tanımlayıp, karmaşık sayılar üzerinde yapılabilecek işlemleri 
 tanımlıyoruz. Böylece karmaşık sayıyı kullanacak olan başka yazılım bileşenlerine ihtiyaçları olan methodları 
 baştan belirlemiş oluyoruz.</p>
 
@@ -303,7 +303,7 @@ baştan belirlemiş oluyoruz.</p>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>Daha sonra bu interface’den türeyen <em>abstract</em> bir sınıf tanımlayıp, <code class="highlighter-rouge">sum</code>, <code class="highlighter-rouge">subtract</code>, <code class="highlighter-rouge">multiply</code> ve <code class="highlighter-rouge">divide</code> 
+<p>Daha sonra bu interface’den türeyen <em>abstract</em> bir sınıf tanımlayıp, <code class="language-plaintext highlighter-rouge">sum</code>, <code class="language-plaintext highlighter-rouge">subtract</code>, <code class="language-plaintext highlighter-rouge">multiply</code> ve <code class="language-plaintext highlighter-rouge">divide</code> 
 methodlarını buraya yazıyorum çünkü bu methodlar datanın içeride nasıl tutulduğundan bağımsız methodlar. 
 Yani karmaşık sayılar üzerinde yapılan dört işlemde bile karmaşık sayı datasının içeride nasıl tutulduğu 
 ile ilgilenmemiş olduk.</p>
@@ -355,7 +355,7 @@ ile ilgilenmemiş olduk.</p>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>Kendisine ait <code class="highlighter-rouge">realPart</code>, <code class="highlighter-rouge">imaginaryPart</code>, <code class="highlighter-rouge">angle</code> ve <code class="highlighter-rouge">magnitude</code> değerlerini dönme 
+<p>Kendisine ait <code class="language-plaintext highlighter-rouge">realPart</code>, <code class="language-plaintext highlighter-rouge">imaginaryPart</code>, <code class="language-plaintext highlighter-rouge">angle</code> ve <code class="language-plaintext highlighter-rouge">magnitude</code> değerlerini dönme 
 veya gerekirse hesaplama işlerini ise datayı asıl tutan sınıfın omuzlarına yükledik, 
 çünkü bu işlemler içerideki verinin nasıl saklandığına bağlı değişiklik gösteriyorlar.</p>
 
@@ -444,10 +444,10 @@ aşağıdaki gibi bir sınıf geliştirebiliriz:</p>
 <p>Görüldüğü üzere bu sınıf da realPart ve imaginaryPart değerlerini tutup, 
 angle ve magnitude değerlerini hesaplayarak hizmet veriyor.</p>
 
-<p><code class="highlighter-rouge">BaseComplexNumber</code> sınıfında factory method olarak kullandığımız <code class="highlighter-rouge">ComplexNumbers.fromPolarForm</code> 
-ve <code class="highlighter-rouge">ComplexNumbers.fromRectangularForm</code> methodları bu iki gösterimden herhangi birisini seçip 
-onu dönecek şekilde geliştirilebilir. <code class="highlighter-rouge">ComplexNumbers</code> aracılığı ile başka yazılım bileşenlerinin 
-elde edebileceği tek nesne tipi <code class="highlighter-rouge">ComplexNumber</code> olacaktır. 
+<p><code class="language-plaintext highlighter-rouge">BaseComplexNumber</code> sınıfında factory method olarak kullandığımız <code class="language-plaintext highlighter-rouge">ComplexNumbers.fromPolarForm</code> 
+ve <code class="language-plaintext highlighter-rouge">ComplexNumbers.fromRectangularForm</code> methodları bu iki gösterimden herhangi birisini seçip 
+onu dönecek şekilde geliştirilebilir. <code class="language-plaintext highlighter-rouge">ComplexNumbers</code> aracılığı ile başka yazılım bileşenlerinin 
+elde edebileceği tek nesne tipi <code class="language-plaintext highlighter-rouge">ComplexNumber</code> olacaktır. 
 Yani datanın nasıl represent edildiğini datayı kullananlardan soyutlamış olduk.</p>
 
 <p>Ben hazır yazmışken iki sınıfı da kullanayım dedim ve ortaya şöyle bir sınıf çıktı:</p>
@@ -468,10 +468,10 @@ Bir yazılımda kompleks bir veri tipi (karmaşık sayı gibi) yaratıyorsanız,
 bu veri tipini kullanan yazılımın diğer bileşenleri için önemli olan iki soruyu cevaplamanız gerekmektedir.</p>
 
 <p>Bunlardan birincisi, bu veriyi nasıl yaratacakları. 
-Bu örneklerde, <code class="highlighter-rouge">ComplexNumbers</code> sınıfı içerisindeki iki factory method ile verinin kolayca yaratılmasını sağladık.</p>
+Bu örneklerde, <code class="language-plaintext highlighter-rouge">ComplexNumbers</code> sınıfı içerisindeki iki factory method ile verinin kolayca yaratılmasını sağladık.</p>
 
 <p>İkinci önemli soru da bu veri üzerindeki gerekli bilgilere nasıl erişecekleri. 
-Açtığımız <code class="highlighter-rouge">ComplexNumber</code> arayüzü ile karmaşık sayı ile ilgili bilgilere 
+Açtığımız <code class="language-plaintext highlighter-rouge">ComplexNumber</code> arayüzü ile karmaşık sayı ile ilgili bilgilere 
 nasıl erişeceklerini de diğer yazılım bileşenlerine anlatmış olduk.</p>
 
 <p>Bundan gerisi bizim içeride veriyi nasıl 

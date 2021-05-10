@@ -192,7 +192,7 @@ PHP’de Checkbox’lar ile basit bir ekrana yazma uygulaması yapmıştık.
 <p>Öncelikle hazırlayacağımız iki sayfa için de MySQL bağlantısı gerekeceği için, 
 bağlantıları kuran ayrı bir dosya hazırlayacağız 
 ve o dosyayı sayfalarımıza çağıracağız. 
-Aşağıdaki kodları kendimize göre düzenliyoruz, ve <code class="highlighter-rouge">baglan.php</code> isminde kaydediyoruz.</p>
+Aşağıdaki kodları kendimize göre düzenliyoruz, ve <code class="language-plaintext highlighter-rouge">baglan.php</code> isminde kaydediyoruz.</p>
 
 <p>Şimdi, yukarıda belirttiğimiz veritabanının içinde “checkbox” isminde bir tablo olduğunu varsayalım. 
 Tablonun içerisinde 3 sütun var, ve görünüşü de şu şekilde:</p>
@@ -215,7 +215,7 @@ Aşağıdaki kodları arayuz.php ismiyle kaydedelim.</p>
    <span class="nv">$id</span> <span class="o">=</span> <span class="nv">$dizi</span><span class="p">[</span><span class="s1">'id'</span><span class="p">];</span>
    <span class="nv">$isim</span> <span class="o">=</span> <span class="nv">$dizi</span><span class="p">[</span><span class="s1">'isim'</span><span class="p">];</span>
    <span class="nv">$soyisim</span> <span class="o">=</span> <span class="nv">$dizi</span><span class="p">[</span><span class="s1">'soyisim'</span><span class="p">];</span>
-   <span class="k">echo</span> <span class="s1">'&lt;li&gt;&lt;input name="secenek['</span> <span class="o">.</span> <span class="nv">$id</span> <span class="o">.</span> <span class="s1">']" type="checkbox" value="'</span> <span class="o">.</span> <span class="nv">$id</span> <span class="o">.</span> <span class="s1">'" /&gt; '</span> <span class="o">.</span> <span class="nv">$isim</span> <span class="o">.</span> <span class="s1">' '</span><span class="o">.</span><span class="nv">$soyisim</span><span class="o">.</span><span class="s1">'&lt;/li&gt;'</span><span class="p">;</span> 
+   <span class="k">echo</span> <span class="s1">'&lt;li&gt;&lt;input name="secenek['</span> <span class="mf">.</span> <span class="nv">$id</span> <span class="mf">.</span> <span class="s1">']" type="checkbox" value="'</span> <span class="mf">.</span> <span class="nv">$id</span> <span class="mf">.</span> <span class="s1">'" /&gt; '</span> <span class="mf">.</span> <span class="nv">$isim</span> <span class="mf">.</span> <span class="s1">' '</span><span class="mf">.</span><span class="nv">$soyisim</span><span class="mf">.</span><span class="s1">'&lt;/li&gt;'</span><span class="p">;</span> 
 <span class="p">}</span> 
 <span class="k">echo</span> <span class="s1">'&lt;input name="kayit_sil" type="submit" value="Sil" /&gt;'</span><span class="p">;</span>
 <span class="k">echo</span> <span class="s1">'&lt;/form&gt;'</span><span class="p">;</span>
@@ -259,9 +259,9 @@ Haydi bir de islem.php sayfamızın içine yazmamız gereken kodlarımıza bakal
 <div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
 <span class="k">include</span><span class="p">(</span><span class="s1">'baglan.php'</span><span class="p">);</span> <span class="c1">// MySQL bağlantımız</span>
  
-<span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'kayit_sil'</span><span class="p">]))</span> <span class="c1">// Eğer butona basıldıysa</span>
+<span class="k">if</span><span class="p">(</span><span class="k">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'kayit_sil'</span><span class="p">]))</span> <span class="c1">// Eğer butona basıldıysa</span>
 <span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'secenek'</span><span class="p">]))</span> <span class="c1">// Eğer seçeneklerden en az biri işaretlenmişse</span>
+  <span class="k">if</span><span class="p">(</span><span class="k">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'secenek'</span><span class="p">]))</span> <span class="c1">// Eğer seçeneklerden en az biri işaretlenmişse</span>
   <span class="p">{</span>
     <span class="nv">$dizi</span> <span class="o">=</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'secenek'</span><span class="p">];</span> <span class="c1">// Post ile gelen seçenekler diziye aktarılır.</span>
     <span class="k">foreach</span><span class="p">(</span><span class="nv">$dizi</span> <span class="k">as</span> <span class="nv">$secenek</span><span class="p">)</span> <span class="c1">// dizinin her elemanı için tekrar eden döngü</span>

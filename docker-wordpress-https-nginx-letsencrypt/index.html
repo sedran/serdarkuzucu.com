@@ -332,9 +332,9 @@ Aynı zamanda yerini iyi bildiğimiz bu dizinleri başka bir sunucuya geçmek is
 kolayca taşıyabiliriz.</p>
 
 <p>Bu mimaride 3 adet container kullanacağız. 
-Tüm data bir arada bulunsun amacıyla sunucunun root dizininde <code class="highlighter-rouge">/docker-storage</code> isminde bir dizin oluşturacağım 
+Tüm data bir arada bulunsun amacıyla sunucunun root dizininde <code class="language-plaintext highlighter-rouge">/docker-storage</code> isminde bir dizin oluşturacağım 
 ve her container için bu dizinin altında ekstra dizinler açacağım. 
-Dikkatinizi çekerim, <code class="highlighter-rouge">docker-storage</code> özel bir isim değil, ben uydurdum. 
+Dikkatinizi çekerim, <code class="language-plaintext highlighter-rouge">docker-storage</code> özel bir isim değil, ben uydurdum. 
 Siz başka bir dizin de kullanabilirsiniz.</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> <span class="nt">-p</span> /docker-storage/nginx
@@ -349,9 +349,9 @@ kurulum kolaylığı için şimdilik görmezden gelelim.</p>
 <h2 id="4-mimarinin-yaml-formatında-hazırlanışı">4. Mimarinin YAML Formatında Hazırlanışı</h2>
 
 <p>Yavaş yavaş sunucumuzu ısıtmaya başlıyoruz. 
-Öncelikle sunucumuzun uygun bir dizininde <code class="highlighter-rouge">docker-compose.yml</code> dosyasını barındıracak olan bir dizin yaratıyoruz. 
-Ben root user ile girdiğim için home dizinim <code class="highlighter-rouge">/root</code> olarak tayin edilmiş. 
-Bu dizine gidiyor ve <code class="highlighter-rouge">demoblog</code> isminde bir dizin oluşturuyorum ve içerisinde <code class="highlighter-rouge">docker-compose.yml</code> isminde 
+Öncelikle sunucumuzun uygun bir dizininde <code class="language-plaintext highlighter-rouge">docker-compose.yml</code> dosyasını barındıracak olan bir dizin yaratıyoruz. 
+Ben root user ile girdiğim için home dizinim <code class="language-plaintext highlighter-rouge">/root</code> olarak tayin edilmiş. 
+Bu dizine gidiyor ve <code class="language-plaintext highlighter-rouge">demoblog</code> isminde bir dizin oluşturuyorum ve içerisinde <code class="language-plaintext highlighter-rouge">docker-compose.yml</code> isminde 
 bir boş dosya yaratıyorum.</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> /root/demoblog
@@ -359,10 +359,10 @@ bir boş dosya yaratıyorum.</p>
 <span class="nb">touch </span>docker-compose.yml
 </code></pre></div></div>
 
-<p>Daha sonra favori text editörümüz ile (nano, vi, vs) <code class="highlighter-rouge">docker-compose.yml</code> dosyasını açıp aşağıdaki içeriği yapıştıralım.</p>
+<p>Daha sonra favori text editörümüz ile (nano, vi, vs) <code class="language-plaintext highlighter-rouge">docker-compose.yml</code> dosyasını açıp aşağıdaki içeriği yapıştıralım.</p>
 
-<p>Bu dosyanın sizin için çalışır hale gelmesi için sadece <code class="highlighter-rouge">EMAIL=demoblog@serdarkuzucu.com</code> 
-ve <code class="highlighter-rouge">URL=demoblog.serdarkuzucu.com</code> alanlarını değiştirmeniz yeterli olacaktır.</p>
+<p>Bu dosyanın sizin için çalışır hale gelmesi için sadece <code class="language-plaintext highlighter-rouge">EMAIL=demoblog@serdarkuzucu.com</code> 
+ve <code class="language-plaintext highlighter-rouge">URL=demoblog.serdarkuzucu.com</code> alanlarını değiştirmeniz yeterli olacaktır.</p>
 
 <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3.6"</span>
 
@@ -427,8 +427,8 @@ ve <code class="highlighter-rouge">URL=demoblog.serdarkuzucu.com</code> alanlar�
 
 <h2 id="5-i̇lk-çalıştırma">5. İlk Çalıştırma</h2>
 
-<p>Gerekli docker imajlarının docker-hub’dan indirilmesi ve sistemin ilk çalışması için <code class="highlighter-rouge">docker-compose.yml</code> 
-dosyasının bulunduğu dizine gidip <code class="highlighter-rouge">docker-compose up</code> komutunu çalıştırıyoruz:</p>
+<p>Gerekli docker imajlarının docker-hub’dan indirilmesi ve sistemin ilk çalışması için <code class="language-plaintext highlighter-rouge">docker-compose.yml</code> 
+dosyasının bulunduğu dizine gidip <code class="language-plaintext highlighter-rouge">docker-compose up</code> komutunu çalıştırıyoruz:</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd</span> /root/demoblog
 docker-compose up
@@ -526,16 +526,16 @@ kendi hallerinde takılıyorlar.</li>
 
 <h2 id="6-reverse-proxy-ve-http-https-yönlendirme">6. Reverse Proxy ve Http-&gt;Https Yönlendirme</h2>
 
-<p>Öncelikle yukarıdaki adımlarda geldiğimiz son noktada <code class="highlighter-rouge">docker-compose up</code> demiştik 
-ve terminalimizde hala bu işlem açık durumda bekliyor. Klavyemizdeki <code class="highlighter-rouge">CTRL + C</code> tuşlarına birlikte 
+<p>Öncelikle yukarıdaki adımlarda geldiğimiz son noktada <code class="language-plaintext highlighter-rouge">docker-compose up</code> demiştik 
+ve terminalimizde hala bu işlem açık durumda bekliyor. Klavyemizdeki <code class="language-plaintext highlighter-rouge">CTRL + C</code> tuşlarına birlikte 
 basarak bu işlemi sonlandırıyoruz. 
 Böylece açık olan uygulamalarımız da kapanmış oluyor.</p>
 
-<p>Öncelikle Wordpress’in https reverse-proxy üzerinden gelen isteklerde sapıtmaması için <code class="highlighter-rouge">wp-config.php</code> dosyasında 
-aşağıdaki satırları buluyoruz. <code class="highlighter-rouge">wp-config.php</code> dosyası şurada: <code class="highlighter-rouge">/docker-storage/wordpress/wp-config.php</code></p>
+<p>Öncelikle Wordpress’in https reverse-proxy üzerinden gelen isteklerde sapıtmaması için <code class="language-plaintext highlighter-rouge">wp-config.php</code> dosyasında 
+aşağıdaki satırları buluyoruz. <code class="language-plaintext highlighter-rouge">wp-config.php</code> dosyası şurada: <code class="language-plaintext highlighter-rouge">/docker-storage/wordpress/wp-config.php</code></p>
 
 <div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cd">/** Sets up WordPress vars and included files. */</span>
-<span class="k">require_once</span><span class="p">(</span><span class="nx">ABSPATH</span> <span class="o">.</span> <span class="s1">'wp-settings.php'</span><span class="p">);</span>
+<span class="k">require_once</span><span class="p">(</span><span class="no">ABSPATH</span> <span class="mf">.</span> <span class="s1">'wp-settings.php'</span><span class="p">);</span>
 </code></pre></div></div>
 
 <p>Bulduğumuz bu satırların hemen <strong>üzerine</strong> aşağıdaki kodu yapıştırıyoruz. Aman URL’leri değiştirmeyi unutmayın.</p>
@@ -544,10 +544,10 @@ aşağıdaki satırları buluyoruz. <code class="highlighter-rouge">wp-config.ph
 <span class="k">if</span> <span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'HTTP_X_FORWARDED_PROTO'</span><span class="p">]</span> <span class="o">==</span> <span class="s1">'https'</span><span class="p">)</span>
     <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'HTTPS'</span><span class="p">]</span><span class="o">=</span><span class="s1">'on'</span><span class="p">;</span>
 
-<span class="k">if</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'HTTP_X_FORWARDED_HOST'</span><span class="p">]))</span> <span class="p">{</span>
+<span class="k">if</span> <span class="p">(</span><span class="k">isset</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'HTTP_X_FORWARDED_HOST'</span><span class="p">]))</span> <span class="p">{</span>
     <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'HTTP_HOST'</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'HTTP_X_FORWARDED_HOST'</span><span class="p">];</span>
 <span class="p">}</span>
-<span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'HTTP_X_FORWARDED_FOR'</span><span class="p">]))</span> <span class="p">{</span>
+<span class="k">if</span><span class="p">(</span><span class="k">isset</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'HTTP_X_FORWARDED_FOR'</span><span class="p">]))</span> <span class="p">{</span>
     <span class="nv">$list</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span><span class="s1">','</span><span class="p">,</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'HTTP_X_FORWARDED_FOR'</span><span class="p">]);</span>
     <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">'REMOTE_ADDR'</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$list</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
 <span class="p">}</span>
@@ -557,10 +557,10 @@ aşağıdaki satırları buluyoruz. <code class="highlighter-rouge">wp-config.ph
 <span class="c1"># End: Modified</span>
 </code></pre></div></div>
 
-<p><code class="highlighter-rouge">wp-config.php</code> dosyasıyla işimiz bu kadar. Kaydedip dosyayı kapatabilirsiniz.</p>
+<p><code class="language-plaintext highlighter-rouge">wp-config.php</code> dosyasıyla işimiz bu kadar. Kaydedip dosyayı kapatabilirsiniz.</p>
 
 <p>Şimdi sıra nginx konfigürasyonunu düzeltmeye geldi. 
-Şu dosyayı favori text editörümüzle açalım: <code class="highlighter-rouge">/docker-storage/nginx/nginx/site-confs/default</code></p>
+Şu dosyayı favori text editörümüzle açalım: <code class="language-plaintext highlighter-rouge">/docker-storage/nginx/nginx/site-confs/default</code></p>
 
 <p>İçindeki her şeyi silip aşağıdaki kodu yapıştıralım. 
 Adresleri yine değiştirmeyi unutmayın aman diyeyim.</p>
@@ -604,8 +604,8 @@ Adresleri yine değiştirmeyi unutmayın aman diyeyim.</p>
 </code></pre></div></div>
 
 <p>Bu dosyayı da kaydedip kapatalım. Şimdi sistemi ayağa kaldırma vakti. 
-<code class="highlighter-rouge">docker-compose.yml</code> dosyamızı koyduğumuz yeri unutmadınız değil mi? 
-O dizine <code class="highlighter-rouge">cd /root/demoblog</code> komutuyla geri dönüyoruz ve aşağıdaki komutla sistemi başlatıyoruz. 
+<code class="language-plaintext highlighter-rouge">docker-compose.yml</code> dosyamızı koyduğumuz yeri unutmadınız değil mi? 
+O dizine <code class="language-plaintext highlighter-rouge">cd /root/demoblog</code> komutuyla geri dönüyoruz ve aşağıdaki komutla sistemi başlatıyoruz. 
 Bu sefer tüm logları terminalde görmeyeceğiz çünkü detached modda başlatıyoruz.</p>
 
 <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker-compose up <span class="nt">-d</span>
@@ -634,7 +634,7 @@ hata sayfası yerine wordpress kurulum ekranının açıldığını göreceğiz.
 <p>Eğer aynı adrese http şemasıyla girersek, 
 nginx’e yaptığımız konfigürasyon sayesinde sitenin https’e yönlendirdiğini görebiliriz.</p>
 
-<p>Biraz daha ileri gidip, <code class="highlighter-rouge">reboot</code> komutu ile sunucuyu yeniden başlattım. 
+<p>Biraz daha ileri gidip, <code class="language-plaintext highlighter-rouge">reboot</code> komutu ile sunucuyu yeniden başlattım. 
 Sunucu tekrar açıldığında tüm container’ların da açılmış olduğunu 
 ve sistemin çalışır vaziyette olduğunu test etmiş oldum.</p>
 
@@ -650,7 +650,7 @@ Bu doğrudan veritabanınıza gelebilecek saldırıları engeller.</p>
 Böylece IP:PORT şeklinde sunucunuzdaki apache’ye doğrudan saldırganların gelmesini engellemiş olduk.</p>
 
 <p>Letsencrypt üzerinden oluşturulan sertifikaların geçerlilik tarihi 90 gündür. 
-nginx container’ını oluştururken kullandığımız <code class="highlighter-rouge">linuxserver/letsencrypt</code> imajını oldukça başarılı hazırlamışlar, 
+nginx container’ını oluştururken kullandığımız <code class="language-plaintext highlighter-rouge">linuxserver/letsencrypt</code> imajını oldukça başarılı hazırlamışlar, 
 sertifika bitiş tarihi gelirken otomatik olarak sertifikayı yeniliyor. 
 Böylece sertifika yenileme ile de uğraşmamış oluyoruz.</p>
 

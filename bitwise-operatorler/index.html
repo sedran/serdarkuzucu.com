@@ -196,7 +196,7 @@ Biz genellikle en küçük veri türü olarak byte kullanırız.
 Mesela C dilinde bir karakter (char) 1 byte yer tutar. 
 Biz biliyoruz ki bir byte da 8 bitten oluşur.
 Bir bit de bir adet 1 veya 0’dan oluşur.
-Örnek vermek gerekirse küçük a harfini tutan karakter şu 8 bitten meydana gelir: <code class="highlighter-rouge">01100001</code></p>
+Örnek vermek gerekirse küçük a harfini tutan karakter şu 8 bitten meydana gelir: <code class="language-plaintext highlighter-rouge">01100001</code></p>
 
 <p>Bunu nasıl bulduğuma daha sonra geleceğiz.</p>
 
@@ -235,8 +235,8 @@ kullanabileceğimiz operatörlerden birkaç tanesine değineyim.</p>
 <p>Bir bit bloğu üzerinde sağa kaydırma işlemi uyguladığımız zaman 
 o blok üzerindeki tüm bitler bir sağ pozisyona geçerler. 
 En sağdaki bit kaybolur, en soldan bir adet 0 eklenir. 
-Örneğin elimizde 4 bitlik <code class="highlighter-rouge">1011</code> bloğunun olduğunu düşünelim. 
-Bunu bir defa sağa kaydırdığımız zaman elimizdeki blok <code class="highlighter-rouge">0101</code> olur.</p>
+Örneğin elimizde 4 bitlik <code class="language-plaintext highlighter-rouge">1011</code> bloğunun olduğunu düşünelim. 
+Bunu bir defa sağa kaydırdığımız zaman elimizdeki blok <code class="language-plaintext highlighter-rouge">0101</code> olur.</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="sc">'a'</span><span class="p">;</span>    <span class="c1">// 01100001</span>
 <span class="kt">char</span> <span class="n">b</span> <span class="o">=</span> <span class="n">c</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 00110000</span>
@@ -249,7 +249,7 @@ Bunu bir defa sağa kaydırdığımız zaman elimizdeki blok <code class="highli
 </code></pre></div></div>
 
 <p>Bitlerin integer olarak ne anlama geldiğini de anlatalım.
-Örneğin <code class="highlighter-rouge">01000101</code> byte’ını integer olarak açalım:</p>
+Örneğin <code class="language-plaintext highlighter-rouge">01000101</code> byte’ını integer olarak açalım:</p>
 
 <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>01000101 = 
    = 0x2^7 + 1x2^6 + 0x2^5 + 0x2^4
@@ -271,8 +271,8 @@ Bunu bir defa sağa kaydırdığımız zaman elimizdeki blok <code class="highli
 <p>Bir bit bloğu üzerinde sola kaydırma işlemi uyguladığımız zaman 
 o blok üzerindeki tüm bitler bir sol pozisyona geçerler. 
 En soldaki bit kaybolur, en sağdan bir adet 0 eklenir. 
-Örneğin elimizde 4 bitlik <code class="highlighter-rouge">1011</code> bloğunun olduğunu düşünelim. 
-Bunu bir defa sola kaydırdığımız zaman elimizdeki blok <code class="highlighter-rouge">0110</code> olur.</p>
+Örneğin elimizde 4 bitlik <code class="language-plaintext highlighter-rouge">1011</code> bloğunun olduğunu düşünelim. 
+Bunu bir defa sola kaydırdığımız zaman elimizdeki blok <code class="language-plaintext highlighter-rouge">0110</code> olur.</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">char</span> <span class="n">c</span> <span class="o">=</span> <span class="sc">'a'</span><span class="p">;</span>    <span class="c1">// 01100001</span>
 <span class="kt">char</span> <span class="n">b</span> <span class="o">=</span> <span class="n">c</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// 11000010</span>
@@ -300,7 +300,7 @@ Birkaç örnek ile:</p>
 0101 &amp; 1010 = 0000
 </code></pre></div></div>
 
-<p>Bunu <code class="highlighter-rouge">&amp;=</code> olarak da kullanabilirsiniz.
+<p>Bunu <code class="language-plaintext highlighter-rouge">&amp;=</code> olarak da kullanabilirsiniz.
 Örneğin:</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">char</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span> <span class="c1">// a = 00010000</span>
@@ -318,7 +318,7 @@ Birkaç örnek ile:</p>
 0101 | 1010 = 1111
 </code></pre></div></div>
 
-<p>Bu operatörü <code class="highlighter-rouge">|=</code> olarak da kullanabiliyoruz. 
+<p>Bu operatörü <code class="language-plaintext highlighter-rouge">|=</code> olarak da kullanabiliyoruz. 
 Örnek vermek gerekirse:</p>
 
 <div class="language-c++ highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">char</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span> <span class="c1">// a = 00010000</span>

@@ -238,10 +238,10 @@ Bir nedenimiz yok.
 </code></pre></div></div>
 
 <p>Şimdi örnek olarak yazacağım LayoutManager’da, 
-ben <code class="highlighter-rouge">removeLayoutComponent</code> ve <code class="highlighter-rouge">addLayoutComponent</code> methodlarını kullanmayacağım.
+ben <code class="language-plaintext highlighter-rouge">removeLayoutComponent</code> ve <code class="language-plaintext highlighter-rouge">addLayoutComponent</code> methodlarını kullanmayacağım.
 Benim LayoutManager’larım genellikle elemanların listesini tutmaz 
 ve sonradan eklenen elemanlara göre ekstra işlem yapmaz. 
-Genellikle işlemleri <code class="highlighter-rouge">layoutContainer</code> ve <code class="highlighter-rouge">minimumLayoutSize</code> methodlarında yaparım.
+Genellikle işlemleri <code class="language-plaintext highlighter-rouge">layoutContainer</code> ve <code class="language-plaintext highlighter-rouge">minimumLayoutSize</code> methodlarında yaparım.
 Şimdi bir LayoutManager yazmaya başlayalım.
 Bu LayoutManager’ın ismi AltAlta ve özelliği de herşeyi alt alta dizmesi.
 Alt alta dizerken de tüm elemanların genişliğini sabit ve eşit tutuyor.
@@ -271,9 +271,9 @@ ve elemanların arasında da belirli miktarda bir boşluk bırakıyor.
 
 <p>Gördüğünüz gibi, tüm elemanlar kendi yüksekliklerine sahipler 
 fakat hepsinin genişliği eşitlenmiş durumda. 
-Şimdi bunu sağlayan <code class="highlighter-rouge">layoutContainer</code> methodunu inceleyelim.</p>
+Şimdi bunu sağlayan <code class="language-plaintext highlighter-rouge">layoutContainer</code> methodunu inceleyelim.</p>
 
-<p><code class="highlighter-rouge">layoutContainer</code> methodunda yapmamız gereken öncelikle parent Container’ın içindeki 
+<p><code class="language-plaintext highlighter-rouge">layoutContainer</code> methodunda yapmamız gereken öncelikle parent Container’ın içindeki 
 tüm Component’ların genişlik değerlerine bakıp maksimumu bulmak. 
 Bunu basit bir döngüyle hallediyoruz:</p>
 
@@ -289,15 +289,15 @@ Bunu basit bir döngüyle hallediyoruz:</p>
     <span class="o">}</span>
 </code></pre></div></div>
 
-<p>Böylece <code class="highlighter-rouge">maxWidth</code> isimli bir değişkende maksimum genişliği yakalamış olduk. 
+<p>Böylece <code class="language-plaintext highlighter-rouge">maxWidth</code> isimli bir değişkende maksimum genişliği yakalamış olduk. 
 Şimdi tüm Component’ları bu genişlikte birbirinin altına yerleştirelim. 
-LayoutManager yazarken dikkat etmemiz gereken bir diğer nokta da <code class="highlighter-rouge">Insets</code>. 
+LayoutManager yazarken dikkat etmemiz gereken bir diğer nokta da <code class="language-plaintext highlighter-rouge">Insets</code>. 
 Insets çok önemlidir. 
 Eğer Container bir <a href="java-swing-custom-border-yaratalim">Border</a> içeriyorsa, 
 bu bize bir Insets objesi olarak bildirilir. 
 Elemanları yerleştirirken, onları kenara dayamadan önce, 
 kenarda bir border var mı yok mu bakmamız gerekir. 
-<code class="highlighter-rouge">layoutContainer</code> methodumuzun geri kalan kısmı da şu şekilde olacak:</p>
+<code class="language-plaintext highlighter-rouge">layoutContainer</code> methodumuzun geri kalan kısmı da şu şekilde olacak:</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>     <span class="nc">Insets</span> <span class="n">borders</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="na">getInsets</span><span class="o">();</span>
      <span class="kt">int</span> <span class="n">top</span> <span class="o">=</span> <span class="n">borders</span><span class="o">.</span><span class="na">top</span> <span class="o">+</span> <span class="n">myInsets</span><span class="o">;</span>
@@ -311,20 +311,20 @@ kenarda bir border var mı yok mu bakmamız gerekir.
 </code></pre></div></div>
 
 <p>Burada yaptığımız işlem, her elemanı sayfaya eklediğimizde, 
-bir sonraki elemanın yukarıya ne kadar uzaklıkta olacağını hesaplamak(<code class="highlighter-rouge">int top</code> değişkeni) 
-ve elemanı <code class="highlighter-rouge">maxWidth</code> genişlikte tutmak. 
-<code class="highlighter-rouge">setBounds(int x, int y, int width, int height)</code> methodu ile elemanımızı 
+bir sonraki elemanın yukarıya ne kadar uzaklıkta olacağını hesaplamak(<code class="language-plaintext highlighter-rouge">int top</code> değişkeni) 
+ve elemanı <code class="language-plaintext highlighter-rouge">maxWidth</code> genişlikte tutmak. 
+<code class="language-plaintext highlighter-rouge">setBounds(int x, int y, int width, int height)</code> methodu ile elemanımızı 
 parent Container içerisinde konumlandırıyoruz.</p>
 
-<p>Şimdi <code class="highlighter-rouge">minimumLayoutSize</code> methoduna bakalım.
+<p>Şimdi <code class="language-plaintext highlighter-rouge">minimumLayoutSize</code> methoduna bakalım.
 Burada yapmamız gereken, parent Container’ımızın ne kadar yer kaplayacağını hesaplayıp bunu return etmek.
 Yine en önemli noktalardan birisi Border’ları, yani Insets’i hesaba katmayı unutmamak.
-Öncelikle yine bir <code class="highlighter-rouge">maxWidth</code> değişkeni tutarak elemanların genişliklerinin maksimumunu hesaplayacağız.
+Öncelikle yine bir <code class="language-plaintext highlighter-rouge">maxWidth</code> değişkeni tutarak elemanların genişliklerinin maksimumunu hesaplayacağız.
 Aynı zamanda tüm elemanların yüksekliklerinin de toplamını hesaplayacağız.
-Daha sonra <code class="highlighter-rouge">private int gap</code> olarak tuttuğumuz elemanlar arası boşlukları 
+Daha sonra <code class="language-plaintext highlighter-rouge">private int gap</code> olarak tuttuğumuz elemanlar arası boşlukları 
 ve border yüksekliklerini bu yüksekliğe ekleyeceğiz. 
 Hesapladığımız maksimum eleman genişliğine de border genişliklerini ekleyeceğiz. 
-Ben bu yükseklik ve genişlik değerlerine bir de private olarak tuttuğum <code class="highlighter-rouge">myInsets</code> değişkenini ekliyorum,
+Ben bu yükseklik ve genişlik değerlerine bir de private olarak tuttuğum <code class="language-plaintext highlighter-rouge">myInsets</code> değişkenini ekliyorum,
 benim Layout Manager’ım kenarlardan 5 pixel fazla boşluk bıraksın istediğim için.
 Şimdi kodu görelim:</p>
 
@@ -348,9 +348,9 @@ benim Layout Manager’ım kenarlardan 5 pixel fazla boşluk bıraksın istediğ
 </code></pre></div></div>
 
 <p>Şimdi bahsetmediğimiz bir method kaldı.
-<code class="highlighter-rouge">preferredLayoutSize</code> methodunda da Container’ımız için tercih ettiğimiz genişlik 
+<code class="language-plaintext highlighter-rouge">preferredLayoutSize</code> methodunda da Container’ımız için tercih ettiğimiz genişlik 
 ve yükseklik değerini vermemiz gerekiyor.
-Ben bunun <code class="highlighter-rouge">minimumLayoutSize</code>‘dan pek farklı olacağını düşünmediğim için 
+Ben bunun <code class="language-plaintext highlighter-rouge">minimumLayoutSize</code>‘dan pek farklı olacağını düşünmediğim için 
 doğrudan diğer fonksiyona yönlendiriyorum. 
 Yani şöyle:</p>
 

@@ -232,12 +232,12 @@ $("#jQueryOrnekBtnClick").click(function () {
 
 <h4 id="1-this-kullanımı">1. ‘this’ kullanımı</h4>
 
-<p><code class="highlighter-rouge">this</code> anahtar sözcüğü ile bir objenin içerisinde kullanılan, 
+<p><code class="language-plaintext highlighter-rouge">this</code> anahtar sözcüğü ile bir objenin içerisinde kullanılan, 
 o objenin kendisine verdiği referanstır. 
 Peki jQuery olayları ile ilgisi ne? 
 Şöyle ki, bir jQuery olayı olduğunda, o olayı dinleyen fonksiyon, 
 o olayın meydana geldiği DOM objesinin bir methoduymuş gibi çağırılır. 
-Yani olayı dinleyen fonksiyonun içerisinde kullandığımızda <code class="highlighter-rouge">this</code> anahtar sözcüğü 
+Yani olayı dinleyen fonksiyonun içerisinde kullandığımızda <code class="language-plaintext highlighter-rouge">this</code> anahtar sözcüğü 
 olayın meydana geldiği DOM objesinin referansını alır.</p>
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- HTML Kodumuz --&gt;</span>
@@ -465,7 +465,7 @@ Bunun için ben netmera’da şöyle bir çözüm getirmiştim:</p>
 <p>Tamam kabul bu biraz uçuk hayvani bir örnek oldu. 
 Daha basit bir örnek yazayım.
 Bir formdan bir kişi kartı oluşturalım dinamik olarak.
-Aşağıda 4 tane <code class="highlighter-rouge">input[type=text]</code> alan var. 
+Aşağıda 4 tane <code class="language-plaintext highlighter-rouge">input[type=text]</code> alan var. 
 Bunların hepsinin “listenChange” sınıfına sahip olduğunu görüyoruz.
 Dolayısıyla tek bir fonksiyon ile dördünün de değişim olayını yakalayabiliriz.
 Daha sonra üzerinde change olayı meydana gelen form elemanının id’sinden, 
@@ -597,7 +597,7 @@ Böyle durumlarda işlerin karışmasını önlemek için işte bu keywordler va
 
 <h4 id="41-preventdefault">4.1. preventDefault</h4>
 
-<p>Bir eventi yakaladığımızda, bu event üzerinden çağıracağımız <code class="highlighter-rouge">preventDefault</code> methodu, 
+<p>Bir eventi yakaladığımızda, bu event üzerinden çağıracağımız <code class="language-plaintext highlighter-rouge">preventDefault</code> methodu, 
 o html objesi üzerinde o event için default olarak çalışacak olan fonksiyonun çalışmasını engeller. 
 Mesela google.com sitesine bağlanan bir link var sitemizde 
 ve bu linke tıklandığında google’a gitmesin de sayfada başka birşey yapsın istiyorsunuz. 
@@ -660,7 +660,7 @@ jsFiddle: <a href="http://jsfiddle.net/sedran/LEghR/">jsfiddle.net/sedran/LEghR/
 
 <h5 id="43-return-false">4.3. return false</h5>
 
-<p>Aynı anda hem <code class="highlighter-rouge">preventDefault</code> hem de <code class="highlighter-rouge">stopPropagation</code> methodlarını çağırmamız gerektiğini düşünelim.
+<p>Aynı anda hem <code class="language-plaintext highlighter-rouge">preventDefault</code> hem de <code class="language-plaintext highlighter-rouge">stopPropagation</code> methodlarını çağırmamız gerektiğini düşünelim.
 Bu bir sorun değil, tabi ki de ard arda ikisini de çağırabiliriz.
 Fakat gerek yok.
 İkisini birden çağırmak istediğimizde sadece return false yazmamız yeterli.</p>
@@ -678,7 +678,7 @@ Fakat gerek yok.
 <span class="p">});</span>
 </code></pre></div></div>
 
-<p><code class="highlighter-rouge">preventDefault</code>, <code class="highlighter-rouge">stopPropagation</code> ve <code class="highlighter-rouge">return false</code> ile ilgili genel bir örnek için 
+<p><code class="language-plaintext highlighter-rouge">preventDefault</code>, <code class="language-plaintext highlighter-rouge">stopPropagation</code> ve <code class="language-plaintext highlighter-rouge">return false</code> ile ilgili genel bir örnek için 
 jsFiddle: <a href="http://jsfiddle.net/sedran/updNu/1/">jsfiddle.net/sedran/updNu/1/</a></p>
 
 <h4 id="5-bind-ve-unbind-methodları">5. bind ve unbind methodları</h4>
@@ -1038,7 +1038,7 @@ Fakat daha iyisi varken neden bunu yazalım değil mi? İşte daha kolayı:</p>
 <span class="p">});</span>
 </code></pre></div></div>
 
-<p><code class="highlighter-rouge">one</code> methodu ile eklediğimiz event dinleyici jQuery tarafından sadece event ilk gerçekleştiğinde çalıştırılır 
+<p><code class="language-plaintext highlighter-rouge">one</code> methodu ile eklediğimiz event dinleyici jQuery tarafından sadece event ilk gerçekleştiğinde çalıştırılır 
 ve daha sonra otomatik olarak unbind edilir. 
 Böylece bu işle biz uğraşmamış oluruz.</p>
 

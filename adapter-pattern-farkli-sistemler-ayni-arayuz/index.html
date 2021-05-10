@@ -215,16 +215,16 @@ Adapter pattern’ın ismi de aslında gerçek hayattaki adaptörlerden geliyor.
 Android cihazlar için Google Cloud Messaging (veya artık Firebase) kullanırken, 
 iOS cihazlar için Apple Push Notification Service (apns) kullanmanız gerekmektedir. 
 Microsoft cihazlar için de vardı bir servis birkaç sene önce kullanmıştım, şimdi hatırlayamadım. 
-Bu durumda <code class="highlighter-rouge">PushNotificationAdapter</code> gibi bir interface tasarlayıp, 
-bu interface’den <code class="highlighter-rouge">FirebasePushNotificationAdapter</code>, <code class="highlighter-rouge">ApplePushNotificationAdapter</code> 
-ve <code class="highlighter-rouge">MicrosoftPushNotificationAdapter</code> gibi 3 farklı sınıf oluşturabilirsiniz. 
-Hatta sadece test ortamınızda veya kendi bilgisayarınızda çalışacak <code class="highlighter-rouge">DummyPushNotificationAdapter</code> 
+Bu durumda <code class="language-plaintext highlighter-rouge">PushNotificationAdapter</code> gibi bir interface tasarlayıp, 
+bu interface’den <code class="language-plaintext highlighter-rouge">FirebasePushNotificationAdapter</code>, <code class="language-plaintext highlighter-rouge">ApplePushNotificationAdapter</code> 
+ve <code class="language-plaintext highlighter-rouge">MicrosoftPushNotificationAdapter</code> gibi 3 farklı sınıf oluşturabilirsiniz. 
+Hatta sadece test ortamınızda veya kendi bilgisayarınızda çalışacak <code class="language-plaintext highlighter-rouge">DummyPushNotificationAdapter</code> 
 gibi bir sınıf tasarlayıp sistemin göndermeye çalıştığı bildirimleri 
 bambaşka bir yere (log dosyası, veritabanı, vb.) gönderebilirsiniz.</p>
 
-<p>Ücretlendirme yapmak için <code class="highlighter-rouge">PaymentAdapter</code> interface’ini tanımlayıp, 
-farklı ödeme yöntemleri için <code class="highlighter-rouge">PaypalPaymentAdapter</code>, <code class="highlighter-rouge">VisaPaymentAdapter</code>, <code class="highlighter-rouge">MasterCardPaymentAdapter</code> 
-veya <code class="highlighter-rouge">MobilePaymentAdapter</code> gibi sınıflar oluşturabilirsiniz.</p>
+<p>Ücretlendirme yapmak için <code class="language-plaintext highlighter-rouge">PaymentAdapter</code> interface’ini tanımlayıp, 
+farklı ödeme yöntemleri için <code class="language-plaintext highlighter-rouge">PaypalPaymentAdapter</code>, <code class="language-plaintext highlighter-rouge">VisaPaymentAdapter</code>, <code class="language-plaintext highlighter-rouge">MasterCardPaymentAdapter</code> 
+veya <code class="language-plaintext highlighter-rouge">MobilePaymentAdapter</code> gibi sınıflar oluşturabilirsiniz.</p>
 
 <h3 id="sosyal-medyada-paylaşım-yapmak">Sosyal Medya’da Paylaşım Yapmak</h3>
 
@@ -249,7 +249,7 @@ Google Plus biraz daha ileri gitmiş ve kendileri Java kütüphanesi paylaşmı�
 ve tüm bu kodları yazacak <strong>güzel bir yere ihtiyacımız var</strong>. 
 Kodları yazacak güzel bir yer aramaya başlamadan önce, birkaç interface ve enumeration yazalım.</p>
 
-<p>Öncelikle sosyal medya platformlarını belirlemek için <code class="highlighter-rouge">Platform</code> adında bir <code class="highlighter-rouge">enum</code> tanımlayalım.</p>
+<p>Öncelikle sosyal medya platformlarını belirlemek için <code class="language-plaintext highlighter-rouge">Platform</code> adında bir <code class="language-plaintext highlighter-rouge">enum</code> tanımlayalım.</p>
 
 <h5 id="platform">Platform</h5>
 
@@ -261,7 +261,7 @@ Kodları yazacak güzel bir yer aramaya başlamadan önce, birkaç interface ve 
 </code></pre></div></div>
 
 <p>Paylaşılacak olan içeriği ve hangi platformda(yada hepsinde) paylaşılacağını gönderdiğimiz 
-<code class="highlighter-rouge">SocialMediaShareClient</code> interface’ini oluşturalım. 
+<code class="language-plaintext highlighter-rouge">SocialMediaShareClient</code> interface’ini oluşturalım. 
 Bu interface’i kullanan kişi, esas işi bunun yaptığını düşünecek.</p>
 
 <h5 id="socialmediashareclient">SocialMediaShareClient</h5>
@@ -288,9 +288,9 @@ Bu interface’i kullanan kişi, esas işi bunun yaptığını düşünecek.</p>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>En amatör zamanlarımda <code class="highlighter-rouge">interface</code> bile tanımlamazdım :)
-Az amatör zamanlarımda ise bu interface’in implementasyonunda tüm sosyal medya platformları için <code class="highlighter-rouge">if/else</code> 
-veya <code class="highlighter-rouge">switch/case</code> kullanır, tüm kodu oraya kitle olarak yazardım :)</p>
+<p>En amatör zamanlarımda <code class="language-plaintext highlighter-rouge">interface</code> bile tanımlamazdım :)
+Az amatör zamanlarımda ise bu interface’in implementasyonunda tüm sosyal medya platformları için <code class="language-plaintext highlighter-rouge">if/else</code> 
+veya <code class="language-plaintext highlighter-rouge">switch/case</code> kullanır, tüm kodu oraya kitle olarak yazardım :)</p>
 
 <p>Böyle bir çirkinlik yapmamamız için birileri çıkmış ve <strong>adapter pattern</strong>‘ı icat etmiş.</p>
 
@@ -303,14 +303,14 @@ Ben de bildiğimi iddia edemiyorum zaten.
 Mezun olduğumdan beri UML diagram çizmemiştim. 
 Hatalı çizgiler falan koyduysam, okların yönü falan ters olduysa kusura bakmayın.</p>
 
-<p>Öncelikle yukarıda kodunu paylaştığım <code class="highlighter-rouge">SocialMediaShareClient</code> arayüzünden 
-<code class="highlighter-rouge">DefaultSocialMediaShareClient</code> adında bir implementasyon sınıfı yazacağız. 
+<p>Öncelikle yukarıda kodunu paylaştığım <code class="language-plaintext highlighter-rouge">SocialMediaShareClient</code> arayüzünden 
+<code class="language-plaintext highlighter-rouge">DefaultSocialMediaShareClient</code> adında bir implementasyon sınıfı yazacağız. 
 Arayüzünde iki method olan bu sınıfın görevi verilen belli bir platformda 
 veya tüm platformlarda ilgili içeriğin paylaşılması olacak. 
 Hangi platformda nasıl paylaşılacağı ile ilgili detayları ise 
-<code class="highlighter-rouge">SocialMediaShareAdapter</code> arayüzünün implementasyonları içeriyor olacak.</p>
+<code class="language-plaintext highlighter-rouge">SocialMediaShareAdapter</code> arayüzünün implementasyonları içeriyor olacak.</p>
 
-<p>Bu sebeple aşağıdaki <code class="highlighter-rouge">SocialMediaShareAdapter</code> arayüzünü geliştiriyor olacağız:</p>
+<p>Bu sebeple aşağıdaki <code class="language-plaintext highlighter-rouge">SocialMediaShareAdapter</code> arayüzünü geliştiriyor olacağız:</p>
 
 <h5 id="socialmediashareadapter">SocialMediaShareAdapter</h5>
 
@@ -328,14 +328,14 @@ Hangi platformda nasıl paylaşılacağı ile ilgili detayları ise
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>Bu arayüz üzerinde bulunan <code class="highlighter-rouge">String share(String text, String link)</code> methodu, 
+<p>Bu arayüz üzerinde bulunan <code class="language-plaintext highlighter-rouge">String share(String text, String link)</code> methodu, 
 ilgili sosyal medyada verilen text ve linkin paylaşılmasını sağlayacak 
 ve paylaşılan gönderinin unique id’sini dönecek. 
 Her sosyal medya platformu bizden farklı formatta data bekliyor 
 ve cevap olarak da farklı formatta data dönüyor. 
 Data türleri arasındaki tüm çeviri işlemleri 
-<code class="highlighter-rouge">SocialMediaShareAdapter</code> arayüzünün implementasyonları içerisine gömülecek 
-ve böylece adaptörleri kullanan sınıfların (<code class="highlighter-rouge">DefaultSocialMediaShareClient</code>) 
+<code class="language-plaintext highlighter-rouge">SocialMediaShareAdapter</code> arayüzünün implementasyonları içerisine gömülecek 
+ve böylece adaptörleri kullanan sınıfların (<code class="language-plaintext highlighter-rouge">DefaultSocialMediaShareClient</code>) 
 bu işlemlerden haberi olmayacak.</p>
 
 <p>Bir sonraki aşamada Facebook, Twitter ve Google Plus için üç ayrı adaptörü aşağıdaki gibi tanımlıyoruz.</p>
@@ -392,7 +392,7 @@ bu işlemlerden haberi olmayacak.</p>
 <strong>Abstraction</strong>‘ın dibine vuruyoruz. 
 Daha abstract olsun diye adaptörlerin içine gerçek kodları yazmadım, siz yazdığımı varsayın :)</p>
 
-<p>Son olarak <code class="highlighter-rouge">DefaultSocialMediaShareClient</code> sınıfını yazıyoruz. 
+<p>Son olarak <code class="language-plaintext highlighter-rouge">DefaultSocialMediaShareClient</code> sınıfını yazıyoruz. 
 Bu sınıf hangi platform için hangi adaptörü kullanması gerektiğini bilen sınıf oluyor.</p>
 
 <h5 id="defaultsocialmediashareclient">DefaultSocialMediaShareClient</h5>
@@ -431,7 +431,7 @@ Bu sınıf hangi platform için hangi adaptörü kullanması gerektiğini bilen 
 </code></pre></div></div>
 
 <p>Bu şekilde sistemimizin mimari tasarımını tamamlamış oluyoruz. 
-Yukarıdaki kodda gördüğünüz <code class="highlighter-rouge">storePost</code> methodunun işlevinin 
+Yukarıdaki kodda gördüğünüz <code class="language-plaintext highlighter-rouge">storePost</code> methodunun işlevinin 
 paylaşılan içerikler ile ilgili kayıtların veritabanına yazılması olduğunu varsayabilirsiniz. 
 Böylece hangi sosyal medya platformuna giderse gitsin 
 bir içeriği düzgün şekilde paylaşabilen 

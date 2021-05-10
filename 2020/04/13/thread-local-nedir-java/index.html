@@ -184,17 +184,17 @@
 
   <div class="post-content" itemprop="articleBody">
     <p>Bu yazıda Java dünyasında sıkça kullanıldığına 
-veya bahsedildiğine şahit olduğumuz <code class="highlighter-rouge">ThreadLocal</code> sınıfını inceleyeceğiz.
-<code class="highlighter-rouge">ThreadLocal</code> sınıfı belirlediğimiz nesnelerin sadece aynı thread tarafından erişilebilir olmasını sağlar.
+veya bahsedildiğine şahit olduğumuz <code class="language-plaintext highlighter-rouge">ThreadLocal</code> sınıfını inceleyeceğiz.
+<code class="language-plaintext highlighter-rouge">ThreadLocal</code> sınıfı belirlediğimiz nesnelerin sadece aynı thread tarafından erişilebilir olmasını sağlar.
 Bu sayede <strong>thread safe</strong> olmayan nesneleri <strong>thread safe</strong> kullanmış oluruz.
-Bir <code class="highlighter-rouge">ThreadLocal</code> nesnesi içerisine yazdığımız nesne, 
-<code class="highlighter-rouge">ThreadLocal</code>‘e yazan thread tarafından çalıştırılan tüm methodlar tarafından okunabilir olacaktır.
+Bir <code class="language-plaintext highlighter-rouge">ThreadLocal</code> nesnesi içerisine yazdığımız nesne, 
+<code class="language-plaintext highlighter-rouge">ThreadLocal</code>‘e yazan thread tarafından çalıştırılan tüm methodlar tarafından okunabilir olacaktır.
 Gelin bu güçlü aracı avantajları ve dezavantajları ile inceleyelim.</p>
 
 <!--more-->
 
-<p>İlk olarak <code class="highlighter-rouge">ThreadLocal</code> teknik olarak nedir ona bakalım.
-Java’da her yaratılan <code class="highlighter-rouge">Thread</code> nesnesi içerisinde 
+<p>İlk olarak <code class="language-plaintext highlighter-rouge">ThreadLocal</code> teknik olarak nedir ona bakalım.
+Java’da her yaratılan <code class="language-plaintext highlighter-rouge">Thread</code> nesnesi içerisinde 
 o <em>Thread</em>‘e ait <em>ThreadLocal</em>‘lerin tutulduğu bir map bulunmaktadır.
 İki farklı thread aynı <em>ThreadLocal</em> nesnesine eriştikleri zaman,
 ThreadLocal nesnesi değerini o an kendisine erişen thread’in içerisindeki <em>Map</em>‘den okur veya yazar.
@@ -202,34 +202,34 @@ Bu sayede iki farklı <em>Thread</em> aynı ThreadLocal nesnesi üzerinden farkl
 
 <h3 id="nasıl-tanımlanmalı">Nasıl Tanımlanmalı?</h3>
 
-<p><code class="highlighter-rouge">new</code> anahtar kelimesi ile yarattığımız her bir yeni <em>ThreadLocal</em> nesnesi 
+<p><code class="language-plaintext highlighter-rouge">new</code> anahtar kelimesi ile yarattığımız her bir yeni <em>ThreadLocal</em> nesnesi 
 <em>Thread</em> içerisindeki Map’de farklı bir key olarak tutulmaktadır.
-Bu sebeple belirli bir amaç için kullanacağımız <code class="highlighter-rouge">ThreadLocal</code> nesnesinin 
+Bu sebeple belirli bir amaç için kullanacağımız <code class="language-plaintext highlighter-rouge">ThreadLocal</code> nesnesinin 
 sadece tek bir instance’ının olduğundan emin olmalıyız.</p>
 
-<p>Bunun en kolay yolu da <code class="highlighter-rouge">static final</code> olarak tanımlamaktır.
-Bu sayede oluşturacağımız <code class="highlighter-rouge">ThreadLocal</code> nesnesinin aynı <code class="highlighter-rouge">ClassLoader</code> içerisinde 
+<p>Bunun en kolay yolu da <code class="language-plaintext highlighter-rouge">static final</code> olarak tanımlamaktır.
+Bu sayede oluşturacağımız <code class="language-plaintext highlighter-rouge">ThreadLocal</code> nesnesinin aynı <code class="language-plaintext highlighter-rouge">ClassLoader</code> içerisinde 
 sadece tek bir instance’ının olacağını garanti etmiş oluruz.</p>
 
 <h3 id="nasıl-kullanılır">Nasıl Kullanılır?</h3>
 
-<p>Bu kısımda <code class="highlighter-rouge">ThreadLocal</code> üzerindeki method ve constructor’ları inceleyelim.</p>
+<p>Bu kısımda <code class="language-plaintext highlighter-rouge">ThreadLocal</code> üzerindeki method ve constructor’ları inceleyelim.</p>
 
 <h4 id="boş-threadlocal-oluşturma">Boş ThreadLocal Oluşturma</h4>
 
 <p>İçinde herhangi bir değer taşımayan (null value) bir ThreadLocal, doğrudan boş constructor kullanılarak üretilebilir. 
-Bu ThreadLocal nesnesine erişen her bir Thread <code class="highlighter-rouge">get</code> methodundan <code class="highlighter-rouge">null</code> değerini alacaktır.</p>
+Bu ThreadLocal nesnesine erişen her bir Thread <code class="language-plaintext highlighter-rouge">get</code> methodundan <code class="language-plaintext highlighter-rouge">null</code> değerini alacaktır.</p>
 
 <p>Bu yazıdaki örneklerde çoğunlukla Java’da thread-safe olmayan 
 <a href="https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat</a> sınıfını
-<code class="highlighter-rouge">ThreadLocal</code> içerisinde kullanacağım.</p>
+<code class="language-plaintext highlighter-rouge">ThreadLocal</code> içerisinde kullanacağım.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">final</span> <span class="kd">static</span> <span class="nc">ThreadLocal</span><span class="o">&lt;</span><span class="nc">SimpleDateFormat</span><span class="o">&gt;</span> <span class="no">DATE_FORMAT_THREAD_LOCAL</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ThreadLocal</span><span class="o">&lt;&gt;();</span>
 </code></pre></div></div>
 
 <h4 id="threadlocal-değerini-atamak">ThreadLocal Değerini Atamak</h4>
 
-<p>Boş veya dolu fark etmeksizin bir ThreadLocal nesnesine <code class="highlighter-rouge">set</code> methodunu kullanarak yeni bir değer atayabilirsiniz.
+<p>Boş veya dolu fark etmeksizin bir ThreadLocal nesnesine <code class="language-plaintext highlighter-rouge">set</code> methodunu kullanarak yeni bir değer atayabilirsiniz.
 Atadığınız değer sadece o değeri atadığınız Thread için geçerli olacaktır.
 Diğer Thread’lerin atayacakları veya okuyacakları değerler tamamen mevcut Thread’inkinden bağımsız olacaktır.</p>
 
@@ -242,9 +242,9 @@ Diğer Thread’lerin atayacakları veya okuyacakları değerler tamamen mevcut 
 
 <h4 id="threadlocal-değerini-okumak">ThreadLocal Değerini Okumak</h4>
 
-<p>Bir ThreadLocal üzerinde mevcut Thread için tutulmakta olan değeri almak için <code class="highlighter-rouge">get</code> methodu kullanılır.
+<p>Bir ThreadLocal üzerinde mevcut Thread için tutulmakta olan değeri almak için <code class="language-plaintext highlighter-rouge">get</code> methodu kullanılır.
 Mevcut Thread tarafından değer atanmamış veya başlangıç değeri bulunmayan bir ThreadLocal üzerindeki 
-<code class="highlighter-rouge">get</code> methodunu çağırmak <code class="highlighter-rouge">null</code> değerini dönecektir.</p>
+<code class="language-plaintext highlighter-rouge">get</code> methodunu çağırmak <code class="language-plaintext highlighter-rouge">null</code> değerini dönecektir.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
 <span class="kt">void</span> <span class="nf">shouldSetAndGetThreadLocalValue</span><span class="o">()</span> <span class="o">{</span>
@@ -265,18 +265,18 @@ Mevcut Thread tarafından değer atanmamış veya başlangıç değeri bulunmaya
 <h4 id="başlangıç-değeri-ile-oluşturma">Başlangıç Değeri ile Oluşturma</h4>
 
 <p>ThreadLocal nesneleri bir başlangıç değerine sahip olabilir. 
-Bu durumda <code class="highlighter-rouge">set</code> çağırmadan <code class="highlighter-rouge">get</code> methodunu ilk kez çağıran her bir Thread belirlenen initialValue değerini alırlar.
+Bu durumda <code class="language-plaintext highlighter-rouge">set</code> çağırmadan <code class="language-plaintext highlighter-rouge">get</code> methodunu ilk kez çağıran her bir Thread belirlenen initialValue değerini alırlar.
 Bu ilk değer her Thread için farklı olabileceği gibi aynı değer de verilebilir.
 Bu kısım tamamen kullanıcıya kalmış.
 Aşağıda başlangıç değeri ile bir ThreadLocal nesnesi oluşturmanın iki farklı yolunu görelim.</p>
 
 <h5 id="initialvalue-methodunun-override-edilmesi">initialValue Methodunun Override Edilmesi</h5>
 
-<p>ThreadLocal sınıfı üzerinde bulunan <code class="highlighter-rouge">initialValue</code> methodunun görevi 
+<p>ThreadLocal sınıfı üzerinde bulunan <code class="language-plaintext highlighter-rouge">initialValue</code> methodunun görevi 
 bir ThreadLocal nesnesi için ilk değerin üretilmesidir.
-Bu method ThreadLocal sınıfı içerisinde <code class="highlighter-rouge">return null</code> şeklinde yazılmıştır.</p>
+Bu method ThreadLocal sınıfı içerisinde <code class="language-plaintext highlighter-rouge">return null</code> şeklinde yazılmıştır.</p>
 
-<p>Aşağıdaki şekilde <code class="highlighter-rouge">initialValue</code> methodunun override edildiği ThreadLocal’den extend eden
+<p>Aşağıdaki şekilde <code class="language-plaintext highlighter-rouge">initialValue</code> methodunun override edildiği ThreadLocal’den extend eden
 bir anonymous class yazarak kullanacağımız ThreadLocal için bir ilk değer belirleyebiliyoruz.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
@@ -294,16 +294,16 @@ bir anonymous class yazarak kullanacağımız ThreadLocal için bir ilk değer b
 <span class="o">}</span>
 </code></pre></div></div>
 
-<h5 id="static-withinitial-methodu-i̇le-başlangıç-değerinin-verilmesi">Static <code class="highlighter-rouge">withInitial</code> Methodu İle Başlangıç Değerinin Verilmesi</h5>
+<h5 id="static-withinitial-methodu-i̇le-başlangıç-değerinin-verilmesi">Static <code class="language-plaintext highlighter-rouge">withInitial</code> Methodu İle Başlangıç Değerinin Verilmesi</h5>
 
-<p>Java 8 ile birlikte gelen static <code class="highlighter-rouge">withInitial</code> methodunu kullanarak 
+<p>Java 8 ile birlikte gelen static <code class="language-plaintext highlighter-rouge">withInitial</code> methodunu kullanarak 
 başlangıç değeri olan bir ThreadLocal nesnesi yaratabiliriz.</p>
 
-<p><code class="highlighter-rouge">initialValue</code> methodunu override ederken anonymous bir sınıf yaratmıştık.
+<p><code class="language-plaintext highlighter-rouge">initialValue</code> methodunu override ederken anonymous bir sınıf yaratmıştık.
 Bu yöntemde ise ThreadLocal içerisinde tanımlı ThreadLocal’den extend eden
-<code class="highlighter-rouge">SuppliedThreadLocal</code> isimli bir private inner class dönülüyor.</p>
+<code class="language-plaintext highlighter-rouge">SuppliedThreadLocal</code> isimli bir private inner class dönülüyor.</p>
 
-<p>Bu method parametre olarak bir <code class="highlighter-rouge">Supplier</code> alıyor 
+<p>Bu method parametre olarak bir <code class="language-plaintext highlighter-rouge">Supplier</code> alıyor 
 ve başlangıç değerine ihtiyacı olan her Thread tarafından bu Supplier çağırılıyor.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
@@ -320,9 +320,9 @@ ve başlangıç değerine ihtiyacı olan her Thread tarafından bu Supplier ça�
 <h4 id="threadlocal-değerinin-temizlenmesi">ThreadLocal Değerinin Temizlenmesi</h4>
 
 <p>Bir ThreadLocal’e bir Thread tarafından atanan değer yine aynı Thread tarafından temizlenebilir.
-Bu işlem <code class="highlighter-rouge">remove</code> methodu kullanılarak yapılır.</p>
+Bu işlem <code class="language-plaintext highlighter-rouge">remove</code> methodu kullanılarak yapılır.</p>
 
-<p><code class="highlighter-rouge">remove</code> işlemi sonrası <code class="highlighter-rouge">get</code> methodu <code class="highlighter-rouge">null</code> dönecektir.</p>
+<p><code class="language-plaintext highlighter-rouge">remove</code> işlemi sonrası <code class="language-plaintext highlighter-rouge">get</code> methodu <code class="language-plaintext highlighter-rouge">null</code> dönecektir.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
 <span class="kt">void</span> <span class="nf">shouldRemoveThreadLocalValue</span><span class="o">()</span> <span class="o">{</span>
@@ -390,9 +390,9 @@ bu değer ThreadLocal üzerinde tutularak
 
 <p>Örnek olarak Spring Security bir takım filtreler kullanarak 
 gelen HTTP isteğinin hangi kullanıcı tarafından yapıldığını anlar
-ve <code class="highlighter-rouge">SecurityContextHolder</code> içerisine kullanıcı verisini yazar.
+ve <code class="language-plaintext highlighter-rouge">SecurityContextHolder</code> içerisine kullanıcı verisini yazar.
 Bu sınıf varsayılan olarak ThreadLocal kullanmaktadır.
-İstek Controller veya servis katmanlarımıza geldiğinde istersek <code class="highlighter-rouge">SecurityContextHolder</code> üzerinden
+İstek Controller veya servis katmanlarımıza geldiğinde istersek <code class="language-plaintext highlighter-rouge">SecurityContextHolder</code> üzerinden
 kullanıcı bilgisine static methodlar kullanarak ulaşabiliyoruz.</p>
 
 <h4 id="thread-safe-olmayan-sınıfların-singleton-gibi-kullanılması">Thread-Safe Olmayan Sınıfların Singleton Gibi Kullanılması</h4>
@@ -406,7 +406,7 @@ bu nesnenin state’inde bir takım istenmeyen sonuçlar ortaya çıkabilir.</p>
 uygulama genelinde tek instance olan bir singleton olarak tanımlamak yerine,
 her thread’de bir instance’ı olacak şekilde oluşturabiliriz.</p>
 
-<p>Örnek olarak yukarıdaki örneklerde de kullandığım <code class="highlighter-rouge">SimpleDateFormat</code> sınıfını verebilirim.
+<p>Örnek olarak yukarıdaki örneklerde de kullandığım <code class="language-plaintext highlighter-rouge">SimpleDateFormat</code> sınıfını verebilirim.
 Bu sınıf thread-safe olmadığı için global değişken olarak kullanılamıyor.
 Onun yerine bu sınıfın ya her methodda yeni bir nesnesinin oluşturulması gerekiyor
 ya da ThreadLocal üzerinde tutulması gerekiyor.</p>
@@ -477,13 +477,13 @@ Bir ClassLoader belki binlerce sınıfı memory’ye yükleyeceği için Garbage
 Uygulama Application Server üzerinde tekrar ayağa kaldırılırken yepyeni bir ClassLoader oluşturulur
 ve yeniden tüm class’lar load edilir.
 Bu şekilde uygulamalar aç/kapa yaptıkça Application Server üzerinde ClassLoader’lar birikecektir
-ve nihayetinde <code class="highlighter-rouge">java.lang.OutOfMemoryError: PermGen space</code> hatası alınacaktır.
+ve nihayetinde <code class="language-plaintext highlighter-rouge">java.lang.OutOfMemoryError: PermGen space</code> hatası alınacaktır.
 Bu noktadan sonra artık Application Server’ın restart edilmesi gerekecektir.</p>
 
 <p>Eğer Application Server Thread’lerinin üzerine bir ThreadLocal yazılıyorsa
 bunun iş biterken silindiğinden emin olunması gerekir.</p>
 
-<p>Bu sebeple ThreadLocal yazıldıktan sonraki işlem <code class="highlighter-rouge">try/finally</code> bloğu ile yazılmalı.
+<p>Bu sebeple ThreadLocal yazıldıktan sonraki işlem <code class="language-plaintext highlighter-rouge">try/finally</code> bloğu ile yazılmalı.
 Ben aşağıdaki gibi yazıyorum genellikle:</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">ThreadLocal</span><span class="o">&lt;</span><span class="nc">UserContext</span><span class="o">&gt;</span> <span class="no">USER_CONTEXT_THREAD_LOCAL</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ThreadLocal</span><span class="o">&lt;&gt;();</span>
@@ -516,12 +516,12 @@ Yoksa ExecutorService aynı thread’leri kullanarak başka işleri de koşacağ
 ThreadLocal’e set ettiğimiz değer alakasız başka işler tarafından erişilebilir olacaktır.</p>
 
 <p>Aynı zamanda executorService’e submit ettiğimiz Runnable ayrı bir thread tarafından çalıştırılacağı için,
-<code class="highlighter-rouge">executorService.submit()</code> methodunu çağırdığımız thread’deki ThreadLocal’leri görmeyecektir.</p>
+<code class="language-plaintext highlighter-rouge">executorService.submit()</code> methodunu çağırdığımız thread’deki ThreadLocal’leri görmeyecektir.</p>
 
 <p>Aşağıdaki kodda executorService’e bir task verilmeden önce oradaki iş parçacığı ile paylaşmak istediğimiz
 ThreadLocal değeri önce bir değişkene aktarılıyor.
 Daha sonra executorService’in içerisinde işi çalıştıran Thread’in ThreadLocal’ine tekrar set ediliyor.
-Daha önemlisi, executorService’deki işimiz bittiğinde <code class="highlighter-rouge">finally</code> bloğu içerisinde ThreadLocal’i tekrar temizliyoruz.
+Daha önemlisi, executorService’deki işimiz bittiğinde <code class="language-plaintext highlighter-rouge">finally</code> bloğu içerisinde ThreadLocal’i tekrar temizliyoruz.
 Bu sayede ExecutorService tarafından yapılan diğer işlere fazladan bilgi vermemiş oluyoruz.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kt">void</span> <span class="nf">executeBatchTask</span><span class="o">()</span> <span class="o">{</span>

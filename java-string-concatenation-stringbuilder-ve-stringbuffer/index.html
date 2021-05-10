@@ -186,7 +186,7 @@
     
 <p>Gece gece canım sıkıldı, yine yerimde duramadım, 
 bir benchmark yapıp yazılım camiasında sık sık dile getirilen bir noktaya bir de ben parmak basayım dedim. 
-Biliyorsunuz ki Java ile birşeyler geliştirirken sık sık <code class="highlighter-rouge">String</code>‘leri uç uca eklememiz gerekiyor. 
+Biliyorsunuz ki Java ile birşeyler geliştirirken sık sık <code class="language-plaintext highlighter-rouge">String</code>‘leri uç uca eklememiz gerekiyor. 
 En basit okul ödevinden en komplike web projelerine kadar bu işlemi 
 hiç düşünmeden concatenation yöntemi ile yapanlarımız var. 
 Hiç düşünür müydünüz bunun bir performans sorunu olarak değerlendirilebileceğini 
@@ -209,12 +209,12 @@ fakat ihtiyacınıza göre hangisini kullanmanız gerektiğine karar vermek iyi 
 
 <p>Java’da yarattığımız her string varsayılan olarak bu türde yaratılır.
 Yani iki tırnak içine karakterleri yazıp bunu bir değişkene atayacak olursanız,
-bu değişkenin türü <code class="highlighter-rouge">String</code>‘dir.
-<code class="highlighter-rouge">String</code> literatürde immutable, yani değişmez olarak geçer.
+bu değişkenin türü <code class="language-plaintext highlighter-rouge">String</code>‘dir.
+<code class="language-plaintext highlighter-rouge">String</code> literatürde immutable, yani değişmez olarak geçer.
 Dökümantasyonunda da farkettiyseniz, 
-<code class="highlighter-rouge">String</code>‘in değişmesi için çağırabileceğimiz bütün fonksiyonlar yeni bir <code class="highlighter-rouge">String</code> objesi döner.
-Yani orjinal <code class="highlighter-rouge">String</code> objesine birşeycik olmaz.
-Yani aşağıdaki kod parçacığını çalıştırdığınızda elinizde birbirinden farklı 3 adet <code class="highlighter-rouge">String</code> objesi olur.</p>
+<code class="language-plaintext highlighter-rouge">String</code>‘in değişmesi için çağırabileceğimiz bütün fonksiyonlar yeni bir <code class="language-plaintext highlighter-rouge">String</code> objesi döner.
+Yani orjinal <code class="language-plaintext highlighter-rouge">String</code> objesine birşeycik olmaz.
+Yani aşağıdaki kod parçacığını çalıştırdığınızda elinizde birbirinden farklı 3 adet <code class="language-plaintext highlighter-rouge">String</code> objesi olur.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">String</span> <span class="n">s1</span> <span class="o">=</span> <span class="s">"aBcD1"</span><span class="o">;</span>
 <span class="nc">String</span> <span class="n">s2</span> <span class="o">=</span> <span class="n">s1</span> <span class="o">+</span> <span class="s">"a."</span><span class="o">;</span> <span class="c1">// s1 değişmeden kaldı</span>
@@ -223,15 +223,15 @@ Yani aşağıdaki kod parçacığını çalıştırdığınızda elinizde birbir
 
 <h4 id="stringbuilder">StringBuilder</h4>
 
-<p><code class="highlighter-rouge">StringBuilder</code> sınıfı <code class="highlighter-rouge">String</code> objelerinin birleştirme işlemindeki gereksiz bellek 
+<p><code class="language-plaintext highlighter-rouge">StringBuilder</code> sınıfı <code class="language-plaintext highlighter-rouge">String</code> objelerinin birleştirme işlemindeki gereksiz bellek 
 ve işlemci kullanımını azaltmak için yaratıldı. 
 Yazının son kısmında göstereceğim benchmark ile de gösteriyor ki 
-döngü içerisinde yapılan <code class="highlighter-rouge">String</code> concatenation işlemlerinde büyük ölçüde performans sağlıyor. 
-Normalde her <code class="highlighter-rouge">String</code> birleştirme işleminde yeni bir <code class="highlighter-rouge">String</code> objesi yaratılır 
-ve varolan <code class="highlighter-rouge">String</code> objesi değişmeden kalır. 
-Bu işlemler <code class="highlighter-rouge">StringBuilder</code> sınıfı ile yapıldığında ise tek bir obje ile 
-istediğimiz kadar <code class="highlighter-rouge">String</code>‘i birbirine ekleyebiliriz. 
-Aşağıda da basitçe <code class="highlighter-rouge">StringBuilder</code> sınıfı nasıl kullanılır ona bakalım:</p>
+döngü içerisinde yapılan <code class="language-plaintext highlighter-rouge">String</code> concatenation işlemlerinde büyük ölçüde performans sağlıyor. 
+Normalde her <code class="language-plaintext highlighter-rouge">String</code> birleştirme işleminde yeni bir <code class="language-plaintext highlighter-rouge">String</code> objesi yaratılır 
+ve varolan <code class="language-plaintext highlighter-rouge">String</code> objesi değişmeden kalır. 
+Bu işlemler <code class="language-plaintext highlighter-rouge">StringBuilder</code> sınıfı ile yapıldığında ise tek bir obje ile 
+istediğimiz kadar <code class="language-plaintext highlighter-rouge">String</code>‘i birbirine ekleyebiliriz. 
+Aşağıda da basitçe <code class="language-plaintext highlighter-rouge">StringBuilder</code> sınıfı nasıl kullanılır ona bakalım:</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">();</span>
 <span class="c1">// append methodu ile istediğimiz kadar </span>
@@ -246,44 +246,44 @@ Aşağıda da basitçe <code class="highlighter-rouge">StringBuilder</code> sın
 
 <h4 id="stringbuffer">StringBuffer</h4>
 
-<p>Bu sınıf ile <code class="highlighter-rouge">StringBuilder</code> yaptıkları iş olarak baktığımızda neredeyse tamamen aynı.
-<code class="highlighter-rouge">String</code> objesinin concatenation işlemlerinde fazladan bellek 
+<p>Bu sınıf ile <code class="language-plaintext highlighter-rouge">StringBuilder</code> yaptıkları iş olarak baktığımızda neredeyse tamamen aynı.
+<code class="language-plaintext highlighter-rouge">String</code> objesinin concatenation işlemlerinde fazladan bellek 
 ve işlemci kullanımına karşı ikisi de aynı avantajı sağlar. 
-Aralarındaki tek fark, <code class="highlighter-rouge">StringBuffer</code> bu işi thread safe olarak yapar. 
+Aralarındaki tek fark, <code class="language-plaintext highlighter-rouge">StringBuffer</code> bu işi thread safe olarak yapar. 
 Thread safety kavramını açıklamanın yeri bu yazı değil fakat kabaca değinmek gerekirse, 
 şu şekilde açıklayabilirim: 
 eğer bir nesne birden fazla thread tarafından rastgele olarak kullanılıyorsa 
 ve bu nesne bir thread kendisiyle işini bitirmeden diğerinin işine başlamıyorsa, 
 o nesneye thread safe diyoruz. 
 Bir de kaba bir örnek vereyim. 
-Mesela <code class="highlighter-rouge">StringBuilder</code> objesine iki farklı thread aynı anda erişip birisi “abc”, 
+Mesela <code class="language-plaintext highlighter-rouge">StringBuilder</code> objesine iki farklı thread aynı anda erişip birisi “abc”, 
 diğeri de “def” append etmeye çalışırsa, 
-en son elde ettiğimiz <code class="highlighter-rouge">String</code>‘in “adefbc”, “deabfc” veya “adbecf” olma 
-veya sistemin <code class="highlighter-rouge">Exception</code> fırlatma ihtimalleri var. 
-Bu durumda ya synchronized değişkenler kullanarak elle <code class="highlighter-rouge">StringBuilder</code> objesini koruyacağız, 
-ya da kendi kendini koruyabilen <code class="highlighter-rouge">StringBuffer</code> objesini kullanacağız. 
-<code class="highlighter-rouge">StringBuffer</code> objesinin thread safe yapısı da kendisini <code class="highlighter-rouge">StringBuilder</code>‘a göre biraz yavaş kılıyor. 
-Yani eğer sisteminizde birden fazla thread yoksa, <code class="highlighter-rouge">StringBuilder</code> kullanmanızı tavsiye ederim.</p>
+en son elde ettiğimiz <code class="language-plaintext highlighter-rouge">String</code>‘in “adefbc”, “deabfc” veya “adbecf” olma 
+veya sistemin <code class="language-plaintext highlighter-rouge">Exception</code> fırlatma ihtimalleri var. 
+Bu durumda ya synchronized değişkenler kullanarak elle <code class="language-plaintext highlighter-rouge">StringBuilder</code> objesini koruyacağız, 
+ya da kendi kendini koruyabilen <code class="language-plaintext highlighter-rouge">StringBuffer</code> objesini kullanacağız. 
+<code class="language-plaintext highlighter-rouge">StringBuffer</code> objesinin thread safe yapısı da kendisini <code class="language-plaintext highlighter-rouge">StringBuilder</code>‘a göre biraz yavaş kılıyor. 
+Yani eğer sisteminizde birden fazla thread yoksa, <code class="language-plaintext highlighter-rouge">StringBuilder</code> kullanmanızı tavsiye ederim.</p>
 
 <p>Şimdi yaptığım benchmark uygulamasının kodlarını dökeyim ortaya.
 Yaptığım işlem basitçe şu:</p>
 
 <ol>
-  <li>Lorem ipsum satırlarından oluşan dosyayı okuyup her satırı global bir <code class="highlighter-rouge">ArrayList</code>‘e kaydet.</li>
-  <li><code class="highlighter-rouge">ArrayList</code> içindeki elemanları kopyalayıp tekrar ArrayList’e ekleyerek 
+  <li>Lorem ipsum satırlarından oluşan dosyayı okuyup her satırı global bir <code class="language-plaintext highlighter-rouge">ArrayList</code>‘e kaydet.</li>
+  <li><code class="language-plaintext highlighter-rouge">ArrayList</code> içindeki elemanları kopyalayıp tekrar ArrayList’e ekleyerek 
 1044480 adet String’den oluşan bir ArrayList elde et.</li>
-  <li>Toplamda 100 defa <code class="highlighter-rouge">String</code> concatenation, <code class="highlighter-rouge">StringBuilder</code> ve <code class="highlighter-rouge">StringBuffer</code> kullanarak 
-ArrayList içerisindeki <code class="highlighter-rouge">String</code>‘leri birleştir ve sürelerin ortalamalarını hesapla.</li>
+  <li>Toplamda 100 defa <code class="language-plaintext highlighter-rouge">String</code> concatenation, <code class="language-plaintext highlighter-rouge">StringBuilder</code> ve <code class="language-plaintext highlighter-rouge">StringBuffer</code> kullanarak 
+ArrayList içerisindeki <code class="language-plaintext highlighter-rouge">String</code>‘leri birleştir ve sürelerin ortalamalarını hesapla.</li>
   <li>Oluşan sonuçları her adımda ve programın sonunda konsola yaz.</li>
 </ol>
 
-<p>Dürüst olmak gerekirse <code class="highlighter-rouge">String</code> concatenation işlemi o kadar uzun sürdü ki, 
-ilk stepte programı durdurup <code class="highlighter-rouge">String</code> ile yaptığım işlemi comment-out ettim 
-ve tekrar çalıştırdığımda sadece <code class="highlighter-rouge">StringBuilder</code> ve <code class="highlighter-rouge">StringBuffer</code>‘ı karşılaştırdım.</p>
+<p>Dürüst olmak gerekirse <code class="language-plaintext highlighter-rouge">String</code> concatenation işlemi o kadar uzun sürdü ki, 
+ilk stepte programı durdurup <code class="language-plaintext highlighter-rouge">String</code> ile yaptığım işlemi comment-out ettim 
+ve tekrar çalıştırdığımda sadece <code class="language-plaintext highlighter-rouge">StringBuilder</code> ve <code class="language-plaintext highlighter-rouge">StringBuffer</code>‘ı karşılaştırdım.</p>
 
-<p><code class="highlighter-rouge">String</code> işin içine girdiğinde çok daha küçük bir <code class="highlighter-rouge">ArrayList</code> (16320 cümle) ile çalıştım 
+<p><code class="language-plaintext highlighter-rouge">String</code> işin içine girdiğinde çok daha küçük bir <code class="language-plaintext highlighter-rouge">ArrayList</code> (16320 cümle) ile çalıştım 
 ve döngülerin iterasyon sayılarını da düşük tuttum ki gece bitmeden bir sonuca varabileyim. 
-Aşağıda içinde <code class="highlighter-rouge">String</code> objesinin concatenation operatörünün de kullanıldığı 16320 cümleyi birleştirme süreleri:</p>
+Aşağıda içinde <code class="language-plaintext highlighter-rouge">String</code> objesinin concatenation operatörünün de kullanıldığı 16320 cümleyi birleştirme süreleri:</p>
 
 <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Size of WORD_LIST: 16320
 Started 1. main iteration...
@@ -294,9 +294,9 @@ Finished 1. main iteration...
 </code></pre></div></div>
 
 <p>Buradan anlayacağımız üzere, 
-16320 tane <code class="highlighter-rouge">String</code> objesini birleştirmek için kesinlikle <code class="highlighter-rouge">String</code> concatenation kullanmıyoruz :).
-<code class="highlighter-rouge">String</code> concatenation işlemini uygulamadan kaldırdıktan sonra 
-<code class="highlighter-rouge">ArrayList</code>‘in boyutunu arttırıp (1044480 cümle) uygulamamızı 10 sample üretecek şekilde çalıştırırsak 
+16320 tane <code class="language-plaintext highlighter-rouge">String</code> objesini birleştirmek için kesinlikle <code class="language-plaintext highlighter-rouge">String</code> concatenation kullanmıyoruz :).
+<code class="language-plaintext highlighter-rouge">String</code> concatenation işlemini uygulamadan kaldırdıktan sonra 
+<code class="language-plaintext highlighter-rouge">ArrayList</code>‘in boyutunu arttırıp (1044480 cümle) uygulamamızı 10 sample üretecek şekilde çalıştırırsak 
 şu sonuçları elde ediyoruz:</p>
 
 <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Size of WORD_LIST: 1044480
@@ -345,20 +345,20 @@ Average time for string builder: 166.49999999999997 ms.
 Average time for string buffer: 178.61999999999998 ms.
 </code></pre></div></div>
 
-<p>Raporun sonundaki ortalamadan anlayacağımız gibi <code class="highlighter-rouge">StringBuilder</code> objesi 
-<code class="highlighter-rouge">StringBuffer</code> objesine göre daha hızlı bir şekilde, 
+<p>Raporun sonundaki ortalamadan anlayacağımız gibi <code class="language-plaintext highlighter-rouge">StringBuilder</code> objesi 
+<code class="language-plaintext highlighter-rouge">StringBuffer</code> objesine göre daha hızlı bir şekilde, 
 daha kısa sürede işini hallediyor. 
 Peki bazı ara steplerdeki anormal sonuçları nasıl açıklayabiliriz?
-Nasıl oluyor da bazen <code class="highlighter-rouge">StringBuffer</code> öne geçiyor? 
+Nasıl oluyor da bazen <code class="language-plaintext highlighter-rouge">StringBuffer</code> öne geçiyor? 
 Bunu 6 ay önce olsa açıklayamazdım fakat İşletim Sistemleri dersini aldığım için artık açıklayabilirim.
 İşletim Sistemleri Multi-Threading/Multi-Processing yapılarından dolayı sürekli olarak bizim işlemimizi yapmıyor.
 Büyük bir for döngüsü bitene kadar işlemcide çalışamaz mesela.
 İşletim sistemi o işlemi ara sıra duraklatıp bilgisayardaki diğer işlerle de ilgilenmek zorunda kalır.
 Hatta bu uygulamada yarattığımız yoğun işlemci kullanımı sebebiye de 
 işletim sistemi bizim uygulamamızın önceliğini düşürüyor olabilir.
-<code class="highlighter-rouge">StringBuilder</code> çalışırken bizim işlemimiz işletim sistemi tarafından 10 kere duraklatılmış 
-ve <code class="highlighter-rouge">StringBuffer</code> çalışırken de 8 kere duraklatılmış olabilir.
-Bu da <code class="highlighter-rouge">StringBuilder</code> kullanırken ölçtüğümüz zamanın daha fazla çıktığı stepleri kabaca açıklayabilir.</p>
+<code class="language-plaintext highlighter-rouge">StringBuilder</code> çalışırken bizim işlemimiz işletim sistemi tarafından 10 kere duraklatılmış 
+ve <code class="language-plaintext highlighter-rouge">StringBuffer</code> çalışırken de 8 kere duraklatılmış olabilir.
+Bu da <code class="language-plaintext highlighter-rouge">StringBuilder</code> kullanırken ölçtüğümüz zamanın daha fazla çıktığı stepleri kabaca açıklayabilir.</p>
 
 <h4 id="özet">Özet</h4>
 
@@ -366,13 +366,13 @@ Bu da <code class="highlighter-rouge">StringBuilder</code> kullanırken ölçtü
 Bir özet geçelim:</p>
 
 <ol>
-  <li><code class="highlighter-rouge">String</code> <strong>immutable(değişmez)</strong> bir sınıftır. 
-<code class="highlighter-rouge">String</code> üzerinden yapacağımız çoğu işlem yeni bir <code class="highlighter-rouge">String</code> objesi yaratır ve orjinal <code class="highlighter-rouge">String</code> objesi değişmez.</li>
-  <li>Çok fazla <code class="highlighter-rouge">String</code> birleştireceksek <code class="highlighter-rouge">String</code> concatenation kullanmıyoruz. 
+  <li><code class="language-plaintext highlighter-rouge">String</code> <strong>immutable(değişmez)</strong> bir sınıftır. 
+<code class="language-plaintext highlighter-rouge">String</code> üzerinden yapacağımız çoğu işlem yeni bir <code class="language-plaintext highlighter-rouge">String</code> objesi yaratır ve orjinal <code class="language-plaintext highlighter-rouge">String</code> objesi değişmez.</li>
+  <li>Çok fazla <code class="language-plaintext highlighter-rouge">String</code> birleştireceksek <code class="language-plaintext highlighter-rouge">String</code> concatenation kullanmıyoruz. 
 Bu işlem <strong>çok uzun sürer, yüksek bellek ve CPU kullanımına</strong> sebep olabilir.</li>
-  <li><strong>Birden fazla thread</strong> kullanıyorsak ve birden fazla thread aynı <code class="highlighter-rouge">StringBuilder</code> objesine erişiyorsa, 
-istenmedik sonuçlar doğabilir. Bu durumda <code class="highlighter-rouge">StringBuffer</code> kullanıyoruz.</li>
-  <li><strong>Birden fazla thread kullanmıyorsak</strong>, performans açısından <code class="highlighter-rouge">StringBuffer</code> değil <code class="highlighter-rouge">StringBuilder</code> kullanıyoruz.</li>
+  <li><strong>Birden fazla thread</strong> kullanıyorsak ve birden fazla thread aynı <code class="language-plaintext highlighter-rouge">StringBuilder</code> objesine erişiyorsa, 
+istenmedik sonuçlar doğabilir. Bu durumda <code class="language-plaintext highlighter-rouge">StringBuffer</code> kullanıyoruz.</li>
+  <li><strong>Birden fazla thread kullanmıyorsak</strong>, performans açısından <code class="language-plaintext highlighter-rouge">StringBuffer</code> değil <code class="language-plaintext highlighter-rouge">StringBuilder</code> kullanıyoruz.</li>
 </ol>
 
 <p>Programın kaynak kodlarını indirmek için <a href="https://app.box.com/s/xxw3aaw3v12szpamuww3">buraya tıklayın</a>.</p>

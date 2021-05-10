@@ -207,7 +207,7 @@ veya <a href="https://bootstrapmade.com/">buraya</a> tıklayarak göz atabilirsi
 Bu özellikler Bootstrap’in sitesinde <a href="https://getbootstrap.com/docs/4.2/content/reboot/">Content</a> başlığı altında anlatılmış. 
 Bunu yapmasının amacı siz web sitenizde hiçbir CSS kodu yazmasanız bile kullandığınız HMTL taglerinin farklı tarayıcı 
 ve işletim sistemlerinde aynı görüntüyü vermesini sağlamaktır. 
-Örneğin siz bir <code class="highlighter-rouge">&lt;h1&gt;&lt;/h1&gt;</code> tagi kullandığınız zaman Bootstrap kullanmazsanız bu bütün tarayıcılarda farklı görünecektir. 
+Örneğin siz bir <code class="language-plaintext highlighter-rouge">&lt;h1&gt;&lt;/h1&gt;</code> tagi kullandığınız zaman Bootstrap kullanmazsanız bu bütün tarayıcılarda farklı görünecektir. 
 Bunu sağlamak için eskiden <a href="https://meyerweb.com/eric/tools/css/reset/">Eric Mayer’in CSS Reset</a> yöntemini kullanırdık. 
 Artık Bootstrap kullanarak da default HTML stilini tüm tarayıcılarda aynı görünecek şekilde konfigüre edebiliyoruz.</p>
 
@@ -274,10 +274,10 @@ bir tanıyalım:</p>
 </tbody>
 </table>
 
-<h3 id="container-nedir"><code class="highlighter-rouge">.container</code> Nedir?</h3>
+<h3 id="container-nedir"><code class="language-plaintext highlighter-rouge">.container</code> Nedir?</h3>
 
 <p>Eğer sitemizin yatay olarak tüm ekrana yayılmasını istemiyorsak tüm HTML kodumuzu 
-aşağıdaki gibi <code class="highlighter-rouge">class</code> özelliği <code class="highlighter-rouge">container</code> olan bir <code class="highlighter-rouge">div</code>‘in içine alabiliriz.</p>
+aşağıdaki gibi <code class="language-plaintext highlighter-rouge">class</code> özelliği <code class="language-plaintext highlighter-rouge">container</code> olan bir <code class="language-plaintext highlighter-rouge">div</code>‘in içine alabiliriz.</p>
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"container"</span><span class="nt">&gt;</span>
     Geri kalan her şey buraya 
@@ -290,19 +290,19 @@ Yukarıdaki tabloda farklı ekran genişliklerinde container boyutunun ne kadar 
 genişliği 576 piksel ile 768 piksel arasındaki bir ekranda container 540 piksel alan 
 kaplayıp sayfanın tam ortasında yer alacaktır.</p>
 
-<p>Eğer içerik her zaman sayfanın tüm genişliğini kapsasın istiyorsanız, <code class="highlighter-rouge">container</code> yerine 
-<code class="highlighter-rouge">container-fluid</code> sınıfını kullanmanız yeterli.</p>
+<p>Eğer içerik her zaman sayfanın tüm genişliğini kapsasın istiyorsanız, <code class="language-plaintext highlighter-rouge">container</code> yerine 
+<code class="language-plaintext highlighter-rouge">container-fluid</code> sınıfını kullanmanız yeterli.</p>
 
 <h3 id="satır-ve-sütunlar">Satır ve Sütunlar</h3>
 
 <p>Grid system satır ve sütunlardan oluşur.</p>
 
-<p>Satırlar <code class="highlighter-rouge">row</code> sınıfı ile oluşturulur ve sayfada alt alta görünürler. 
+<p>Satırlar <code class="language-plaintext highlighter-rouge">row</code> sınıfı ile oluşturulur ve sayfada alt alta görünürler. 
 Sütunlar dışında içerik barındırmamalıdır.</p>
 
 <p>Satırların içerisine doğrudan sütunlar gelir. 
 Sütunlar responsive kullanım tarzınıza bağlı olarak yan yana veya alt alta gelebilirler. 
-Sütun oluşturmak için <code class="highlighter-rouge">col</code>, <code class="highlighter-rouge">col-{boyut}</code> veya <code class="highlighter-rouge">col-{kırılım}-{boyut}</code> sınıflarını kullanırız.</p>
+Sütun oluşturmak için <code class="language-plaintext highlighter-rouge">col</code>, <code class="language-plaintext highlighter-rouge">col-{boyut}</code> veya <code class="language-plaintext highlighter-rouge">col-{kırılım}-{boyut}</code> sınıflarını kullanırız.</p>
 
 <p>Bootstrap grid sistemini kullandığınız alanı 12 eşit parçaya böler. 
 Bu parçaları birleştirerek kullanarak sütunlarımızın genişliklerini belirleriz. 
@@ -386,7 +386,7 @@ ve sağdaki sütun da satırda geri kalan alanı dolduracak şekilde konumlandı
 <span class="nt">&lt;/div&gt;</span>
 </code></pre></div></div>
 
-<p>Sadece bir sütunun genişliğini belirtip gerisine sadece <code class="highlighter-rouge">col</code> sınıfını verirsek, 
+<p>Sadece bir sütunun genişliğini belirtip gerisine sadece <code class="language-plaintext highlighter-rouge">col</code> sınıfını verirsek, 
 genişliği belirtilmemiş olan sütunlar kendilerine kalan alanı eşit ölçülerde paylaşırlar.</p>
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row"</span><span class="nt">&gt;</span>
@@ -405,10 +405,10 @@ genişliği belirtilmemiş olan sütunlar kendilerine kalan alanı eşit ölçü
 </code></pre></div></div>
 
 <p>Eğer bir sütunun genişliğine sütunun içeriği karar versin istiyorsak, 
-<code class="highlighter-rouge">col-auto</code> veya <code class="highlighter-rouge">col-{kırılım}-auto</code> sınıfını kullanabiliriz. 
-Örneğin 200 pixel genişliğinde bir içeriği tutan sütuna <code class="highlighter-rouge">col-auto</code> sınıfını verirsek 
+<code class="language-plaintext highlighter-rouge">col-auto</code> veya <code class="language-plaintext highlighter-rouge">col-{kırılım}-auto</code> sınıfını kullanabiliriz. 
+Örneğin 200 pixel genişliğinde bir içeriği tutan sütuna <code class="language-plaintext highlighter-rouge">col-auto</code> sınıfını verirsek 
 bu sütun 200 pixel genişliğinde olur. 
-Aynı satırda <code class="highlighter-rouge">col</code> sınıfına sahip bir sütun varsa o sütun da geri kalan tüm alanı doldurur.</p>
+Aynı satırda <code class="language-plaintext highlighter-rouge">col</code> sınıfına sahip bir sütun varsa o sütun da geri kalan tüm alanı doldurur.</p>
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row"</span><span class="nt">&gt;</span>
     <span class="c">&lt;!-- Solda içeriğinin genişliği (200px) kadar yer kaplayan sütun --&gt;</span>

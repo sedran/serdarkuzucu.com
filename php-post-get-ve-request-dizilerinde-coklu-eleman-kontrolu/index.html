@@ -187,32 +187,32 @@
 POST, GET veya REQUEST, veri hangi method ile geliyor olursa olsun, 
 bizim kullanıcı bu alanı doldurmuş mu, 
 veya veriyi gönderen sayfada böyle bir alan var mı diye kontrol etmemiz gerekir. 
-Bunun için de gelmesi ihtimali olan her değişken için tek tek <code class="highlighter-rouge">isset()</code> methodunu kullanırız.</p>
+Bunun için de gelmesi ihtimali olan her değişken için tek tek <code class="language-plaintext highlighter-rouge">isset()</code> methodunu kullanırız.</p>
 
 <!--more-->
 
 <p>Örneğin:</p>
 
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span><span class="p">(</span> <span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'username'</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'password'</span><span class="p">])</span> <span class="p">)</span> <span class="p">{</span>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span><span class="p">(</span> <span class="k">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'username'</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="k">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'password'</span><span class="p">])</span> <span class="p">)</span> <span class="p">{</span>
    <span class="c1">// işlemler...</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
 <p>Veya biraz daha kısa bir şekilde:</p>
 
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span><span class="p">(</span> <span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'username'</span><span class="p">],</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'password'</span><span class="p">])</span> <span class="p">)</span> <span class="p">{</span>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span><span class="p">(</span> <span class="k">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">'username'</span><span class="p">],</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'password'</span><span class="p">])</span> <span class="p">)</span> <span class="p">{</span>
    <span class="c1">// işlemler...</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
 <p>Şimdi bu işlemi biraz daha kısaltacak bir fonksiyonu tozlu kod kütüphanemden çıkarıp sizlerle paylaşıyorum.
-Bu fonksiyon sayesinde birden fazla <code class="highlighter-rouge">isset()</code> yazmaktan, veya birden fazla <code class="highlighter-rouge">$_POST</code> yazmaktan kurtulacağız.</p>
+Bu fonksiyon sayesinde birden fazla <code class="language-plaintext highlighter-rouge">isset()</code> yazmaktan, veya birden fazla <code class="language-plaintext highlighter-rouge">$_POST</code> yazmaktan kurtulacağız.</p>
 
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">post_isset</span><span class="p">()</span> <span class="p">{</span>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="n">post_isset</span><span class="p">()</span> <span class="p">{</span>
    <span class="nv">$args</span> <span class="o">=</span> <span class="nb">func_get_args</span><span class="p">();</span>
 
    <span class="k">foreach</span><span class="p">(</span><span class="nv">$args</span> <span class="k">as</span> <span class="nv">$arg</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="nv">$arg</span><span class="p">])</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="k">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="nv">$arg</span><span class="p">])</span> <span class="p">)</span> <span class="p">{</span>
          <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
       <span class="p">}</span>
    <span class="p">}</span>
@@ -221,24 +221,24 @@ Bu fonksiyon sayesinde birden fazla <code class="highlighter-rouge">isset()</cod
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Fonksiyon, ona parametre olarak gönderdiğimiz her indexin <code class="highlighter-rouge">$_POST</code> dizisinde var olup olmadığına bakar 
+<p>Fonksiyon, ona parametre olarak gönderdiğimiz her indexin <code class="language-plaintext highlighter-rouge">$_POST</code> dizisinde var olup olmadığına bakar 
 ve bir tanesi bile yoksa false return eder. 
 Mantık olarak basit, pratikte çok işe yarayan bir fonksiyon. 
-Kullanırken de uzun uzun <code class="highlighter-rouge">$_POST['index']</code> yazmak yerine sadece ‘index’ yazıyoruz parametre olarak. 
+Kullanırken de uzun uzun <code class="language-plaintext highlighter-rouge">$_POST['index']</code> yazmak yerine sadece ‘index’ yazıyoruz parametre olarak. 
 Örneğin:</p>
 
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span><span class="p">(</span> <span class="nx">post_isset</span><span class="p">(</span><span class="s1">'username'</span><span class="p">,</span> <span class="s1">'password'</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span><span class="p">(</span> <span class="nf">post_isset</span><span class="p">(</span><span class="s1">'username'</span><span class="p">,</span> <span class="s1">'password'</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
    <span class="c1">// işlemler...</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p>Aynı fonksiyonu <code class="highlighter-rouge">$_GET</code> ve <code class="highlighter-rouge">$_REQUEST</code> dizilerinin kontrolü için de yazabiliriz:</p>
+<p>Aynı fonksiyonu <code class="language-plaintext highlighter-rouge">$_GET</code> ve <code class="language-plaintext highlighter-rouge">$_REQUEST</code> dizilerinin kontrolü için de yazabiliriz:</p>
 
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">get_isset</span><span class="p">()</span> <span class="p">{</span>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="n">get_isset</span><span class="p">()</span> <span class="p">{</span>
    <span class="nv">$args</span> <span class="o">=</span> <span class="nb">func_get_args</span><span class="p">();</span>
 
    <span class="k">foreach</span><span class="p">(</span><span class="nv">$args</span> <span class="k">as</span> <span class="nv">$arg</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="nv">$arg</span><span class="p">])</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="k">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="nv">$arg</span><span class="p">])</span> <span class="p">)</span> <span class="p">{</span>
          <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
       <span class="p">}</span>
    <span class="p">}</span>
@@ -247,11 +247,11 @@ Kullanırken de uzun uzun <code class="highlighter-rouge">$_POST['index']</code>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="nf">request_isset</span><span class="p">()</span> <span class="p">{</span>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="n">request_isset</span><span class="p">()</span> <span class="p">{</span>
    <span class="nv">$args</span> <span class="o">=</span> <span class="nb">func_get_args</span><span class="p">();</span>
 
    <span class="k">foreach</span><span class="p">(</span><span class="nv">$args</span> <span class="k">as</span> <span class="nv">$arg</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_REQUEST</span><span class="p">[</span><span class="nv">$arg</span><span class="p">])</span> <span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="k">isset</span><span class="p">(</span><span class="nv">$_REQUEST</span><span class="p">[</span><span class="nv">$arg</span><span class="p">])</span> <span class="p">)</span> <span class="p">{</span>
          <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
       <span class="p">}</span>
    <span class="p">}</span>

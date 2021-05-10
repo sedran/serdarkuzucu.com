@@ -181,11 +181,11 @@
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p><code class="highlighter-rouge">git log</code>, Git versiyon kontrol sisteminde oluşturulmuş
+    <p><code class="language-plaintext highlighter-rouge">git log</code>, Git versiyon kontrol sisteminde oluşturulmuş
 commit geçmişini tarihsel olarak sondan başa doğru sırasıyla
 konsola yazan bir <strong>Git</strong> komutudur. 
 Tek başına kullanıldığında oldukça sıkıcı bir görünüme sahip olan
-<code class="highlighter-rouge">git log</code> komutunu birkaç parametre ile daha tatlı bir hale getirebiliyoruz.</p>
+<code class="language-plaintext highlighter-rouge">git log</code> komutunu birkaç parametre ile daha tatlı bir hale getirebiliyoruz.</p>
 
 <!--more-->
 
@@ -193,7 +193,7 @@ Tek başına kullanıldığında oldukça sıkıcı bir görünüme sahip olan
 
 <p>En basit hali ile 
 <a href="https://github.com/spring-projects/spring-boot">spring-boot</a> 
-projesinde <code class="highlighter-rouge">git log</code> komutunu çalıştırdığımızda
+projesinde <code class="language-plaintext highlighter-rouge">git log</code> komutunu çalıştırdığımızda
 aşağıdaki gibi bir görüntü ile karşılaşırız.</p>
 
 <p><img src="/assets/posts/better-git-log-1.png" alt="Normal Git Log" width="600px" /></p>
@@ -202,18 +202,18 @@ aşağıdaki gibi bir görüntü ile karşılaşırız.</p>
 
 <p>Yukarıdaki şekilde olduğu gibi uzun uzun açıklamaları okumak istemiyorsak,
 sadece commit başlıklarını listelemek istiyorsak, 
-<code class="highlighter-rouge">--oneline</code> parametresini kullanabiliriz.</p>
+<code class="language-plaintext highlighter-rouge">--oneline</code> parametresini kullanabiliriz.</p>
 
-<p><code class="highlighter-rouge">git log --oneline</code> komutunu çalıştırdığımızda 
+<p><code class="language-plaintext highlighter-rouge">git log --oneline</code> komutunu çalıştırdığımızda 
 aşağıdaki çıktıyı elde ederiz.</p>
 
 <p><img src="/assets/posts/better-git-log-2.png" alt="Git Log --oneline" width="600px" /></p>
 
 <h2 id="graph-şeklinde">Graph Şeklinde</h2>
 
-<p>Graph şeklinde çıktı almak için <code class="highlighter-rouge">--graph</code> parametresini kullanabiliriz.</p>
+<p>Graph şeklinde çıktı almak için <code class="language-plaintext highlighter-rouge">--graph</code> parametresini kullanabiliriz.</p>
 
-<p><code class="highlighter-rouge">git log --graph</code> komutunu çalıştırdığımızda aşağıdaki çıktıyı elde ederiz.</p>
+<p><code class="language-plaintext highlighter-rouge">git log --graph</code> komutunu çalıştırdığımızda aşağıdaki çıktıyı elde ederiz.</p>
 
 <p><img src="/assets/posts/better-git-log-3.png" alt="Git Log --graph" width="600px" /></p>
 
@@ -221,16 +221,16 @@ aşağıdaki çıktıyı elde ederiz.</p>
 hangi branch hangi branch’e birleştirilmiş rahatça görebiliriz.</p>
 
 <p>Eğer commit mesajlarının sadece başlık kısımları görünsün isterseniz
-bu komutta da <code class="highlighter-rouge">--oneline</code> parametresini kullanabilirsiniz.</p>
+bu komutta da <code class="language-plaintext highlighter-rouge">--oneline</code> parametresini kullanabilirsiniz.</p>
 
-<p><code class="highlighter-rouge">git log --graph --oneline</code> komutunu kullanarak aşağıdaki
+<p><code class="language-plaintext highlighter-rouge">git log --graph --oneline</code> komutunu kullanarak aşağıdaki
 görüntüyü elde edebiliriz.</p>
 
 <p><img src="/assets/posts/better-git-log-4.png" alt="Git Log --graph --oneline" width="600px" /></p>
 
 <h2 id="formatlama">Formatlama</h2>
 
-<p><code class="highlighter-rouge">git log</code> komutuna <code class="highlighter-rouge">--pretty=format:&lt;string&gt;</code> parametresini geçerek
+<p><code class="language-plaintext highlighter-rouge">git log</code> komutuna <code class="language-plaintext highlighter-rouge">--pretty=format:&lt;string&gt;</code> parametresini geçerek
 kendi istediğimiz bilgiyi istediğimiz şekilde yazmasını sağlayabiliyoruz.</p>
 
 <p>Bu sayede istersek tek bir satırda veya birden fazla satırda 
@@ -251,11 +251,11 @@ ve daha birçok alanını çıktı alabiliriz.</p>
 <p>Bu komuttaki formatın içerisinde bulunan parametreler:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">%h</code>  : Commit ID’sinin 10 karakter uzunluğundaki kısa hali</li>
-  <li><code class="highlighter-rouge">%d</code>  : Commit’e işaret eden branch veya tag’lerin parantez içerisinde virgülle ayrılmış listesi</li>
-  <li><code class="highlighter-rouge">%s</code>  : Commit mesajının başlık satırı (subject)</li>
-  <li><code class="highlighter-rouge">%ar</code> : Commit tarihinin şimdiki zamana göre göreceli formatı. Örneğin “3 gün önce”, “5 dakika önce”, vb.</li>
-  <li><code class="highlighter-rouge">%an</code> : Commit’i oluşturan kişinin (author) ismi</li>
+  <li><code class="language-plaintext highlighter-rouge">%h</code>  : Commit ID’sinin 10 karakter uzunluğundaki kısa hali</li>
+  <li><code class="language-plaintext highlighter-rouge">%d</code>  : Commit’e işaret eden branch veya tag’lerin parantez içerisinde virgülle ayrılmış listesi</li>
+  <li><code class="language-plaintext highlighter-rouge">%s</code>  : Commit mesajının başlık satırı (subject)</li>
+  <li><code class="language-plaintext highlighter-rouge">%ar</code> : Commit tarihinin şimdiki zamana göre göreceli formatı. Örneğin “3 gün önce”, “5 dakika önce”, vb.</li>
+  <li><code class="language-plaintext highlighter-rouge">%an</code> : Commit’i oluşturan kişinin (author) ismi</li>
 </ul>
 
 <p>Bu komutun çıktısı aşağıdaki gibi olacaktır:</p>
@@ -268,27 +268,27 @@ ve daha birçok alanını çıktı alabiliriz.</p>
 başlığını incelemelerini tavsiye ederim.</p>
 
 <p>Ben “3 gün önce” gibi göreceli tarihleri sevmediğim için
-<code class="highlighter-rouge">%cd</code> format parametresini kullanıyorum.
-Bu parametre ek olarak <code class="highlighter-rouge">--date=format:&lt;string&gt;</code> parametresini
+<code class="language-plaintext highlighter-rouge">%cd</code> format parametresini kullanıyorum.
+Bu parametre ek olarak <code class="language-plaintext highlighter-rouge">--date=format:&lt;string&gt;</code> parametresini
 kullanabilmeme olanak tanıyor.
 Böylece istediğim formatta tarih çıktısı da alabiliyorum.</p>
 
 <p>Aşağıdaki komut tarih formatını istediğimiz gibi ayarlayabilmemizi sağlıyor.
-Yukarıdaki komuttan tek farkı tarihin <code class="highlighter-rouge">2020-04-25 13:32:43</code> şeklinde çıkması.</p>
+Yukarıdaki komuttan tek farkı tarihin <code class="language-plaintext highlighter-rouge">2020-04-25 13:32:43</code> şeklinde çıkması.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git log <span class="nt">--pretty</span><span class="o">=</span>format:<span class="s2">"%h -%d %s (%cd) &lt;%an&gt;"</span> <span class="nt">--date</span><span class="o">=</span>format:<span class="s1">'%Y-%m-%d %H:%M:%S'</span>
 </code></pre></div></div>
 
 <h2 id="renklendirme">Renklendirme</h2>
 
-<p><code class="highlighter-rouge">--pretty=format:&lt;string&gt;</code> parametresi ile formatladığımız log
+<p><code class="language-plaintext highlighter-rouge">--pretty=format:&lt;string&gt;</code> parametresi ile formatladığımız log
 tek renk olarak çıktı vereceğinden okuması biraz zor olacaktır.</p>
 
 <p>Eğer istersek formatın herhangi bir alanını 
-<code class="highlighter-rouge">%C(&lt;color&gt;)</code> ve <code class="highlighter-rouge">%C(reset)</code> arasına alarak renklendirebiliriz.</p>
+<code class="language-plaintext highlighter-rouge">%C(&lt;color&gt;)</code> ve <code class="language-plaintext highlighter-rouge">%C(reset)</code> arasına alarak renklendirebiliriz.</p>
 
 <p>Bazı durumlarda renklendirme git ayarlarında devre dışı bırakılmış olabiliyor.
-Bu sebeple komuta <code class="highlighter-rouge">--color</code> parametresini de ekleyelim.</p>
+Bu sebeple komuta <code class="language-plaintext highlighter-rouge">--color</code> parametresini de ekleyelim.</p>
 
 <p>Yukarıdaki son örnekte verdiğim komutta
 commit id kırmızı,
@@ -310,7 +310,7 @@ aşağıdaki gibi parametrelerin etrafını renklerle sarabiliriz.</p>
 <h2 id="renkli-formatlı-graph-olarak">Renkli, Formatlı, Graph Olarak</h2>
 
 <p>Yukarıdaki renklendirme başlığında verdiğim örnek komutun sonuna
-bir de <code class="highlighter-rouge">--graph</code> parametresini eklersek eğer,
+bir de <code class="language-plaintext highlighter-rouge">--graph</code> parametresini eklersek eğer,
 hem istediğimiz formatta ve renklendirme ile hem de graph halinde
 versiyon geçmişimizi görüntülemiş oluruz.</p>
 
@@ -334,11 +334,11 @@ her seferinde tekrar elle yazmayacağız veya kopyala yapıştır yapmayacağız
 
 <p>Bu komutu git’in alias özelliğini kullanarak bir kısayola atayacağız.</p>
 
-<p>Terminalde <code class="highlighter-rouge">git lg</code> yazdığımızda yukarıdaki uzun komutun çalışmasını sağlayacağız.</p>
+<p>Terminalde <code class="language-plaintext highlighter-rouge">git lg</code> yazdığımızda yukarıdaki uzun komutun çalışmasını sağlayacağız.</p>
 
 <p>Aşağıdaki komutu çalıştırdığınız anda git’in global konfigürasyonunda
-<code class="highlighter-rouge">lg</code> isminde bir alias tanımlanmış oldu.
-Böylece <code class="highlighter-rouge">git lg</code> yazdığımız zaman artık o meşhur uzun komutumuz çalışacak.</p>
+<code class="language-plaintext highlighter-rouge">lg</code> isminde bir alias tanımlanmış oldu.
+Böylece <code class="language-plaintext highlighter-rouge">git lg</code> yazdığımız zaman artık o meşhur uzun komutumuz çalışacak.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git config <span class="nt">--global</span> <span class="se">\</span>
   alias.lg <span class="s2">"log --color --graph --pretty=format:'%C(red)%h%C(reset) -%C(yellow)%d%C(reset) %s %C(green)(%cd)%C(reset) %C(bold blue)&lt;%an&gt;%C(reset)' --date=format:'%Y-%m-%d %H:%M:%S'"</span>

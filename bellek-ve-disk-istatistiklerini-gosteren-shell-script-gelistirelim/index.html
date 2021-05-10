@@ -197,10 +197,10 @@ Bu yazıyı bazı komutların üzerinde durmak istediğim için adım adım yaza
 <h2 id="disk-kullanımını-görmek">Disk Kullanımını Görmek</h2>
 
 <p>Öncelikle hard disklerimizi ve toplam/kullanılan/boş alanları nasıl görebileceğimize bakalım. 
-Ben bu işlem için linux’da varolan <code class="highlighter-rouge">df -h</code> komutunu kullanıyorum. 
+Ben bu işlem için linux’da varolan <code class="language-plaintext highlighter-rouge">df -h</code> komutunu kullanıyorum. 
 Diskler çok büyük depolama alanları olduğu için, bu komuttan gigabyte değerinde ölçüm alıyoruz.</p>
 
-<p>Bir terminal açıp, <code class="highlighter-rouge">df -h</code> komutunu yazdığınızda, aşağıdakine benzer bir output alacaksınız.</p>
+<p>Bir terminal açıp, <code class="language-plaintext highlighter-rouge">df -h</code> komutunu yazdığınızda, aşağıdakine benzer bir output alacaksınız.</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">sedrik@localhost ~ $</span><span class="w"> </span><span class="nb">df</span> <span class="nt">-h</span>
 <span class="go">Filesystem      Size  Used Avail Use% Mounted on
@@ -216,19 +216,19 @@ tmpfs           1,2G     0  1,2G   0% /run/user/1001
 tmpfs           1,2G   56K  1,2G   1% /run/user/1000
 </span></code></pre></div></div>
 
-<p>Ben diskimi iki partition’a bölmüştüm ve birinci partition’ı <code class="highlighter-rouge">/</code> adresine mount etmiştim. 
-Bu yüzden <code class="highlighter-rouge">/dev/sda1</code> satırındaki disk kullanımı, birinci partition’ıma ait.</p>
+<p>Ben diskimi iki partition’a bölmüştüm ve birinci partition’ı <code class="language-plaintext highlighter-rouge">/</code> adresine mount etmiştim. 
+Bu yüzden <code class="language-plaintext highlighter-rouge">/dev/sda1</code> satırındaki disk kullanımı, birinci partition’ıma ait.</p>
 
-<p>İkinci partition’ımı da <code class="highlighter-rouge">/appdata</code> adresine mount etmiştim. 
-Bu yüzden <code class="highlighter-rouge">/dev/sda6</code> satırındaki disk kullanımı, ikinci partition’ıma ait. 
+<p>İkinci partition’ımı da <code class="language-plaintext highlighter-rouge">/appdata</code> adresine mount etmiştim. 
+Bu yüzden <code class="language-plaintext highlighter-rouge">/dev/sda6</code> satırındaki disk kullanımı, ikinci partition’ıma ait. 
 Siz de diskinizi iyi tanımalı ve bu aşamada hangi partition’ların 
 kullanım istatistiklerini kontrol etmek istediğinize karar vermelisiniz.</p>
 
 <h2 id="bellek-kullanımını-görmek">Bellek Kullanımını Görmek</h2>
 
 <p>Şimdi de bellekteki toplam/kullanılan/boş alanları nasıl öğrenebileceğimize bakalım. 
-Bu işlem için <code class="highlighter-rouge">free -m</code> komutunu kullanıyorum ben. <code class="highlighter-rouge">-m</code> seçeneğini kullandığımızda değerleri megabyte cinsinden veriyor. 
-Şimdi bir terminal açıp <code class="highlighter-rouge">free -m</code> komutunu yazarsanız, aşağıdakine benzer bir output alabilirsiniz:</p>
+Bu işlem için <code class="language-plaintext highlighter-rouge">free -m</code> komutunu kullanıyorum ben. <code class="language-plaintext highlighter-rouge">-m</code> seçeneğini kullandığımızda değerleri megabyte cinsinden veriyor. 
+Şimdi bir terminal açıp <code class="language-plaintext highlighter-rouge">free -m</code> komutunu yazarsanız, aşağıdakine benzer bir output alabilirsiniz:</p>
 
 <div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="gp">sedrik@localhost ~ $</span><span class="w"> </span>free <span class="nt">-m</span>
 <span class="go">             total       used       free     shared    buffers     cached
@@ -248,19 +248,19 @@ ikinci satırdaki bilgileri kullanırsak daha doğru sonuç elde ediyoruz, içim
 
 <h2 id="komut-sonuçlarından-i̇stenilen-bilgilerin-alınması">Komut Sonuçlarından İstenilen Bilgilerin Alınması</h2>
 
-<p><code class="highlighter-rouge">df -h</code> ve <code class="highlighter-rouge">free -m</code> şeklinde iki komut gördük. 
+<p><code class="language-plaintext highlighter-rouge">df -h</code> ve <code class="language-plaintext highlighter-rouge">free -m</code> şeklinde iki komut gördük. 
 Uzun uzun sonuçlar veriyorlar, kafalarına göre formatlıyorlar. 
 Peki bu sonuçlardan nasıl istediğimiz bilgileri alıp değişkenlere aktarırız?</p>
 
 <p>Öncelikle istediğimiz satırları alarak başlayalım. 
-Pipe (<code class="highlighter-rouge">|</code>) karakteri, bir komuttan çıkan sonucu diğer komuta input olarak vermemizi sağlıyor. 
-Örneğin <code class="highlighter-rouge">df -h | grep "/dev/sda1"</code> komutunu yazdığımızda, 
-<code class="highlighter-rouge">df -h</code> komutundan çıkan sonucu <code class="highlighter-rouge">grep</code> komutuna vermiş oluyoruz. 
-<code class="highlighter-rouge">grep</code> komutu da, kendine gelen inputun içerisinden sadece 
+Pipe (<code class="language-plaintext highlighter-rouge">|</code>) karakteri, bir komuttan çıkan sonucu diğer komuta input olarak vermemizi sağlıyor. 
+Örneğin <code class="language-plaintext highlighter-rouge">df -h | grep "/dev/sda1"</code> komutunu yazdığımızda, 
+<code class="language-plaintext highlighter-rouge">df -h</code> komutundan çıkan sonucu <code class="language-plaintext highlighter-rouge">grep</code> komutuna vermiş oluyoruz. 
+<code class="language-plaintext highlighter-rouge">grep</code> komutu da, kendine gelen inputun içerisinden sadece 
 istediğimiz anahtar kelimeyi içeren satırları output olarak veriyor, diğerlerini eliyor.</p>
 
 <p>Böylece istediğimiz sabit diske ait istatistikleri tek bir satır halinde bir değişkene aktarabiliyoruz. 
-Aşağıdaki kodda benim iki partition’ıma ait istatistikleri <code class="highlighter-rouge">DISK1</code> ve <code class="highlighter-rouge">DISK2</code> isimli değişkenlere aktarmış olduk.</p>
+Aşağıdaki kodda benim iki partition’ıma ait istatistikleri <code class="language-plaintext highlighter-rouge">DISK1</code> ve <code class="language-plaintext highlighter-rouge">DISK2</code> isimli değişkenlere aktarmış olduk.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
 <span class="c"># Shows user friendly disk usage</span>
@@ -270,14 +270,14 @@ Aşağıdaki kodda benim iki partition’ıma ait istatistikleri <code class="hi
 </code></pre></div></div>
 
 <p>Şimdi bu satırlardan toplam disk boyutu, kullanılan alan ve boş alan istatistiklerini ayıklayalım. 
-<code class="highlighter-rouge">df -h</code> komutunu çalıştırdığınızda farketmişsinizdir ki, toplam disk boyutu 2. sütunda yer alıyor. 
+<code class="language-plaintext highlighter-rouge">df -h</code> komutunu çalıştırdığınızda farketmişsinizdir ki, toplam disk boyutu 2. sütunda yer alıyor. 
 Kullanılan disk boyutu 3. sütunda, diskteki boş alan da 4. sütunda yer alıyor. 
-Peki elimizdeki satırlardan sütunları nasıl ayıklıyoruz? <code class="highlighter-rouge">awk</code> komutu ile!</p>
+Peki elimizdeki satırlardan sütunları nasıl ayıklıyoruz? <code class="language-plaintext highlighter-rouge">awk</code> komutu ile!</p>
 
-<p>Bir programın outputunu pipe (<code class="highlighter-rouge">|</code>) karakteri ile <code class="highlighter-rouge">awk '{print $1}'</code> komutuna vermek, 
+<p>Bir programın outputunu pipe (<code class="language-plaintext highlighter-rouge">|</code>) karakteri ile <code class="language-plaintext highlighter-rouge">awk '{print $1}'</code> komutuna vermek, 
 ekrana o çıkıdaki birinci sütunun değerinin yazılmasını sağlıyor. 
 Biz ise 2. 3. ve 4. sütunlara ihtiyaç duyuyoruz, 
-o yüzden <code class="highlighter-rouge">awk</code> komutumuzdaki print edilen sayıyı değiştirmemiz gerekiyor.</p>
+o yüzden <code class="language-plaintext highlighter-rouge">awk</code> komutumuzdaki print edilen sayıyı değiştirmemiz gerekiyor.</p>
 
 <p>Aşağıdaki kod parçası, iki diskin de kullanım istatistiklerini TOTAL, USED ve FREE olmak üzere üçer değişkene bölüyor.</p>
 
@@ -297,14 +297,14 @@ o yüzden <code class="highlighter-rouge">awk</code> komutumuzdaki print edilen 
 </code></pre></div></div>
 
 <p>Şimdi bellek ile ilgili istatistiklere bakalım. 
-<code class="highlighter-rouge">free -m</code> komutu ile bunu yapacağımızdan bahsetmiştik. 
-Toplam RAM boyutumuzu, <code class="highlighter-rouge">free -m</code> komutunda içerisinde “Mem” anahtar kelimesi geçen satırın 2. sütunu söylüyor. 
-Bu yüzden bu bilgiyi <code class="highlighter-rouge">free -m | grep "Mem" | awk '{print $2}'</code> şeklinde alacağız.</p>
+<code class="language-plaintext highlighter-rouge">free -m</code> komutu ile bunu yapacağımızdan bahsetmiştik. 
+Toplam RAM boyutumuzu, <code class="language-plaintext highlighter-rouge">free -m</code> komutunda içerisinde “Mem” anahtar kelimesi geçen satırın 2. sütunu söylüyor. 
+Bu yüzden bu bilgiyi <code class="language-plaintext highlighter-rouge">free -m | grep "Mem" | awk '{print $2}'</code> şeklinde alacağız.</p>
 
-<p>Kullanılan ve boş alanları ise <code class="highlighter-rouge">free -m</code> komutunun “buffers/cache” 
+<p>Kullanılan ve boş alanları ise <code class="language-plaintext highlighter-rouge">free -m</code> komutunun “buffers/cache” 
 anahtar kelimesi geçen satırının 3. ve 4. sütunları içeriyor. 
-Bu yüzden kullanılan RAM bilgisini <code class="highlighter-rouge">free -m | grep "buffers/cache" | awk '{print $3}'</code> komutuyla öğrenirken, 
-boş RAM bilgisini de <code class="highlighter-rouge">free -m | grep "buffers/cache" | awk '{print $4}'</code> komutuyla öğreneceğiz. 
+Bu yüzden kullanılan RAM bilgisini <code class="language-plaintext highlighter-rouge">free -m | grep "buffers/cache" | awk '{print $3}'</code> komutuyla öğrenirken, 
+boş RAM bilgisini de <code class="language-plaintext highlighter-rouge">free -m | grep "buffers/cache" | awk '{print $4}'</code> komutuyla öğreneceğiz. 
 Aşağıda, kodumuza bellek istatistiklerinin de eklenmiş hali mevcut.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
@@ -329,13 +329,13 @@ Aşağıda, kodumuza bellek istatistiklerinin de eklenmiş hali mevcut.</p>
 <h2 id="bilgileri-ekrana-güzelce-yazdıralım">Bilgileri Ekrana Güzelce Yazdıralım</h2>
 
 <p>Herşey iyi güzel de, komutu çalıştırınca hala ekranda birşey göremiyoruz diyor musunuz? 
-Çünkü ekrana hiçbir şey yazdırmadık. Şimdi <code class="highlighter-rouge">echo</code> ve <code class="highlighter-rouge">printf</code> komutları eşliğinde ekrana bu değerleri yazdıralım.</p>
+Çünkü ekrana hiçbir şey yazdırmadık. Şimdi <code class="language-plaintext highlighter-rouge">echo</code> ve <code class="language-plaintext highlighter-rouge">printf</code> komutları eşliğinde ekrana bu değerleri yazdıralım.</p>
 
-<p><code class="highlighter-rouge">echo</code> kullanmayı hepiniz biliyorsunuzdur.
-<code class="highlighter-rouge">pritf</code> kullanmak ise biraz daha zahmetli ama sonu çok güzel bitiyor. 
+<p><code class="language-plaintext highlighter-rouge">echo</code> kullanmayı hepiniz biliyorsunuzdur.
+<code class="language-plaintext highlighter-rouge">pritf</code> kullanmak ise biraz daha zahmetli ama sonu çok güzel bitiyor. 
 Bu komuta ilk parametre olarak kullanmak istediğiniz formatı geçiyorsunuz. 
 Örneğin 3 kelimeyi 10 karakterlik sütunlara sığdırmak ve aralarına pipe karakteri koymak istiyorsanız, 
-şu şekilde <code class="highlighter-rouge">printf</code> yazmanız yeterli:</p>
+şu şekilde <code class="language-plaintext highlighter-rouge">printf</code> yazmanız yeterli:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">printf</span> <span class="s2">"| %-10s | %-10s | %-10s |n"</span> <span class="s2">"Kelime1"</span> <span class="s2">"Kelime2"</span> <span class="s2">"Kelime3"</span>
 </code></pre></div></div>
@@ -378,12 +378,12 @@ Yukarıda hesapladığımız tüm değişkenleri güzel güzel ekrana yazdıral�
 <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$DIVIDER</span><span class="s2">"</span>
 </code></pre></div></div>
 
-<p>Şimdi bu kodu <code class="highlighter-rouge">monitor</code> ismiyle bir yere kaydedelim. 
+<p>Şimdi bu kodu <code class="language-plaintext highlighter-rouge">monitor</code> ismiyle bir yere kaydedelim. 
 Ben şu şekilde kaydediyorum: ~/myscripts/monitor</p>
 
-<p>Daha sonra <code class="highlighter-rouge">chmod +x ~/myscripts/monitor</code> komutunu çağırarak yazdığımız script’in çalışabilmesini sağlıyoruz.</p>
+<p>Daha sonra <code class="language-plaintext highlighter-rouge">chmod +x ~/myscripts/monitor</code> komutunu çağırarak yazdığımız script’in çalışabilmesini sağlıyoruz.</p>
 
-<p>Şimdi komutumuzu terminalden şu şekilde çalıştırabiliriz: <code class="highlighter-rouge">~/myscripts/monitor</code>. Bize şuna benzer bir sonuç verecektir:</p>
+<p>Şimdi komutumuzu terminalden şu şekilde çalıştırabiliriz: <code class="language-plaintext highlighter-rouge">~/myscripts/monitor</code>. Bize şuna benzer bir sonuç verecektir:</p>
 
 <pre class="language-bash command-line" data-output="2-10" data-user="sedrik" data-host="localhost"><code></code></pre>
 
@@ -402,10 +402,10 @@ Ben şu şekilde kaydediyorum: ~/myscripts/monitor</p>
 <p>Şimdi bu yazdığımız koda hep ~/myscripts klasörü altından mı erişeceğiz? 
 Haydi gelin bir de alias tanımlaması yapalım da, her yerden tek bir kelime ile bu kodumuzu çalıştırabilelim.</p>
 
-<p>Alias tanımlamak için, <code class="highlighter-rouge">~/.bashrc</code> veya <code class="highlighter-rouge">~/.bash_aliases</code> dosyalarından birisini 
+<p>Alias tanımlamak için, <code class="language-plaintext highlighter-rouge">~/.bashrc</code> veya <code class="language-plaintext highlighter-rouge">~/.bash_aliases</code> dosyalarından birisini 
 gedit programı yardımıyla düzenleyelim. 
-Ben alias tanımlamak içni <code class="highlighter-rouge">~/.bash_aliases</code> dosyasını tavsiye ediyorum, adından belli. 
-Şu komutla açabiliriz bu dosyayı: <code class="highlighter-rouge">gedit ~/.bash_aliases</code></p>
+Ben alias tanımlamak içni <code class="language-plaintext highlighter-rouge">~/.bash_aliases</code> dosyasını tavsiye ediyorum, adından belli. 
+Şu komutla açabiliriz bu dosyayı: <code class="language-plaintext highlighter-rouge">gedit ~/.bash_aliases</code></p>
 
 <p>Açılan gedit penceresinde, aşağıdaki satırı ekleyelim ve kaydedip kapatalım:</p>
 
@@ -413,13 +413,13 @@ Ben alias tanımlamak içni <code class="highlighter-rouge">~/.bash_aliases</cod
 </code></pre></div></div>
 
 <p>Daha sonra da terminal pencerelerimizi kapatalım ve tekrar açalım. 
-Böylelikle <code class="highlighter-rouge">~/.bash_aliases</code> dosyası terminale tekrar yüklenmiş olacak. 
-Artık terminalde hangi klasörde olursak olalım, <code class="highlighter-rouge">monitor</code> yazarak programımızı çalıştırabiliriz.</p>
+Böylelikle <code class="language-plaintext highlighter-rouge">~/.bash_aliases</code> dosyası terminale tekrar yüklenmiş olacak. 
+Artık terminalde hangi klasörde olursak olalım, <code class="language-plaintext highlighter-rouge">monitor</code> yazarak programımızı çalıştırabiliriz.</p>
 
-<p>Bu arada kodun içinde bir yerlerde <code class="highlighter-rouge">${DISK2_USED:0:-1} GB</code> kullandığımı görmüş 
-ve dikkatinizi çekmiş olabilir. <code class="highlighter-rouge">df -h</code> komutu bize sayıların sonuna Gigabyte’ın G’sini ekleyerek veriyor. 
+<p>Bu arada kodun içinde bir yerlerde <code class="language-plaintext highlighter-rouge">${DISK2_USED:0:-1} GB</code> kullandığımı görmüş 
+ve dikkatinizi çekmiş olabilir. <code class="language-plaintext highlighter-rouge">df -h</code> komutu bize sayıların sonuna Gigabyte’ın G’sini ekleyerek veriyor. 
 Örneğin: 12G. Biz bunu istemiyoruz. 
-O kod, <code class="highlighter-rouge">DISK2_USED</code> değişkeninin son karakterini yani ‘G’ karakterini silmeye yarıyor. 
+O kod, <code class="language-plaintext highlighter-rouge">DISK2_USED</code> değişkeninin son karakterini yani ‘G’ karakterini silmeye yarıyor. 
 Daha sonra kendim elle bir boşluk bırakıp ‘GB’ yazıyorum. 
 Daha estetik görünüyor.</p>
 

@@ -6,9 +6,9 @@
 </description>
     <link>https://serdarkuzucu.com/</link>
     <atom:link href="https://serdarkuzucu.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 14 Jan 2021 19:08:24 +0000</pubDate>
-    <lastBuildDate>Thu, 14 Jan 2021 19:08:24 +0000</lastBuildDate>
-    <generator>Jekyll v4.0.0</generator>
+    <pubDate>Mon, 10 May 2021 22:17:18 +0000</pubDate>
+    <lastBuildDate>Mon, 10 May 2021 22:17:18 +0000</lastBuildDate>
+    <generator>Jekyll v4.2.0</generator>
     
       <item>
         <title>Gradle: Spring Boot &amp; Angular Uygulamalarını Birlikte Build Edelim</title>
@@ -47,7 +47,7 @@ bilgisayarınızda “npm” ve “ng” (Angular CLI) araçlarının da yüklü
 
 &lt;h2 id=&quot;adım-1-gradle-projesi-oluşturalım&quot;&gt;Adım 1: Gradle Projesi Oluşturalım&lt;/h2&gt;
 
-&lt;p&gt;Öncelikle Intellij IDEA menüsünden &lt;code class=&quot;highlighter-rouge&quot;&gt;File &amp;gt; New &amp;gt; Project&lt;/code&gt; 
+&lt;p&gt;Öncelikle Intellij IDEA menüsünden &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;File &amp;gt; New &amp;gt; Project&lt;/code&gt; 
 yolunu takip ederek yeni proje oluşturma diyaloğunu açıyoruz 
 ve bu diyalogda sol tarafta “Gradle” seçeneğini işaretliyoruz.
 Sağ tarafta ise hiçbir seçeneği işaretlemeden Next butonuna basıyoruz.&lt;/p&gt;
@@ -80,13 +80,13 @@ ve içerisinde boş bir Angular hello world uygulamasının oluştuğunu görece
 
 &lt;p&gt;Ana projemizi zaten versiyon kontrol sisteminde tutacağımız için frontend klasöründe
 otomatik olarak oluşturulan git repository’sine ihtiyacımız yok.
-&lt;code class=&quot;highlighter-rouge&quot;&gt;frontend/.git&lt;/code&gt; klasörünü hiç düşünmeden silebiliriz.&lt;/p&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;frontend/.git&lt;/code&gt; klasörünü hiç düşünmeden silebiliriz.&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;frontend
 &lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; .git
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Terminalde frontend klasörünün içerisinde &lt;code class=&quot;highlighter-rouge&quot;&gt;ng serve&lt;/code&gt; komutunu yazdığımızda
+&lt;p&gt;Terminalde frontend klasörünün içerisinde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ng serve&lt;/code&gt; komutunu yazdığımızda
 projenin “Angular Live Development Server” üzerinde ayağa kalktığını ve
 &lt;a href=&quot;http://localhost:4200/&quot;&gt;http://localhost:4200/&lt;/a&gt; adresinden otomatik olarak üretilmiş
 Welcome sayfasına ulaşabildiğimizi görüyoruz.&lt;/p&gt;
@@ -94,7 +94,7 @@ Welcome sayfasına ulaşabildiğimizi görüyoruz.&lt;/p&gt;
 &lt;p&gt;Angular projeleri npm paket yöneticisini kullanır ve Angular CLI denen
 nodejs ile çalışan bir araç tarafından build edilirler.
 Biz “frontend” projesini de gradle ile build etmek istediğimiz için
-frontend klasörünün içerisinde aşağıdaki gibi bir &lt;code class=&quot;highlighter-rouge&quot;&gt;build.gradle&lt;/code&gt; dosyası oluşturuyoruz.&lt;/p&gt;
+frontend klasörünün içerisinde aşağıdaki gibi bir &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;build.gradle&lt;/code&gt; dosyası oluşturuyoruz.&lt;/p&gt;
 
 &lt;div class=&quot;language-gradle highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;frontendProjectDir&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;${rootProject.projectDir}/frontend&quot;&lt;/span&gt;
 
@@ -150,8 +150,8 @@ frontend klasörünün içerisinde aşağıdaki gibi bir &lt;code class=&quot;hi
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;“frontend” klasöründeki &lt;code class=&quot;highlighter-rouge&quot;&gt;package.json&lt;/code&gt; dosyasında &lt;code class=&quot;highlighter-rouge&quot;&gt;scripts&lt;/code&gt; anahtarının içerisine
-aşağıdaki gibi &lt;code class=&quot;highlighter-rouge&quot;&gt;buildProd&lt;/code&gt; komutunu ekliyoruz. 
+&lt;p&gt;“frontend” klasöründeki &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;package.json&lt;/code&gt; dosyasında &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scripts&lt;/code&gt; anahtarının içerisine
+aşağıdaki gibi &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;buildProd&lt;/code&gt; komutunu ekliyoruz. 
 Dosyayı aşağıdaki gibi değiştirmeyin komple, sadece bir kısmını yazdım.&lt;/p&gt;
 
 &lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
@@ -169,21 +169,21 @@ Dosyayı aşağıdaki gibi değiştirmeyin komple, sadece bir kısmını yazdım
 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;“package.json” dosyasına eklediğimiz &lt;code class=&quot;highlighter-rouge&quot;&gt;ng build --prod&lt;/code&gt; komutu build.gradle
-dosyasındaki &lt;code class=&quot;highlighter-rouge&quot;&gt;buildAngular&lt;/code&gt; gradle taskı tarafından tetikleniyor.
+&lt;p&gt;“package.json” dosyasına eklediğimiz &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ng build --prod&lt;/code&gt; komutu build.gradle
+dosyasındaki &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;buildAngular&lt;/code&gt; gradle taskı tarafından tetikleniyor.
 Asıl build işini sistemimize daha önceden kurduğumuz “Angular CLI” aracı yapıyor.
 Gradle burada sadece bir tetikleyici durumunda fakat backend projesi gradle
 tarafından build edileceği için ikisini birbirine bağlamamızda 
 bu konfigürasyonun oldukça faydası olacak.&lt;/p&gt;
 
 &lt;p&gt;“frontend” projesinin bir gradle projesi olarak ana proje tarafından görülmesi için
-ana proje klasöründeki &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.gradle&lt;/code&gt; dosyasını da şu şekilde düzenliyoruz:&lt;/p&gt;
+ana proje klasöründeki &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;settings.gradle&lt;/code&gt; dosyasını da şu şekilde düzenliyoruz:&lt;/p&gt;
 
 &lt;div class=&quot;language-gradle highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;rootProject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'springangulardemo'&lt;/span&gt;
 &lt;span class=&quot;n&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;':frontend'&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;En sonunda ana proje dizininde &lt;code class=&quot;highlighter-rouge&quot;&gt;./gradlew build&lt;/code&gt; komutunu çalıştırdığımızda 
+&lt;p&gt;En sonunda ana proje dizininde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;./gradlew build&lt;/code&gt; komutunu çalıştırdığımızda 
 aşağıdaki gibi bir çıktı verince angular projemizin gradle ile build olduğunu
 görmüş oluyoruz.&lt;/p&gt;
 
@@ -225,7 +225,7 @@ Sonraki adıma geçebiliriz.&lt;/p&gt;
 &lt;p&gt;Yeni bir Spring Boot uygulaması oluştururken yaptığım şey genellikle çoğu insan gibi
 https://start.spring.io/ adresine girip ihtiyacım olan bağımlılıkları seçip 
 projeyi zip olarak indirmek. 
-Bu sefer onun yerine ihtiyacım olan bağımlılıkları seçip sadece &lt;code class=&quot;highlighter-rouge&quot;&gt;build.gradle&lt;/code&gt;
+Bu sefer onun yerine ihtiyacım olan bağımlılıkları seçip sadece &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;build.gradle&lt;/code&gt;
 dosyasını kopyalayacağım.&lt;/p&gt;
 
 &lt;p&gt;Spring Boot projesini aşağıdaki gibi starter arayüzünden konfigüre ettim:&lt;/p&gt;
@@ -235,11 +235,11 @@ dosyasını kopyalayacağım.&lt;/p&gt;
 &lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Daha sonra sayfanın altında bulunan “EXPLORE” butonuna basarak 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;build.gradle&lt;/code&gt; dosyasının içeriğini kopyalıyoruz.&lt;/p&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;build.gradle&lt;/code&gt; dosyasının içeriğini kopyalıyoruz.&lt;/p&gt;
 
 &lt;p&gt;Ana projenin içerisinde “frontend” klasörüne komşu olacak şekilde 
 “backend” isminde bir klasör oluşturuyoruz.
-“backend” klasörünün içerisinde &lt;code class=&quot;highlighter-rouge&quot;&gt;build.gradle&lt;/code&gt; isimli bir dosya oluşturuyoruz
+“backend” klasörünün içerisinde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;build.gradle&lt;/code&gt; isimli bir dosya oluşturuyoruz
 ve Spring Boot starter sitesinden kopyaladığımız “build.gradle” dosya içeriğini
 bu yeni dosyanın içerisine yapıştırıyoruz.&lt;/p&gt;
 
@@ -262,7 +262,7 @@ garanti altına almış oluyoruz.&lt;/p&gt;
 &lt;p&gt;Angular projesi build olduğunda ortaya “dist” isimli bir klasör çıkar.
 Bu klasör Angular projesindeki tüm dosyaların build + uglify edilmiş halini içerir.&lt;/p&gt;
 
-&lt;p&gt;“build.gradle” dosyasına &lt;code class=&quot;highlighter-rouge&quot;&gt;into(&lt;/code&gt; ile başlayan satırda yaptığımız ilave 
+&lt;p&gt;“build.gradle” dosyasına &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;into(&lt;/code&gt; ile başlayan satırda yaptığımız ilave 
 ile “dist” klasörünü Spring Boot uygulamasının ürettiği jar’ın içerisine
 JVM’in classpath’inde olacak şekilde eklemiş oluyoruz.
 “BOOT-INF/classes” klasörü spring uygulamasının classpath’inin root dizinidir.&lt;/p&gt;
@@ -290,7 +290,7 @@ aşağıdaki içerikte bir dosya oluşturalım.&lt;/p&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Son olarak ana projedeki &lt;code class=&quot;highlighter-rouge&quot;&gt;settings.gradle&lt;/code&gt; dosyasına aşağıdaki gibi
+&lt;p&gt;Son olarak ana projedeki &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;settings.gradle&lt;/code&gt; dosyasına aşağıdaki gibi
 backend projesini de eklememiz gerekiyor:&lt;/p&gt;
 
 &lt;div class=&quot;language-gradle highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;rootProject&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'springangulardemo'&lt;/span&gt;
@@ -299,10 +299,10 @@ backend projesini de eklememiz gerekiyor:&lt;/p&gt;
 &lt;span class=&quot;n&quot;&gt;include&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;':backend'&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Bu noktadan sonra &lt;code class=&quot;highlighter-rouge&quot;&gt;./gradlew build&lt;/code&gt; komutunu çalıştırdığımızda
+&lt;p&gt;Bu noktadan sonra &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;./gradlew build&lt;/code&gt; komutunu çalıştırdığımızda
 hata almamamız gerekiyor.&lt;/p&gt;
 
-&lt;p&gt;Spring uygulamasını ayağa kaldırmak için de &lt;code class=&quot;highlighter-rouge&quot;&gt;./gradlew bootRun&lt;/code&gt; 
+&lt;p&gt;Spring uygulamasını ayağa kaldırmak için de &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;./gradlew bootRun&lt;/code&gt; 
 komutunu çalıştırıyoruz. 
 Bu komutta da bir hata almamamız gerekiyor.&lt;/p&gt;
 
@@ -338,7 +338,7 @@ sunmaya başlayabilmek için bazı konfigürasyonları yapmak gerekiyor.&lt;/p&g
 &lt;p&gt;Öncelikle frontend klasörünü bir önceki adımda classpath’e kopyalamıştık.
 Angular projesinin “dist” klasörünün içerisinde “frontend” isminde bir klasör
 oluşmakta ve biz de o klasörü Spring Boot uygulamasının classpath’ine eklemiş olduk.
-Bu sebeple Spring’e ResourceHandler olarak &lt;code class=&quot;highlighter-rouge&quot;&gt;classpath:/frontend/&lt;/code&gt;
+Bu sebeple Spring’e ResourceHandler olarak &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;classpath:/frontend/&lt;/code&gt;
 dizinini aşağıdaki gibi ekliyoruz.&lt;/p&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;com.serdarkuzucu.springangulardemo.configuration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
@@ -366,7 +366,7 @@ söylemiş olmaktayız.&lt;/p&gt;
 şeklinde gelen isteklerde “404 Not Found” hatası dönüyor.&lt;/p&gt;
 
 &lt;p&gt;Uygulamamızın root adresini de index.html dosyasına bağlayabilmek için
-aşağıdaki gibi bir &lt;code class=&quot;highlighter-rouge&quot;&gt;IndexController&lt;/code&gt; sınıfı yazmamız yeterli.&lt;/p&gt;
+aşağıdaki gibi bir &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IndexController&lt;/code&gt; sınıfı yazmamız yeterli.&lt;/p&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;com.serdarkuzucu.springangulardemo.controller&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
 
@@ -387,9 +387,9 @@ aşağıdaki gibi bir &lt;code class=&quot;highlighter-rouge&quot;&gt;IndexContr
 &lt;p&gt;Bir geliştirici kendi bilgisayarında projeyi geliştirme amaçlı çalıştığında
 Spring Boot jar’ının içerisine gömülmüş Angular projesini çalıştırmamalı.
 Geliştiriciler Spring Boot uygulamasını IDE’lerindeki Run Configuration ile main
-sınıftan çalıştırmalı veya &lt;code class=&quot;highlighter-rouge&quot;&gt;./gradlew bootRun&lt;/code&gt; komutuyla ayağa kaldırmalılar.
-Angular uygulamasını ise frontend klasöründe &lt;code class=&quot;highlighter-rouge&quot;&gt;ng serve&lt;/code&gt; komutunu çalıştırarak
-&lt;code class=&quot;highlighter-rouge&quot;&gt;Angular Live Development Server&lt;/code&gt; üzerinde ayağa kaldırmalılar.&lt;/p&gt;
+sınıftan çalıştırmalı veya &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;./gradlew bootRun&lt;/code&gt; komutuyla ayağa kaldırmalılar.
+Angular uygulamasını ise frontend klasöründe &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ng serve&lt;/code&gt; komutunu çalıştırarak
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Angular Live Development Server&lt;/code&gt; üzerinde ayağa kaldırmalılar.&lt;/p&gt;
 
 &lt;p&gt;Bu durumda frontend 4200, backend ise 8080 portlarında ayağa kalkmış oluyor.
 Bu da bazı tarayıcılarda ön yüzden backend uygulamasına atılan isteklerin
@@ -410,8 +410,8 @@ Angular proxy ayarlarını yapmamız gerekiyor.
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Bu konfigürasyon adresi Angular Live Development Server uygulamasına
-&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:4200/api&lt;/code&gt; şeklinde gelecek olan tüm istekleri 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt; uygulamasına gönderecek.&lt;/p&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http://localhost:4200/api&lt;/code&gt; şeklinde gelecek olan tüm istekleri 
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt; uygulamasına gönderecek.&lt;/p&gt;
 
 &lt;p&gt;Proxy ayarını “frontend” klasöründeki “angular.json” 
 dosyasında da şu şekilde yapıyoruz:&lt;/p&gt;
@@ -432,7 +432,7 @@ dosyasında da şu şekilde yapıyoruz:&lt;/p&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Düzenli bir API standardınızın olması ve proxy ayarlarının temiz kalması için
-backend tarafındaki tüm REST API’lere burda yaptığımız gibi &lt;code class=&quot;highlighter-rouge&quot;&gt;api/**&lt;/code&gt; ön eki ile
+backend tarafındaki tüm REST API’lere burda yaptığımız gibi &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;api/**&lt;/code&gt; ön eki ile
 veya kendi belirleyeceğiniz başka tek bir ön ek ile başlamanızı tavsiye ederim.
 Spring Security konfigürasyonları, custom servlet filtreleri gibi başka işlerde de
 oldukça işe yaradığını göreceksiniz ileride.&lt;/p&gt;
@@ -442,7 +442,7 @@ oldukça işe yaradığını göreceksiniz ileride.&lt;/p&gt;
 &lt;p&gt;Yaptığımız bunca konfigürasyonun çalışıp çalışmadığını uçtan uca test etmek 
 için aşağıdaki değişiklikleri yapıyoruz:&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;app.module.ts&lt;/code&gt; dosyasında &lt;code class=&quot;highlighter-rouge&quot;&gt;HttpClientModule&lt;/code&gt; modülünü import edelim:&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;app.module.ts&lt;/code&gt; dosyasında &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HttpClientModule&lt;/code&gt; modülünü import edelim:&lt;/p&gt;
 
 &lt;div class=&quot;language-ts highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;BrowserModule&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;@angular/platform-browser&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;NgModule&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;@angular/core&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -467,9 +467,9 @@ için aşağıdaki değişiklikleri yapıyoruz:&lt;/p&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;app.module.ts&lt;/code&gt; dosyası ile aynı dizinde bir adet &lt;code class=&quot;highlighter-rouge&quot;&gt;user.service.ts&lt;/code&gt; dosyası oluşturalım.
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;app.module.ts&lt;/code&gt; dosyası ile aynı dizinde bir adet &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;user.service.ts&lt;/code&gt; dosyası oluşturalım.
 Bu dosyanın içeriği aşağıdaki gibi olsun.
-Backend’de açtığımız &lt;code class=&quot;highlighter-rouge&quot;&gt;api/users/me&lt;/code&gt; REST API’sini çağırsın.&lt;/p&gt;
+Backend’de açtığımız &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;api/users/me&lt;/code&gt; REST API’sini çağırsın.&lt;/p&gt;
 
 &lt;div class=&quot;language-ts highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Injectable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;@angular/core&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;HttpClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;@angular/common/http&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -477,22 +477,22 @@ Backend’de açtığımız &lt;code class=&quot;highlighter-rouge&quot;&gt;api/
 
 &lt;span class=&quot;p&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;nd&quot;&gt;Injectable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;providedIn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;root&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;UserService&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;kd&quot;&gt;constructor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;HttpClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;constructor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;HttpClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
-  &lt;span class=&quot;kr&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;getCurrentUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Observable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;getCurrentUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Observable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;http&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;api/users/me&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;firstName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-  &lt;span class=&quot;nl&quot;&gt;lastName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;firstName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+  &lt;span class=&quot;nl&quot;&gt;lastName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;app.component.ts&lt;/code&gt; dosyasını aşağıdaki şekilde değiştirelim.
-&lt;code class=&quot;highlighter-rouge&quot;&gt;UserService&lt;/code&gt; üzerinden backend’den kullanıcı bilgilerini çeksin.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;app.component.ts&lt;/code&gt; dosyasını aşağıdaki şekilde değiştirelim.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;UserService&lt;/code&gt; üzerinden backend’den kullanıcı bilgilerini çeksin.&lt;/p&gt;
 
 &lt;div class=&quot;language-ts highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Component&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;OnInit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;@angular/core&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;UserService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;./user.service&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
@@ -502,11 +502,11 @@ Backend’de açtığımız &lt;code class=&quot;highlighter-rouge&quot;&gt;api/
   &lt;span class=&quot;na&quot;&gt;templateUrl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;./app.component.html&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
   &lt;span class=&quot;na&quot;&gt;styleUrls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;./app.component.scss&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;})&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;AppComponent&lt;/span&gt; &lt;span class=&quot;kr&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;OnInit&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;export&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;AppComponent&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;OnInit&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
   &lt;span class=&quot;nx&quot;&gt;title&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;frontend&lt;/span&gt;&lt;span class=&quot;dl&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
   &lt;span class=&quot;nl&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;User&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
-  &lt;span class=&quot;kd&quot;&gt;constructor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kr&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;userService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;UserService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+  &lt;span class=&quot;kd&quot;&gt;constructor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;userService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;UserService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
   &lt;span class=&quot;nx&quot;&gt;ngOnInit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -516,7 +516,7 @@ Backend’de açtığımız &lt;code class=&quot;highlighter-rouge&quot;&gt;api/
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;app.component.html&lt;/code&gt; dosyasında da &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;span&amp;gt;Welcome&amp;lt;/span&amp;gt;&lt;/code&gt; yazan satırı 
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;app.component.html&lt;/code&gt; dosyasında da &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;span&amp;gt;Welcome&amp;lt;/span&amp;gt;&lt;/code&gt; yazan satırı 
 aşağıdaki gibi değiştirelim:&lt;/p&gt;
 
 &lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;span&amp;gt;&lt;/span&gt;Welcome &lt;span class=&quot;nt&quot;&gt;&amp;lt;span&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;*ngIf=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;user&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;&amp;lt;/span&amp;gt;&amp;lt;/span&amp;gt;&lt;/span&gt;
@@ -539,18 +539,18 @@ faydalanabileceklerini görmüş oluyoruz.&lt;/p&gt;
 
 &lt;h3 id=&quot;production-ortamı-testleri&quot;&gt;Production Ortamı Testleri&lt;/h3&gt;
 
-&lt;p&gt;Production build almak için ana projenin dizininde &lt;code class=&quot;highlighter-rouge&quot;&gt;./gradlew build&lt;/code&gt; 
+&lt;p&gt;Production build almak için ana projenin dizininde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;./gradlew build&lt;/code&gt; 
 komutunu çalıştırmamız yeterli.&lt;/p&gt;
 
 &lt;p&gt;Gradle dosyalarındaki versiyonlarda bir değişiklik yapmadıysanız build işlemi
 sonrasında proje içerisinde şu isimde bir dosya üreyecektir:
-&lt;code class=&quot;highlighter-rouge&quot;&gt;backend/build/libs/backend-0.0.1-SNAPSHOT.jar&lt;/code&gt;&lt;/p&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;backend/build/libs/backend-0.0.1-SNAPSHOT.jar&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;Bu dosya Spring Boot uygulamasının son çıktısıdır.
 Bu dosyanın içerisinde compile olmuş java sınıflarının yanı sıra
 Angular projesinin de production build çıktısı yer almaktadır.&lt;/p&gt;
 
-&lt;p&gt;Bu dosyayı doğrudan &lt;code class=&quot;highlighter-rouge&quot;&gt;java -jar&lt;/code&gt; ile aşağıdaki gibi çalıştırabiliriz:&lt;/p&gt;
+&lt;p&gt;Bu dosyayı doğrudan &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java -jar&lt;/code&gt; ile aşağıdaki gibi çalıştırabiliriz:&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;java &lt;span class=&quot;nt&quot;&gt;-jar&lt;/span&gt; backend/build/libs/backend-0.0.1-SNAPSHOT.jar
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -665,16 +665,16 @@ verileri parça parça alıp, aldıkça işlemeliyiz.&lt;/p&gt;
 atarak sayfalama (pagination) yapmak fakat bu yöntem her seferinde veritabanına yeniden sorgu atmayı
 gerektirdiği için faydasından çok zararı oluyor.&lt;/p&gt;
 
-&lt;p&gt;Verileri parça parça çekmek ve işledikçe devamını okumak için Hibernate’deki &lt;code class=&quot;highlighter-rouge&quot;&gt;scroll&lt;/code&gt; özelliğini kullandık.
+&lt;p&gt;Verileri parça parça çekmek ve işledikçe devamını okumak için Hibernate’deki &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scroll&lt;/code&gt; özelliğini kullandık.
 Sorgunun envai çeşit hibernate kontrolünden ve transaction yönetiminden geçmemesi için
-Hibernate’deki &lt;code class=&quot;highlighter-rouge&quot;&gt;StatelessSession&lt;/code&gt; sınıfı üzerinden sorgumuzu &lt;code class=&quot;highlighter-rouge&quot;&gt;read-only&lt;/code&gt; modda attık.&lt;/p&gt;
+Hibernate’deki &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;StatelessSession&lt;/code&gt; sınıfı üzerinden sorgumuzu &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;read-only&lt;/code&gt; modda attık.&lt;/p&gt;
 
 &lt;p&gt;Ek olarak bir ORM aracı ile sorgu sonuçlarının otomatik olarak entity sınıfına
 çevirilmesi özelliğinden de çok fazla reflection ve nesne kullanımının olmaması için
 feragat ediyoruz. Garbage Collector ve CPU biraz rahatlamış oluyor bu sayede.&lt;/p&gt;
 
 &lt;p&gt;Hibernate’de bu şekilde bir sorgu nasıl atılır aşağıda ufak bir örnek paylaşıyorum.
-Buradaki &lt;code class=&quot;highlighter-rouge&quot;&gt;fetchSize&lt;/code&gt; parametresi veritabanından sonuçların kaçar kaçar belleğe alınacağını belirliyor.&lt;/p&gt;
+Buradaki &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fetchSize&lt;/code&gt; parametresi veritabanından sonuçların kaçar kaçar belleğe alınacağını belirliyor.&lt;/p&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fetchMsisdnCategories&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;QueryState&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queryState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fetchSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Consumer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;MsisdnCategoriesRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;processor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StatelessSession&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;statelessSession&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;openStatelessSession&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
@@ -695,11 +695,11 @@ Buradaki &lt;code class=&quot;highlighter-rouge&quot;&gt;fetchSize&lt;/code&gt; 
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Bu method içerisinde çektiğimiz her satırı hemen sonuçları işleyecek olan &lt;code class=&quot;highlighter-rouge&quot;&gt;Consumer&lt;/code&gt; sınıfına gönderiyoruz.
+&lt;p&gt;Bu method içerisinde çektiğimiz her satırı hemen sonuçları işleyecek olan &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Consumer&lt;/code&gt; sınıfına gönderiyoruz.
 Böylece herhangi bir şekilde uygulamanın belleğinde aşırı birikme yaratmamış oluyoruz.&lt;/p&gt;
 
-&lt;p&gt;Yukarıdaki methodu çağıran sınıf &lt;code class=&quot;highlighter-rouge&quot;&gt;Consumer&lt;/code&gt; arayüzünden oluşturulmuş bir sınıfı parametre olarak gönderiyor.
-Yani DAO katmanından çıkacak olan her bir &lt;code class=&quot;highlighter-rouge&quot;&gt;MsisdnCategoriesRecord&lt;/code&gt; nesnesinin nasıl işleneceğini DAO katmanına
+&lt;p&gt;Yukarıdaki methodu çağıran sınıf &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Consumer&lt;/code&gt; arayüzünden oluşturulmuş bir sınıfı parametre olarak gönderiyor.
+Yani DAO katmanından çıkacak olan her bir &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MsisdnCategoriesRecord&lt;/code&gt; nesnesinin nasıl işleneceğini DAO katmanına
 yazmamış oluyoruz.&lt;/p&gt;
 
 &lt;p&gt;DAO katmanındaki methodumuzu çağıran servis katmanı ise gelen her bir sonucu doğrudan Hazelcast’e atıyor.&lt;/p&gt;
@@ -727,7 +727,7 @@ Bir öğle yemeğinde tartışırken aklımıza gelen şu çözümü beğendik v
 Cep telefon numarası 905XXXXXXXXX formatında 12 adet rakamdan oluşan bir sayı olduğu için 
 modüler aritmetik işlemlerinde msisdn alanını tercih ettik.&lt;/p&gt;
 
-&lt;p&gt;Sorgumuzdaki &lt;code class=&quot;highlighter-rouge&quot;&gt;WHERE&lt;/code&gt; cümleciğinde ise şu şekilde modüler aritmetik koşuluna yer verdik:&lt;/p&gt;
+&lt;p&gt;Sorgumuzdaki &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WHERE&lt;/code&gt; cümleciğinde ise şu şekilde modüler aritmetik koşuluna yer verdik:&lt;/p&gt;
 
 &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt;
   &lt;span class=&quot;cm&quot;&gt;/*+ parallel(%s) */&lt;/span&gt;
@@ -741,8 +741,8 @@ modüler aritmetik işlemlerinde msisdn alanını tercih ettik.&lt;/p&gt;
 &lt;span class=&quot;k&quot;&gt;group&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;by&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MSISDN&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Yukarıdaki &lt;code class=&quot;highlighter-rouge&quot;&gt;reloadMsisdnCategories&lt;/code&gt; ve &lt;code class=&quot;highlighter-rouge&quot;&gt;fetchMsisdnCategories&lt;/code&gt; isimli methodlarda belki dikkatinizi çekmiştir 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;QueryState&lt;/code&gt; isminde bir sınıf kullanıyoruz sorguları oluştururken.
+&lt;p&gt;Yukarıdaki &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;reloadMsisdnCategories&lt;/code&gt; ve &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fetchMsisdnCategories&lt;/code&gt; isimli methodlarda belki dikkatinizi çekmiştir 
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;QueryState&lt;/code&gt; isminde bir sınıf kullanıyoruz sorguları oluştururken.
 Bu sınıf atılacak olan sorgunun hangi modda hangi kalana göre atılacağı bilgisini taşıyor.&lt;/p&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;QueryState&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Serializable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
@@ -768,15 +768,15 @@ Hiçbir instance’ın boş yatmaması için tüm instance’ların işin bir uc
 Çözümü bulduğumuz gün bunun için instance sayısını bilmeye ihtiyacımız olmadığını keşfettik.&lt;/p&gt;
 
 &lt;p&gt;Aşağıdaki diagramda olduğu gibi, tüm DB’yi okuyup veriyi belleğe yükleme görevini alan mikroservis,
-belirli bir mod değerine karar verip, bir hazelcast queue’suna mod sayısı kadar &lt;code class=&quot;highlighter-rouge&quot;&gt;QueryState&lt;/code&gt; nesnesini
+belirli bir mod değerine karar verip, bir hazelcast queue’suna mod sayısı kadar &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;QueryState&lt;/code&gt; nesnesini
 farklı kalan değerleri ile dolduruyor. Tüm mikroservis instance’ları hali hazırda açık duran 
 birer Thread ile bu belirli Queue’dan gelecek olan mesajları dinlemekteler. 
-Her instance Queue’dan kendine düşen &lt;code class=&quot;highlighter-rouge&quot;&gt;QueryState&lt;/code&gt; nesnesindeki mod ve kalan bilgisine göre sorgusunu atıyor
+Her instance Queue’dan kendine düşen &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;QueryState&lt;/code&gt; nesnesindeki mod ve kalan bilgisine göre sorgusunu atıyor
 ve veritabanından gelen sonuçları Hazelcast Map’ine dolduruyor.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/posts/queue-mod-query.png&quot; alt=&quot;hazelcast queue modular_query&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Burada queue’ya attığımız &lt;code class=&quot;highlighter-rouge&quot;&gt;QueryState&lt;/code&gt; nesnelerinin sayısı (ya da mod değerimiz) instance sayısına tam bölünmüyorsa 
+&lt;p&gt;Burada queue’ya attığımız &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;QueryState&lt;/code&gt; nesnelerinin sayısı (ya da mod değerimiz) instance sayısına tam bölünmüyorsa 
 bazı instance’lar diğerlerinden daha fazla sorgu atabilirler veritabanına. 
 Eğer mod değerimiz instance sayısından küçük ise bazı instance’larımız hiç sorgu atmayabilirler.
 Biz mikroservisin instance sayısının alabileceği maksimum değer civarında 
@@ -794,15 +794,15 @@ Veritabanından veriyi okuma kısmındaki git-gel işlemlerini sorguları scroll
 Geriye hazelcast’e verileri gönderdiğimiz yer kalıyor. Hazelcast aracını da uygulamadan ayrı bir cluster şeklinde
 kurduğumuz için hazelcast operasyonları da network işlemlerinin büyük çoğunluğunu oluşturmakta.&lt;/p&gt;
 
-&lt;p&gt;DAO katmanından gelen her bir satır için hazelcast’e bir &lt;code class=&quot;highlighter-rouge&quot;&gt;.put&lt;/code&gt; işlemi çağırmak yerine öncelikle
-gelen satırları küçük gruplar halinde (1000 adet gibi) toparlayıp sonrasında &lt;code class=&quot;highlighter-rouge&quot;&gt;.putAll&lt;/code&gt; methodunu çağırarak
+&lt;p&gt;DAO katmanından gelen her bir satır için hazelcast’e bir &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.put&lt;/code&gt; işlemi çağırmak yerine öncelikle
+gelen satırları küçük gruplar halinde (1000 adet gibi) toparlayıp sonrasında &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.putAll&lt;/code&gt; methodunu çağırarak
 tek seferde network’e çıkarak küçük bir iyileştirme sağlayabildik. Burada önemli nokta elimizdeki verinin
 karakteristiğine göre memory üzerinde fazla birikme oluşturmayacak doğru sayıyı seçmek.&lt;/p&gt;
 
 &lt;p&gt;Sonraki aşamada hazelcast dökümantasyonlarını karıştırırken bildiğimiz java Map’lerinde olmayan 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;.set&lt;/code&gt; ve &lt;code class=&quot;highlighter-rouge&quot;&gt;.setAll&lt;/code&gt; isimli methodlarının Hazelcast’in IMap arayüzünde bulunduğunu fark ettik.
-&lt;code class=&quot;highlighter-rouge&quot;&gt;put*&lt;/code&gt; türevi methodlar veriyi hazelcast’e koyduktan sonra Map’de ilgili key’e ait varolan eski veriyi dönerken
-&lt;code class=&quot;highlighter-rouge&quot;&gt;set*&lt;/code&gt; türevi methodlar herhangi bir şey dönmüyorlar. 
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.set&lt;/code&gt; ve &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.setAll&lt;/code&gt; isimli methodlarının Hazelcast’in IMap arayüzünde bulunduğunu fark ettik.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;put*&lt;/code&gt; türevi methodlar veriyi hazelcast’e koyduktan sonra Map’de ilgili key’e ait varolan eski veriyi dönerken
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;set*&lt;/code&gt; türevi methodlar herhangi bir şey dönmüyorlar. 
 Bu methodları kullandığımız durumda network katmanını kullanmayacağımız bir veri için boşuna meşgul etmemiş oluyoruz.&lt;/p&gt;
 
 &lt;h1 id=&quot;sonuç&quot;&gt;Sonuç&lt;/h1&gt;
@@ -842,11 +842,11 @@ Anlatımda kopukluklar varsa sebebi budur, hatalarım olduysa affola.&lt;/p&gt;
     
       <item>
         <title>Daha Tatlı Bir Git Log</title>
-        <description>&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git log&lt;/code&gt;, Git versiyon kontrol sisteminde oluşturulmuş
+        <description>&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git log&lt;/code&gt;, Git versiyon kontrol sisteminde oluşturulmuş
 commit geçmişini tarihsel olarak sondan başa doğru sırasıyla
 konsola yazan bir &lt;strong&gt;Git&lt;/strong&gt; komutudur. 
 Tek başına kullanıldığında oldukça sıkıcı bir görünüme sahip olan
-&lt;code class=&quot;highlighter-rouge&quot;&gt;git log&lt;/code&gt; komutunu birkaç parametre ile daha tatlı bir hale getirebiliyoruz.&lt;/p&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git log&lt;/code&gt; komutunu birkaç parametre ile daha tatlı bir hale getirebiliyoruz.&lt;/p&gt;
 
 &lt;!--more--&gt;
 
@@ -854,7 +854,7 @@ Tek başına kullanıldığında oldukça sıkıcı bir görünüme sahip olan
 
 &lt;p&gt;En basit hali ile 
 &lt;a href=&quot;https://github.com/spring-projects/spring-boot&quot;&gt;spring-boot&lt;/a&gt; 
-projesinde &lt;code class=&quot;highlighter-rouge&quot;&gt;git log&lt;/code&gt; komutunu çalıştırdığımızda
+projesinde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git log&lt;/code&gt; komutunu çalıştırdığımızda
 aşağıdaki gibi bir görüntü ile karşılaşırız.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/posts/better-git-log-1.png&quot; alt=&quot;Normal Git Log&quot; width=&quot;600px&quot; /&gt;&lt;/p&gt;
@@ -863,18 +863,18 @@ aşağıdaki gibi bir görüntü ile karşılaşırız.&lt;/p&gt;
 
 &lt;p&gt;Yukarıdaki şekilde olduğu gibi uzun uzun açıklamaları okumak istemiyorsak,
 sadece commit başlıklarını listelemek istiyorsak, 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;--oneline&lt;/code&gt; parametresini kullanabiliriz.&lt;/p&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--oneline&lt;/code&gt; parametresini kullanabiliriz.&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git log --oneline&lt;/code&gt; komutunu çalıştırdığımızda 
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git log --oneline&lt;/code&gt; komutunu çalıştırdığımızda 
 aşağıdaki çıktıyı elde ederiz.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/posts/better-git-log-2.png&quot; alt=&quot;Git Log --oneline&quot; width=&quot;600px&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;graph-şeklinde&quot;&gt;Graph Şeklinde&lt;/h2&gt;
 
-&lt;p&gt;Graph şeklinde çıktı almak için &lt;code class=&quot;highlighter-rouge&quot;&gt;--graph&lt;/code&gt; parametresini kullanabiliriz.&lt;/p&gt;
+&lt;p&gt;Graph şeklinde çıktı almak için &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--graph&lt;/code&gt; parametresini kullanabiliriz.&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git log --graph&lt;/code&gt; komutunu çalıştırdığımızda aşağıdaki çıktıyı elde ederiz.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git log --graph&lt;/code&gt; komutunu çalıştırdığımızda aşağıdaki çıktıyı elde ederiz.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/posts/better-git-log-3.png&quot; alt=&quot;Git Log --graph&quot; width=&quot;600px&quot; /&gt;&lt;/p&gt;
 
@@ -882,16 +882,16 @@ aşağıdaki çıktıyı elde ederiz.&lt;/p&gt;
 hangi branch hangi branch’e birleştirilmiş rahatça görebiliriz.&lt;/p&gt;
 
 &lt;p&gt;Eğer commit mesajlarının sadece başlık kısımları görünsün isterseniz
-bu komutta da &lt;code class=&quot;highlighter-rouge&quot;&gt;--oneline&lt;/code&gt; parametresini kullanabilirsiniz.&lt;/p&gt;
+bu komutta da &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--oneline&lt;/code&gt; parametresini kullanabilirsiniz.&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git log --graph --oneline&lt;/code&gt; komutunu kullanarak aşağıdaki
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git log --graph --oneline&lt;/code&gt; komutunu kullanarak aşağıdaki
 görüntüyü elde edebiliriz.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/posts/better-git-log-4.png&quot; alt=&quot;Git Log --graph --oneline&quot; width=&quot;600px&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;formatlama&quot;&gt;Formatlama&lt;/h2&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git log&lt;/code&gt; komutuna &lt;code class=&quot;highlighter-rouge&quot;&gt;--pretty=format:&amp;lt;string&amp;gt;&lt;/code&gt; parametresini geçerek
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git log&lt;/code&gt; komutuna &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--pretty=format:&amp;lt;string&amp;gt;&lt;/code&gt; parametresini geçerek
 kendi istediğimiz bilgiyi istediğimiz şekilde yazmasını sağlayabiliyoruz.&lt;/p&gt;
 
 &lt;p&gt;Bu sayede istersek tek bir satırda veya birden fazla satırda 
@@ -912,11 +912,11 @@ ve daha birçok alanını çıktı alabiliriz.&lt;/p&gt;
 &lt;p&gt;Bu komuttaki formatın içerisinde bulunan parametreler:&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;%h&lt;/code&gt;  : Commit ID’sinin 10 karakter uzunluğundaki kısa hali&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;%d&lt;/code&gt;  : Commit’e işaret eden branch veya tag’lerin parantez içerisinde virgülle ayrılmış listesi&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;%s&lt;/code&gt;  : Commit mesajının başlık satırı (subject)&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;%ar&lt;/code&gt; : Commit tarihinin şimdiki zamana göre göreceli formatı. Örneğin “3 gün önce”, “5 dakika önce”, vb.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;%an&lt;/code&gt; : Commit’i oluşturan kişinin (author) ismi&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%h&lt;/code&gt;  : Commit ID’sinin 10 karakter uzunluğundaki kısa hali&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%d&lt;/code&gt;  : Commit’e işaret eden branch veya tag’lerin parantez içerisinde virgülle ayrılmış listesi&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%s&lt;/code&gt;  : Commit mesajının başlık satırı (subject)&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%ar&lt;/code&gt; : Commit tarihinin şimdiki zamana göre göreceli formatı. Örneğin “3 gün önce”, “5 dakika önce”, vb.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%an&lt;/code&gt; : Commit’i oluşturan kişinin (author) ismi&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Bu komutun çıktısı aşağıdaki gibi olacaktır:&lt;/p&gt;
@@ -929,27 +929,27 @@ ve daha birçok alanını çıktı alabiliriz.&lt;/p&gt;
 başlığını incelemelerini tavsiye ederim.&lt;/p&gt;
 
 &lt;p&gt;Ben “3 gün önce” gibi göreceli tarihleri sevmediğim için
-&lt;code class=&quot;highlighter-rouge&quot;&gt;%cd&lt;/code&gt; format parametresini kullanıyorum.
-Bu parametre ek olarak &lt;code class=&quot;highlighter-rouge&quot;&gt;--date=format:&amp;lt;string&amp;gt;&lt;/code&gt; parametresini
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%cd&lt;/code&gt; format parametresini kullanıyorum.
+Bu parametre ek olarak &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--date=format:&amp;lt;string&amp;gt;&lt;/code&gt; parametresini
 kullanabilmeme olanak tanıyor.
 Böylece istediğim formatta tarih çıktısı da alabiliyorum.&lt;/p&gt;
 
 &lt;p&gt;Aşağıdaki komut tarih formatını istediğimiz gibi ayarlayabilmemizi sağlıyor.
-Yukarıdaki komuttan tek farkı tarihin &lt;code class=&quot;highlighter-rouge&quot;&gt;2020-04-25 13:32:43&lt;/code&gt; şeklinde çıkması.&lt;/p&gt;
+Yukarıdaki komuttan tek farkı tarihin &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2020-04-25 13:32:43&lt;/code&gt; şeklinde çıkması.&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git log &lt;span class=&quot;nt&quot;&gt;--pretty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;format:&lt;span class=&quot;s2&quot;&gt;&quot;%h -%d %s (%cd) &amp;lt;%an&amp;gt;&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;format:&lt;span class=&quot;s1&quot;&gt;'%Y-%m-%d %H:%M:%S'&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;renklendirme&quot;&gt;Renklendirme&lt;/h2&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;--pretty=format:&amp;lt;string&amp;gt;&lt;/code&gt; parametresi ile formatladığımız log
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--pretty=format:&amp;lt;string&amp;gt;&lt;/code&gt; parametresi ile formatladığımız log
 tek renk olarak çıktı vereceğinden okuması biraz zor olacaktır.&lt;/p&gt;
 
 &lt;p&gt;Eğer istersek formatın herhangi bir alanını 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;%C(&amp;lt;color&amp;gt;)&lt;/code&gt; ve &lt;code class=&quot;highlighter-rouge&quot;&gt;%C(reset)&lt;/code&gt; arasına alarak renklendirebiliriz.&lt;/p&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%C(&amp;lt;color&amp;gt;)&lt;/code&gt; ve &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%C(reset)&lt;/code&gt; arasına alarak renklendirebiliriz.&lt;/p&gt;
 
 &lt;p&gt;Bazı durumlarda renklendirme git ayarlarında devre dışı bırakılmış olabiliyor.
-Bu sebeple komuta &lt;code class=&quot;highlighter-rouge&quot;&gt;--color&lt;/code&gt; parametresini de ekleyelim.&lt;/p&gt;
+Bu sebeple komuta &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--color&lt;/code&gt; parametresini de ekleyelim.&lt;/p&gt;
 
 &lt;p&gt;Yukarıdaki son örnekte verdiğim komutta
 commit id kırmızı,
@@ -971,7 +971,7 @@ aşağıdaki gibi parametrelerin etrafını renklerle sarabiliriz.&lt;/p&gt;
 &lt;h2 id=&quot;renkli-formatlı-graph-olarak&quot;&gt;Renkli, Formatlı, Graph Olarak&lt;/h2&gt;
 
 &lt;p&gt;Yukarıdaki renklendirme başlığında verdiğim örnek komutun sonuna
-bir de &lt;code class=&quot;highlighter-rouge&quot;&gt;--graph&lt;/code&gt; parametresini eklersek eğer,
+bir de &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--graph&lt;/code&gt; parametresini eklersek eğer,
 hem istediğimiz formatta ve renklendirme ile hem de graph halinde
 versiyon geçmişimizi görüntülemiş oluruz.&lt;/p&gt;
 
@@ -995,11 +995,11 @@ her seferinde tekrar elle yazmayacağız veya kopyala yapıştır yapmayacağız
 
 &lt;p&gt;Bu komutu git’in alias özelliğini kullanarak bir kısayola atayacağız.&lt;/p&gt;
 
-&lt;p&gt;Terminalde &lt;code class=&quot;highlighter-rouge&quot;&gt;git lg&lt;/code&gt; yazdığımızda yukarıdaki uzun komutun çalışmasını sağlayacağız.&lt;/p&gt;
+&lt;p&gt;Terminalde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git lg&lt;/code&gt; yazdığımızda yukarıdaki uzun komutun çalışmasını sağlayacağız.&lt;/p&gt;
 
 &lt;p&gt;Aşağıdaki komutu çalıştırdığınız anda git’in global konfigürasyonunda
-&lt;code class=&quot;highlighter-rouge&quot;&gt;lg&lt;/code&gt; isminde bir alias tanımlanmış oldu.
-Böylece &lt;code class=&quot;highlighter-rouge&quot;&gt;git lg&lt;/code&gt; yazdığımız zaman artık o meşhur uzun komutumuz çalışacak.&lt;/p&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lg&lt;/code&gt; isminde bir alias tanımlanmış oldu.
+Böylece &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git lg&lt;/code&gt; yazdığımız zaman artık o meşhur uzun komutumuz çalışacak.&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git config &lt;span class=&quot;nt&quot;&gt;--global&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
   alias.lg &lt;span class=&quot;s2&quot;&gt;&quot;log --color --graph --pretty=format:'%C(red)%h%C(reset) -%C(yellow)%d%C(reset) %s %C(green)(%cd)%C(reset) %C(bold blue)&amp;lt;%an&amp;gt;%C(reset)' --date=format:'%Y-%m-%d %H:%M:%S'&quot;&lt;/span&gt;
@@ -1091,7 +1091,7 @@ mesajını göstermek istiyorum.
 Bu commit’i gönderen &lt;a href=&quot;https://github.com/scottfrederick&quot;&gt;Scott Frederick&lt;/a&gt; abimiz 
 aşağıda yazacağım bütün iyi commit mesajı yazma kurallarını, adeta ibret-i alem için, uygulamış.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Disable exception details on default error views
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Disable exception details on default error views
 
 Prior to this commit, default error responses included the message
 from a handled exception. When the exception was a BindException, the
@@ -1131,8 +1131,8 @@ Kötü örnekleri çok iyi bildiğiniz için burayı hiç kirletmeyeceğim.&lt;/
 
 &lt;p&gt;Git versiyon kontrol sistemi yazdığınız mesajı başlık ve gövde olmak üzere iki parça olarak düşünür.
 Versiyon geçmişi üzerinde çalışan birçok git komutu bu ayrımı kullanır. 
-Örneğin &lt;code class=&quot;highlighter-rouge&quot;&gt;git log&lt;/code&gt; komutu tüm commit’lerin mesajlarını tam haliyle listelerken,
-&lt;code class=&quot;highlighter-rouge&quot;&gt;git shortlog&lt;/code&gt; ve &lt;code class=&quot;highlighter-rouge&quot;&gt;git log --oneline&lt;/code&gt; komutları commit’lerin sadece başlıklarını listeler.&lt;/p&gt;
+Örneğin &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git log&lt;/code&gt; komutu tüm commit’lerin mesajlarını tam haliyle listelerken,
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git shortlog&lt;/code&gt; ve &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git log --oneline&lt;/code&gt; komutları commit’lerin sadece başlıklarını listeler.&lt;/p&gt;
 
 &lt;p&gt;Git’in bu ayrımı yapabilmesinin tek yolu başlık olarak yazdığınız satır ile
 gövde olarak yazdığınız ilk satırın arasında bir boş satır bulunmasıdır.
@@ -1148,10 +1148,10 @@ yaptığınız değişiklikleri bir kez daha düşünmenizi sağlayacaktır.&lt;
 gerekenden fazla değişikliği tek bir commit’e yüklemeye çalışıyor olabilirsiniz.
 Bu durumda yaptığınız değişiklikleri birden fazla commit’e paylaştırmayı düşünebilirsiniz.&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git commit --help&lt;/code&gt; komutunu kullanarak &lt;code class=&quot;highlighter-rouge&quot;&gt;git commit&lt;/code&gt; hakkında yardım istediğimizde
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git commit --help&lt;/code&gt; komutunu kullanarak &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git commit&lt;/code&gt; hakkında yardım istediğimizde
 terminalimize dökülen uzun yazıda aşağıdaki gibi bir bölüm var:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Though not required, it's a good idea to begin the commit message with a single short 
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Though not required, it's a good idea to begin the commit message with a single short 
 (less than 50 character) line summarizing the change, followed by a blank line and then 
 a more thorough description. The text up to the first blank line in a commit message is 
 treated as the commit title, and that title is used throughout Git. For example, 
@@ -1180,7 +1180,7 @@ kendimize koyduğumuz 50 karakter başlık kotasından tüketmekte.&lt;/p&gt;
 
 &lt;p&gt;Örneğin otomatik olarak merge commit oluşturken:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Merge branch 'release/awesome-feature'
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Merge branch 'release/awesome-feature'
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Bu durumda emir kipi ile yazmanın birinci faydası 
@@ -1205,19 +1205,19 @@ Böylece başlık satırımızda 50 karakter limiti kuralımızı delmeden daha 
 
 &lt;h5 id=&quot;yanlış&quot;&gt;Yanlış&lt;/h5&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Fixes NullPointerException in SubscriptionRestController&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Fixes NullPointerException in SubscriptionRestController&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Fixed NullPointerException in SubscriptionRestController&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Fixed NullPointerException in SubscriptionRestController&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;I added direct charging capability for internal partners&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;I added direct charging capability for internal partners&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;This commit adds direct charging capability for internal partners&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;This commit adds direct charging capability for internal partners&lt;/code&gt;&lt;/p&gt;
 
 &lt;h5 id=&quot;doğru&quot;&gt;Doğru&lt;/h5&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Fix NullPointerException in SubscriptionRestController&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Fix NullPointerException in SubscriptionRestController&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Add direct charging capability for internal partners&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Add direct charging capability for internal partners&lt;/code&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;govde-72-karakter&quot;&gt;Gövde satırlarında 72 karakter uzunluğunu geçmeyin&lt;/h3&gt;
 
@@ -1306,7 +1306,7 @@ proje yönetim sistemi ID’mizi yazabiliriz.&lt;/p&gt;
 Daha ileriki zamanlarda commit mesajını inceleyen arkadaşlara 
 bu iş ile ilgili daha fazla detayın bulunduğu bir kaynak daha sunmuş oluruz.&lt;/p&gt;
 
-&lt;p&gt;Örneğin yazının başında örnek verdiğim commit mesajındaki &lt;code class=&quot;highlighter-rouge&quot;&gt;Fixes gh-20505&lt;/code&gt; yazan satırda
+&lt;p&gt;Örneğin yazının başında örnek verdiğim commit mesajındaki &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Fixes gh-20505&lt;/code&gt; yazan satırda
 Github’daki issue ID’sinin referans verildiğini görebiliriz.&lt;/p&gt;
 
 &lt;p&gt;Bunu yaparken dikkat edilmesi gereken husus bu issue id’nin commit mesajının
@@ -1320,7 +1320,7 @@ Bu konuda çok hassasım çünkü çalıştığım ekipte buna direnen gençler 
 
 &lt;p&gt;Commit mesajının en sonlarında bir satırda issue id aşağıdakilere benzer bir formatta kullanılabilir:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Fixes: FCB-8473
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Fixes: FCB-8473
 Resolves: FCB-3123
 Issue: TEAM-432
 Ticket: TKT-83823242
@@ -1360,12 +1360,12 @@ birlikte çalıştığınız arkadaşınızın ismini de bir şekilde commit mes
 &lt;p&gt;Bunu yapmak çok kolay.
 Sadece üşenmeyip aşağıdakine benzer bir satırı commit mesajının sonuna ekleyebilirsiniz.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Co-authored-by: Foo Bar &amp;lt;foo.bar@example.com&amp;gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Co-authored-by: Foo Bar &amp;lt;foo.bar@example.com&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Veya birden fazla kişi ile birlikte çalışıyorsanız bunu iki satırda yapabilirsiniz:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Co-authored-by: Foo Bar &amp;lt;foo.bar@example.com&amp;gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Co-authored-by: Foo Bar &amp;lt;foo.bar@example.com&amp;gt;
 Co-authored-by: John Bob &amp;lt;john.bob@example.com&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
@@ -1419,17 +1419,17 @@ Commit mesajları da bana göre en güzel dökümantasyon araçlarından biridir
       <item>
         <title>Thread Local Nedir?</title>
         <description>&lt;p&gt;Bu yazıda Java dünyasında sıkça kullanıldığına 
-veya bahsedildiğine şahit olduğumuz &lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; sınıfını inceleyeceğiz.
-&lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; sınıfı belirlediğimiz nesnelerin sadece aynı thread tarafından erişilebilir olmasını sağlar.
+veya bahsedildiğine şahit olduğumuz &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; sınıfını inceleyeceğiz.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; sınıfı belirlediğimiz nesnelerin sadece aynı thread tarafından erişilebilir olmasını sağlar.
 Bu sayede &lt;strong&gt;thread safe&lt;/strong&gt; olmayan nesneleri &lt;strong&gt;thread safe&lt;/strong&gt; kullanmış oluruz.
-Bir &lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; nesnesi içerisine yazdığımız nesne, 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt;‘e yazan thread tarafından çalıştırılan tüm methodlar tarafından okunabilir olacaktır.
+Bir &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; nesnesi içerisine yazdığımız nesne, 
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt;‘e yazan thread tarafından çalıştırılan tüm methodlar tarafından okunabilir olacaktır.
 Gelin bu güçlü aracı avantajları ve dezavantajları ile inceleyelim.&lt;/p&gt;
 
 &lt;!--more--&gt;
 
-&lt;p&gt;İlk olarak &lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; teknik olarak nedir ona bakalım.
-Java’da her yaratılan &lt;code class=&quot;highlighter-rouge&quot;&gt;Thread&lt;/code&gt; nesnesi içerisinde 
+&lt;p&gt;İlk olarak &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; teknik olarak nedir ona bakalım.
+Java’da her yaratılan &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Thread&lt;/code&gt; nesnesi içerisinde 
 o &lt;em&gt;Thread&lt;/em&gt;‘e ait &lt;em&gt;ThreadLocal&lt;/em&gt;‘lerin tutulduğu bir map bulunmaktadır.
 İki farklı thread aynı &lt;em&gt;ThreadLocal&lt;/em&gt; nesnesine eriştikleri zaman,
 ThreadLocal nesnesi değerini o an kendisine erişen thread’in içerisindeki &lt;em&gt;Map&lt;/em&gt;‘den okur veya yazar.
@@ -1437,34 +1437,34 @@ Bu sayede iki farklı &lt;em&gt;Thread&lt;/em&gt; aynı ThreadLocal nesnesi üze
 
 &lt;h3 id=&quot;nasıl-tanımlanmalı&quot;&gt;Nasıl Tanımlanmalı?&lt;/h3&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;new&lt;/code&gt; anahtar kelimesi ile yarattığımız her bir yeni &lt;em&gt;ThreadLocal&lt;/em&gt; nesnesi 
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;new&lt;/code&gt; anahtar kelimesi ile yarattığımız her bir yeni &lt;em&gt;ThreadLocal&lt;/em&gt; nesnesi 
 &lt;em&gt;Thread&lt;/em&gt; içerisindeki Map’de farklı bir key olarak tutulmaktadır.
-Bu sebeple belirli bir amaç için kullanacağımız &lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; nesnesinin 
+Bu sebeple belirli bir amaç için kullanacağımız &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; nesnesinin 
 sadece tek bir instance’ının olduğundan emin olmalıyız.&lt;/p&gt;
 
-&lt;p&gt;Bunun en kolay yolu da &lt;code class=&quot;highlighter-rouge&quot;&gt;static final&lt;/code&gt; olarak tanımlamaktır.
-Bu sayede oluşturacağımız &lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; nesnesinin aynı &lt;code class=&quot;highlighter-rouge&quot;&gt;ClassLoader&lt;/code&gt; içerisinde 
+&lt;p&gt;Bunun en kolay yolu da &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;static final&lt;/code&gt; olarak tanımlamaktır.
+Bu sayede oluşturacağımız &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; nesnesinin aynı &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ClassLoader&lt;/code&gt; içerisinde 
 sadece tek bir instance’ının olacağını garanti etmiş oluruz.&lt;/p&gt;
 
 &lt;h3 id=&quot;nasıl-kullanılır&quot;&gt;Nasıl Kullanılır?&lt;/h3&gt;
 
-&lt;p&gt;Bu kısımda &lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; üzerindeki method ve constructor’ları inceleyelim.&lt;/p&gt;
+&lt;p&gt;Bu kısımda &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; üzerindeki method ve constructor’ları inceleyelim.&lt;/p&gt;
 
 &lt;h4 id=&quot;boş-threadlocal-oluşturma&quot;&gt;Boş ThreadLocal Oluşturma&lt;/h4&gt;
 
 &lt;p&gt;İçinde herhangi bir değer taşımayan (null value) bir ThreadLocal, doğrudan boş constructor kullanılarak üretilebilir. 
-Bu ThreadLocal nesnesine erişen her bir Thread &lt;code class=&quot;highlighter-rouge&quot;&gt;get&lt;/code&gt; methodundan &lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt; değerini alacaktır.&lt;/p&gt;
+Bu ThreadLocal nesnesine erişen her bir Thread &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;get&lt;/code&gt; methodundan &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;null&lt;/code&gt; değerini alacaktır.&lt;/p&gt;
 
 &lt;p&gt;Bu yazıdaki örneklerde çoğunlukla Java’da thread-safe olmayan 
 &lt;a href=&quot;https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html&quot;&gt;SimpleDateFormat&lt;/a&gt; sınıfını
-&lt;code class=&quot;highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; içerisinde kullanacağım.&lt;/p&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ThreadLocal&lt;/code&gt; içerisinde kullanacağım.&lt;/p&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;SimpleDateFormat&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;DATE_FORMAT_THREAD_LOCAL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h4 id=&quot;threadlocal-değerini-atamak&quot;&gt;ThreadLocal Değerini Atamak&lt;/h4&gt;
 
-&lt;p&gt;Boş veya dolu fark etmeksizin bir ThreadLocal nesnesine &lt;code class=&quot;highlighter-rouge&quot;&gt;set&lt;/code&gt; methodunu kullanarak yeni bir değer atayabilirsiniz.
+&lt;p&gt;Boş veya dolu fark etmeksizin bir ThreadLocal nesnesine &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;set&lt;/code&gt; methodunu kullanarak yeni bir değer atayabilirsiniz.
 Atadığınız değer sadece o değeri atadığınız Thread için geçerli olacaktır.
 Diğer Thread’lerin atayacakları veya okuyacakları değerler tamamen mevcut Thread’inkinden bağımsız olacaktır.&lt;/p&gt;
 
@@ -1477,9 +1477,9 @@ Diğer Thread’lerin atayacakları veya okuyacakları değerler tamamen mevcut 
 
 &lt;h4 id=&quot;threadlocal-değerini-okumak&quot;&gt;ThreadLocal Değerini Okumak&lt;/h4&gt;
 
-&lt;p&gt;Bir ThreadLocal üzerinde mevcut Thread için tutulmakta olan değeri almak için &lt;code class=&quot;highlighter-rouge&quot;&gt;get&lt;/code&gt; methodu kullanılır.
+&lt;p&gt;Bir ThreadLocal üzerinde mevcut Thread için tutulmakta olan değeri almak için &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;get&lt;/code&gt; methodu kullanılır.
 Mevcut Thread tarafından değer atanmamış veya başlangıç değeri bulunmayan bir ThreadLocal üzerindeki 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;get&lt;/code&gt; methodunu çağırmak &lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt; değerini dönecektir.&lt;/p&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;get&lt;/code&gt; methodunu çağırmak &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;null&lt;/code&gt; değerini dönecektir.&lt;/p&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
 &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;shouldSetAndGetThreadLocalValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
@@ -1500,18 +1500,18 @@ Mevcut Thread tarafından değer atanmamış veya başlangıç değeri bulunmaya
 &lt;h4 id=&quot;başlangıç-değeri-ile-oluşturma&quot;&gt;Başlangıç Değeri ile Oluşturma&lt;/h4&gt;
 
 &lt;p&gt;ThreadLocal nesneleri bir başlangıç değerine sahip olabilir. 
-Bu durumda &lt;code class=&quot;highlighter-rouge&quot;&gt;set&lt;/code&gt; çağırmadan &lt;code class=&quot;highlighter-rouge&quot;&gt;get&lt;/code&gt; methodunu ilk kez çağıran her bir Thread belirlenen initialValue değerini alırlar.
+Bu durumda &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;set&lt;/code&gt; çağırmadan &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;get&lt;/code&gt; methodunu ilk kez çağıran her bir Thread belirlenen initialValue değerini alırlar.
 Bu ilk değer her Thread için farklı olabileceği gibi aynı değer de verilebilir.
 Bu kısım tamamen kullanıcıya kalmış.
 Aşağıda başlangıç değeri ile bir ThreadLocal nesnesi oluşturmanın iki farklı yolunu görelim.&lt;/p&gt;
 
 &lt;h5 id=&quot;initialvalue-methodunun-override-edilmesi&quot;&gt;initialValue Methodunun Override Edilmesi&lt;/h5&gt;
 
-&lt;p&gt;ThreadLocal sınıfı üzerinde bulunan &lt;code class=&quot;highlighter-rouge&quot;&gt;initialValue&lt;/code&gt; methodunun görevi 
+&lt;p&gt;ThreadLocal sınıfı üzerinde bulunan &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;initialValue&lt;/code&gt; methodunun görevi 
 bir ThreadLocal nesnesi için ilk değerin üretilmesidir.
-Bu method ThreadLocal sınıfı içerisinde &lt;code class=&quot;highlighter-rouge&quot;&gt;return null&lt;/code&gt; şeklinde yazılmıştır.&lt;/p&gt;
+Bu method ThreadLocal sınıfı içerisinde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;return null&lt;/code&gt; şeklinde yazılmıştır.&lt;/p&gt;
 
-&lt;p&gt;Aşağıdaki şekilde &lt;code class=&quot;highlighter-rouge&quot;&gt;initialValue&lt;/code&gt; methodunun override edildiği ThreadLocal’den extend eden
+&lt;p&gt;Aşağıdaki şekilde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;initialValue&lt;/code&gt; methodunun override edildiği ThreadLocal’den extend eden
 bir anonymous class yazarak kullanacağımız ThreadLocal için bir ilk değer belirleyebiliyoruz.&lt;/p&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
@@ -1529,16 +1529,16 @@ bir anonymous class yazarak kullanacağımız ThreadLocal için bir ilk değer b
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h5 id=&quot;static-withinitial-methodu-i̇le-başlangıç-değerinin-verilmesi&quot;&gt;Static &lt;code class=&quot;highlighter-rouge&quot;&gt;withInitial&lt;/code&gt; Methodu İle Başlangıç Değerinin Verilmesi&lt;/h5&gt;
+&lt;h5 id=&quot;static-withinitial-methodu-i̇le-başlangıç-değerinin-verilmesi&quot;&gt;Static &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;withInitial&lt;/code&gt; Methodu İle Başlangıç Değerinin Verilmesi&lt;/h5&gt;
 
-&lt;p&gt;Java 8 ile birlikte gelen static &lt;code class=&quot;highlighter-rouge&quot;&gt;withInitial&lt;/code&gt; methodunu kullanarak 
+&lt;p&gt;Java 8 ile birlikte gelen static &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;withInitial&lt;/code&gt; methodunu kullanarak 
 başlangıç değeri olan bir ThreadLocal nesnesi yaratabiliriz.&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;initialValue&lt;/code&gt; methodunu override ederken anonymous bir sınıf yaratmıştık.
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;initialValue&lt;/code&gt; methodunu override ederken anonymous bir sınıf yaratmıştık.
 Bu yöntemde ise ThreadLocal içerisinde tanımlı ThreadLocal’den extend eden
-&lt;code class=&quot;highlighter-rouge&quot;&gt;SuppliedThreadLocal&lt;/code&gt; isimli bir private inner class dönülüyor.&lt;/p&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SuppliedThreadLocal&lt;/code&gt; isimli bir private inner class dönülüyor.&lt;/p&gt;
 
-&lt;p&gt;Bu method parametre olarak bir &lt;code class=&quot;highlighter-rouge&quot;&gt;Supplier&lt;/code&gt; alıyor 
+&lt;p&gt;Bu method parametre olarak bir &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Supplier&lt;/code&gt; alıyor 
 ve başlangıç değerine ihtiyacı olan her Thread tarafından bu Supplier çağırılıyor.&lt;/p&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
@@ -1555,9 +1555,9 @@ ve başlangıç değerine ihtiyacı olan her Thread tarafından bu Supplier ça�
 &lt;h4 id=&quot;threadlocal-değerinin-temizlenmesi&quot;&gt;ThreadLocal Değerinin Temizlenmesi&lt;/h4&gt;
 
 &lt;p&gt;Bir ThreadLocal’e bir Thread tarafından atanan değer yine aynı Thread tarafından temizlenebilir.
-Bu işlem &lt;code class=&quot;highlighter-rouge&quot;&gt;remove&lt;/code&gt; methodu kullanılarak yapılır.&lt;/p&gt;
+Bu işlem &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;remove&lt;/code&gt; methodu kullanılarak yapılır.&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;remove&lt;/code&gt; işlemi sonrası &lt;code class=&quot;highlighter-rouge&quot;&gt;get&lt;/code&gt; methodu &lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt; dönecektir.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;remove&lt;/code&gt; işlemi sonrası &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;get&lt;/code&gt; methodu &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;null&lt;/code&gt; dönecektir.&lt;/p&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nd&quot;&gt;@Test&lt;/span&gt;
 &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;shouldRemoveThreadLocalValue&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
@@ -1625,9 +1625,9 @@ bu değer ThreadLocal üzerinde tutularak
 
 &lt;p&gt;Örnek olarak Spring Security bir takım filtreler kullanarak 
 gelen HTTP isteğinin hangi kullanıcı tarafından yapıldığını anlar
-ve &lt;code class=&quot;highlighter-rouge&quot;&gt;SecurityContextHolder&lt;/code&gt; içerisine kullanıcı verisini yazar.
+ve &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityContextHolder&lt;/code&gt; içerisine kullanıcı verisini yazar.
 Bu sınıf varsayılan olarak ThreadLocal kullanmaktadır.
-İstek Controller veya servis katmanlarımıza geldiğinde istersek &lt;code class=&quot;highlighter-rouge&quot;&gt;SecurityContextHolder&lt;/code&gt; üzerinden
+İstek Controller veya servis katmanlarımıza geldiğinde istersek &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SecurityContextHolder&lt;/code&gt; üzerinden
 kullanıcı bilgisine static methodlar kullanarak ulaşabiliyoruz.&lt;/p&gt;
 
 &lt;h4 id=&quot;thread-safe-olmayan-sınıfların-singleton-gibi-kullanılması&quot;&gt;Thread-Safe Olmayan Sınıfların Singleton Gibi Kullanılması&lt;/h4&gt;
@@ -1641,7 +1641,7 @@ bu nesnenin state’inde bir takım istenmeyen sonuçlar ortaya çıkabilir.&lt;
 uygulama genelinde tek instance olan bir singleton olarak tanımlamak yerine,
 her thread’de bir instance’ı olacak şekilde oluşturabiliriz.&lt;/p&gt;
 
-&lt;p&gt;Örnek olarak yukarıdaki örneklerde de kullandığım &lt;code class=&quot;highlighter-rouge&quot;&gt;SimpleDateFormat&lt;/code&gt; sınıfını verebilirim.
+&lt;p&gt;Örnek olarak yukarıdaki örneklerde de kullandığım &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SimpleDateFormat&lt;/code&gt; sınıfını verebilirim.
 Bu sınıf thread-safe olmadığı için global değişken olarak kullanılamıyor.
 Onun yerine bu sınıfın ya her methodda yeni bir nesnesinin oluşturulması gerekiyor
 ya da ThreadLocal üzerinde tutulması gerekiyor.&lt;/p&gt;
@@ -1712,13 +1712,13 @@ Bir ClassLoader belki binlerce sınıfı memory’ye yükleyeceği için Garbage
 Uygulama Application Server üzerinde tekrar ayağa kaldırılırken yepyeni bir ClassLoader oluşturulur
 ve yeniden tüm class’lar load edilir.
 Bu şekilde uygulamalar aç/kapa yaptıkça Application Server üzerinde ClassLoader’lar birikecektir
-ve nihayetinde &lt;code class=&quot;highlighter-rouge&quot;&gt;java.lang.OutOfMemoryError: PermGen space&lt;/code&gt; hatası alınacaktır.
+ve nihayetinde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;java.lang.OutOfMemoryError: PermGen space&lt;/code&gt; hatası alınacaktır.
 Bu noktadan sonra artık Application Server’ın restart edilmesi gerekecektir.&lt;/p&gt;
 
 &lt;p&gt;Eğer Application Server Thread’lerinin üzerine bir ThreadLocal yazılıyorsa
 bunun iş biterken silindiğinden emin olunması gerekir.&lt;/p&gt;
 
-&lt;p&gt;Bu sebeple ThreadLocal yazıldıktan sonraki işlem &lt;code class=&quot;highlighter-rouge&quot;&gt;try/finally&lt;/code&gt; bloğu ile yazılmalı.
+&lt;p&gt;Bu sebeple ThreadLocal yazıldıktan sonraki işlem &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;try/finally&lt;/code&gt; bloğu ile yazılmalı.
 Ben aşağıdaki gibi yazıyorum genellikle:&lt;/p&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;UserContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;USER_CONTEXT_THREAD_LOCAL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ThreadLocal&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;gt;();&lt;/span&gt;
@@ -1751,12 +1751,12 @@ Yoksa ExecutorService aynı thread’leri kullanarak başka işleri de koşacağ
 ThreadLocal’e set ettiğimiz değer alakasız başka işler tarafından erişilebilir olacaktır.&lt;/p&gt;
 
 &lt;p&gt;Aynı zamanda executorService’e submit ettiğimiz Runnable ayrı bir thread tarafından çalıştırılacağı için,
-&lt;code class=&quot;highlighter-rouge&quot;&gt;executorService.submit()&lt;/code&gt; methodunu çağırdığımız thread’deki ThreadLocal’leri görmeyecektir.&lt;/p&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;executorService.submit()&lt;/code&gt; methodunu çağırdığımız thread’deki ThreadLocal’leri görmeyecektir.&lt;/p&gt;
 
 &lt;p&gt;Aşağıdaki kodda executorService’e bir task verilmeden önce oradaki iş parçacığı ile paylaşmak istediğimiz
 ThreadLocal değeri önce bir değişkene aktarılıyor.
 Daha sonra executorService’in içerisinde işi çalıştıran Thread’in ThreadLocal’ine tekrar set ediliyor.
-Daha önemlisi, executorService’deki işimiz bittiğinde &lt;code class=&quot;highlighter-rouge&quot;&gt;finally&lt;/code&gt; bloğu içerisinde ThreadLocal’i tekrar temizliyoruz.
+Daha önemlisi, executorService’deki işimiz bittiğinde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;finally&lt;/code&gt; bloğu içerisinde ThreadLocal’i tekrar temizliyoruz.
 Bu sayede ExecutorService tarafından yapılan diğer işlere fazladan bilgi vermemiş oluyoruz.&lt;/p&gt;
 
 &lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;executeBatchTask&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
@@ -2164,8 +2164,8 @@ Sizin de MDC ile ilgili farklı kullanım senaryolarınız varsa duymak isterim.
       <item>
         <title>User Threads vs Daemon Threads</title>
         <description>&lt;p&gt;Java’da birden fazla görevi eş zamanlı gerçekleştirmek istediğimizde 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;Thread&lt;/code&gt;‘lerden faydalanırız. 
-Yeni bir &lt;code class=&quot;highlighter-rouge&quot;&gt;Thread&lt;/code&gt; nesnesi oluşturur, 
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Thread&lt;/code&gt;‘lerden faydalanırız. 
+Yeni bir &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Thread&lt;/code&gt; nesnesi oluşturur, 
 constructor argümanı olarak bir &lt;code&gt;Runnable&lt;/code&gt; geçeriz veya 
 &lt;code&gt;Thread&lt;/code&gt; sınıfını extend eder, 
 &lt;code&gt;void run()&lt;/code&gt; methodunu override ederiz. 
@@ -2189,7 +2189,7 @@ process, rather than being under the direct control of an interactive user.&lt;/
 &lt;p&gt;Java iki adet Thread türü tanımlar:&lt;/p&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;&lt;strong&gt;User Threads:&lt;/strong&gt; Bu tip Thread’ler bitmeden JVM kapanmaz. Eğer &lt;code class=&quot;highlighter-rouge&quot;&gt;System.exit&lt;/code&gt; çağırmadıysanız.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;User Threads:&lt;/strong&gt; Bu tip Thread’ler bitmeden JVM kapanmaz. Eğer &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;System.exit&lt;/code&gt; çağırmadıysanız.&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;Daemon Threads:&lt;/strong&gt; Tüm User Thread’leri sonlandığında JVM bu Thread’leri gözünün yaşına bakmadan sonlandırır.&lt;/li&gt;
 &lt;/ol&gt;
 
@@ -2201,11 +2201,11 @@ process, rather than being under the direct control of an interactive user.&lt;/
   &lt;li&gt;JVM’e ait çoğu Thread daemon tipindedir. 
 Örneğin Garbage Collection Thread’leri. 
 JVM sonlanmak için çalışmakta olan bir Garbage Collection işleminin tamamlanmasını beklemez.&lt;/li&gt;
-  &lt;li&gt;Bir Thread &lt;code class=&quot;highlighter-rouge&quot;&gt;start()&lt;/code&gt; edilmeden önce daemon olup olmadığına karar verilmelidir. 
-Eğer çalışmakta olan bir &lt;code class=&quot;highlighter-rouge&quot;&gt;Thread&lt;/code&gt; üzerinde &lt;code class=&quot;highlighter-rouge&quot;&gt;setDaemon(boolean)&lt;/code&gt; 
-çağırırsanız &lt;code class=&quot;highlighter-rouge&quot;&gt;IllegalThreadStateException&lt;/code&gt; alırsınız.&lt;/li&gt;
+  &lt;li&gt;Bir Thread &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;start()&lt;/code&gt; edilmeden önce daemon olup olmadığına karar verilmelidir. 
+Eğer çalışmakta olan bir &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Thread&lt;/code&gt; üzerinde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;setDaemon(boolean)&lt;/code&gt; 
+çağırırsanız &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;IllegalThreadStateException&lt;/code&gt; alırsınız.&lt;/li&gt;
   &lt;li&gt;I/O benzeri kritik işler için daemon thread kullanımı kesinlikle tavsiye edilmez. 
-Çünkü JVM kapanırken daemon thread’leri &lt;code class=&quot;highlighter-rouge&quot;&gt;finally&lt;/code&gt; bloklarını bile çalıştırmadan öldürür.&lt;/li&gt;
+Çünkü JVM kapanırken daemon thread’leri &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;finally&lt;/code&gt; bloklarını bile çalıştırmadan öldürür.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Bu konular ile ilgili sık duyduğum birkaç yanlış bilginin doğrularını yazayım:&lt;/p&gt;
@@ -2394,7 +2394,7 @@ veya &lt;a href=&quot;https://bootstrapmade.com/&quot;&gt;buraya&lt;/a&gt; tıkl
 Bu özellikler Bootstrap’in sitesinde &lt;a href=&quot;https://getbootstrap.com/docs/4.2/content/reboot/&quot;&gt;Content&lt;/a&gt; başlığı altında anlatılmış. 
 Bunu yapmasının amacı siz web sitenizde hiçbir CSS kodu yazmasanız bile kullandığınız HMTL taglerinin farklı tarayıcı 
 ve işletim sistemlerinde aynı görüntüyü vermesini sağlamaktır. 
-Örneğin siz bir &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;h1&amp;gt;&amp;lt;/h1&amp;gt;&lt;/code&gt; tagi kullandığınız zaman Bootstrap kullanmazsanız bu bütün tarayıcılarda farklı görünecektir. 
+Örneğin siz bir &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&amp;lt;h1&amp;gt;&amp;lt;/h1&amp;gt;&lt;/code&gt; tagi kullandığınız zaman Bootstrap kullanmazsanız bu bütün tarayıcılarda farklı görünecektir. 
 Bunu sağlamak için eskiden &lt;a href=&quot;https://meyerweb.com/eric/tools/css/reset/&quot;&gt;Eric Mayer’in CSS Reset&lt;/a&gt; yöntemini kullanırdık. 
 Artık Bootstrap kullanarak da default HTML stilini tüm tarayıcılarda aynı görünecek şekilde konfigüre edebiliyoruz.&lt;/p&gt;
 
@@ -2461,10 +2461,10 @@ bir tanıyalım:&lt;/p&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;h3 id=&quot;container-nedir&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;.container&lt;/code&gt; Nedir?&lt;/h3&gt;
+&lt;h3 id=&quot;container-nedir&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.container&lt;/code&gt; Nedir?&lt;/h3&gt;
 
 &lt;p&gt;Eğer sitemizin yatay olarak tüm ekrana yayılmasını istemiyorsak tüm HTML kodumuzu 
-aşağıdaki gibi &lt;code class=&quot;highlighter-rouge&quot;&gt;class&lt;/code&gt; özelliği &lt;code class=&quot;highlighter-rouge&quot;&gt;container&lt;/code&gt; olan bir &lt;code class=&quot;highlighter-rouge&quot;&gt;div&lt;/code&gt;‘in içine alabiliriz.&lt;/p&gt;
+aşağıdaki gibi &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;class&lt;/code&gt; özelliği &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;container&lt;/code&gt; olan bir &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;div&lt;/code&gt;‘in içine alabiliriz.&lt;/p&gt;
 
 &lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;container&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
     Geri kalan her şey buraya 
@@ -2477,19 +2477,19 @@ Yukarıdaki tabloda farklı ekran genişliklerinde container boyutunun ne kadar 
 genişliği 576 piksel ile 768 piksel arasındaki bir ekranda container 540 piksel alan 
 kaplayıp sayfanın tam ortasında yer alacaktır.&lt;/p&gt;
 
-&lt;p&gt;Eğer içerik her zaman sayfanın tüm genişliğini kapsasın istiyorsanız, &lt;code class=&quot;highlighter-rouge&quot;&gt;container&lt;/code&gt; yerine 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;container-fluid&lt;/code&gt; sınıfını kullanmanız yeterli.&lt;/p&gt;
+&lt;p&gt;Eğer içerik her zaman sayfanın tüm genişliğini kapsasın istiyorsanız, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;container&lt;/code&gt; yerine 
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;container-fluid&lt;/code&gt; sınıfını kullanmanız yeterli.&lt;/p&gt;
 
 &lt;h3 id=&quot;satır-ve-sütunlar&quot;&gt;Satır ve Sütunlar&lt;/h3&gt;
 
 &lt;p&gt;Grid system satır ve sütunlardan oluşur.&lt;/p&gt;
 
-&lt;p&gt;Satırlar &lt;code class=&quot;highlighter-rouge&quot;&gt;row&lt;/code&gt; sınıfı ile oluşturulur ve sayfada alt alta görünürler. 
+&lt;p&gt;Satırlar &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;row&lt;/code&gt; sınıfı ile oluşturulur ve sayfada alt alta görünürler. 
 Sütunlar dışında içerik barındırmamalıdır.&lt;/p&gt;
 
 &lt;p&gt;Satırların içerisine doğrudan sütunlar gelir. 
 Sütunlar responsive kullanım tarzınıza bağlı olarak yan yana veya alt alta gelebilirler. 
-Sütun oluşturmak için &lt;code class=&quot;highlighter-rouge&quot;&gt;col&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;col-{boyut}&lt;/code&gt; veya &lt;code class=&quot;highlighter-rouge&quot;&gt;col-{kırılım}-{boyut}&lt;/code&gt; sınıflarını kullanırız.&lt;/p&gt;
+Sütun oluşturmak için &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;col&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;col-{boyut}&lt;/code&gt; veya &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;col-{kırılım}-{boyut}&lt;/code&gt; sınıflarını kullanırız.&lt;/p&gt;
 
 &lt;p&gt;Bootstrap grid sistemini kullandığınız alanı 12 eşit parçaya böler. 
 Bu parçaları birleştirerek kullanarak sütunlarımızın genişliklerini belirleriz. 
@@ -2573,7 +2573,7 @@ ve sağdaki sütun da satırda geri kalan alanı dolduracak şekilde konumlandı
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Sadece bir sütunun genişliğini belirtip gerisine sadece &lt;code class=&quot;highlighter-rouge&quot;&gt;col&lt;/code&gt; sınıfını verirsek, 
+&lt;p&gt;Sadece bir sütunun genişliğini belirtip gerisine sadece &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;col&lt;/code&gt; sınıfını verirsek, 
 genişliği belirtilmemiş olan sütunlar kendilerine kalan alanı eşit ölçülerde paylaşırlar.&lt;/p&gt;
 
 &lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;row&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
@@ -2592,10 +2592,10 @@ genişliği belirtilmemiş olan sütunlar kendilerine kalan alanı eşit ölçü
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Eğer bir sütunun genişliğine sütunun içeriği karar versin istiyorsak, 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;col-auto&lt;/code&gt; veya &lt;code class=&quot;highlighter-rouge&quot;&gt;col-{kırılım}-auto&lt;/code&gt; sınıfını kullanabiliriz. 
-Örneğin 200 pixel genişliğinde bir içeriği tutan sütuna &lt;code class=&quot;highlighter-rouge&quot;&gt;col-auto&lt;/code&gt; sınıfını verirsek 
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;col-auto&lt;/code&gt; veya &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;col-{kırılım}-auto&lt;/code&gt; sınıfını kullanabiliriz. 
+Örneğin 200 pixel genişliğinde bir içeriği tutan sütuna &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;col-auto&lt;/code&gt; sınıfını verirsek 
 bu sütun 200 pixel genişliğinde olur. 
-Aynı satırda &lt;code class=&quot;highlighter-rouge&quot;&gt;col&lt;/code&gt; sınıfına sahip bir sütun varsa o sütun da geri kalan tüm alanı doldurur.&lt;/p&gt;
+Aynı satırda &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;col&lt;/code&gt; sınıfına sahip bir sütun varsa o sütun da geri kalan tüm alanı doldurur.&lt;/p&gt;
 
 &lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;row&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
     &lt;span class=&quot;c&quot;&gt;&amp;lt;!-- Solda içeriğinin genişliği (200px) kadar yer kaplayan sütun --&amp;gt;&lt;/span&gt;
@@ -2779,9 +2779,9 @@ Aynı zamanda yerini iyi bildiğimiz bu dizinleri başka bir sunucuya geçmek is
 kolayca taşıyabiliriz.&lt;/p&gt;
 
 &lt;p&gt;Bu mimaride 3 adet container kullanacağız. 
-Tüm data bir arada bulunsun amacıyla sunucunun root dizininde &lt;code class=&quot;highlighter-rouge&quot;&gt;/docker-storage&lt;/code&gt; isminde bir dizin oluşturacağım 
+Tüm data bir arada bulunsun amacıyla sunucunun root dizininde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/docker-storage&lt;/code&gt; isminde bir dizin oluşturacağım 
 ve her container için bu dizinin altında ekstra dizinler açacağım. 
-Dikkatinizi çekerim, &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-storage&lt;/code&gt; özel bir isim değil, ben uydurdum. 
+Dikkatinizi çekerim, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker-storage&lt;/code&gt; özel bir isim değil, ben uydurdum. 
 Siz başka bir dizin de kullanabilirsiniz.&lt;/p&gt;
 
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; /docker-storage/nginx
@@ -2796,9 +2796,9 @@ kurulum kolaylığı için şimdilik görmezden gelelim.&lt;/p&gt;
 &lt;h2 id=&quot;4-mimarinin-yaml-formatında-hazırlanışı&quot;&gt;4. Mimarinin YAML Formatında Hazırlanışı&lt;/h2&gt;
 
 &lt;p&gt;Yavaş yavaş sunucumuzu ısıtmaya başlıyoruz. 
-Öncelikle sunucumuzun uygun bir dizininde &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; dosyasını barındıracak olan bir dizin yaratıyoruz. 
-Ben root user ile girdiğim için home dizinim &lt;code class=&quot;highlighter-rouge&quot;&gt;/root&lt;/code&gt; olarak tayin edilmiş. 
-Bu dizine gidiyor ve &lt;code class=&quot;highlighter-rouge&quot;&gt;demoblog&lt;/code&gt; isminde bir dizin oluşturuyorum ve içerisinde &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; isminde 
+Öncelikle sunucumuzun uygun bir dizininde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; dosyasını barındıracak olan bir dizin yaratıyoruz. 
+Ben root user ile girdiğim için home dizinim &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/root&lt;/code&gt; olarak tayin edilmiş. 
+Bu dizine gidiyor ve &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;demoblog&lt;/code&gt; isminde bir dizin oluşturuyorum ve içerisinde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; isminde 
 bir boş dosya yaratıyorum.&lt;/p&gt;
 
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; /root/demoblog
@@ -2806,10 +2806,10 @@ bir boş dosya yaratıyorum.&lt;/p&gt;
 &lt;span class=&quot;nb&quot;&gt;touch &lt;/span&gt;docker-compose.yml
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Daha sonra favori text editörümüz ile (nano, vi, vs) &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; dosyasını açıp aşağıdaki içeriği yapıştıralım.&lt;/p&gt;
+&lt;p&gt;Daha sonra favori text editörümüz ile (nano, vi, vs) &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; dosyasını açıp aşağıdaki içeriği yapıştıralım.&lt;/p&gt;
 
-&lt;p&gt;Bu dosyanın sizin için çalışır hale gelmesi için sadece &lt;code class=&quot;highlighter-rouge&quot;&gt;EMAIL=demoblog@serdarkuzucu.com&lt;/code&gt; 
-ve &lt;code class=&quot;highlighter-rouge&quot;&gt;URL=demoblog.serdarkuzucu.com&lt;/code&gt; alanlarını değiştirmeniz yeterli olacaktır.&lt;/p&gt;
+&lt;p&gt;Bu dosyanın sizin için çalışır hale gelmesi için sadece &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;EMAIL=demoblog@serdarkuzucu.com&lt;/code&gt; 
+ve &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;URL=demoblog.serdarkuzucu.com&lt;/code&gt; alanlarını değiştirmeniz yeterli olacaktır.&lt;/p&gt;
 
 &lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;3.6&quot;&lt;/span&gt;
 
@@ -2874,8 +2874,8 @@ ve &lt;code class=&quot;highlighter-rouge&quot;&gt;URL=demoblog.serdarkuzucu.com
 
 &lt;h2 id=&quot;5-i̇lk-çalıştırma&quot;&gt;5. İlk Çalıştırma&lt;/h2&gt;
 
-&lt;p&gt;Gerekli docker imajlarının docker-hub’dan indirilmesi ve sistemin ilk çalışması için &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; 
-dosyasının bulunduğu dizine gidip &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose up&lt;/code&gt; komutunu çalıştırıyoruz:&lt;/p&gt;
+&lt;p&gt;Gerekli docker imajlarının docker-hub’dan indirilmesi ve sistemin ilk çalışması için &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; 
+dosyasının bulunduğu dizine gidip &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker-compose up&lt;/code&gt; komutunu çalıştırıyoruz:&lt;/p&gt;
 
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /root/demoblog
 docker-compose up
@@ -2973,16 +2973,16 @@ kendi hallerinde takılıyorlar.&lt;/li&gt;
 
 &lt;h2 id=&quot;6-reverse-proxy-ve-http-https-yönlendirme&quot;&gt;6. Reverse Proxy ve Http-&amp;gt;Https Yönlendirme&lt;/h2&gt;
 
-&lt;p&gt;Öncelikle yukarıdaki adımlarda geldiğimiz son noktada &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose up&lt;/code&gt; demiştik 
-ve terminalimizde hala bu işlem açık durumda bekliyor. Klavyemizdeki &lt;code class=&quot;highlighter-rouge&quot;&gt;CTRL + C&lt;/code&gt; tuşlarına birlikte 
+&lt;p&gt;Öncelikle yukarıdaki adımlarda geldiğimiz son noktada &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker-compose up&lt;/code&gt; demiştik 
+ve terminalimizde hala bu işlem açık durumda bekliyor. Klavyemizdeki &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CTRL + C&lt;/code&gt; tuşlarına birlikte 
 basarak bu işlemi sonlandırıyoruz. 
 Böylece açık olan uygulamalarımız da kapanmış oluyor.&lt;/p&gt;
 
-&lt;p&gt;Öncelikle Wordpress’in https reverse-proxy üzerinden gelen isteklerde sapıtmaması için &lt;code class=&quot;highlighter-rouge&quot;&gt;wp-config.php&lt;/code&gt; dosyasında 
-aşağıdaki satırları buluyoruz. &lt;code class=&quot;highlighter-rouge&quot;&gt;wp-config.php&lt;/code&gt; dosyası şurada: &lt;code class=&quot;highlighter-rouge&quot;&gt;/docker-storage/wordpress/wp-config.php&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Öncelikle Wordpress’in https reverse-proxy üzerinden gelen isteklerde sapıtmaması için &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wp-config.php&lt;/code&gt; dosyasında 
+aşağıdaki satırları buluyoruz. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wp-config.php&lt;/code&gt; dosyası şurada: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/docker-storage/wordpress/wp-config.php&lt;/code&gt;&lt;/p&gt;
 
 &lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cd&quot;&gt;/** Sets up WordPress vars and included files. */&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;require_once&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ABSPATH&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'wp-settings.php'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;require_once&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;ABSPATH&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'wp-settings.php'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Bulduğumuz bu satırların hemen &lt;strong&gt;üzerine&lt;/strong&gt; aşağıdaki kodu yapıştırıyoruz. Aman URL’leri değiştirmeyi unutmayın.&lt;/p&gt;
@@ -2991,10 +2991,10 @@ aşağıdaki satırları buluyoruz. &lt;code class=&quot;highlighter-rouge&quot;
 &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HTTP_X_FORWARDED_PROTO'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'https'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HTTPS'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'on'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
 
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;isset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HTTP_X_FORWARDED_HOST'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;isset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HTTP_X_FORWARDED_HOST'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HTTP_HOST'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HTTP_X_FORWARDED_HOST'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;isset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HTTP_X_FORWARDED_FOR'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;isset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HTTP_X_FORWARDED_FOR'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
     &lt;span class=&quot;nv&quot;&gt;$list&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;explode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;','&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'HTTP_X_FORWARDED_FOR'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
     &lt;span class=&quot;nv&quot;&gt;$_SERVER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'REMOTE_ADDR'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
@@ -3004,10 +3004,10 @@ aşağıdaki satırları buluyoruz. &lt;code class=&quot;highlighter-rouge&quot;
 &lt;span class=&quot;c1&quot;&gt;# End: Modified&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;wp-config.php&lt;/code&gt; dosyasıyla işimiz bu kadar. Kaydedip dosyayı kapatabilirsiniz.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;wp-config.php&lt;/code&gt; dosyasıyla işimiz bu kadar. Kaydedip dosyayı kapatabilirsiniz.&lt;/p&gt;
 
 &lt;p&gt;Şimdi sıra nginx konfigürasyonunu düzeltmeye geldi. 
-Şu dosyayı favori text editörümüzle açalım: &lt;code class=&quot;highlighter-rouge&quot;&gt;/docker-storage/nginx/nginx/site-confs/default&lt;/code&gt;&lt;/p&gt;
+Şu dosyayı favori text editörümüzle açalım: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/docker-storage/nginx/nginx/site-confs/default&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;İçindeki her şeyi silip aşağıdaki kodu yapıştıralım. 
 Adresleri yine değiştirmeyi unutmayın aman diyeyim.&lt;/p&gt;
@@ -3051,8 +3051,8 @@ Adresleri yine değiştirmeyi unutmayın aman diyeyim.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Bu dosyayı da kaydedip kapatalım. Şimdi sistemi ayağa kaldırma vakti. 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; dosyamızı koyduğumuz yeri unutmadınız değil mi? 
-O dizine &lt;code class=&quot;highlighter-rouge&quot;&gt;cd /root/demoblog&lt;/code&gt; komutuyla geri dönüyoruz ve aşağıdaki komutla sistemi başlatıyoruz. 
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;docker-compose.yml&lt;/code&gt; dosyamızı koyduğumuz yeri unutmadınız değil mi? 
+O dizine &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cd /root/demoblog&lt;/code&gt; komutuyla geri dönüyoruz ve aşağıdaki komutla sistemi başlatıyoruz. 
 Bu sefer tüm logları terminalde görmeyeceğiz çünkü detached modda başlatıyoruz.&lt;/p&gt;
 
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;docker-compose up &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt;
@@ -3081,7 +3081,7 @@ hata sayfası yerine wordpress kurulum ekranının açıldığını göreceğiz.
 &lt;p&gt;Eğer aynı adrese http şemasıyla girersek, 
 nginx’e yaptığımız konfigürasyon sayesinde sitenin https’e yönlendirdiğini görebiliriz.&lt;/p&gt;
 
-&lt;p&gt;Biraz daha ileri gidip, &lt;code class=&quot;highlighter-rouge&quot;&gt;reboot&lt;/code&gt; komutu ile sunucuyu yeniden başlattım. 
+&lt;p&gt;Biraz daha ileri gidip, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;reboot&lt;/code&gt; komutu ile sunucuyu yeniden başlattım. 
 Sunucu tekrar açıldığında tüm container’ların da açılmış olduğunu 
 ve sistemin çalışır vaziyette olduğunu test etmiş oldum.&lt;/p&gt;
 
@@ -3097,7 +3097,7 @@ Bu doğrudan veritabanınıza gelebilecek saldırıları engeller.&lt;/p&gt;
 Böylece IP:PORT şeklinde sunucunuzdaki apache’ye doğrudan saldırganların gelmesini engellemiş olduk.&lt;/p&gt;
 
 &lt;p&gt;Letsencrypt üzerinden oluşturulan sertifikaların geçerlilik tarihi 90 gündür. 
-nginx container’ını oluştururken kullandığımız &lt;code class=&quot;highlighter-rouge&quot;&gt;linuxserver/letsencrypt&lt;/code&gt; imajını oldukça başarılı hazırlamışlar, 
+nginx container’ını oluştururken kullandığımız &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;linuxserver/letsencrypt&lt;/code&gt; imajını oldukça başarılı hazırlamışlar, 
 sertifika bitiş tarihi gelirken otomatik olarak sertifikayı yeniliyor. 
 Böylece sertifika yenileme ile de uğraşmamış oluyoruz.&lt;/p&gt;
 
@@ -3183,7 +3183,7 @@ sınıflar bu kütüphaneden soyutladı.&lt;/p&gt;
 Yazılım mimarisine eklenen her bir soyutlama seviyesi, yazılımı makine anlayacak seviyeden insan anlayacak seviyeye 
 bir adım daha yaklaştırır.&lt;/p&gt;
 
-&lt;p&gt;Bir excel dosyası tonla bilgi taşıyan zengin bir içeriğe sahiptir. &lt;code class=&quot;highlighter-rouge&quot;&gt;HSSFWorkbook&lt;/code&gt; sınıfı bu bilgilerin çoğunu 
+&lt;p&gt;Bir excel dosyası tonla bilgi taşıyan zengin bir içeriğe sahiptir. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;HSSFWorkbook&lt;/code&gt; sınıfı bu bilgilerin çoğunu 
 ve nasıl manipüle edileceğine ait detayları bizden gizler, bu sayede bu kütüphanede ileriki zamanlarda 
 yapılabilecek performans iyileştirmeleri yada refactoring gibi işlemlerde bizim kodumuzu güncellememiz gerekmez. 
 Encapsulation da burada bu şekilde kullanıldı.&lt;/p&gt;
@@ -3209,17 +3209,17 @@ Bir karmaşık sayı kutupsal ve düzlemsel(bu kelime doğru mu emin değilim) o
 &lt;p&gt;Örneğin yukarıdaki resimdeki z karmaşık sayısı aşağıdaki iki farklı biçimde gösterilebilir 
 ve ikisi de sayısal olarak aynıdır:&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;z = r ∠ θ&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;z = r ∠ θ&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;z = a + bi&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;z = a + bi&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;Buradan anlaşılıyor ki &lt;code class=&quot;highlighter-rouge&quot;&gt;ComplexNumber&lt;/code&gt; diye bir sınıf geliştirmek istesek, 
+&lt;p&gt;Buradan anlaşılıyor ki &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ComplexNumber&lt;/code&gt; diye bir sınıf geliştirmek istesek, 
 bu sınıf içerisinde veriyi iki farklı şekilde tutabiliriz. Birinci yöntem bir açı ve bir büyüklük içeren yani iki adet 
-&lt;code class=&quot;highlighter-rouge&quot;&gt;double&lt;/code&gt; alandan oluşan bir sınıf tasarlamak. İkinci yöntem ise karmaşık sayının reel eksendeki izdüşümünü 
-ve sanal eksendeki izdüşümünü tutan yine iki adet &lt;code class=&quot;highlighter-rouge&quot;&gt;double&lt;/code&gt; alandan oluşan bir sınıf tasarlamak.&lt;/p&gt;
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;double&lt;/code&gt; alandan oluşan bir sınıf tasarlamak. İkinci yöntem ise karmaşık sayının reel eksendeki izdüşümünü 
+ve sanal eksendeki izdüşümünü tutan yine iki adet &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;double&lt;/code&gt; alandan oluşan bir sınıf tasarlamak.&lt;/p&gt;
 
 &lt;p&gt;Şimdi tek tek iki yöntemin de nasıl tasarlanabileceğine bakalım. 
-Öncelikle &lt;code class=&quot;highlighter-rouge&quot;&gt;ComplexNumber&lt;/code&gt; isimli bir &lt;em&gt;interface&lt;/em&gt; tanımlayıp, karmaşık sayılar üzerinde yapılabilecek işlemleri 
+Öncelikle &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ComplexNumber&lt;/code&gt; isimli bir &lt;em&gt;interface&lt;/em&gt; tanımlayıp, karmaşık sayılar üzerinde yapılabilecek işlemleri 
 tanımlıyoruz. Böylece karmaşık sayıyı kullanacak olan başka yazılım bileşenlerine ihtiyaçları olan methodları 
 baştan belirlemiş oluyoruz.&lt;/p&gt;
 
@@ -3242,7 +3242,7 @@ baştan belirlemiş oluyoruz.&lt;/p&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Daha sonra bu interface’den türeyen &lt;em&gt;abstract&lt;/em&gt; bir sınıf tanımlayıp, &lt;code class=&quot;highlighter-rouge&quot;&gt;sum&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;subtract&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;multiply&lt;/code&gt; ve &lt;code class=&quot;highlighter-rouge&quot;&gt;divide&lt;/code&gt; 
+&lt;p&gt;Daha sonra bu interface’den türeyen &lt;em&gt;abstract&lt;/em&gt; bir sınıf tanımlayıp, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sum&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;subtract&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;multiply&lt;/code&gt; ve &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;divide&lt;/code&gt; 
 methodlarını buraya yazıyorum çünkü bu methodlar datanın içeride nasıl tutulduğundan bağımsız methodlar. 
 Yani karmaşık sayılar üzerinde yapılan dört işlemde bile karmaşık sayı datasının içeride nasıl tutulduğu 
 ile ilgilenmemiş olduk.&lt;/p&gt;
@@ -3294,7 +3294,7 @@ ile ilgilenmemiş olduk.&lt;/p&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Kendisine ait &lt;code class=&quot;highlighter-rouge&quot;&gt;realPart&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;imaginaryPart&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;angle&lt;/code&gt; ve &lt;code class=&quot;highlighter-rouge&quot;&gt;magnitude&lt;/code&gt; değerlerini dönme 
+&lt;p&gt;Kendisine ait &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;realPart&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;imaginaryPart&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;angle&lt;/code&gt; ve &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;magnitude&lt;/code&gt; değerlerini dönme 
 veya gerekirse hesaplama işlerini ise datayı asıl tutan sınıfın omuzlarına yükledik, 
 çünkü bu işlemler içerideki verinin nasıl saklandığına bağlı değişiklik gösteriyorlar.&lt;/p&gt;
 
@@ -3383,10 +3383,10 @@ aşağıdaki gibi bir sınıf geliştirebiliriz:&lt;/p&gt;
 &lt;p&gt;Görüldüğü üzere bu sınıf da realPart ve imaginaryPart değerlerini tutup, 
 angle ve magnitude değerlerini hesaplayarak hizmet veriyor.&lt;/p&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;BaseComplexNumber&lt;/code&gt; sınıfında factory method olarak kullandığımız &lt;code class=&quot;highlighter-rouge&quot;&gt;ComplexNumbers.fromPolarForm&lt;/code&gt; 
-ve &lt;code class=&quot;highlighter-rouge&quot;&gt;ComplexNumbers.fromRectangularForm&lt;/code&gt; methodları bu iki gösterimden herhangi birisini seçip 
-onu dönecek şekilde geliştirilebilir. &lt;code class=&quot;highlighter-rouge&quot;&gt;ComplexNumbers&lt;/code&gt; aracılığı ile başka yazılım bileşenlerinin 
-elde edebileceği tek nesne tipi &lt;code class=&quot;highlighter-rouge&quot;&gt;ComplexNumber&lt;/code&gt; olacaktır. 
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;BaseComplexNumber&lt;/code&gt; sınıfında factory method olarak kullandığımız &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ComplexNumbers.fromPolarForm&lt;/code&gt; 
+ve &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ComplexNumbers.fromRectangularForm&lt;/code&gt; methodları bu iki gösterimden herhangi birisini seçip 
+onu dönecek şekilde geliştirilebilir. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ComplexNumbers&lt;/code&gt; aracılığı ile başka yazılım bileşenlerinin 
+elde edebileceği tek nesne tipi &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ComplexNumber&lt;/code&gt; olacaktır. 
 Yani datanın nasıl represent edildiğini datayı kullananlardan soyutlamış olduk.&lt;/p&gt;
 
 &lt;p&gt;Ben hazır yazmışken iki sınıfı da kullanayım dedim ve ortaya şöyle bir sınıf çıktı:&lt;/p&gt;
@@ -3407,10 +3407,10 @@ Bir yazılımda kompleks bir veri tipi (karmaşık sayı gibi) yaratıyorsanız,
 bu veri tipini kullanan yazılımın diğer bileşenleri için önemli olan iki soruyu cevaplamanız gerekmektedir.&lt;/p&gt;
 
 &lt;p&gt;Bunlardan birincisi, bu veriyi nasıl yaratacakları. 
-Bu örneklerde, &lt;code class=&quot;highlighter-rouge&quot;&gt;ComplexNumbers&lt;/code&gt; sınıfı içerisindeki iki factory method ile verinin kolayca yaratılmasını sağladık.&lt;/p&gt;
+Bu örneklerde, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ComplexNumbers&lt;/code&gt; sınıfı içerisindeki iki factory method ile verinin kolayca yaratılmasını sağladık.&lt;/p&gt;
 
 &lt;p&gt;İkinci önemli soru da bu veri üzerindeki gerekli bilgilere nasıl erişecekleri. 
-Açtığımız &lt;code class=&quot;highlighter-rouge&quot;&gt;ComplexNumber&lt;/code&gt; arayüzü ile karmaşık sayı ile ilgili bilgilere 
+Açtığımız &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ComplexNumber&lt;/code&gt; arayüzü ile karmaşık sayı ile ilgili bilgilere 
 nasıl erişeceklerini de diğer yazılım bileşenlerine anlatmış olduk.&lt;/p&gt;
 
 &lt;p&gt;Bundan gerisi bizim içeride veriyi nasıl 

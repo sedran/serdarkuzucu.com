@@ -425,9 +425,9 @@ Benzer şekilde, objenin içerisinde this kullanmadan tanımlayacağımız fonks
 
 <p>Şimdi statik değişken ve metotlara gelelim.
 Öncelikle Point objemizde, o noktadan parametre olarak geçilen başka bir noktaya olan uzaklığı hesaplayan
-<code class="highlighter-rouge">distanceFrom</code> metodunu tanımlayacağız, 
+<code class="language-plaintext highlighter-rouge">distanceFrom</code> metodunu tanımlayacağız, 
 daha sonra ise Point sınıfı üzerinde statik bir değişken olarak orijin’i 
-ve statik bir fonksiyon olan <code class="highlighter-rouge">randomPoint()</code> metodunu tanımlayacağız.
+ve statik bir fonksiyon olan <code class="language-plaintext highlighter-rouge">randomPoint()</code> metodunu tanımlayacağız.
 Daha sonra da yarattığımız bir noktanın orijin ve rastgele bir noktaya olan uzaklıklarını hesaplayacağız sırasıyla.</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">Point</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
@@ -536,13 +536,13 @@ ve değişkenler yaratarak bunları private statikmiş gibi kullanmaktan başka 
 
 <p>Şimdi gelelim kalıtıma. Javascript’te inheritance nasıl sağlanır?</p>
 
-<p>Aşağıda <code class="highlighter-rouge">ColorPoint</code> isminde bir sınıf yazdım 
+<p>Aşağıda <code class="language-plaintext highlighter-rouge">ColorPoint</code> isminde bir sınıf yazdım 
 ve bu sınıfın amacı da renkli nokta oluşturmak. 
-İşin ‘Nokta’ olma kısmını yukarıda tanımladığımız <code class="highlighter-rouge">Point</code> sınıfı sağlarken, 
-<code class="highlighter-rouge">ColorPoint</code> sınıfını sadece renk ile ilgili bilgileri tutan, 
-<code class="highlighter-rouge">Point</code> objesinin bir çocuk sınıfı olarak tanımlayabiliriz.
-Böylelikle bir <code class="highlighter-rouge">ColorPoint</code> sınıfı instance’ını aynı zamanda 
-<code class="highlighter-rouge">Point</code> sınıfının bir instance’ı olarak da kullanabiliriz.</p>
+İşin ‘Nokta’ olma kısmını yukarıda tanımladığımız <code class="language-plaintext highlighter-rouge">Point</code> sınıfı sağlarken, 
+<code class="language-plaintext highlighter-rouge">ColorPoint</code> sınıfını sadece renk ile ilgili bilgileri tutan, 
+<code class="language-plaintext highlighter-rouge">Point</code> objesinin bir çocuk sınıfı olarak tanımlayabiliriz.
+Böylelikle bir <code class="language-plaintext highlighter-rouge">ColorPoint</code> sınıfı instance’ını aynı zamanda 
+<code class="language-plaintext highlighter-rouge">Point</code> sınıfının bir instance’ı olarak da kullanabiliriz.</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">ColorPoint</span> <span class="o">=</span> <span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">DEFAULT_COLOR</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">#000000</span><span class="dl">"</span><span class="p">;</span>
@@ -585,7 +585,7 @@ fakat madem OOP ile ilgili bir yazı yazıyorum,
 bunun da bu yazıda olması lazım dedim 
 ve bu yazıyı yazmak için araştırıp öğrendim.</p>
 
-<p>Son olarak, <code class="highlighter-rouge">ColorPoint</code>‘ten türetilmiş <code class="highlighter-rouge">HtmlPoint</code> isminde bir sınıf yazdım 
+<p>Son olarak, <code class="language-plaintext highlighter-rouge">ColorPoint</code>‘ten türetilmiş <code class="language-plaintext highlighter-rouge">HtmlPoint</code> isminde bir sınıf yazdım 
 ve onu kullanarak sayfaya 1000 tane rastgele renkli rastgele koordinatlı nokta yaratıp 
 ekleyen örnek bir uygulama yazdım. 
 Onu da göstereyim:</p>

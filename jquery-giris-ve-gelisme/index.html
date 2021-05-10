@@ -222,7 +222,7 @@ Bir HTML objesine CSS ile nasıl erişiyorsak, jQuery ile de o şekilde erişiyo
 <h4 id="11-etikettag-seçicisi">1.1. Etiket(Tag) Seçicisi</h4>
 
 <p>Bir elemanı etiketinden seçebilmek için doğrudan o etiketin ismini yazarız ve başına herhangi bir işaret koymayız.
-Javascript’de <code class="highlighter-rouge">getElementsByTagName</code> komutuyla gerçekleştirilen bu eylem, JQuery ile çok daha basit:</p>
+Javascript’de <code class="language-plaintext highlighter-rouge">getElementsByTagName</code> komutuyla gerçekleştirilen bu eylem, JQuery ile çok daha basit:</p>
 
 <p><strong>HTML:</strong></p>
 
@@ -297,7 +297,7 @@ JQuery bunu bizim için bu şekilde kolaylaştırıyor:</p>
 
 <p>HTML elemanlarını id özelliklerini kullanarak seçebilmemize yarar.
 Seçerken seçeceğimiz elemanın id’sinin başına sharp(#) işareti koyarız.
-Javascript’teki <code class="highlighter-rouge">getElementById</code> methodunun karşılığıdır.</p>
+Javascript’teki <code class="language-plaintext highlighter-rouge">getElementById</code> methodunun karşılığıdır.</p>
 
 <p><strong>HTML:</strong></p>
 
@@ -385,7 +385,7 @@ Mesela aşağıdaki kod parçasına bakalım:</p>
 
 <p>Yukarıdaki jQuery kodlarından görebileceğimiz gibi, HTML elemanlarına tag isimlerinden(tagName), 
 sınıflarından(class), kimliklerinden(id) veya bunların kombinasyonlarını kullanarak ulaşabiliyoruz. 
-Bu kodu <code class="highlighter-rouge">$(document).ready();</code> içerisine yazdık çünkü <code class="highlighter-rouge">document.ready</code> event’i 
+Bu kodu <code class="language-plaintext highlighter-rouge">$(document).ready();</code> içerisine yazdık çünkü <code class="language-plaintext highlighter-rouge">document.ready</code> event’i 
 DOM nesneleri sayfaya tamamen yüklendikten sonra tetiklenir. 
 Bu event tetiklenmeden önce Javascript ile DOM nesnelerine ulaşmaya çalışırsak hiçbir şey elde edemeyiz.</p>
 
@@ -819,10 +819,10 @@ target dediğimiz parametre olarak da jQuery seçicisi, jQuery objesi veya DOM o
 Göster/Gizle olayları yada arkaplan rengi gibi olayları dinamikleştirmek adına,
 bir elemanın sınıfını programın yaşam döngüsü içerisinde sık sık değiştirmemiz gerekebilir.
 Bu methodlar bu konuda çok iyi iş çıkarıyorlar.
-Elimizdeki bir jQuery objesinin bir sınıfa ait olup olmadığını <code class="highlighter-rouge">hasClass()</code> ile sorgulayıp, 
-o elemana <code class="highlighter-rouge">addClass()</code> methodu ile istediğimiz bir sınıfı ekleyebilir veya <code class="highlighter-rouge">removeClass()</code> methodu ile 
+Elimizdeki bir jQuery objesinin bir sınıfa ait olup olmadığını <code class="language-plaintext highlighter-rouge">hasClass()</code> ile sorgulayıp, 
+o elemana <code class="language-plaintext highlighter-rouge">addClass()</code> methodu ile istediğimiz bir sınıfı ekleyebilir veya <code class="language-plaintext highlighter-rouge">removeClass()</code> methodu ile 
 istemediğimiz bir sınıfı o elemandan çıkarabiliriz. 
-<code class="highlighter-rouge">toggleClass()</code> methodu sayesinde ise bu işi biraz daha dinamikleştirerek, 
+<code class="language-plaintext highlighter-rouge">toggleClass()</code> methodu sayesinde ise bu işi biraz daha dinamikleştirerek, 
 “sınıf varsa sil, yoksa ekle” işlemini yapabiliriz.</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// hasClass kontrolü yapmadan da removeClass yapabiliriz.</span>
@@ -896,9 +896,9 @@ o özelliği eklemeye, değiştirmeye veya silmeye yarayan methodlar.</p>
 <h4 id="26-aftercontent--content--beforecontent--content--insertaftertarget-ve-insertbeforetarget">2.6. .after(content [, content ]), .before(content [, content ]), .insertAfter(target) ve .insertBefore(target)</h4>
 
 <p>Bir elemandan sonra veya önce eleman eklememize yarar. 
-<code class="highlighter-rouge">append</code> ve <code class="highlighter-rouge">prepend</code> methodlarıyla karıştırılabilir.
-Aradaki fark, <code class="highlighter-rouge">append</code> ve <code class="highlighter-rouge">prepend</code> methodları seçilen elemanın içerisine eklerken, 
-<code class="highlighter-rouge">after</code> ve <code class="highlighter-rouge">before</code> methodları seçili elemanın dışına, kardeş olarak eklerler.</p>
+<code class="language-plaintext highlighter-rouge">append</code> ve <code class="language-plaintext highlighter-rouge">prepend</code> methodlarıyla karıştırılabilir.
+Aradaki fark, <code class="language-plaintext highlighter-rouge">append</code> ve <code class="language-plaintext highlighter-rouge">prepend</code> methodları seçilen elemanın içerisine eklerken, 
+<code class="language-plaintext highlighter-rouge">after</code> ve <code class="language-plaintext highlighter-rouge">before</code> methodları seçili elemanın dışına, kardeş olarak eklerler.</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">span#x</span><span class="dl">"</span><span class="p">).</span><span class="nx">after</span><span class="p">(</span><span class="dl">"</span><span class="s2">&lt;i&gt;After:x&lt;/i&gt;</span><span class="dl">"</span><span class="p">);</span>
 <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">&lt;p&gt;insertAfter:y&lt;/p&gt;</span><span class="dl">'</span><span class="p">).</span><span class="nx">insertAfter</span><span class="p">(</span><span class="dl">"</span><span class="s2">span#y</span><span class="dl">"</span><span class="p">);</span>
@@ -930,7 +930,7 @@ Aradaki fark, <code class="highlighter-rouge">append</code> ve <code class="high
 <h4 id="27-show-hide-ve-toggle">2.7. .show(), .hide() ve .toggle()</h4>
 
 <p>Seçilen bir elemanı gizlemek ve tekrar göstermek için kullanılırlar. 
-<code class="highlighter-rouge">toggle()</code> methodu eleman görünür ise gizle, görünmez ise göster işini yapar. 
+<code class="language-plaintext highlighter-rouge">toggle()</code> methodu eleman görünür ise gizle, görünmez ise göster işini yapar. 
 Bu methodlara “normal”, “slow” veya “fast” gibi parametreler geçerek 
 bu işlemlerin animasyonlar ile yapılmasını da sağlayabiliriz.</p>
 
@@ -958,11 +958,11 @@ tüm DOM ağacını taramaya ihtiyacımız olmadığını biliriz.
 İşte bu durumlarda bu 4 method yardımımıza koşuyor.</p>
 
 <ul>
-  <li><code class="highlighter-rouge">.find(query)</code> ile elimizdeki jQuery objesinin çocuklarının arasında arama yapıyoruz.</li>
-  <li><code class="highlighter-rouge">.parent(query)</code> ile elemanın ilk parent’ına çıkıyoruz 
+  <li><code class="language-plaintext highlighter-rouge">.find(query)</code> ile elimizdeki jQuery objesinin çocuklarının arasında arama yapıyoruz.</li>
+  <li><code class="language-plaintext highlighter-rouge">.parent(query)</code> ile elemanın ilk parent’ına çıkıyoruz 
 ve eğer bir parametre geçmişsek elemanın parentı o seçiciye uyuyor mu onu kontrol ediyor.</li>
-  <li><code class="highlighter-rouge">.parents(query)</code> ile elemanın tüm parentlarından, belirttiğimiz seçiciye uyanlar geliyor.</li>
-  <li><code class="highlighter-rouge">.closest(query)</code> ile elemanın parentlarının girilen seçiciye uygun olanlardan elemana en yakın olanı geliyor.</li>
+  <li><code class="language-plaintext highlighter-rouge">.parents(query)</code> ile elemanın tüm parentlarından, belirttiğimiz seçiciye uyanlar geliyor.</li>
+  <li><code class="language-plaintext highlighter-rouge">.closest(query)</code> ile elemanın parentlarının girilen seçiciye uygun olanlardan elemana en yakın olanı geliyor.</li>
 </ul>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// farzedelim ki elimizde bu var:</span>
@@ -991,8 +991,8 @@ ve eğer bir parametre geçmişsek elemanın parentı o seçiciye uyuyor mu onu 
 <h4 id="29-valvalue-ve-htmlvalue">2.9. .val(value) ve .html(value)</h4>
 
 <p>Bu methodlar da HTML elemanlarındaki gözle görülür datalara müdahale edebilmemizi sağlıyor. 
-<code class="highlighter-rouge">val()</code> methodu ile input elemanlarının değerlerini okuyup değiştirebiliyorken, 
-<code class="highlighter-rouge">html()</code> methodu ile ise HTML elemanlarının içeriklerini okuyup değiştirebiliyoruz.</p>
+<code class="language-plaintext highlighter-rouge">val()</code> methodu ile input elemanlarının değerlerini okuyup değiştirebiliyorken, 
+<code class="language-plaintext highlighter-rouge">html()</code> methodu ile ise HTML elemanlarının içeriklerini okuyup değiştirebiliyoruz.</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// input alanından kullanıcı adını okuyalım:</span>
 <span class="kd">var</span> <span class="nx">username</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">#username</span><span class="dl">"</span><span class="p">).</span><span class="nx">val</span><span class="p">();</span>

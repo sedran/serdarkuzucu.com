@@ -186,15 +186,15 @@
 
   <div class="post-content" itemprop="articleBody">
     <p><a href="/linux-shell-script-gelistirmek">Linux Shell Script Geliştirmek</a> diye başladığım yazı dizisinin 
-bir diğer yazısında daha birlikteyiz. <code class="highlighter-rouge">if/elif/else</code> komutlarını sık sık kullanmaya başladığınızda farkedeceksiniz ki, 
+bir diğer yazısında daha birlikteyiz. <code class="language-plaintext highlighter-rouge">if/elif/else</code> komutlarını sık sık kullanmaya başladığınızda farkedeceksiniz ki, 
 bir çok zaman tek bir değişkenin değerini kontrol ediyoruz. 
 Örneğin komut satırından gelen parametrenin değeri 1 ise şunu yap, 2 ise bunu yap, 3 ise başka birşey yap. 
-Böyle tek bir değişkeni kontrol etmemiz gerektiğinde <code class="highlighter-rouge">if/elif/else</code> yazmak çok sıkıcı bir hale dönüşebiliyor. 
+Böyle tek bir değişkeni kontrol etmemiz gerektiğinde <code class="language-plaintext highlighter-rouge">if/elif/else</code> yazmak çok sıkıcı bir hale dönüşebiliyor. 
 Peki değişkenin ismini sadece bir kere yazsak ve alabileceği her değer için sadece çalışacak kodları söylesek?</p>
 
 <!--more-->
 
-<p>Bu gibi durumlarda işimizi kolaylaştırması için <code class="highlighter-rouge">case</code> adında hoş bir kontrol komutumuz var. 
+<p>Bu gibi durumlarda işimizi kolaylaştırması için <code class="language-plaintext highlighter-rouge">case</code> adında hoş bir kontrol komutumuz var. 
 Örneğin komut satırından geçilen bir parametrenin değeri “disk” ise disk istatistiklerini, 
 “memory” ise bellek istatistiklerini göstermek istiyorsunuz.
 Şu şekilde yazabilirsiniz bu programı:</p>
@@ -210,8 +210,8 @@ Peki değişkenin ismini sadece bir kere yazsak ve alabileceği her değer için
 <span class="k">esac</span>
 </code></pre></div></div>
 
-<p>Bu programı case ismiyle kaydedip daha sonra <code class="highlighter-rouge">./case disk</code> diye çalıştırırsak, <code class="highlighter-rouge">df</code> komutu çalışacak. 
-<code class="highlighter-rouge">./case memory</code> şeklinde çalıştırırsak, <code class="highlighter-rouge">free</code> komutu çalışacak.</p>
+<p>Bu programı case ismiyle kaydedip daha sonra <code class="language-plaintext highlighter-rouge">./case disk</code> diye çalıştırırsak, <code class="language-plaintext highlighter-rouge">df</code> komutu çalışacak. 
+<code class="language-plaintext highlighter-rouge">./case memory</code> şeklinde çalıştırırsak, <code class="language-plaintext highlighter-rouge">free</code> komutu çalışacak.</p>
 
 <p>Eğer başka bir parametre ile çağırırsak, hata mesajı gösterilecek. 
 En sonraki “*” anahtar kelimesi, disk ve memory dışındaki herşeyle eşleşiyor.</p>
@@ -245,12 +245,12 @@ Mesela bilgisayarımızda o anda çalışan işlemlerin kaydını bir dosyaya ya
 
 <ul>
   <li>Programımızın ismi processes olsun</li>
-  <li><code class="highlighter-rouge">-f filename</code> parametresi geçilirse kullanıcının girdiği isimde bir dosya yaratılsın ve output oraya kaydedilsin.</li>
+  <li><code class="language-plaintext highlighter-rouge">-f filename</code> parametresi geçilirse kullanıcının girdiği isimde bir dosya yaratılsın ve output oraya kaydedilsin.</li>
   <li>Dosya ismi parametre geçilmezse, şu anki tarih ve saat ile bir dosya yaratalım.</li>
-  <li><code class="highlighter-rouge">-z</code> parametresi geçilirse outputu kaydettiğimiz dosyayı gzip ile zipleyelim.</li>
-  <li><code class="highlighter-rouge">-p</code> parametresi geçilirse outputu ekrana da yazdıralım.</li>
-  <li><code class="highlighter-rouge">-q searchString</code> parametresi girilirse, içinde sadece aranan keyword geçen processlerin outputu alalım.</li>
-  <li><code class="highlighter-rouge">--help</code> parametresi girilirse, programın nasıl kullanılacağını anlatan bir metin gösterip diğer parametreleri yoksayacağız.</li>
+  <li><code class="language-plaintext highlighter-rouge">-z</code> parametresi geçilirse outputu kaydettiğimiz dosyayı gzip ile zipleyelim.</li>
+  <li><code class="language-plaintext highlighter-rouge">-p</code> parametresi geçilirse outputu ekrana da yazdıralım.</li>
+  <li><code class="language-plaintext highlighter-rouge">-q searchString</code> parametresi girilirse, içinde sadece aranan keyword geçen processlerin outputu alalım.</li>
+  <li><code class="language-plaintext highlighter-rouge">--help</code> parametresi girilirse, programın nasıl kullanılacağını anlatan bir metin gösterip diğer parametreleri yoksayacağız.</li>
 </ul>
 
 <p>Anlayacağınız üzere, komut satırından birkaç tane parametre gelişigüzel girilecek. 
@@ -324,15 +324,15 @@ Girilip girilmemeleri ve hangi sırayla girilecekleri tamamen kullanıcıya kalm
 <span class="k">fi</span>
 </code></pre></div></div>
 
-<p>Döngü ile parametreleri okuyup parametreleri <code class="highlighter-rouge">shift</code> komutuyla kaydırmayı 
+<p>Döngü ile parametreleri okuyup parametreleri <code class="language-plaintext highlighter-rouge">shift</code> komutuyla kaydırmayı 
 <a href="/shell-scripts-while-ve-until-donguleri">While ve Until Döngüleri</a> isimli yazımda yazmıştım. 
 Yukarıdaki until döngüsü de aynı şekilde shift yöntemi ile tüm parametreleri okuyor 
-ve parametrelerin değerini kontrol etmek için <code class="highlighter-rouge">case</code> komutunu kullanıyor. 
+ve parametrelerin değerini kontrol etmek için <code class="language-plaintext highlighter-rouge">case</code> komutunu kullanıyor. 
 Parametrelerin değerlerini kontrol ettikten sonra uygun değişkenlerin değerlerini değiştiriyoruz. 
-Örneğin <code class="highlighter-rouge">-p</code> parametresini gördüğümüzde, <code class="highlighter-rouge">printOutput</code> isimli değişkenin değerini <code class="highlighter-rouge">true</code> yapıyoruz. 
-Programın ilerleyen kısımlarında bu değişkeni kontrol ediyoruz ve değeri <code class="highlighter-rouge">true</code> ise çıktıyı ekrana yazdırıyoruz.</p>
+Örneğin <code class="language-plaintext highlighter-rouge">-p</code> parametresini gördüğümüzde, <code class="language-plaintext highlighter-rouge">printOutput</code> isimli değişkenin değerini <code class="language-plaintext highlighter-rouge">true</code> yapıyoruz. 
+Programın ilerleyen kısımlarında bu değişkeni kontrol ediyoruz ve değeri <code class="language-plaintext highlighter-rouge">true</code> ise çıktıyı ekrana yazdırıyoruz.</p>
 
-<p>Nasıl buldunuz <code class="highlighter-rouge">case</code> komutunu?
+<p>Nasıl buldunuz <code class="language-plaintext highlighter-rouge">case</code> komutunu?
 Parametreleri bu şekilde okuduğumuzda hem kullanıcıyı parametreleri belli bir sırayla girmek zorunda bırakmıyoruz, 
 hem de kodumuz daha şık görünüyor. 
 Bu programı aşağıdaki kombinasyonlarla kullanabilirsiniz:</p>
@@ -345,18 +345,18 @@ Bu programı aşağıdaki kombinasyonlarla kullanabilirsiniz:</p>
 </code></pre></div></div>
 
 <p>Eğer aynı bir işlemi birden fazla değerle yapmak istiyorsanız, 
-bunu da pipe(<code class="highlighter-rouge">|</code>) işareti kullanarak belirtebiliyorsunuz. 
+bunu da pipe(<code class="language-plaintext highlighter-rouge">|</code>) işareti kullanarak belirtebiliyorsunuz. 
 Mesela yukarıdaki kodda bazı alternatifler ekleyebiliriz. 
 Aşağıdaki gibi, parametre seçeneklerimize eşanlamlı seçenekler ekleyelim:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">-f</code> yerine <code class="highlighter-rouge">--file</code> kullanılabilsin.</li>
-  <li><code class="highlighter-rouge">-p</code> yerine <code class="highlighter-rouge">--print</code> kullanılabilsin.</li>
-  <li><code class="highlighter-rouge">-q</code> yerine <code class="highlighter-rouge">--query</code> kullanılabilsin.</li>
-  <li><code class="highlighter-rouge">-z</code> yerine <code class="highlighter-rouge">--zip</code> kullanılabilsin.</li>
+  <li><code class="language-plaintext highlighter-rouge">-f</code> yerine <code class="language-plaintext highlighter-rouge">--file</code> kullanılabilsin.</li>
+  <li><code class="language-plaintext highlighter-rouge">-p</code> yerine <code class="language-plaintext highlighter-rouge">--print</code> kullanılabilsin.</li>
+  <li><code class="language-plaintext highlighter-rouge">-q</code> yerine <code class="language-plaintext highlighter-rouge">--query</code> kullanılabilsin.</li>
+  <li><code class="language-plaintext highlighter-rouge">-z</code> yerine <code class="language-plaintext highlighter-rouge">--zip</code> kullanılabilsin.</li>
 </ul>
 
-<p>Bu durumda yukarıdaki kodun <code class="highlighter-rouge">case</code> kısmı aşağıdaki gibi şekillenecek:</p>
+<p>Bu durumda yukarıdaki kodun <code class="language-plaintext highlighter-rouge">case</code> kısmı aşağıdaki gibi şekillenecek:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">case</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="k">in</span>
     <span class="nt">-f</span><span class="p">|</span><span class="nt">--file</span> <span class="p">)</span>

@@ -184,8 +184,8 @@
 
   <div class="post-content" itemprop="articleBody">
     <p>Java’da birden fazla görevi eş zamanlı gerçekleştirmek istediğimizde 
-<code class="highlighter-rouge">Thread</code>‘lerden faydalanırız. 
-Yeni bir <code class="highlighter-rouge">Thread</code> nesnesi oluşturur, 
+<code class="language-plaintext highlighter-rouge">Thread</code>‘lerden faydalanırız. 
+Yeni bir <code class="language-plaintext highlighter-rouge">Thread</code> nesnesi oluşturur, 
 constructor argümanı olarak bir <code>Runnable</code> geçeriz veya 
 <code>Thread</code> sınıfını extend eder, 
 <code>void run()</code> methodunu override ederiz. 
@@ -209,7 +209,7 @@ process, rather than being under the direct control of an interactive user.</p>
 <p>Java iki adet Thread türü tanımlar:</p>
 
 <ol>
-  <li><strong>User Threads:</strong> Bu tip Thread’ler bitmeden JVM kapanmaz. Eğer <code class="highlighter-rouge">System.exit</code> çağırmadıysanız.</li>
+  <li><strong>User Threads:</strong> Bu tip Thread’ler bitmeden JVM kapanmaz. Eğer <code class="language-plaintext highlighter-rouge">System.exit</code> çağırmadıysanız.</li>
   <li><strong>Daemon Threads:</strong> Tüm User Thread’leri sonlandığında JVM bu Thread’leri gözünün yaşına bakmadan sonlandırır.</li>
 </ol>
 
@@ -221,11 +221,11 @@ process, rather than being under the direct control of an interactive user.</p>
   <li>JVM’e ait çoğu Thread daemon tipindedir. 
 Örneğin Garbage Collection Thread’leri. 
 JVM sonlanmak için çalışmakta olan bir Garbage Collection işleminin tamamlanmasını beklemez.</li>
-  <li>Bir Thread <code class="highlighter-rouge">start()</code> edilmeden önce daemon olup olmadığına karar verilmelidir. 
-Eğer çalışmakta olan bir <code class="highlighter-rouge">Thread</code> üzerinde <code class="highlighter-rouge">setDaemon(boolean)</code> 
-çağırırsanız <code class="highlighter-rouge">IllegalThreadStateException</code> alırsınız.</li>
+  <li>Bir Thread <code class="language-plaintext highlighter-rouge">start()</code> edilmeden önce daemon olup olmadığına karar verilmelidir. 
+Eğer çalışmakta olan bir <code class="language-plaintext highlighter-rouge">Thread</code> üzerinde <code class="language-plaintext highlighter-rouge">setDaemon(boolean)</code> 
+çağırırsanız <code class="language-plaintext highlighter-rouge">IllegalThreadStateException</code> alırsınız.</li>
   <li>I/O benzeri kritik işler için daemon thread kullanımı kesinlikle tavsiye edilmez. 
-Çünkü JVM kapanırken daemon thread’leri <code class="highlighter-rouge">finally</code> bloklarını bile çalıştırmadan öldürür.</li>
+Çünkü JVM kapanırken daemon thread’leri <code class="language-plaintext highlighter-rouge">finally</code> bloklarını bile çalıştırmadan öldürür.</li>
 </ul>
 
 <p>Bu konular ile ilgili sık duyduğum birkaç yanlış bilginin doğrularını yazayım:</p>

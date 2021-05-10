@@ -214,7 +214,7 @@ While döngüsü, içerisine verdiğimiz koşul doğru olduğu sürece verdiğim
 </code></pre></div></div>
 
 <p>Koşulu yazdıktan sonra koyduğumuz noktalı virgül, 
-<code class="highlighter-rouge">do</code> anahtar kelimesi ile koşulu aynı satıra yazabilmemizi sağlıyor. 
+<code class="language-plaintext highlighter-rouge">do</code> anahtar kelimesi ile koşulu aynı satıra yazabilmemizi sağlıyor. 
 Ben ikinci yazımı tercih ediyorum, gözüme hoş geldiği için.</p>
 
 <p><a href="/shell-scripts-program-argumanlarini-okumak">Program Argümanlarını Okumak</a> 
@@ -222,11 +222,11 @@ isimli yazıda komut satırından gelen argümanları tek tek ekrana yazdırmay�
 Şimdi bir döngü yapıp hepsini daha şık bir kod ile yazdırmaya ne dersiniz?</p>
 
 <p>Aşağıdaki kod, parametre sayısı 0 oluncaya kadar ilk parametreyi ekrana yazdırıyor. 
-Bu kodun en önemli kısmı <code class="highlighter-rouge">shift</code> komutu. 
+Bu kodun en önemli kısmı <code class="language-plaintext highlighter-rouge">shift</code> komutu. 
 Bu komut parametreleri birer sola kaydırıyor. 
-Yani örneğin <code class="highlighter-rouge">shift</code> çağırmadan önce argüman değerleri <code class="highlighter-rouge">$1="a"</code>, <code class="highlighter-rouge">$2="b"</code>, <code class="highlighter-rouge">$3="c"</code> durumundaysa, 
-<code class="highlighter-rouge">shift</code> çağırdıktan sonra <code class="highlighter-rouge">$1="b"</code>, <code class="highlighter-rouge">$2="c"</code> durumuna geçiyor. 
-Böylece tüm parametreleri <code class="highlighter-rouge">$1</code> değişkenini kullanarak okuyabiliyoruz.</p>
+Yani örneğin <code class="language-plaintext highlighter-rouge">shift</code> çağırmadan önce argüman değerleri <code class="language-plaintext highlighter-rouge">$1="a"</code>, <code class="language-plaintext highlighter-rouge">$2="b"</code>, <code class="language-plaintext highlighter-rouge">$3="c"</code> durumundaysa, 
+<code class="language-plaintext highlighter-rouge">shift</code> çağırdıktan sonra <code class="language-plaintext highlighter-rouge">$1="b"</code>, <code class="language-plaintext highlighter-rouge">$2="c"</code> durumuna geçiyor. 
+Böylece tüm parametreleri <code class="language-plaintext highlighter-rouge">$1</code> değişkenini kullanarak okuyabiliyoruz.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
 <span class="c"># Learning Shell Scripting</span>
@@ -255,7 +255,7 @@ Parameter[4] is d
 Yani verdiğimiz koşul doğru olmadığı sürece verdiğimiz komutları tekrarlar. 
 Koşul ne zaman doğru olur, o zaman döngü durur.</p>
 
-<p>Aşağıdaki döngü, <code class="highlighter-rouge">my_variable</code> isimli değişken 10 değerinden büyük olduğu zaman duracak. 
+<p>Aşağıdaki döngü, <code class="language-plaintext highlighter-rouge">my_variable</code> isimli değişken 10 değerinden büyük olduğu zaman duracak. 
 Yani ekrana 1’den 10’a kadar tüm sayıları yazdırmış olacağız.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/sh</span>
@@ -272,7 +272,7 @@ Yani ekrana 1’den 10’a kadar tüm sayıları yazdırmış olacağız.</p>
 
 <p>While syntax’ında olduğu gibi, until syntax’ında da, 
 koşuldan sonraki noktalı virgülü kaldırıp 
-<code class="highlighter-rouge">do</code> anahtar kelimesini bir sonraki satıra atabilirsiniz. 
+<code class="language-plaintext highlighter-rouge">do</code> anahtar kelimesini bir sonraki satıra atabilirsiniz. 
 Ama ben atmamayı tercih edeceğim. 
 Bana göre böyle daha güzel görünüyor.</p>
 

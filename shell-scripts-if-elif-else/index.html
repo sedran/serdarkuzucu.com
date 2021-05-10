@@ -240,7 +240,7 @@ veya belirttiğimiz hiçbir koşul doğru olmadığında (else) çalıştırıla
 <p>Şimdi örnek olarak RAM’de kalan boş yere göre vereceği mesaj değişecek olan bir kod parçası geliştirelim. 
 Öncelikle benim geliştirmiş olduğum, basitçe bellek istatistiklerini okuyup değişkenlere aktaran 
 ve süslü bir şekilde ekrana yazdıran kodu veriyorum. 
-Daha sonra bu koda <code class="highlighter-rouge">if/elif/else</code> yapısını kuracağız.</p>
+Daha sonra bu koda <code class="language-plaintext highlighter-rouge">if/elif/else</code> yapısını kuracağız.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
 <span class="c"># if / elif / else</span>
@@ -264,9 +264,9 @@ Daha sonra bu koda <code class="highlighter-rouge">if/elif/else</code> yapısın
 Önceki yazılarda gösterdiğim değişken tanımlama 
 ve bir komutun sonucunu bir değişkene aktarma dışında ekstra birşey kullanmadım. 
 Geri kalan yabancı terimler standart linux komutları. 
-<code class="highlighter-rouge">free</code> komutu ile bellekteki boş alan hesaplanıyor, 
-<code class="highlighter-rouge">grep</code> komutu ile <code class="highlighter-rouge">free</code> komutunun sonucundan içinde “Mem:” geçen satır ayrıştırılıyor 
-ve <code class="highlighter-rouge">awk</code> komutuyla sırasıyla bu satırdaki ikinci, üçüncü ve dördüncü sütunlardaki veriler değişkenlere aktarılıyor. 
+<code class="language-plaintext highlighter-rouge">free</code> komutu ile bellekteki boş alan hesaplanıyor, 
+<code class="language-plaintext highlighter-rouge">grep</code> komutu ile <code class="language-plaintext highlighter-rouge">free</code> komutunun sonucundan içinde “Mem:” geçen satır ayrıştırılıyor 
+ve <code class="language-plaintext highlighter-rouge">awk</code> komutuyla sırasıyla bu satırdaki ikinci, üçüncü ve dördüncü sütunlardaki veriler değişkenlere aktarılıyor. 
 Bu programı çalıştırınca aşağıdaki tabloyu çiziyor ekrana:</p>
 
 <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>========================================
@@ -308,10 +308,10 @@ Bu programı çalıştırınca aşağıdaki tabloyu çiziyor ekrana:</p>
 </code></pre></div></div>
 
 <p>Gördüğünüz gibi, 
-<code class="highlighter-rouge">free_percent=$((free_memory * 100 / total_memory))</code> ile boş belleğin toplam belleğe yüzdesini hesapladık 
-ve <code class="highlighter-rouge">if [[ "$free_percent" -gt "50" ]];</code> ile belleğin yüzde 50’den fazlası boş mu kontrolünü yaptık. 
+<code class="language-plaintext highlighter-rouge">free_percent=$((free_memory * 100 / total_memory))</code> ile boş belleğin toplam belleğe yüzdesini hesapladık 
+ve <code class="language-plaintext highlighter-rouge">if [[ "$free_percent" -gt "50" ]];</code> ile belleğin yüzde 50’den fazlası boş mu kontrolünü yaptık. 
 Eğer belleğin yüzde 50’den fazlası boşsa, güvendeyiz mesajı verdik. 
-<code class="highlighter-rouge">elif [[ "$free_percent" -gt "30" ]];</code> ile belleğin yüzde 30’undan fazlası boş mu kontrolü yaptık 
+<code class="language-plaintext highlighter-rouge">elif [[ "$free_percent" -gt "30" ]];</code> ile belleğin yüzde 30’undan fazlası boş mu kontrolü yaptık 
 ve sonrasında sorun yok mesajı verdik. 
 Eğer boş bellek yüzdesi yüzde 30’dan daha düşük bir seviyedeyse, tehlikedeyiz uyarısını yaptık. 
 Şimdi bu kodu benim bilgisayarımda çalıştırdığımızda ne sonuç veriyor tekrar paylaşayım.</p>
@@ -324,7 +324,7 @@ Eğer boş bellek yüzdesi yüzde 30’dan daha düşük bir seviyedeyse, tehlik
 We are OK. Memory=4050 MB. 34%
 </code></pre></div></div>
 
-<p>İşte <code class="highlighter-rouge">if/elif/else</code> kullanımı bu kadar basit.</p>
+<p>İşte <code class="language-plaintext highlighter-rouge">if/elif/else</code> kullanımı bu kadar basit.</p>
 
 <p>Şimdi interaktif ve istenildiği kadar toplama çıkarma yapılabilen bir hesap makinası yapalım.</p>
 
@@ -355,12 +355,12 @@ We are OK. Memory=4050 MB. 34%
 </code></pre></div></div>
 
 <p>Bu program önce kullanıcıdan bir işlem girmesini istiyor. 
-Kullanıcı <code class="highlighter-rouge">+</code>, <code class="highlighter-rouge">-</code>, veya <code class="highlighter-rouge">=</code> işaretlerinden birisini girebilir bu aşamada. 
-Eğer kullanıcı <code class="highlighter-rouge">+</code> işaretini girerse, program bir tane sayı girmesini istiyor. 
-Sayı girilince, girilen sayı <code class="highlighter-rouge">SUM</code> isimli değişkene ekleniyor. 
-Eğer kullanıcı <code class="highlighter-rouge">-</code> işaretini girerse, program yine bir tane sayı girmesini istiyor. 
-Sayı girilince, girilen sayı <code class="highlighter-rouge">SUM</code> isimli değişkenden çıkartılıyor. 
-<code class="highlighter-rouge">=</code> işareti girildiğinde ise program kapanıyor.</p>
+Kullanıcı <code class="language-plaintext highlighter-rouge">+</code>, <code class="language-plaintext highlighter-rouge">-</code>, veya <code class="language-plaintext highlighter-rouge">=</code> işaretlerinden birisini girebilir bu aşamada. 
+Eğer kullanıcı <code class="language-plaintext highlighter-rouge">+</code> işaretini girerse, program bir tane sayı girmesini istiyor. 
+Sayı girilince, girilen sayı <code class="language-plaintext highlighter-rouge">SUM</code> isimli değişkene ekleniyor. 
+Eğer kullanıcı <code class="language-plaintext highlighter-rouge">-</code> işaretini girerse, program yine bir tane sayı girmesini istiyor. 
+Sayı girilince, girilen sayı <code class="language-plaintext highlighter-rouge">SUM</code> isimli değişkenden çıkartılıyor. 
+<code class="language-plaintext highlighter-rouge">=</code> işareti girildiğinde ise program kapanıyor.</p>
 
 <p>Örnek bir kullanım çıktısını paylaşıyorum aşağıda:</p>
 
@@ -378,7 +378,7 @@ Sayı girilince, girilen sayı <code class="highlighter-rouge">SUM</code> isimli
 <span class="go">Exiting... SUM is now 2
 </span></code></pre></div></div>
 
-<p><code class="highlighter-rouge">if / elif / else</code> hakkında söyleyeceklerim şimdilik bu kadar. 
+<p><code class="language-plaintext highlighter-rouge">if / elif / else</code> hakkında söyleyeceklerim şimdilik bu kadar. 
 Bir ara hatırlatırsanız, 
 if komutlarında veya döngülerde koşul olarak kullanılabilecek özel yapılara değinmek istiyorum. 
 Şimdilik kalın sağlıcakla.</p>

@@ -224,7 +224,7 @@ bilgisayarınızda “npm” ve “ng” (Angular CLI) araçlarının da yüklü
 
 <h2 id="adım-1-gradle-projesi-oluşturalım">Adım 1: Gradle Projesi Oluşturalım</h2>
 
-<p>Öncelikle Intellij IDEA menüsünden <code class="highlighter-rouge">File &gt; New &gt; Project</code> 
+<p>Öncelikle Intellij IDEA menüsünden <code class="language-plaintext highlighter-rouge">File &gt; New &gt; Project</code> 
 yolunu takip ederek yeni proje oluşturma diyaloğunu açıyoruz 
 ve bu diyalogda sol tarafta “Gradle” seçeneğini işaretliyoruz.
 Sağ tarafta ise hiçbir seçeneği işaretlemeden Next butonuna basıyoruz.</p>
@@ -257,13 +257,13 @@ ve içerisinde boş bir Angular hello world uygulamasının oluştuğunu görece
 
 <p>Ana projemizi zaten versiyon kontrol sisteminde tutacağımız için frontend klasöründe
 otomatik olarak oluşturulan git repository’sine ihtiyacımız yok.
-<code class="highlighter-rouge">frontend/.git</code> klasörünü hiç düşünmeden silebiliriz.</p>
+<code class="language-plaintext highlighter-rouge">frontend/.git</code> klasörünü hiç düşünmeden silebiliriz.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cd </span>frontend
 <span class="nb">rm</span> <span class="nt">-rf</span> .git
 </code></pre></div></div>
 
-<p>Terminalde frontend klasörünün içerisinde <code class="highlighter-rouge">ng serve</code> komutunu yazdığımızda
+<p>Terminalde frontend klasörünün içerisinde <code class="language-plaintext highlighter-rouge">ng serve</code> komutunu yazdığımızda
 projenin “Angular Live Development Server” üzerinde ayağa kalktığını ve
 <a href="http://localhost:4200/">http://localhost:4200/</a> adresinden otomatik olarak üretilmiş
 Welcome sayfasına ulaşabildiğimizi görüyoruz.</p>
@@ -271,7 +271,7 @@ Welcome sayfasına ulaşabildiğimizi görüyoruz.</p>
 <p>Angular projeleri npm paket yöneticisini kullanır ve Angular CLI denen
 nodejs ile çalışan bir araç tarafından build edilirler.
 Biz “frontend” projesini de gradle ile build etmek istediğimiz için
-frontend klasörünün içerisinde aşağıdaki gibi bir <code class="highlighter-rouge">build.gradle</code> dosyası oluşturuyoruz.</p>
+frontend klasörünün içerisinde aşağıdaki gibi bir <code class="language-plaintext highlighter-rouge">build.gradle</code> dosyası oluşturuyoruz.</p>
 
 <div class="language-gradle highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">def</span> <span class="n">frontendProjectDir</span> <span class="o">=</span> <span class="s2">"${rootProject.projectDir}/frontend"</span>
 
@@ -327,8 +327,8 @@ frontend klasörünün içerisinde aşağıdaki gibi bir <code class="highlighte
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>“frontend” klasöründeki <code class="highlighter-rouge">package.json</code> dosyasında <code class="highlighter-rouge">scripts</code> anahtarının içerisine
-aşağıdaki gibi <code class="highlighter-rouge">buildProd</code> komutunu ekliyoruz. 
+<p>“frontend” klasöründeki <code class="language-plaintext highlighter-rouge">package.json</code> dosyasında <code class="language-plaintext highlighter-rouge">scripts</code> anahtarının içerisine
+aşağıdaki gibi <code class="language-plaintext highlighter-rouge">buildProd</code> komutunu ekliyoruz. 
 Dosyayı aşağıdaki gibi değiştirmeyin komple, sadece bir kısmını yazdım.</p>
 
 <div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
@@ -346,21 +346,21 @@ Dosyayı aşağıdaki gibi değiştirmeyin komple, sadece bir kısmını yazdım
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
-<p>“package.json” dosyasına eklediğimiz <code class="highlighter-rouge">ng build --prod</code> komutu build.gradle
-dosyasındaki <code class="highlighter-rouge">buildAngular</code> gradle taskı tarafından tetikleniyor.
+<p>“package.json” dosyasına eklediğimiz <code class="language-plaintext highlighter-rouge">ng build --prod</code> komutu build.gradle
+dosyasındaki <code class="language-plaintext highlighter-rouge">buildAngular</code> gradle taskı tarafından tetikleniyor.
 Asıl build işini sistemimize daha önceden kurduğumuz “Angular CLI” aracı yapıyor.
 Gradle burada sadece bir tetikleyici durumunda fakat backend projesi gradle
 tarafından build edileceği için ikisini birbirine bağlamamızda 
 bu konfigürasyonun oldukça faydası olacak.</p>
 
 <p>“frontend” projesinin bir gradle projesi olarak ana proje tarafından görülmesi için
-ana proje klasöründeki <code class="highlighter-rouge">settings.gradle</code> dosyasını da şu şekilde düzenliyoruz:</p>
+ana proje klasöründeki <code class="language-plaintext highlighter-rouge">settings.gradle</code> dosyasını da şu şekilde düzenliyoruz:</p>
 
 <div class="language-gradle highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rootProject</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="s1">'springangulardemo'</span>
 <span class="n">include</span> <span class="s1">':frontend'</span>
 </code></pre></div></div>
 
-<p>En sonunda ana proje dizininde <code class="highlighter-rouge">./gradlew build</code> komutunu çalıştırdığımızda 
+<p>En sonunda ana proje dizininde <code class="language-plaintext highlighter-rouge">./gradlew build</code> komutunu çalıştırdığımızda 
 aşağıdaki gibi bir çıktı verince angular projemizin gradle ile build olduğunu
 görmüş oluyoruz.</p>
 
@@ -402,7 +402,7 @@ Sonraki adıma geçebiliriz.</p>
 <p>Yeni bir Spring Boot uygulaması oluştururken yaptığım şey genellikle çoğu insan gibi
 https://start.spring.io/ adresine girip ihtiyacım olan bağımlılıkları seçip 
 projeyi zip olarak indirmek. 
-Bu sefer onun yerine ihtiyacım olan bağımlılıkları seçip sadece <code class="highlighter-rouge">build.gradle</code>
+Bu sefer onun yerine ihtiyacım olan bağımlılıkları seçip sadece <code class="language-plaintext highlighter-rouge">build.gradle</code>
 dosyasını kopyalayacağım.</p>
 
 <p>Spring Boot projesini aşağıdaki gibi starter arayüzünden konfigüre ettim:</p>
@@ -412,11 +412,11 @@ dosyasını kopyalayacağım.</p>
 </a></p>
 
 <p>Daha sonra sayfanın altında bulunan “EXPLORE” butonuna basarak 
-<code class="highlighter-rouge">build.gradle</code> dosyasının içeriğini kopyalıyoruz.</p>
+<code class="language-plaintext highlighter-rouge">build.gradle</code> dosyasının içeriğini kopyalıyoruz.</p>
 
 <p>Ana projenin içerisinde “frontend” klasörüne komşu olacak şekilde 
 “backend” isminde bir klasör oluşturuyoruz.
-“backend” klasörünün içerisinde <code class="highlighter-rouge">build.gradle</code> isimli bir dosya oluşturuyoruz
+“backend” klasörünün içerisinde <code class="language-plaintext highlighter-rouge">build.gradle</code> isimli bir dosya oluşturuyoruz
 ve Spring Boot starter sitesinden kopyaladığımız “build.gradle” dosya içeriğini
 bu yeni dosyanın içerisine yapıştırıyoruz.</p>
 
@@ -439,7 +439,7 @@ garanti altına almış oluyoruz.</p>
 <p>Angular projesi build olduğunda ortaya “dist” isimli bir klasör çıkar.
 Bu klasör Angular projesindeki tüm dosyaların build + uglify edilmiş halini içerir.</p>
 
-<p>“build.gradle” dosyasına <code class="highlighter-rouge">into(</code> ile başlayan satırda yaptığımız ilave 
+<p>“build.gradle” dosyasına <code class="language-plaintext highlighter-rouge">into(</code> ile başlayan satırda yaptığımız ilave 
 ile “dist” klasörünü Spring Boot uygulamasının ürettiği jar’ın içerisine
 JVM’in classpath’inde olacak şekilde eklemiş oluyoruz.
 “BOOT-INF/classes” klasörü spring uygulamasının classpath’inin root dizinidir.</p>
@@ -467,7 +467,7 @@ aşağıdaki içerikte bir dosya oluşturalım.</p>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>Son olarak ana projedeki <code class="highlighter-rouge">settings.gradle</code> dosyasına aşağıdaki gibi
+<p>Son olarak ana projedeki <code class="language-plaintext highlighter-rouge">settings.gradle</code> dosyasına aşağıdaki gibi
 backend projesini de eklememiz gerekiyor:</p>
 
 <div class="language-gradle highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">rootProject</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="s1">'springangulardemo'</span>
@@ -476,10 +476,10 @@ backend projesini de eklememiz gerekiyor:</p>
 <span class="n">include</span> <span class="s1">':backend'</span>
 </code></pre></div></div>
 
-<p>Bu noktadan sonra <code class="highlighter-rouge">./gradlew build</code> komutunu çalıştırdığımızda
+<p>Bu noktadan sonra <code class="language-plaintext highlighter-rouge">./gradlew build</code> komutunu çalıştırdığımızda
 hata almamamız gerekiyor.</p>
 
-<p>Spring uygulamasını ayağa kaldırmak için de <code class="highlighter-rouge">./gradlew bootRun</code> 
+<p>Spring uygulamasını ayağa kaldırmak için de <code class="language-plaintext highlighter-rouge">./gradlew bootRun</code> 
 komutunu çalıştırıyoruz. 
 Bu komutta da bir hata almamamız gerekiyor.</p>
 
@@ -515,7 +515,7 @@ sunmaya başlayabilmek için bazı konfigürasyonları yapmak gerekiyor.</p>
 <p>Öncelikle frontend klasörünü bir önceki adımda classpath’e kopyalamıştık.
 Angular projesinin “dist” klasörünün içerisinde “frontend” isminde bir klasör
 oluşmakta ve biz de o klasörü Spring Boot uygulamasının classpath’ine eklemiş olduk.
-Bu sebeple Spring’e ResourceHandler olarak <code class="highlighter-rouge">classpath:/frontend/</code>
+Bu sebeple Spring’e ResourceHandler olarak <code class="language-plaintext highlighter-rouge">classpath:/frontend/</code>
 dizinini aşağıdaki gibi ekliyoruz.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.serdarkuzucu.springangulardemo.configuration</span><span class="o">;</span>
@@ -543,7 +543,7 @@ söylemiş olmaktayız.</p>
 şeklinde gelen isteklerde “404 Not Found” hatası dönüyor.</p>
 
 <p>Uygulamamızın root adresini de index.html dosyasına bağlayabilmek için
-aşağıdaki gibi bir <code class="highlighter-rouge">IndexController</code> sınıfı yazmamız yeterli.</p>
+aşağıdaki gibi bir <code class="language-plaintext highlighter-rouge">IndexController</code> sınıfı yazmamız yeterli.</p>
 
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.serdarkuzucu.springangulardemo.controller</span><span class="o">;</span>
 
@@ -564,9 +564,9 @@ aşağıdaki gibi bir <code class="highlighter-rouge">IndexController</code> sı
 <p>Bir geliştirici kendi bilgisayarında projeyi geliştirme amaçlı çalıştığında
 Spring Boot jar’ının içerisine gömülmüş Angular projesini çalıştırmamalı.
 Geliştiriciler Spring Boot uygulamasını IDE’lerindeki Run Configuration ile main
-sınıftan çalıştırmalı veya <code class="highlighter-rouge">./gradlew bootRun</code> komutuyla ayağa kaldırmalılar.
-Angular uygulamasını ise frontend klasöründe <code class="highlighter-rouge">ng serve</code> komutunu çalıştırarak
-<code class="highlighter-rouge">Angular Live Development Server</code> üzerinde ayağa kaldırmalılar.</p>
+sınıftan çalıştırmalı veya <code class="language-plaintext highlighter-rouge">./gradlew bootRun</code> komutuyla ayağa kaldırmalılar.
+Angular uygulamasını ise frontend klasöründe <code class="language-plaintext highlighter-rouge">ng serve</code> komutunu çalıştırarak
+<code class="language-plaintext highlighter-rouge">Angular Live Development Server</code> üzerinde ayağa kaldırmalılar.</p>
 
 <p>Bu durumda frontend 4200, backend ise 8080 portlarında ayağa kalkmış oluyor.
 Bu da bazı tarayıcılarda ön yüzden backend uygulamasına atılan isteklerin
@@ -587,8 +587,8 @@ Angular proxy ayarlarını yapmamız gerekiyor.
 </span></code></pre></div></div>
 
 <p>Bu konfigürasyon adresi Angular Live Development Server uygulamasına
-<code class="highlighter-rouge">http://localhost:4200/api</code> şeklinde gelecek olan tüm istekleri 
-<code class="highlighter-rouge">http://localhost:8080</code> uygulamasına gönderecek.</p>
+<code class="language-plaintext highlighter-rouge">http://localhost:4200/api</code> şeklinde gelecek olan tüm istekleri 
+<code class="language-plaintext highlighter-rouge">http://localhost:8080</code> uygulamasına gönderecek.</p>
 
 <p>Proxy ayarını “frontend” klasöründeki “angular.json” 
 dosyasında da şu şekilde yapıyoruz:</p>
@@ -609,7 +609,7 @@ dosyasında da şu şekilde yapıyoruz:</p>
 </span></code></pre></div></div>
 
 <p>Düzenli bir API standardınızın olması ve proxy ayarlarının temiz kalması için
-backend tarafındaki tüm REST API’lere burda yaptığımız gibi <code class="highlighter-rouge">api/**</code> ön eki ile
+backend tarafındaki tüm REST API’lere burda yaptığımız gibi <code class="language-plaintext highlighter-rouge">api/**</code> ön eki ile
 veya kendi belirleyeceğiniz başka tek bir ön ek ile başlamanızı tavsiye ederim.
 Spring Security konfigürasyonları, custom servlet filtreleri gibi başka işlerde de
 oldukça işe yaradığını göreceksiniz ileride.</p>
@@ -619,7 +619,7 @@ oldukça işe yaradığını göreceksiniz ileride.</p>
 <p>Yaptığımız bunca konfigürasyonun çalışıp çalışmadığını uçtan uca test etmek 
 için aşağıdaki değişiklikleri yapıyoruz:</p>
 
-<p><code class="highlighter-rouge">app.module.ts</code> dosyasında <code class="highlighter-rouge">HttpClientModule</code> modülünü import edelim:</p>
+<p><code class="language-plaintext highlighter-rouge">app.module.ts</code> dosyasında <code class="language-plaintext highlighter-rouge">HttpClientModule</code> modülünü import edelim:</p>
 
 <div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span><span class="nx">BrowserModule</span><span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@angular/platform-browser</span><span class="dl">'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span><span class="nx">NgModule</span><span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@angular/core</span><span class="dl">'</span><span class="p">;</span>
@@ -644,9 +644,9 @@ için aşağıdaki değişiklikleri yapıyoruz:</p>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p><code class="highlighter-rouge">app.module.ts</code> dosyası ile aynı dizinde bir adet <code class="highlighter-rouge">user.service.ts</code> dosyası oluşturalım.
+<p><code class="language-plaintext highlighter-rouge">app.module.ts</code> dosyası ile aynı dizinde bir adet <code class="language-plaintext highlighter-rouge">user.service.ts</code> dosyası oluşturalım.
 Bu dosyanın içeriği aşağıdaki gibi olsun.
-Backend’de açtığımız <code class="highlighter-rouge">api/users/me</code> REST API’sini çağırsın.</p>
+Backend’de açtığımız <code class="language-plaintext highlighter-rouge">api/users/me</code> REST API’sini çağırsın.</p>
 
 <div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span><span class="nx">Injectable</span><span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@angular/core</span><span class="dl">"</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span><span class="nx">HttpClient</span><span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@angular/common/http</span><span class="dl">"</span><span class="p">;</span>
@@ -654,22 +654,22 @@ Backend’de açtığımız <code class="highlighter-rouge">api/users/me</code> 
 
 <span class="p">@</span><span class="nd">Injectable</span><span class="p">({</span><span class="na">providedIn</span><span class="p">:</span> <span class="dl">'</span><span class="s1">root</span><span class="dl">'</span><span class="p">})</span>
 <span class="k">export</span> <span class="kd">class</span> <span class="nx">UserService</span> <span class="p">{</span>
-  <span class="kd">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">http</span><span class="p">:</span> <span class="nx">HttpClient</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="k">private</span> <span class="nx">http</span><span class="p">:</span> <span class="nx">HttpClient</span><span class="p">)</span> <span class="p">{</span>
   <span class="p">}</span>
 
-  <span class="kr">public</span> <span class="nx">getCurrentUser</span><span class="p">():</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">User</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="k">public</span> <span class="nx">getCurrentUser</span><span class="p">():</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">User</span><span class="o">&gt;</span> <span class="p">{</span>
     <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">http</span><span class="p">.</span><span class="kd">get</span><span class="o">&lt;</span><span class="nx">User</span><span class="o">&gt;</span><span class="p">(</span><span class="dl">'</span><span class="s1">api/users/me</span><span class="dl">'</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
 <span class="k">export</span> <span class="kr">interface</span> <span class="nx">User</span> <span class="p">{</span>
-  <span class="na">firstName</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
-  <span class="nl">lastName</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="nl">firstName</span><span class="p">:</span> <span class="kr">string</span><span class="p">;</span>
+  <span class="nl">lastName</span><span class="p">:</span> <span class="kr">string</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p><code class="highlighter-rouge">app.component.ts</code> dosyasını aşağıdaki şekilde değiştirelim.
-<code class="highlighter-rouge">UserService</code> üzerinden backend’den kullanıcı bilgilerini çeksin.</p>
+<p><code class="language-plaintext highlighter-rouge">app.component.ts</code> dosyasını aşağıdaki şekilde değiştirelim.
+<code class="language-plaintext highlighter-rouge">UserService</code> üzerinden backend’den kullanıcı bilgilerini çeksin.</p>
 
 <div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="p">{</span><span class="nx">Component</span><span class="p">,</span> <span class="nx">OnInit</span><span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">@angular/core</span><span class="dl">'</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span><span class="nx">User</span><span class="p">,</span> <span class="nx">UserService</span><span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">./user.service</span><span class="dl">"</span><span class="p">;</span>
@@ -679,11 +679,11 @@ Backend’de açtığımız <code class="highlighter-rouge">api/users/me</code> 
   <span class="na">templateUrl</span><span class="p">:</span> <span class="dl">'</span><span class="s1">./app.component.html</span><span class="dl">'</span><span class="p">,</span>
   <span class="na">styleUrls</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">./app.component.scss</span><span class="dl">'</span><span class="p">]</span>
 <span class="p">})</span>
-<span class="k">export</span> <span class="kd">class</span> <span class="nx">AppComponent</span> <span class="kr">implements</span> <span class="nx">OnInit</span> <span class="p">{</span>
+<span class="k">export</span> <span class="kd">class</span> <span class="nx">AppComponent</span> <span class="k">implements</span> <span class="nx">OnInit</span> <span class="p">{</span>
   <span class="nx">title</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">frontend</span><span class="dl">'</span><span class="p">;</span>
   <span class="nl">user</span><span class="p">:</span> <span class="nx">User</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
-  <span class="kd">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">userService</span><span class="p">:</span> <span class="nx">UserService</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">constructor</span><span class="p">(</span><span class="k">private</span> <span class="nx">userService</span><span class="p">:</span> <span class="nx">UserService</span><span class="p">)</span> <span class="p">{</span>
   <span class="p">}</span>
 
   <span class="nx">ngOnInit</span><span class="p">():</span> <span class="k">void</span> <span class="p">{</span>
@@ -693,7 +693,7 @@ Backend’de açtığımız <code class="highlighter-rouge">api/users/me</code> 
 <span class="p">}</span>
 </code></pre></div></div>
 
-<p><code class="highlighter-rouge">app.component.html</code> dosyasında da <code class="highlighter-rouge">&lt;span&gt;Welcome&lt;/span&gt;</code> yazan satırı 
+<p><code class="language-plaintext highlighter-rouge">app.component.html</code> dosyasında da <code class="language-plaintext highlighter-rouge">&lt;span&gt;Welcome&lt;/span&gt;</code> yazan satırı 
 aşağıdaki gibi değiştirelim:</p>
 
 <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;span&gt;</span>Welcome <span class="nt">&lt;span</span> <span class="na">*ngIf=</span><span class="s">"user"</span><span class="nt">&gt;</span> <span class="nt">&lt;/span&gt;&lt;/span&gt;</span>
@@ -716,18 +716,18 @@ faydalanabileceklerini görmüş oluyoruz.</p>
 
 <h3 id="production-ortamı-testleri">Production Ortamı Testleri</h3>
 
-<p>Production build almak için ana projenin dizininde <code class="highlighter-rouge">./gradlew build</code> 
+<p>Production build almak için ana projenin dizininde <code class="language-plaintext highlighter-rouge">./gradlew build</code> 
 komutunu çalıştırmamız yeterli.</p>
 
 <p>Gradle dosyalarındaki versiyonlarda bir değişiklik yapmadıysanız build işlemi
 sonrasında proje içerisinde şu isimde bir dosya üreyecektir:
-<code class="highlighter-rouge">backend/build/libs/backend-0.0.1-SNAPSHOT.jar</code></p>
+<code class="language-plaintext highlighter-rouge">backend/build/libs/backend-0.0.1-SNAPSHOT.jar</code></p>
 
 <p>Bu dosya Spring Boot uygulamasının son çıktısıdır.
 Bu dosyanın içerisinde compile olmuş java sınıflarının yanı sıra
 Angular projesinin de production build çıktısı yer almaktadır.</p>
 
-<p>Bu dosyayı doğrudan <code class="highlighter-rouge">java -jar</code> ile aşağıdaki gibi çalıştırabiliriz:</p>
+<p>Bu dosyayı doğrudan <code class="language-plaintext highlighter-rouge">java -jar</code> ile aşağıdaki gibi çalıştırabiliriz:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>java <span class="nt">-jar</span> backend/build/libs/backend-0.0.1-SNAPSHOT.jar
 </code></pre></div></div>

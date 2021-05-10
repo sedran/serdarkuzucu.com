@@ -236,8 +236,8 @@ Belki yazı kısa olursa onu da eklerim.</p>
 
 <p>Bunu yapabilmek çok mu zor? 
 Hayır. Öncelikle elimizdeki tüm seçenekleri ve ekranda seçili olan seçenekleri birer array’de tutuyoruz.
-Daha sonra yeni bir select yaratılabilmesi için yapılması gereken <code class="highlighter-rouge">addOption</code>, <code class="highlighter-rouge">addOptions</code> 
-ve <code class="highlighter-rouge">addSelect</code> fonksiyonlarını tanımlıyoruz.</p>
+Daha sonra yeni bir select yaratılabilmesi için yapılması gereken <code class="language-plaintext highlighter-rouge">addOption</code>, <code class="language-plaintext highlighter-rouge">addOptions</code> 
+ve <code class="language-plaintext highlighter-rouge">addSelect</code> fonksiyonlarını tanımlıyoruz.</p>
 
 <h3 id="arrayler">Array’ler</h3>
 
@@ -315,7 +315,7 @@ ve <code class="highlighter-rouge">addSelect</code> fonksiyonlarını tanımlıy
 <p>Bu kod şu haliyle, ilginç bir şekilde, çalışıyor. 
 Fakat birkaç eksiği var. Gereksinim 4 ve 5’i sağlamıyor. 
 Şimdi yeni bir select eklediğimizde önceki select’lerden yeni select’deki değeri silmek için gereken 
-<code class="highlighter-rouge">removeOption</code> ve <code class="highlighter-rouge">removeOptions</code> fonksiyonlarını yazalım.</p>
+<code class="language-plaintext highlighter-rouge">removeOption</code> ve <code class="language-plaintext highlighter-rouge">removeOptions</code> fonksiyonlarını yazalım.</p>
 
 <h3 id="removeoption-fonksiyonu">removeOption Fonksiyonu</h3>
 
@@ -352,8 +352,8 @@ Biraz uzun bir cümle oldu fakat anlaşılabilir bence :)</p>
 
 <p>Tabi ki bu fonksiyonları yazdığımıza göre kullanmamız gerekiyor.
 Bunun için, yeni yaratılan select objesine seçenekleri eklerken, 
-<code class="highlighter-rouge">removeOptions</code> fonksiyonunu çağırıyoruz. 
-Yani yukarıda tanımladığımız <code class="highlighter-rouge">addOptions</code> fonksiyonunu şu şekilde modifiye ediyoruz:</p>
+<code class="language-plaintext highlighter-rouge">removeOptions</code> fonksiyonunu çağırıyoruz. 
+Yani yukarıda tanımladığımız <code class="language-plaintext highlighter-rouge">addOptions</code> fonksiyonunu şu şekilde modifiye ediyoruz:</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
  * Adds all available options to a select object
@@ -385,7 +385,7 @@ o select objesinde önceden seçili olan değeri diğer objelere ekleyeceğiz,
 Böylece, kullanıcı Ahmet seçeneği seçili olan kutuda Ayşe’yi seçerse,
 diğer kutulara Ahmet seçeneğini ekleyeceğiz ve Ayşe seçeneğini sileceğiz.</p>
 
-<p>Bunun için <code class="highlighter-rouge">selectionChange</code> ve <code class="highlighter-rouge">replaceOptions</code> isimli iki fonksiyonu ekleyeceğiz.</p>
+<p>Bunun için <code class="language-plaintext highlighter-rouge">selectionChange</code> ve <code class="language-plaintext highlighter-rouge">replaceOptions</code> isimli iki fonksiyonu ekleyeceğiz.</p>
 
 <h3 id="replaceoptions-fonksiyonu">replaceOptions Fonksiyonu</h3>
 
