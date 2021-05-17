@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Unit Test ve Test Edilebilir Kod Yazmak</title>
+
+  <meta name="description" content="Yazılımcılar ikiye ayrılır. Unit test yazanlar ve unit test yazmayanlar.Bazen vakit yok deriz, bazen zor gelir, bazen proje/kod test yazmaya uygun değil deri...">
+
+<meta content="Serdar Kuzucu" property="og:site_name">
+
+
+<meta content="Unit Test ve Test Edilebilir Kod Yazmak" property="og:title">
+
+
+
+<meta content="article" property="og:type">
+
+
+<meta content="Yazılımcılar ikiye ayrılır. Unit test yazanlar ve unit test yazmayanlar.Bazen vakit yok deriz, bazen zor gelir, bazen proje/kod test yazmaya uygun değil deri..." property="og:description">
+
+
+<meta content="https://serdarkuzucu.com/2021/05/18/unit-test-ve-test-edilebilir-kod-yazmak/" property="og:url">
+
+
+
+<meta content="2021-05-17T23:51:25+00:00" property="article:published_time">
+<meta content="https://serdarkuzucu.com/about/" property="article:author">
+
+
+
+<meta content="https://serdarkuzucu.com/assets/category/unit-test.png" property="og:image">
+
+
+
+
+<meta content="Java" property="article:section">
+
+
+
+
+
+
+
+<meta name="twitter:creator" content="@sedran"/>
+<meta name="twitter:site" content="@sedran"/>
+<meta name="twitter:card" content="summary"/>
+
+
+  <link rel="stylesheet" href="/css/main.css?v=201904191944">
+  <link rel="canonical" href="https://serdarkuzucu.com/2021/05/18/unit-test-ve-test-edilebilir-kod-yazmak/">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2260086-7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-2260086-7');
+  </script>
+  
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            
+            <a href="/category/angular" class="dropdown-item">Angular (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (4)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (5)</a>
+            
+            <a href="/category/git" class="dropdown-item">Git (2)</a>
+            
+            <a href="/category/gradle" class="dropdown-item">Gradle (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (23)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (6)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (6)</a>
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (44)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/spring-boot" class="dropdown-item">Spring Boot (1)</a>
+            
+            <a href="/category/unit-test" class="dropdown-item">Unit Test (1)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Unit Test ve Test Edilebilir Kod Yazmak</h1>
+    <p class="post-meta">
+      <time datetime="2021-05-17T23:51:25+00:00" itemprop="datePublished">May 17, 2021</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/unit-test">Unit Test</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    <p>Yazılımcılar ikiye ayrılır. Unit test yazanlar ve unit test yazmayanlar.
+Bazen vakit yok deriz, bazen zor gelir, bazen proje/kod test yazmaya uygun değil deriz.
+Unit test yazmak istemediğimizde bu saydıklarım gibi çok fazla miktarda bahaneler üretebiliriz
+ve üretebileceğimiz bahanelerin de hemen hemen hepsini daha önce başkalarından da duymuşuzdur.
+Bu yazıda unit test konusu ile ilgili birçok soruya cevaplar arayarak 
+kaliteli yazılım geliştirme basamaklarından birkaç tanesini hep birlikte tırmanmaya çalışacağız.</p>
+
+<!--more-->
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">add_twoPlusTwo_returnsFour</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">calculator</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Calculator</span><span class="o">();</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">result</span> <span class="o">=</span> <span class="n">calculator</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">2</span><span class="o">);</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Unit test, dışarıdan bakıldığında yukarıdaki kod örneğinde olduğu gibi basit bir şey
+gibi görünse de, içine girildiğinde derya denizdir.
+Etkili unit test yazmanın çeşitli zorlukları vardır.
+Çoğumuz bu zorlukları aşamayıp test yazmamayı tercih ederiz.
+Kimimiz yazdımız testlerin unit test olduğunu zannederiz fakat aslında bambaşka bir test türüdür.
+Ben bu sınıflandırmaların hepsinin içinde bizzat kendim de bulundum 
+ve bu konuda hala kendimi geliştirebileceğim çok fazla nokta var.
+Zaten kaliteli yazılım geliştirme serüveninde <u>ben artık tamamım</u> 
+diyebileceğimiz bir nokta bulunmuyor.</p>
+
+<p>Şimdi birbirinden zehirli sorularımızı ortaya atalım ve cevaplarına birlikte bakalım.</p>
+
+<ol>
+  <li><a href="#unit-test-nedir">Unit test nedir?</a></li>
+  <li><a href="#diger-test-cesitleri-nelerdir">Diğer test çeşitleri nelerdir?</a></li>
+  <li><a href="#unit-test-vs-diger-testler">Unit testi diğer testlerden ayıran özellikler nelerdir?</a></li>
+  <li><a href="#neden-unit-test-yazariz">Neden unit test yazarız?</a></li>
+  <li><a href="#nasil-unit-test-yazmaliyiz">Nasıl unit test yazmalıyız?</a></li>
+  <li><a href="#test-edilebilir-yazilim">Unit test yazabilmemiz için nasıl yazılımlar tasarlamalıyız?</a></li>
+</ol>
+
+<hr />
+
+<p><a id="unit-test-nedir"></a></p>
+<h2 id="1-unit-test-nedir">1. Unit Test Nedir?</h2>
+
+<p>Unit test uygulamamızın küçük bir parçasını 
+uygulamanın geri kalanından bağımsız bir şekilde çalıştırarak
+bu parçanın davranışını doğrulayan bir metoddur.</p>
+
+<p>Unit test yazdığımız kodun davranışını yine kod yazarak doğrulamamızı sağlar.
+Tipik bir unit test metodu genellikle üç aşamadan oluşur.
+Bu aşamalar yabancı kaynaklarda <u>The AAA(Arrange-Act-Aspect) Pattern</u> olarak geçer.</p>
+
+<ol>
+  <li>
+    <p><b>Arrange:</b> Test edilecek koda verilecek olan input parametrelerinin belirlendiği 
+ve test edilecek olan kodun bağımlı olduğu diğer bileşenlerin 
+test anındaki bulunacakları durumlarının tanımlandığı kısımdır.</p>
+  </li>
+  <li>
+    <p><b>Act:</b> Test edilecek olan kodun çalıştırıldığı aşamadır.
+Bu aşamada test edilecek olan fonksiyonu/metodu tetikleriz.</p>
+  </li>
+  <li>
+    <p><b>Assert:</b> Test sonuçlarının doğrulanması aşamasıdır.
+Tetiklenen fonksiyon doğru sonucu üretiyor mu 
+veya bağımlı olduğu bileşenler üzerinde beklenen aksiyonları tetikliyor mu kontrolünü bu aşamada yaparız.</p>
+  </li>
+</ol>
+
+<p>Bu aşamalar aşağıdaki test kodu üzerinde daha net görebiliriz:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">findByName_exactMatchWithTwoPersons_returnsBothOfThemInInsertionOrder</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// Arrange</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">phoneBook</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PhoneBook</span><span class="o">();</span>
+    <span class="n">phoneBook</span><span class="o">.</span><span class="na">addPerson</span><span class="o">(</span><span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"James"</span><span class="o">,</span> <span class="s">"Malkovic"</span><span class="o">,</span> <span class="s">"+905554443321"</span><span class="o">));</span>
+    <span class="n">phoneBook</span><span class="o">.</span><span class="na">addPerson</span><span class="o">(</span><span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"John"</span><span class="o">,</span> <span class="s">"Doe"</span><span class="o">,</span> <span class="s">"+905554443322"</span><span class="o">));</span>
+    <span class="n">phoneBook</span><span class="o">.</span><span class="na">addPerson</span><span class="o">(</span><span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"Foo"</span><span class="o">,</span> <span class="s">"Bar"</span><span class="o">,</span> <span class="s">"+905554443323"</span><span class="o">));</span>
+    <span class="n">phoneBook</span><span class="o">.</span><span class="na">addPerson</span><span class="o">(</span><span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"John"</span><span class="o">,</span> <span class="s">"Baz"</span><span class="o">,</span> <span class="s">"+905554443324"</span><span class="o">));</span>
+
+    <span class="c1">// Act</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">result</span> <span class="o">=</span> <span class="n">phoneBook</span><span class="o">.</span><span class="na">findByName</span><span class="o">(</span><span class="s">"John"</span><span class="o">);</span>
+
+    <span class="c1">// Assert</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">result</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"John"</span><span class="o">,</span> <span class="s">"Doe"</span><span class="o">,</span> <span class="s">"+905554443322"</span><span class="o">),</span> <span class="n">result</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">));</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"John"</span><span class="o">,</span> <span class="s">"Baz"</span><span class="o">,</span> <span class="s">"+905554443324"</span><span class="o">),</span> <span class="n">result</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">));</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Burada unit testleri “Assert” fazında doğrulayacağı davranışa göre iki kategoriye ayırmışlar bazı kaynaklarda.</p>
+
+<ul>
+  <li>
+    <p><strong>state-based</strong>: Test edilen kodun çıktılarının veya sistemde oluşturduğu durum (state) değişikliğinin
+kontrol edilmesi durumunda “state-based” test yazmış oluyoruz.</p>
+  </li>
+  <li>
+    <p><strong>interaction-based</strong>: Test edilen kodun belirli fonksiyonları doğru şekilde tetiklediğini (doğru etkileşim) 
+doğrulayan bir test yazdığımızda “interaction-based” bir test yazmış oluyoruz.</p>
+  </li>
+</ul>
+
+<p>Ben de yazdığım testlerde bu iki kategori arasındaki ayrıma dikkat etmeye çalışıyorum.
+Eğer bir kod hem bazı başka bileşenlerle etkileşimde bulunuyorsa hem de bir sonuç dönüyorsa,
+ikisini aynı testte yapmak yerine bir tane “state-based” bir tane de “interaction-based” test yazıyorum.</p>
+
+<hr />
+
+<p><a id="diger-test-cesitleri-nelerdir"></a></p>
+<h2 id="2-diğer-test-çeşitleri-nelerdir">2. Diğer Test Çeşitleri Nelerdir?</h2>
+
+<p>Kaliteli unit testler yazabilmemiz için unit testin ne olduğunu iyi anlamamız gerekiyor.
+Bunu anlayabilmemiz için de diğer test çeşitlerini bilmemiz ve unit testleri diğer testlerden ayırabilmemiz gerekiyor.</p>
+
+<p>“Types of Software Testing” veya “Yazılım Test Çeşitleri” şeklinde araştırmaya başladığımızda 
+her biri ayrı bir makale olabilecek kadar çok sayıda test çeşidi olduğunu görüyoruz.
+Hem iyi hem de kötü haber; bu test çeşitleri hangisi daha iyi 
+veya hangisini kullanmalıyım şeklinde karşılaştırabileceğimiz şeyler değil. 
+Hepsinin farklı bir amacı ve yazılım geliştirme ve devreye alma yaşam döngüsünde ayrı bir yeri var.</p>
+
+<p>Birçok kaynakta test çeşitlerinin öncelikle iki kümeye ayırıldığını görmekteyiz.
+Ayrıca farklı kaynaklarda test çeşitlerinin ayrıldığı kümeler de değişebilmektedir.</p>
+
+<p>Testleri yapan veya hazırlayan kişinin bakış açısına göre test çeşitleri gruplandığında 
+<a href="https://en.wikipedia.org/wiki/White-box_testing" target="_blank">“white-box testing”</a> ve 
+<a href="https://en.wikipedia.org/wiki/Black-box_testing" target="_blank">“black-box testing”</a> 
+şeklinde ikiye ayrılmaktadır.</p>
+
+<ul>
+  <li>
+    <p><strong>White-box Testing:</strong> Yazılımın iç yapısının nasıl kurgulandığının ve nasıl çalıştığının bilindiği
+test türüdür. Yazılımın bütününü oluşturan parçaların doğru girdiler ile doğru çıktıları, davranışları
+veya değişiklikleri üretebildiği test edilir. Unit testler çoğunlukla bu kategoriye dahildir.
+Test ettiğimiz kod bir işlevi gerçekleştirirken diğer kod bileşenleri ile 
+kurduğu etkileşimleri de test etmiş oluruz bu seviyede. 
+Örneğin bir methodu birinci tetiklememizde veritabanına sorgu atması, sonucu cache kütüphanesine de kaydetmesi 
+ve ikinci tetiklememizde veritabanı yerine cache üzerindeki veriyi getirmesini test etmek istediğimizde 
+kodun işlevi kadar kullandığı diğer sınıfları veya fonksiyonları da bilmemiz gerekiyor.</p>
+  </li>
+  <li>
+    <p><strong>Black-box Testing:</strong> Yazılımın nasıl çalıştığı bilinmeden veya önemsenmeden fonksiyonalitesi test edilir.
+Test yapanlar yazılımın iç yapısını bilmeden ve kaynak koda bakmadan, 
+son kullanıcıya beklenilen faydayı üretip üretemediğini doğrularlar.
+Genellikle sistem seviyesi testlerdir fakat unit testlerde de bu yaklaşımın kullanıldığı uygulamalar olabilmektedir.
+Örnek bir blackbox testi uygulama arayüzüne girip bir butona tıklamamız 
+ve sonrasında arayüzde gerçekleşen davranışı veya sonucu kontrol etmemiz olabilir.
+Böyle bir testi yaparken sistemin hangi bileşenlerden oluştuğunu hatta hangi dil ile yazıldığını dahi
+bilmemize gerek yoktur. Sistem bizim için tamamen bir kara kutudur.</p>
+  </li>
+</ul>
+
+<p>Testin konusuna veya testin amacına göre kategorilere ayırdığımızda 
+genellikle şu iki kategorinin kullanıldığını görüyoruz:</p>
+
+<ul>
+  <li>
+    <p><strong><a href="https://en.wikipedia.org/wiki/Functional_testing" target="_blank">Fonksiyonel Testler</a>:</strong> 
+Fonksiyonel gereksinimler belirli girdilere veya tetikleyicilere karşılık 
+sistemin hangi davranışları veya çıktıları üretmesini beklediğimizi belirler. 
+Fonksiyonel testler sistemin veya sistemdeki parçaların fonksiyonel gereksinimleri 
+doğru şekilde gerçekleştirdiğinin kontrolünün yapılmasını sağlar.
+Duman Testi, (Smoke Testing), Doğruluk Testi (Sanity Testing), Sistem Testi, Entegrasyon Testi, 
+Tekrar veya Regresyon Testi (Regression Testing), vb. birçok test çeşidi bu gruba dahildir.
+Birim test (Unit test) de birçok kaynakta fonksiyonel test olarak kategorilendirilmektedir 
+fakat unit testlerin yazılım geliştirme süreçlerindeki konumu konusunda epey tartışma mevcut.
+Bu konuya ileride tekrar geleceğiz.</p>
+  </li>
+  <li>
+    <p><strong><a href="https://en.wikipedia.org/wiki/Non-functional_testing" target="_blank">Fonksiyonel Olmayan Testler</a>:</strong> 
+Fonksiyonel olmayan gereksinimlerin sağlanıp sağlanmadığının kontrolünü sağlar.
+Yük testi, performans testi, güvenlik testi, vb. birçok test çeşidi fonksiyonel olmayan gereksinimlerin testleridir.</p>
+  </li>
+</ul>
+
+<p>Aşağıda birkaç farklı test çeşidinin tanımlarını örnek olarak yazacağım fakat burada yazdıklarımdan çok daha fazla
+test çeşidi olduğunu da önceden belirteyim. 
+Daha fazla test çeşidini merak edip öğrenmek isterseniz yazının sonundaki kaynakçadaki linkleri takip edebilirsiniz.</p>
+
+<ul>
+  <li>
+    <p><strong>Integration Test (Entegrasyon Testi):</strong> Yazılım bileşenleri arasındaki arayüzlerin (interface) 
+ve etkileşimlerin (interaction) test edilmesi amacıyla yapılır. 
+Geliştirilen yazılım tarafından kullanılan veritabanı, cache server, entegre olunan başka uygulamalar, 
+farklı network bileşenleri, dosya sistemi, vb. sistemler ile geliştirilen yazılımın entegrasyonları test edilir.
+Unit test ile çok karıştırılmaktadır ve bazılarımız unit test yazdığımızı sanarken 
+entegrasyon testi yazmışızdır birçok defa.</p>
+  </li>
+  <li>
+    <p><strong>System Test (Sistem Testi):</strong> Tüm sistemin entegre olduğu dış bileşenler ile birlikte 
+gereksinimleri yerine getirip getiremediğinin test edilmesidir.
+Elle manuel olarak koşulacak testler olabileceği gibi yazılım ile otomatize edilmiş test senaryoları da olabilir.</p>
+  </li>
+  <li>
+    <p><strong>Regression Test (Regresyon/Tekrar Testi):</strong> Kodda yapılan bir değişiklik sonrası sistemin geri kalanında bir hata
+olup olmadığını anlamak amacıyla yapılır. Bu hatalar varolan bir özelliğin düzgün çalışmamaya başlaması veya 
+daha önce çözülmüş bir hatanın tekrar hortlaması şeklinde gerçekleşebilir.
+Kodda yapılan değişikliğin veya yeni geliştirilen özelliğin değil, önceden varolan özelliklerin testidir.
+Genellikle önceden yazılmış ve test edilmiş test senaryolarının tekrar çalıştırılmasıyla bu test yapılır.</p>
+  </li>
+  <li>
+    <p><strong>Acceptance Test (Kabul Testi):</strong> Uygulamayı alacak olan müşterinin kabul testidir.
+Müşteri uygulamayı almak için belirlediği kabul kriterlerinin karşılanıp karşılanmadığını test eder.
+Operasyonel kabul testi (Operational acceptance test, OAT), kullanıcı kabul testi (User acceptance test, UAT), 
+son kullanıcı testi (End-user test) gibi birçok çeşidi vardır.</p>
+  </li>
+  <li>
+    <p><strong>Smoke Test (Duman Testi):</strong> Uygulamanın hayati fonksiyonlarının hızlıca test edilerek daha ileri seviye testlere
+hazır olup olmadığını anlamak amacıyla yapılır. Uygulama hatasız şekilde ayağa kalkıyor mu, ana sayfa açılıyor mu,
+login olunabiliyor mu gibi basit senaryolar hızlıca test edilir. Basit senaryolarda hata varsa uygulama teste alınmaz.
+Duman testi isminin elektronik donanım testlerinden geldiği rivayet ediliyor. 
+Bir elektronik devreyi elektriğe bağladığınızda duman çıktığını görürseniz 
+elektriği kesersiniz ve başka test yapmaya ihtiyaç kalmaz mantığı ile böyle bir isim verilmiş.</p>
+  </li>
+  <li>
+    <p><strong>Sanity Test (Doğruluk Testi):</strong> Bu test duman testine benzerlik gösterse de aynı şey değil.
+Doğruluk testinde, daha kapsamlı testlere geçmeden önce uygulamanın en önemli fonksiyonlarının 
+çalışıp çalışmadığı test edilir. Duman testinde uygulamanın kalp atışı gibi hayati fonksiyonlarının testi yapılırken
+doğruluk testinde spesifik özellikler test edilir.
+Bu bakımdan doğruluk testini Inomera’da geliştirdiğimiz uygulamaları müşterinin test ekibine teslim etmeden önce 
+test ekibine yaptığımız demoya benzetiyorum. Test ekibinin hazırladığı detaylı test senaryolarının arasından
+önemli özelliklere ait birkaç tane test senaryosu seçiliyor ve uygulama o testlerden başarıyla geçtikten sonra 
+test ekibi detaylı testlere başlıyor.</p>
+  </li>
+  <li>
+    <p><strong>Performance Test (Performans Testi):</strong> Belirli bir iş yükünün altında sistemin nasıl performans gösterdiğinin 
+ölçülmesi işlemidir. Performans testlerinde sistemin yük altında cevap süresinde uzama oluyor mu, 
+bellek, işlemci veya disk gibi kaynak tüketimleri ne seviyelerde artıyor, 
+uygulamanın kullanılabilirliği ne derece etkileniyor, uygulama aynı anda kaç kullanıcıya cevap verebiliyor 
+gibi birçok metrik ölçümlenir. Yazılım yukarı ve aşağı yönde ölçeklenebilir bir yapıdaysa yük arttığında 
+gerçekten instance sayısı artıyor mu veya yük kesildiğinde azalıyor mu kontrolleri yapılır.
+Sık kullanıldığını gördüğüm ve birbirine karıştırılan iki performans testi çeşidi şunlardır:</p>
+
+    <ul>
+      <li>
+        <p><strong>Load Test (Yük Testi):</strong> Belirli bir yükün/trafiğin altında sistemin ölçülmesi.
+Sistemin desteklemek için tasarlandığı ortalama ve/veya maksimum yük miktarı ile yapılmalıdır.</p>
+      </li>
+      <li>
+        <p><strong>Stress Test (Stres Testi):</strong> 
+Sistemin taşımak için tasarlandığından daha fazla yük altında nasıl davrandığının ölçülmesidir.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Security Test (Güvenlik Testi):</strong> En kaba tabiriyle sistemin hacklenmesinin engellenmesi 
+ve yetki gerektiren verinin sadece yetkili kullanıcılar tarafından kullanılabildiğinin görülmesi için yapılır.
+Hassas verilerin yetkisiz kullanıcıların eline geçmeyeceğinin kontrolüdür. 
+Çalıştığım projelerde müşterilerin güvenlik ekipleri tarafından Fortify gibi programlar ile 
+statik kod analizi yapıldığına ve sızma testi (Penetration Test) gibi çeşitli araçlar ile 
+çeşitli güvenlik açıkları arandığına şahit oldum.</p>
+  </li>
+</ul>
+
+<p>Yazılımda daha birçok test çeşidi, kategorisi, yöntemi, vb mevcut. 
+Bu yazının konusunun dışına fazla çıkmamak için genel kültür amaçlı yazdığım bu başlığı burada kesiyorum.</p>
+
+<hr />
+
+<p><a id="unit-test-vs-diger-testler"></a></p>
+<h2 id="3-unit-testi-diğer-testlerden-ayıran-özellikler-nelerdir">3. Unit Testi Diğer Testlerden Ayıran Özellikler Nelerdir?</h2>
+
+<p>Bazı diğer test çeşitlerini yukarıda liste halinde gördükten sonra unit testlerin bu testlerden farkına bakalım.
+Buradaki bazı özellikler aynı zamanda daha sonraki “Nasıl Unit Test Yazmalıyız” gibi başlıklarda da 
+karşımıza gereksinim olarak çıkacak.</p>
+
+<h4 id="unit-testlerin-kapsamı-küçüktür">Unit Testlerin Kapsamı Küçüktür</h4>
+
+<p>Öncelikle unit testlerin en büyük farkı kapsamlarıdır.
+Çok küçük kod parçalarını test ederler.
+Bir araba üreticisi olduğumuzu düşünelim. 
+Bu arabada kullanılan vidaların uygun bir delik üzerinde dik konumda doğru yönde çevirildiğinde 
+deliğe girip girmediğini arabadaki diğer parçalardan bağımsız şekilde test etmemiz bir unit testtir. 
+Bu vidanın ters yönde çevirildiğinde delikten çıktığını doğrulamamız da ikinci bir unit testtir.</p>
+
+<h4 id="unit-testleri-çalıştırmak-hızlıdır">Unit Testleri Çalıştırmak Hızlıdır</h4>
+
+<p>Unit testler, her bir ufak kod değişikliğinde geliştiricilerin çok az vakitlerini harcayarak uygulamadaki 
+tüm unit testleri baştan sona çalıştırabileceği kadar hızlıdır. Hızlı olmalıdır.</p>
+
+<p>Bir geliştiriciden yeni bir özellik geliştirdiğinde elle tüm uygulama özelliklerini 
+arayüz veya API kullanarak test etmesini bekleyemezsiniz fakat tüm birim testleri çalıştırmasını 
+bir kural haline getirebilirsiniz.</p>
+
+<p>Bir şirket sunucusuna Jenkins gibi bir continuous integration ortamı kurup her bir kod değişikliğinde
+tüm testlerin otomatik olarak çalışmasını ve birisi testleri patlattığında
+tüm ekibe e-posta göndermesini sağlayabilirsiniz.</p>
+
+<h4 id="unit-test-kolay-yazılır">Unit Test Kolay Yazılır</h4>
+
+<p>Sistem testi veya entegrasyon testi gibi testleri yazmak çok zaman alır ve daha fazla kod gerektirir.
+Bu tip testlerde sistemin belirli bir durumda olması simüle edilir ve bunun için veritabanına, diske, cache server’a,
+vb. birçok ortama kod ile data üretmek, test sonunda bu datayı temizlemek gibi işlemler yapmak gerekir.</p>
+
+<p>Unit testler ise çok küçük bir kod parçası için yazıldığından çok daha kolay yazılır.
+Unit testlerde bağımlı olunan veritabanı veya network katmanı gibi dış faktörler tamamen ortadan kaldırılır.
+Bu tür bağımlılıkların davranışları da simüle edilerek sadece test edilen sınıf/metod 
+ile ilgili senaryolar test edilmiş olur.</p>
+
+<h4 id="unit-test-bir-test-süreci-değildir">Unit Test Bir Test Süreci Değildir</h4>
+
+<p>Hatta bu başlığın daha tartışmaya açık hali “Unit test test değildir” şeklinde ve ben de katılıyorum.
+Unit test, test değil geliştirmedir. Yazılım geliştirme sürecinin ayrılmaz bir parçasıdır.
+Testçi değil geliştirici tarafından yazılır.
+Geliştiricinin “ben bu kodu geliştirdim ve bu kod parçasının çalıştığına kefilim” deme şeklidir.
+Inomera’da çalıştığım ekipte bir süredir geliştiricilerin bir işi bitirebilmesi için 
+unit testlerinin yazılmış olması ön koşulunu uyguluyoruz.
+Unit testi yazılmamış geliştirmeyi geliştirilmiş saymıyoruz.</p>
+
+<h4 id="unit-test-sistemin-çalıştığını-göstermez">Unit Test Sistemin Çalıştığını Göstermez</h4>
+
+<p>Tüm unit testler başarıyla çalışsa bile bu bize sistemin doğru şekilde çalışacağını, 
+hatta ayağa kalkacağını bile göstermez.
+Unit testler sistem seviyesinde bilgi vermezler.
+Geliştirdiğimiz ürünün fonksiyonel gereksinimlerinin karşılandığını göstermezler.</p>
+
+<p>Unit test sadece geliştirilen kod parçalarının veya fonksiyonların doğru geliştirildiğini gösterir.
+Bu bakımdan her bir satırı unit testler tarafından kapsanmış (coverage) bir kodun 
+hala diğer test çeşitlerine ihtiyacı vardır.</p>
+
+<p>Unit testler ile doğruluğu ispatlanmış kod parçaları bir araya geldiğinde entegrasyon sorunları,
+iş akışı hataları veya eksik özellikleri olabilir.
+Bu sebeple entegrasyon testi, duman testi, doğruluk testi, fonksiyonel testler, 
+güvenlik testleri, performans testleri, vb. tüm testler gereklidir
+ve unit test yaptık test ekibine ihtiyacımız yok diyemeyiz.</p>
+
+<h4 id="test-piramidi">Test Piramidi</h4>
+
+<p>Hazır bu karşılaştırma işine bulaşmışken test piramidinden de bahsedelim.
+Test piramidi epey farklı çeşitleri olan fakat özünde aynı konuyu açıklayan bir görsel.
+Piramidin amacı test çeşidine göre yazılması gereken test miktarının 
+ve bu çeşitlerdeki testlerin özelliklerinin görselleştirilmesi.</p>
+
+<p>Aşağıdaki görseli <em>Jessie Leung</em> 
+<a href="https://betterprogramming.pub/the-test-pyramid-80d77535573" target="_blank">The Test Pyramid</a> 
+başlıklı blog yazısında paylaşmış.
+Piramidin internetteki birçok çeşidi arasından benim en beğendiğim hali bu oldu.</p>
+
+<p><img src="/assets/posts/test-pyramid.png" alt="Test Piramidi" width="600px" /></p>
+
+<p>Piramidin altına doğru indikçe genişlemesi yazmamız gereken test miktarının artması gerektiğini göstermekte.
+Unit testlerin sayıca diğer testlerden fazla olması gerektiğini buradan anlıyoruz.
+Piramitte aşağı indikçe testlerin daha hızlı ve geliştirme maliyetinin daha düşük olması gerektiğini görüyoruz.
+Yukarı çıkıldığında ise hem testlerin çalışma süresi, hem de testleri geliştirmek için harcanan süre artıyor.
+Bu da testlerin geliştirme maliyetini arttırıyor. Bu aynı zamanda bakım (maintenance) maliyetini de arttırıyor.</p>
+
+<p>Sadece unit test yazmıyorsak, entegrasyon testi ve uçtan uca (end-to-end, e2e) test de yazıyorsak,
+bu piramide uymamızda fayda var. Yoksa geliştirme maliyeti, bakım maliyeti 
+ve zaman kaybı işin içinden çıkamayacağımız noktalara gelebilir.</p>
+
+<p>Ek olarak bu konuda en önemli nokta bence unit testler ile diğer test çeşitlerini 
+her ne kadar kodlayarak geliştiriyor olsak da ayrı yazmamız gerekiyor.
+Unit testler ile aynı test suite içerisinde geliştirdiğimiz diğer test çeşitleri 
+geliştiricilerin unit testleri çalıştırmasını çok uzun süren bir süreç haline getirerek 
+bir süre sonra testleri hiç çalıştırmadan kod yazan geliştiricilerin çoğalmasına sebep olacaktır.</p>
+
+<p>Farklı test çeşitleri gradle ile birbirinden nasıl ayrılır konusu 
+tamamen başka bir yazıda anlatılabilecek bir konu fakat merak edenler için <em>Petri Kainulainen</em> tarafından yazılmış
+“<a href="https://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing/" target="_blank">Getting Started With Gradle: Integration Testing</a>”
+başlıklı yazıdan bir fikir edinebilirler.</p>
+
+<hr />
+
+<p><a id="neden-unit-test-yazariz"></a></p>
+<h2 id="4-neden-unit-test-yazarız">4. Neden Unit Test Yazarız?</h2>
+
+<p>Şimdi unit test yazmak için bizleri motive edecek birkaç tane sebebi inceleyelim.</p>
+
+<h4 id="hataların-erken-fark-edilmesi">Hataların Erken Fark Edilmesi</h4>
+
+<p>Unit test yazılarak geliştirilen bir kodda yapılabilecek hatalar henüz o kodun geliştirme aşamasında fark edilecektir.
+Kendi tecrübelerimden gördüğüm kadarıyla bu şekilde çok farklı şekillerde hatalar bulunabiliyor.
+Hata bulma işlemi testleri yazıp çalıştırdığımızda beklenen sonucun gelmemesi sonucunda testin patlaması 
+şeklinde gerçekleşebileceği gibi, test yazımı ile kodun geliştirilmesi birlikte ilerlediğinden, test yazarken
+koddaki hatayı gözle daha testi çalıştırmadan yakalamamız şeklinde de gerçekleşebiliyor.</p>
+
+<p><img src="/assets/posts/defect-cost-increase.png" alt="Hatanın Maliyeti" width="600px" /></p>
+
+<p>Yukarıdaki grafik <em>Steve McConnell</em> tarafından yazılmış olan meşhur 
+<a href="https://en.wikipedia.org/wiki/Code_Complete" target="_blank">Code Complete</a> 
+kitabında yer alıyor. 
+Grafiği en basit haliyle şöyle yorumlayabiliriz;
+bir hatanın oluşması ile fark edilmesi arasında ne kadar zaman geçerse, hatanın çözülmesi maliyeti o kadar artar.
+Grafiğe göre en maliyetli hatalar gereksinim belirleme aşamasında oluşup canlıya alım sonrası ortaya çıkan hatalar.</p>
+
+<p>Unit testler birçok hatanın geliştirme sırasında bulunmasını ve çözülmesini sağladığı için 
+hata çözme maliyetimizi minimum seviyeye indirmemizi sağlar.
+Yine de geliştirme öncesinde yapılacak olan gereksinim belirleme, analiz, sistem mimarisi çalışmalarının da
+minimum hata ile yapılmasının ve bu aşamalarda olabilecek hataların çözümünün geliştirme sürecine kadar gelmemesi
+gerektiğinin de altını çizmek gerekiyor.</p>
+
+<h4 id="unit-test-kodun-dökümantasyonudur">Unit Test Kodun Dökümantasyonudur</h4>
+
+<p>Kaliteli kod kendisinin dökümantasyonudur bakış açısına benzer şekilde,
+kaliteli testler de test ettiği kodun bir dökümantasyonudur.</p>
+
+<p>Karışık bir algoritma içeren bir fonksiyonu kaynak kodunu okuyarak 
+anlamaktan daha kolayı unit testleri okuyarak anlamaktır.
+Özellikle benim gibi kod okurken fonksiyonlara soyut seviyelerde bakmayı seviyorsanız,
+siz de kodun içeriğine fazla girmeden dışarıdan baktığınızda ne yaptığını anlamak istersiniz. 
+Bunun için çoğu durumda fonksiyonların isimlendirmeleri yeterli olsa da 
+bazen birkaç tane unit testi okumak daha faydalı ve yeterli olabiliyor.</p>
+
+<p>İyi yazılmış, okunaklı unit testler incelediğimiz fonksiyona veya bileşene hangi girdiler verildiğinde 
+hangi çıktıların alınacağını gösteren çok güzel örnekler barındırır.
+Test edilen kodun happy path olarak nasıl çalıştığını, uç senaryolarının neler olduğunu örnekler ile görmemizi sağlar.</p>
+
+<h4 id="unit-test-kodu-i̇stenmeyen-değişikliklerden-korur">Unit Test Kodu İstenmeyen Değişikliklerden Korur</h4>
+
+<p>Burası unit testlerin en sevdiğim kısmı. Geliştirdiğiniz özellikleri unit testler ile koruma altına alabilirsiniz.
+Biz veya bir başkası bir gün bu kodda herhangi bir değişiklik yaptığında, eğer beklenmedik bir hataya sebep oluyorsa
+bu hata daha önce bu kod için yazmış olduğumuz testler tarafından yakalanacaktır.</p>
+
+<p>Testleri yazılmış bir sınıfa yeni bir özellik eklediğimizde 
+genellikle yeni eklediğimiz özelliğin testlerine odaklanırız.
+Bu yeni özellik düzgün çalışıyor olsa bile bu sınıfın mevcutta yerine getirebildiği bir özelliği 
+yerine getirememesine sebep olabilir.
+Varolan bir kodun tüm uç senaryolarını tek tek test etmeyi çoğu zaman atlarız.
+Böyle durumlarda varolan özelliklerin önceden yazılmış testlerinin olması istenmeyen hatalardan bizi korur.</p>
+
+<p>Ek olarak bu koruma bize özgüven verir.
+Normalde canlıda çalışan ve kritik öneme sahip bir fonksiyonda bir değişiklik yapmak 
+en junior geliştiricisinden en senior geliştiricisine kadar herkesi korkutan bir süreçtir 
+ve fonksiyonun kritikliğine göre bazen tüm projenin baştan uçtan uca test edilmesine kadar götürebilir.
+Unit testlerin varlığı o fonksiyonu değiştirme konusundaki cesaretimizi ve özgüvenimizi arttırır.
+Yaptığımız değişikliğin başka bir şeyi bozmadığından emin olmamızı sağlar.</p>
+
+<h4 id="unit-test-kodun-karmaşıklığını-azaltır-kalitesini-arttırır">Unit Test Kodun Karmaşıklığını Azaltır, Kalitesini Arttırır</h4>
+
+<p>Unit test yazabilmek için en küçük yazılım bileşenlerinin bile tasarımında planlı olmamız gerekir.
+Karmaşık, kompleks bir kodun testi de o kadar karmaşık ve yazması maliyetli olacaktır.
+Bu maliyet bizi daha test edilebilir, daha ufak sınıflar/fonksiyonlar yazmaya zorlar.
+Bu zorunda kalmışlık kodun daha okunabilir, daha az kompleks ve sonunda daha kaliteli olmasını sağlar.</p>
+
+<p>Test edilebilir kod yazmaya çalışmak başlangıçta zor gibi gelse de zamanla iyi bir alışkanlığa dönüşüyor.
+Farkında olarak veya olmayarak 
+<a href="https://en.wikipedia.org/wiki/SOLID">SOLID</a>, 
+<a href="https://en.wikipedia.org/wiki/KISS_principle">KISS</a>, 
+<a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">DRY</a>, 
+<a href="https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it">YAGNI</a>, 
+vb. bazı temel yazılım geliştirme prensiplerine uymamızı sağlar.
+Testini yazdığımız bileşenleri bağımlı olduğu diğer kod parçalarından bağımsız, izole bir şekilde test etme gereksinimi
+bu bileşenleri soyutlayabilmemizi ve tekrar kullanılabilir (reusable) 
+küçük parçalar halinde kodumuzu tasarlayabilmemizi sağlar.</p>
+
+<p>Bu sayede zamanla iki-üç satırlık küçük kodları bile ihtiyaç duyulan yerlere kopyala yapıştır yapmaktan, 
+ayrı bir sınıf/fonksiyon şekline çevirerek kullanan bir geliştiriciye doğru evrim geçirdiğimizi fark ederiz.</p>
+
+<p>Burada ayrıca ek bir noktaya da değinmeden geçmeyelim.
+Ufak bir kodu kopyala yapıştır usulü yazdığımız her fonksiyonda, 
+o kod için tekrar tekrar test yazmamız gerekirken,
+ayrı bileşen yolunu tercih edersek o bileşen için bir defa test yazmamız yeterli olur.
+O bileşeni kullanan diğer fonksiyonlar, o bileşenin zaten test edildiğini bilerek 
+sadece kendi fonksiyonalitelerinin testlerine odaklanırlar.</p>
+
+<h4 id="hata-bulmayı-debugging-kolaylaştırır">Hata Bulmayı (Debugging) Kolaylaştırır</h4>
+
+<p>Yazılımda bir hata olduğunu ve sadece debug ederek bulabileceğiniz bir durum olduğunu düşünün.
+Bunun için de tüm sistemi ayağa kaldırıp, arayüz üzerinden test verisi üretmeniz gerektiğini
+ve sonra spesifik bir aksiyonu tetikleyip kodun tüm katmanlarında breakpoint’ler 
+yardımıyla satır satır debug ettiğinizi düşünün.</p>
+
+<p>Sistemin büyüklüğüne ve geliştiricinin sistem üzerindeki tecrübesine göre 
+bu hata arayışı saatlerce hatta tüm gün boyunca da sürebilir.</p>
+
+<p>Bunun yerine aynı şeyi unit testler ile yaptığımızı düşünelim.
+Problemli olduğu düşünülen işlemin geçtiği kod bileşenlerine hataya sebep olabilecek test verilerinin 
+girdi olarak verildiği ve çıktıların kontrol edildiği bir birim test yazabiliriz.
+Bu birim testi IDE üzerinde debug modda çalıştırabiliriz.
+Bu esnada sadece o sınıfı debug etmiş oluruz. 
+Unit testlerde herhangi bir dış entegrasyon veya bağımlılık olmadığından test daha hızlı sonuçlanır.
+Tüm uygulamayı veya tüm sistemi bilgisayarımızda ayağa kaldırmamış oluruz.
+Hatayı bulma süreci daha hızlı ve daha az sancılı sonuçlanır.</p>
+
+<p>Hatayı tespit ederken ve çözerken oluşturduğumuz unit test kodu projenin artık bir parçasıdır
+ve bu test senaryosu sayesinde aynı hatanın artık tekrarlanmayacağını da biliriz.</p>
+
+<div class="alert alert-secondary pb-0" role="alert">
+  <p><strong>Not:</strong> Bir projenin kendi bilgisayarımızda ayağa kaldırılarak debug edilmesi 
+senaryosunu neden abarttığım anlaşılmıyor olabilir.
+Çalıştığım bir mikro servis projesinde böyle bir debug yapabilmek için bazen bilgisayarımda 
+3-4 tane farklı mikro servisi, bu mikro servislerin kullandığı Oracle DB, Cassandra gibi iki farklı veritabanını,
+Kafka ile Zookeeper’ı ve Hazelcast uygulamasını ayağa kaldırmam gerekebiliyor.
+Böyle bir ortamı, düşük sistem özelliklerine sahip bir bilgisayarda ayağa kaldıran geliştirici arkadaşların
+bilgisayarlarında genellikle kod yazacak kadar bellek kalmıyor.</p>
+</div>
+
+<h4 id="önemli-bir-ci-continuous-integration-sürekli-entegrasyon-adımıdır">Önemli Bir CI (Continuous Integration, Sürekli Entegrasyon) Adımıdır</h4>
+
+<p>Sürekli Entegrasyon, veya İngilizcesi Continuous Integration, önemli bir yazılım geliştirme aracıdır.
+Yazılımdaki her bir değişiklikte tüm sistemin build edilmesi 
+ve herhangi bir şeyin bozulmadığının kontrol edilmesi amacıyla yapılır.
+Bu işlem genellikle Jenkins gibi araçlar ile otomatize şekilde gerçekleştirilir.</p>
+
+<p><img src="/assets/posts/cicd_pipeline_infograph.png" alt="CI CD Pipeline" width="800px" /></p>
+
+<p>Unit testleri olmayan projelerde CI işlemi sadece projenin build olabildiğini, 
+derleyici hatası içermediğini garanti edebilir.
+Unit testleri olan projelerde ise derleme sonrasında test kodu otomatik olarak çalışacağından
+aynı zamanda varolan fonksiyonalitenin bozulmadığı da anlaşılmış olur.</p>
+
+<p>Biz ne kadar yazdığımız kod sonrası tüm testleri çalıştırıp kontrol ediyor olsak da,
+kalabalık geliştirici ekiplerinde mutlaka bu kontrolü yapmadan 
+doğrudan repository’ye kodu gönderecek olan arkadaşlar çıkacaktır.
+Aynı şeyi baskı altında kaldığımda, acilen bir fix göndermem gerektiğinde, 
+yoğun olduğumda vb. benim de yaptığım oluyor.
+Bu gibi durumlarda daha ürünü paketleyip müşteriye teslim edemeden 
+Jenkins’den gelen bir “Build Failed” e-postası ile yaptığımız değişikliğin bozduğu testleri görüyoruz.</p>
+
+<hr />
+
+<p><a id="nasil-unit-test-yazmaliyiz"></a></p>
+<h2 id="5-nasıl-unit-test-yazmalıyız">5. Nasıl Unit Test Yazmalıyız?</h2>
+
+<p>Bu bölümde unit testlerimizin kaliteli ve faydalı olması için takip etmemiz gereken birkaç kuralı birlikte inceleyelim.</p>
+
+<h4 id="küçük-testler-yazalım">Küçük Testler Yazalım</h4>
+
+<p>Unit testler olabildiğince küçük kod parçaları olmalılar.
+Hata veren bir unit test çok hızlı bir şekilde okunabilmeli, 
+testteki veri mi yoksa test edilen kod mu sıkıntılı çabucak anlaşılabilir olmalıdır.</p>
+
+<p>Ayrıca uzun test fonksiyonları küçük değişikliklerden daha sık etkilenirler 
+ve bu test kodlarında sonradan değişiklik yapmak da zorlaşır.
+Bu da kodun bakım maliyetinin yanında testlerin de bakım maliyetlerini arttırır.</p>
+
+<h4 id="bağımlılıklardan-i̇zole-edelim">Bağımlılıklardan İzole Edelim</h4>
+
+<p>Unit testi “unit” yapan şey sadece ve sadece test ettiği kodu test ediyor oluşudur.
+Test edilen kodun herhangi bir bağımlılığı varsa test sırasında bu bağımlılık izole edilir.
+Yani bağımlı olan sınıfın belirli bir davranışı sergilediği varsayılır, simüle edilir.
+Buna mocking denir ve birçok dilde bunu yapmamızı sağlayan kütüphaneler vardır.</p>
+
+<div class="alert alert-secondary pb-0" role="alert">
+  <p><strong>Not:</strong> Ben bu yazıda birçok farklı izolasyon yöntemine mocking diyorum.
+Production için tasarlanmış bir bağımlılığın/nesnenin test amacıyla değiştirilmesi işinin genel adı literatüre
+<a href="https://www.martinfowler.com/bliki/TestDouble.html" target="_blank">Test Double</a>
+olarak geçmiş ve birçok <em>Test Double</em> çeşidi var.
+Mocking bu çeşitlerden sadece bir tanesi fakat bizim dilimize malesef böyle yerleşmiş.
+Martin Fowler’ın sitesinde yazdığı diğer <em>Test Double</em> çeşileri: <em>Dummy, Fake, Stub ve Spy</em></p>
+</div>
+
+<p>Bağımlı olduğumuz fonksiyonda bir hata varsa bunu nasıl yakalarız diye soruyorsanız,
+onu da bağımlı olduğumuz sınıf/fonksiyon için yazdığımız unit testlerde yakalamamız gerekiyor.</p>
+
+<p>Java’da bu mocking işlemini yapmamızı ve bağımlılıklar varmış gibi davranmamızı sağlayan kütüphanelerin başını
+Mockito çekiyor. Aşağıda Mockito kullanarak yazdığım bir örneği anlatacağım.</p>
+
+<p>Aşağıdaki <code class="language-plaintext highlighter-rouge">PersonServiceImpl</code> isimli sınıfın <code class="language-plaintext highlighter-rouge">createPerson</code> isimli metodunu test etmek istediğimizi düşünelim.
+Bu sınıfın <code class="language-plaintext highlighter-rouge">PersonRepository</code> isimli bir interface bağımlılığı var.
+Bu repository muhtemelen bir veritabanına insert işlemi yapmakta olup, ne yaptığı bizi hiç ama hiç ilgilendirmiyor.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PersonServiceImpl</span> <span class="kd">implements</span> <span class="nc">PersonService</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">PersonRepository</span> <span class="n">personRepository</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">PersonServiceImpl</span><span class="o">(</span><span class="nc">PersonRepository</span> <span class="n">personRepository</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">personRepository</span> <span class="o">=</span> <span class="n">personRepository</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Person</span> <span class="nf">createPerson</span><span class="o">(</span><span class="nc">CreatePersonRequest</span> <span class="n">createPersonRequest</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">firstName</span> <span class="o">=</span> <span class="nc">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">createPersonRequest</span><span class="o">.</span><span class="na">getFirstName</span><span class="o">(),</span> <span class="s">"firstName cannot be null"</span><span class="o">);</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">lastName</span> <span class="o">=</span> <span class="nc">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">createPersonRequest</span><span class="o">.</span><span class="na">getLastName</span><span class="o">(),</span> <span class="s">"lastName cannot be null"</span><span class="o">);</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">phone</span> <span class="o">=</span> <span class="nc">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">createPersonRequest</span><span class="o">.</span><span class="na">getPhone</span><span class="o">(),</span> <span class="s">"phone cannot be null"</span><span class="o">);</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="n">firstName</span><span class="o">,</span> <span class="n">lastName</span><span class="o">,</span> <span class="n">phone</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">personRepository</span><span class="o">.</span><span class="na">savePerson</span><span class="o">(</span><span class="n">person</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Hatta ben bu sınıf için test yazarken <code class="language-plaintext highlighter-rouge">PersonRepository</code> arayüzü için bir implementasyon sınıfı bile yazmadım.
+Mockito kullanarak <code class="language-plaintext highlighter-rouge">PersonRepository</code> arayüzünün sahte (mock) bir implementasyonunu hazırladım 
+ve <code class="language-plaintext highlighter-rouge">savePerson</code> metodu çağırıldığında ne dönmesini istediğimi aşağıdaki test metodunda belirttim.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">createPerson_validCreatePersonRequest_returnsSamePersonReturnedFromRepository</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// Arrange</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">personRepository</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">PersonRepository</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">personService</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PersonServiceImpl</span><span class="o">(</span><span class="n">personRepository</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">expectedResult</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"Serdar"</span><span class="o">,</span> <span class="s">"Kuzucu"</span><span class="o">,</span> <span class="s">"+905554443322"</span><span class="o">);</span>
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">doReturn</span><span class="o">(</span><span class="n">expectedResult</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">when</span><span class="o">(</span><span class="n">personRepository</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">savePerson</span><span class="o">(</span><span class="nc">Mockito</span><span class="o">.</span><span class="na">any</span><span class="o">(</span><span class="nc">Person</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
+
+    <span class="c1">// Act</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">actualResult</span> <span class="o">=</span> <span class="n">personService</span><span class="o">.</span><span class="na">createPerson</span><span class="o">(</span><span class="nc">CreatePersonRequest</span><span class="o">.</span><span class="na">builder</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">firstName</span><span class="o">(</span><span class="s">"Serdar"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">lastName</span><span class="o">(</span><span class="s">"Kuzucu"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">phone</span><span class="o">(</span><span class="s">"+905554443322"</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">build</span><span class="o">());</span>
+
+    <span class="c1">// Assert</span>
+    <span class="n">assertSame</span><span class="o">(</span><span class="n">expectedResult</span><span class="o">,</span> <span class="n">actualResult</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Bu test kaynak kodda <code class="language-plaintext highlighter-rouge">PersonRepository</code> arayüzünün herhangi bir implementasyonu olmasa bile 
+başarılı bir şekilde geçiyor. Eğer bu izolasyonu sağlamasaydık gerçek bir <code class="language-plaintext highlighter-rouge">PersonRepository</code> implementasyonuna
+ihtiyacımız olacaktı. Bu durumda da bu implementasyon bir veritabanı kullanıyorsa testleri çalıştırabilmek için
+bizim de bir veritabanı bağlantısı kurmamız gerekecekti.
+Böyle bir test de unit test değil entegrasyon testi olacaktır.</p>
+
+<h4 id="birbirinden-bağımsız-testler-yazalım">Birbirinden Bağımsız Testler Yazalım</h4>
+
+<p>Unit testler asla birbirine bağımlı olmamalıdır.
+Bir unit testin çalışması için öncesinde başka bir testin başarıyla çalışmış olması gerekmemelidir.
+Böyle bir bağımlılık testlerin sıralı çalıştırılmasını zorunlu kılar ve çoğu test suite yazılımı (junit, vb.)
+test senaryolarının sıralı çalışacağını garanti etmez.
+Lokalimizde bir test sınıfındaki tüm testler doğru sırayla çalışıp başarılı olurken, 
+CI/CD ortamında farklı sırayla çalışıp hata alabilirler.</p>
+
+<p>Testler arası state paylaşımından olabildiğince kaçınmamız gerekiyor.
+Her test kendi state’ini oluşturmalı ve test sonrasında gerekiyorsa temizlemelidir.
+Eğer bir test sınıfındaki tüm testlerde başlangıç ve bitiş durumları için aynı kodları yazmak gerekiyorsa
+bunu bir testte yapıp diğerlerinin sırayla çalışacağını varsaymak yerine,
+kullandığımız test framework’ünün <code class="language-plaintext highlighter-rouge">Setup</code> ve <code class="language-plaintext highlighter-rouge">TearDown</code> özelliklerini kullanmalıyız.</p>
+
+<p>Java’da çoğunlukla kullandığımız junit test framework’ünde bu “Setup” ve “TearDown” özellikleri,
+kullandığımız junit versiyonuna göre,
+<code class="language-plaintext highlighter-rouge">@Before</code>, <code class="language-plaintext highlighter-rouge">@After</code>, <code class="language-plaintext highlighter-rouge">@BeforeClass</code>, <code class="language-plaintext highlighter-rouge">@AfterClass</code>, <code class="language-plaintext highlighter-rouge">@BeforeEach</code>, <code class="language-plaintext highlighter-rouge">@AfterEach</code>, <code class="language-plaintext highlighter-rouge">@BeforeAll</code> ve <code class="language-plaintext highlighter-rouge">@AfterAll</code>
+gibi anotasyonlar ile sağlanıyor.</p>
+
+<h4 id="aaa-tasarım-şablonuna-uyalım">AAA Tasarım Şablonuna Uyalım</h4>
+
+<p>Yazının başında da değindiğim Arrange-Act-Assert, kısaca AAA, tasarım şablonunu mümkün olduğunca uygulayalım.
+Bu şablon hem dünya çapında genel geçer bir tasarım şablonu 
+hem de testlerin okunabilirliğini arttıran bir yöntem.
+Testin okunabilir olması testin ne amaçla yazıldığını anlamayı kolaylaştırır.
+Anlaşılabilir bir test hata verdiğinde testteki veya koddaki hatanın bulunması da daha kolay olur.</p>
+
+<p>Testlerimizi bu 3 aşamayı düşünerek yazdığımızda “ben bu test koduyla neyi test ediyorum” 
+sorusunu kendi kendimize cevaplamamızı da kolaylaştıracaktır.</p>
+
+<h4 id="bir-testte-sadece-bir-şeyi-test-edelim">Bir Testte Sadece Bir Şeyi Test Edelim</h4>
+
+<p>Son derece normal bir şekilde test ettiğimiz fonksiyonun birden fazla dalı olabilir.
+Farklı girdilerde farklı çıktılar üreten değişik iş akışlarına sahip olabilir.
+Hata veren testlerden koddaki hatayı daha hızlı anlayabilmemiz için 
+bir testin sadece tek bir şeyi test ediyor olması gerekmekte.</p>
+
+<p>Örnek olarak aşağıdaki servis sınıfımızı düşünelim:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FrequentlyAskedQuestionServiceImpl</span> <span class="kd">implements</span> <span class="nc">FrequentlyAskedQuestionService</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">FrequentlyAskedQuestionRepository</span> <span class="n">frequentlyAskedQuestionRepository</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">EventPublisher</span> <span class="n">eventPublisher</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">FrequentlyAskedQuestionServiceImpl</span><span class="o">(</span><span class="nc">FrequentlyAskedQuestionRepository</span> <span class="n">frequentlyAskedQuestionRepository</span><span class="o">,</span>
+                                              <span class="nc">EventPublisher</span> <span class="n">eventPublisher</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">frequentlyAskedQuestionRepository</span> <span class="o">=</span> <span class="n">frequentlyAskedQuestionRepository</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">eventPublisher</span> <span class="o">=</span> <span class="n">eventPublisher</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">SaveFAQResult</span> <span class="nf">saveFaq</span><span class="o">(</span><span class="nc">String</span> <span class="n">question</span><span class="o">,</span> <span class="nc">String</span> <span class="n">answer</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">frequentlyAskedQuestionRepository</span><span class="o">.</span><span class="na">existsByQuestion</span><span class="o">(</span><span class="n">question</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="nc">SaveFAQResult</span><span class="o">.</span><span class="na">ALREADY_EXISTS</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">faq</span> <span class="o">=</span> <span class="k">new</span> <span class="no">FAQ</span><span class="o">(</span><span class="n">question</span><span class="o">,</span> <span class="n">answer</span><span class="o">);</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">persistedFaq</span> <span class="o">=</span> <span class="n">frequentlyAskedQuestionRepository</span><span class="o">.</span><span class="na">saveFAQ</span><span class="o">(</span><span class="n">faq</span><span class="o">);</span>
+        <span class="n">eventPublisher</span><span class="o">.</span><span class="na">fireEvent</span><span class="o">(</span><span class="k">new</span> <span class="nc">FAQSavedEvent</span><span class="o">(</span><span class="n">persistedFaq</span><span class="o">));</span>
+        <span class="k">return</span> <span class="nc">SaveFAQResult</span><span class="o">.</span><span class="na">SUCCESS</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Burada aşağıdaki gibi 6 farklı senaryoyu test edebiliriz:</p>
+
+<ul>
+  <li>Başarılı işlemde SUCCESS cevabı dönmeli:</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">saveFaq_validQuestionAndAnswer_returnsSuccess</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">question</span> <span class="o">=</span> <span class="s">"How to deorbit a satellite?"</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">answer</span> <span class="o">=</span> <span class="s">"Lorem ipsum dolor sit amet..."</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">repository</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">FrequentlyAskedQuestionRepository</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">eventPublisher</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">EventPublisher</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">doReturn</span><span class="o">(</span><span class="kc">false</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">when</span><span class="o">(</span><span class="n">repository</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">existsByQuestion</span><span class="o">(</span><span class="n">question</span><span class="o">);</span>
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">doReturn</span><span class="o">(</span><span class="k">new</span> <span class="no">FAQ</span><span class="o">(</span><span class="n">question</span><span class="o">,</span> <span class="n">answer</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">when</span><span class="o">(</span><span class="n">repository</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">saveFAQ</span><span class="o">(</span><span class="nc">Mockito</span><span class="o">.</span><span class="na">any</span><span class="o">(</span><span class="no">FAQ</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">service</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FrequentlyAskedQuestionServiceImpl</span><span class="o">(</span><span class="n">repository</span><span class="o">,</span> <span class="n">eventPublisher</span><span class="o">);</span>
+
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">result</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="na">saveFaq</span><span class="o">(</span><span class="n">question</span><span class="o">,</span> <span class="n">answer</span><span class="o">);</span>
+
+    <span class="n">assertEquals</span><span class="o">(</span><span class="nc">SaveFAQResult</span><span class="o">.</span><span class="na">SUCCESS</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Başarılı işlemlerde <code class="language-plaintext highlighter-rouge">FrequentlyAskedQuestionsRepository</code> üzerindeki 
+<code class="language-plaintext highlighter-rouge">saveFAQ</code> metodu doğru argümanlar ile tetiklenmeli:</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">saveFaq_validQuestionAndAnswer_callsRepositorySaveMethodWithTheSameQuestionAndAnswerValues</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">question</span> <span class="o">=</span> <span class="s">"How to deorbit a satellite?"</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">answer</span> <span class="o">=</span> <span class="s">"Lorem ipsum dolor sit amet..."</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">repository</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">FrequentlyAskedQuestionRepository</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">eventPublisher</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">EventPublisher</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">doReturn</span><span class="o">(</span><span class="kc">false</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">when</span><span class="o">(</span><span class="n">repository</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">existsByQuestion</span><span class="o">(</span><span class="n">question</span><span class="o">);</span>
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">doReturn</span><span class="o">(</span><span class="k">new</span> <span class="no">FAQ</span><span class="o">(</span><span class="n">question</span><span class="o">,</span> <span class="n">answer</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">when</span><span class="o">(</span><span class="n">repository</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">saveFAQ</span><span class="o">(</span><span class="nc">Mockito</span><span class="o">.</span><span class="na">any</span><span class="o">(</span><span class="no">FAQ</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">service</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FrequentlyAskedQuestionServiceImpl</span><span class="o">(</span><span class="n">repository</span><span class="o">,</span> <span class="n">eventPublisher</span><span class="o">);</span>
+
+    <span class="n">service</span><span class="o">.</span><span class="na">saveFaq</span><span class="o">(</span><span class="n">question</span><span class="o">,</span> <span class="n">answer</span><span class="o">);</span>
+
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">faqArgumentCaptor</span> <span class="o">=</span> <span class="nc">ArgumentCaptor</span><span class="o">.</span><span class="na">forClass</span><span class="o">(</span><span class="no">FAQ</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">verify</span><span class="o">(</span><span class="n">repository</span><span class="o">,</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">times</span><span class="o">(</span><span class="mi">1</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">saveFAQ</span><span class="o">(</span><span class="n">faqArgumentCaptor</span><span class="o">.</span><span class="na">capture</span><span class="o">());</span>
+
+    <span class="n">assertEquals</span><span class="o">(</span><span class="n">question</span><span class="o">,</span> <span class="n">faqArgumentCaptor</span><span class="o">.</span><span class="na">getValue</span><span class="o">().</span><span class="na">getQuestion</span><span class="o">());</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="n">answer</span><span class="o">,</span> <span class="n">faqArgumentCaptor</span><span class="o">.</span><span class="na">getValue</span><span class="o">().</span><span class="na">getAnswer</span><span class="o">());</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Başarılı işlemlerde <code class="language-plaintext highlighter-rouge">EventPublisher</code> üzerindeki <code class="language-plaintext highlighter-rouge">fireEvent</code> metodu doğru argümanlar ile tetiklenmeli:</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">createFaq_validQuestionAndAnswer_firesFAQSavedEvent</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">question</span> <span class="o">=</span> <span class="s">"How to deorbit a satellite?"</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">answer</span> <span class="o">=</span> <span class="s">"Lorem ipsum dolor sit amet..."</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">repository</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">FrequentlyAskedQuestionRepository</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">eventPublisher</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">EventPublisher</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">doReturn</span><span class="o">(</span><span class="kc">false</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">when</span><span class="o">(</span><span class="n">repository</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">existsByQuestion</span><span class="o">(</span><span class="n">question</span><span class="o">);</span>
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">doReturn</span><span class="o">(</span><span class="k">new</span> <span class="no">FAQ</span><span class="o">(</span><span class="n">question</span><span class="o">,</span> <span class="n">answer</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">when</span><span class="o">(</span><span class="n">repository</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">saveFAQ</span><span class="o">(</span><span class="nc">Mockito</span><span class="o">.</span><span class="na">any</span><span class="o">(</span><span class="no">FAQ</span><span class="o">.</span><span class="na">class</span><span class="o">));</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">service</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FrequentlyAskedQuestionServiceImpl</span><span class="o">(</span><span class="n">repository</span><span class="o">,</span> <span class="n">eventPublisher</span><span class="o">);</span>
+
+    <span class="n">service</span><span class="o">.</span><span class="na">saveFaq</span><span class="o">(</span><span class="n">question</span><span class="o">,</span> <span class="n">answer</span><span class="o">);</span>
+
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">eventArgumentCaptor</span> <span class="o">=</span> <span class="nc">ArgumentCaptor</span><span class="o">.</span><span class="na">forClass</span><span class="o">(</span><span class="nc">FAQSavedEvent</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">verify</span><span class="o">(</span><span class="n">eventPublisher</span><span class="o">,</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">times</span><span class="o">(</span><span class="mi">1</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">fireEvent</span><span class="o">(</span><span class="n">eventArgumentCaptor</span><span class="o">.</span><span class="na">capture</span><span class="o">());</span>
+
+    <span class="n">assertEquals</span><span class="o">(</span><span class="n">question</span><span class="o">,</span> <span class="n">eventArgumentCaptor</span><span class="o">.</span><span class="na">getValue</span><span class="o">().</span><span class="na">getQuestion</span><span class="o">());</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="n">answer</span><span class="o">,</span> <span class="n">eventArgumentCaptor</span><span class="o">.</span><span class="na">getValue</span><span class="o">().</span><span class="na">getAnswer</span><span class="o">());</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">FrequentlyAskedQuestionRepository</code> sınıfındaki <code class="language-plaintext highlighter-rouge">existsByQuestion</code> metodu <code class="language-plaintext highlighter-rouge">true</code> dönerse 
+servis metodumuz <code class="language-plaintext highlighter-rouge">ALREADY_EXISTS</code> değerini dönmeli.</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">createFaq_alreadyExistingQuestion_returnsAlreadyExists</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">question</span> <span class="o">=</span> <span class="s">"How to deorbit a satellite?"</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">answer</span> <span class="o">=</span> <span class="s">"Lorem ipsum dolor sit amet..."</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">repository</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">FrequentlyAskedQuestionRepository</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">eventPublisher</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">EventPublisher</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">doReturn</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">when</span><span class="o">(</span><span class="n">repository</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">existsByQuestion</span><span class="o">(</span><span class="n">question</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">service</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FrequentlyAskedQuestionServiceImpl</span><span class="o">(</span><span class="n">repository</span><span class="o">,</span> <span class="n">eventPublisher</span><span class="o">);</span>
+
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">result</span> <span class="o">=</span> <span class="n">service</span><span class="o">.</span><span class="na">saveFaq</span><span class="o">(</span><span class="n">question</span><span class="o">,</span> <span class="n">answer</span><span class="o">);</span>
+
+    <span class="n">assertEquals</span><span class="o">(</span><span class="nc">SaveFAQResult</span><span class="o">.</span><span class="na">ALREADY_EXISTS</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">FrequentlyAskedQuestionRepository</code> sınıfındaki <code class="language-plaintext highlighter-rouge">existsByQuestion</code> metodu <code class="language-plaintext highlighter-rouge">true</code> dönerse
+<code class="language-plaintext highlighter-rouge">FrequentlyAskedQuestionRepository</code> sınıfındaki <code class="language-plaintext highlighter-rouge">saveFAQ</code> metodu hiç çağırılmamalı.</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">createFaq_alreadyExistingQuestion_doesNotCallSaveFaqMethodOfRepository</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">question</span> <span class="o">=</span> <span class="s">"How to deorbit a satellite?"</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">answer</span> <span class="o">=</span> <span class="s">"Lorem ipsum dolor sit amet..."</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">repository</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">FrequentlyAskedQuestionRepository</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">eventPublisher</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">EventPublisher</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">doReturn</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">when</span><span class="o">(</span><span class="n">repository</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">existsByQuestion</span><span class="o">(</span><span class="n">question</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">service</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FrequentlyAskedQuestionServiceImpl</span><span class="o">(</span><span class="n">repository</span><span class="o">,</span> <span class="n">eventPublisher</span><span class="o">);</span>
+
+    <span class="n">service</span><span class="o">.</span><span class="na">saveFaq</span><span class="o">(</span><span class="n">question</span><span class="o">,</span> <span class="n">answer</span><span class="o">);</span>
+
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">verify</span><span class="o">(</span><span class="n">repository</span><span class="o">,</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">never</span><span class="o">()).</span><span class="na">saveFAQ</span><span class="o">(</span><span class="nc">Mockito</span><span class="o">.</span><span class="na">any</span><span class="o">());</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">FrequentlyAskedQuestionRepository</code> sınıfındaki <code class="language-plaintext highlighter-rouge">existsByQuestion</code> metodu <code class="language-plaintext highlighter-rouge">true</code> dönerse
+<code class="language-plaintext highlighter-rouge">EventPublisher</code> sınıfındaki <code class="language-plaintext highlighter-rouge">fireEvent</code> metodu hiç çağırılmamalı.</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">createFaq_alreadyExistingQuestion_doesNotPublishAnyEvent</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">question</span> <span class="o">=</span> <span class="s">"How to deorbit a satellite?"</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">answer</span> <span class="o">=</span> <span class="s">"Lorem ipsum dolor sit amet..."</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">repository</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">FrequentlyAskedQuestionRepository</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">eventPublisher</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">EventPublisher</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">doReturn</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">when</span><span class="o">(</span><span class="n">repository</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">existsByQuestion</span><span class="o">(</span><span class="n">question</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">service</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FrequentlyAskedQuestionServiceImpl</span><span class="o">(</span><span class="n">repository</span><span class="o">,</span> <span class="n">eventPublisher</span><span class="o">);</span>
+
+    <span class="n">service</span><span class="o">.</span><span class="na">saveFaq</span><span class="o">(</span><span class="n">question</span><span class="o">,</span> <span class="n">answer</span><span class="o">);</span>
+
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">verify</span><span class="o">(</span><span class="n">eventPublisher</span><span class="o">,</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">never</span><span class="o">()).</span><span class="na">fireEvent</span><span class="o">(</span><span class="nc">Mockito</span><span class="o">.</span><span class="na">any</span><span class="o">());</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Bu şekilde unit testleri sadece bir şeyi test eder şekilde kurguladığımızda
+ileride kodda yapılacak bir değişikliğin tam olarak hangi senaryoyu veya senaryoları etkilediğini aldığımız hatadan
+nokta atışı bulabiliriz.</p>
+
+<p>Bu arada bu örnek testleri yazarken yine daha önce yaptığım gibi <code class="language-plaintext highlighter-rouge">FrequentlyAskedQuestionServiceImpl</code>
+dışındaki hiçbir sınıfı doğru düzgün geliştirmedim.
+Testlerdeki izolasyon sayesinde buna ihtiyacım kalmadan yazdığım tüm testler başarılı bir şekilde çalıştı.</p>
+
+<h4 id="hızlı-çalışan-testler-yazalım">Hızlı Çalışan Testler Yazalım</h4>
+
+<p>Unit testleri hızlıca çalıştırılıp sonuç alabileceğimiz şekilde yazmalıyız.
+Uzun test çalışma süreleri genellikle geliştiricilerin testleri çalıştırmadan build almasıyla sonuçlanıyor.</p>
+
+<p>Bir zamanlar üzerinde çalıştığım bu şekilde bir proje vardı.
+Çalışan testler çok uzun sürüyordu, birçoğu da çalışmıyordu.
+Nasıl olsa testler çalışmıyor diye kimse testleri çalıştırarak build almıyordu, 
+kimse hataları düzeltmeye bile çalışmıyordu.
+Problem projedeki tüm testlerin silinmesiyle sonuçlandı.</p>
+
+<p>Yavaş testler, test edilen sınıftaki bağımlılıkların testlerde yeterince izole edilmediğinin 
+veya test edilen kodun aslında test edilebilir bir kod olmadığının göstergesi olabilir.</p>
+
+<h4 id="i̇lk-olarak-en-basit-başarılı-senaryoyu-test-edelim">İlk Olarak En Basit Başarılı Senaryoyu Test Edelim</h4>
+
+<p>Test edeceğimiz kodun ne yapması gerekiyor? Asıl varoluş amacı ne?
+Bu soruya vereceğimiz en basit ve hızlı cevap için hemen bir test yazalım.</p>
+
+<p>Örneğin bir String’i ters çeviren bir kodu test ediyorsak önce ters çevirilebilir kısa bir metin ile test edelim.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">reverse_threeLetterString_returnsReversedString</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">text</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">result</span> <span class="o">=</span> <span class="nc">StringUtils</span><span class="o">.</span><span class="na">reverse</span><span class="o">(</span><span class="n">text</span><span class="o">);</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="s">"cba"</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Daha sonraki testlerde daha kompleks akışlara, uç senaryolara ve istisna durumlarına geçebiliriz.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">reverse_nullArgument_returnsNull</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="nc">String</span> <span class="n">text</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">result</span> <span class="o">=</span> <span class="nc">StringUtils</span><span class="o">.</span><span class="na">reverse</span><span class="o">(</span><span class="n">text</span><span class="o">);</span>
+    <span class="n">assertNull</span><span class="o">(</span><span class="n">result</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="uç-senaryoların-testlerini-yazalım">Uç Senaryoların Testlerini Yazalım</h4>
+
+<p>Test edilen kodun uç senaryolarını da düşünelim ve mutlaka bu senaryolar için test yazalım.</p>
+
+<ul>
+  <li>Parametre <code class="language-plaintext highlighter-rouge">null</code> gelirse ne olur?</li>
+  <li>DB’den bir sonuç beklerken iki sonuç gelirse ne olmalı? Hiç sonuç gelmezse?</li>
+  <li>Bölme işlemi içeren bir fonksiyonda paydaya 0 (sıfır) gelme ihtimali var mı?</li>
+  <li>Beklediğimden büyük bir sayı gelirse integer overflow olur mu?</li>
+  <li>Kullanıcı adı boş String (<code class="language-plaintext highlighter-rouge">""</code>) geldiğinde fonksiyon ne yapmalı?</li>
+  <li>Javascript kodum <code class="language-plaintext highlighter-rouge">null</code>, <code class="language-plaintext highlighter-rouge">undefined</code>, <code class="language-plaintext highlighter-rouge">0</code>, <code class="language-plaintext highlighter-rouge">false</code> ve <code class="language-plaintext highlighter-rouge">""</code> arasındaki farkı ayırt edebliyor mu?</li>
+  <li>…</li>
+</ul>
+
+<p>Daha aklımıza gelebilecek bir çok senaryoyu buraya ekleyebiliriz ve çoğu kodda da geçerlidir bu durumlar.</p>
+
+<p>Eğer kodumuz sınırlı bir veri aralığı ile ilgiliyse bu sınırların çizgilerini, 
+sınırın bir miktar dışını, bir miktar içini de testlerimize eklemeliyiz.</p>
+
+<p>Örneğin bir kullanıcının 3 defa şifresini yanlış girme hakkı varsa 
+bu kontrolü yapan kodu şifrenin doğru girilmesi için test ettiğimiz gibi 
+mutlaka 2, 3 ve 4 gibi sayılar ile test etmeliyiz.</p>
+
+<h4 id="tüm-yol-ayrımlarını-test-edelim">Tüm Yol Ayrımlarını Test Edelim</h4>
+
+<p>Test edilen kodda yol ayrımları (if/else, loop, vb.) varsa 
+mutlaka o yol ayrımlarına giren ve girmeyen testleri <em>ayrı ayrı</em> yazmaya özen gösterelim.</p>
+
+<p>Bu hem <em>coverage</em> denen testlerin kodun ne kadarını kapsadığı metriğini arttırır 
+hem de bu tür durumlarda olabilecek hataların erken fark edilmesini sağlar.</p>
+
+<p>Kullanılan dile ait <code class="language-plaintext highlighter-rouge">enum</code> gibi bazı yapılar da gizli yol ayrımlarına neden olabilirler.
+<code class="language-plaintext highlighter-rouge">enum</code> tipinde bir veri üzerinde çalışan kodların testlerini yazarken 
+<code class="language-plaintext highlighter-rouge">enum</code> üzerinde tanımlanmış tüm olası değerler için birer test yazmalıyız.</p>
+
+<h4 id="hata-bulmak-i̇çin-test-yazalım">Hata Bulmak İçin Test Yazalım</h4>
+
+<p>Eğer kodda belirli bir durumda bir hata oluştuğu iddia ediliyorsa, 
+kodu okuyup bug-fix geliştirmeden önce bu hatayı oluşturan bir unit test yazalım.</p>
+
+<p>Testi çalıştırdığımızda hata alıyorsa doğru yoldayız demektir.
+Sonrasında istersek doğrudan koda dalabiliriz 
+veya kod okumak için çok karışıksa testi debug modda çalıştırarak debug edebiliriz.</p>
+
+<p>Koddaki düzeltmeyi yaptığımızda yazmış olduğumuz testin başarılı olduğunu görürsek tebrikler!
+Hem bir hatayı çözmüş oluruz hem de bu hatanın bir daha ortaya çıkmayacağını garanti altına alan 
+nur topu gibi bir unit testimiz olur.</p>
+
+<h4 id="i̇simlendirmelere-dikkat-edelim">İsimlendirmelere Dikkat Edelim</h4>
+
+<p>Test isimlendirme konusunda çok farklı yazım standartları var 
+ve birçok farklı standart farklı farklı geliştiriciler tarafından benimsenmiş durumda.
+Burada testlerimizi kesin şu şekilde isimlendirmeliyiz diyemiyoruz.</p>
+
+<p><a href="https://dzone.com/articles/7-popular-unit-test-naming" target="_blank">Şu makalede</a> 
+7 farklı popüler isimlendirme örneği gösterilmiş.
+Hepsinin kendi avantajları ve dezavantajları var.
+<a href="https://www.petrikainulainen.net/programming/testing/writing-clean-tests-naming-matters/" target="_blank">Şu makalede</a> 
+ise test kodundaki isimlendirmelerin öneminden bahsedilmiş.
+Böyle konular çok tartışmaya açık konular olduğundan bu tip konularda fikir alışverişi de fazla oluyor.</p>
+
+<p>Burada önerebileceğim en önemli şey şu, test ismine bakıldığında neyin test edildiği anlaşılmalı.
+<code class="language-plaintext highlighter-rouge">test01</code>, <code class="language-plaintext highlighter-rouge">test02</code> gibi isimlendirmelerden veya fonksiyon ismi + sayı gibi hangi fonksiyonun test edildiği dışında
+bir bilgi vermeyen isimlendirmelerden kaçınmalıyız.</p>
+
+<p>Bir diğer önerim de ekip içerisinde popüler bir isimlendirme standartına karar verilip onun uygulanması.
+Bir projede farklı diğerinde farklı isimlendirmeler yapılması bir süre sonra kafa karışıklığına yol açıyor 
+ve devamında aynı projede farklı isimlendirme standartları ortaya çıkmaya başlıyor.</p>
+
+<p>Ben şahsi olarak Java dilinde geliştirme yaparken Java metod isimlendirme kurallarına 
+mümkün olduğunca uyulmasından yanayım.
+Sonuçta test metodu da bir Java kodu.
+Bu sebeple metod isimlerine büyük harf ile başlamayı kesinlikle sevmem.
+Fakat test metod isminin uzunca bir cümle olabileceğinden dolayı 
+cümlenin farklı parçalarını <code class="language-plaintext highlighter-rouge">_</code> ile ayırmayı da severim.
+Bu okunabilirliği arttırır.
+Unutmayalım bir test hata verdiğinde test isminin ne kadar okunabilir olduğu önemlidir.</p>
+
+<p>Bu sebeple favori test metod ismi yazım stilim olan
+<code class="language-plaintext highlighter-rouge">[testEdilenMetodİsmi]_[verilenGirdi|testEdilenDurum]_[beklenenÇıktı|beklenenDavranış]</code>
+stilini kullandım bu yazıdaki örneklerde de.</p>
+
+<p>Bahsettiğim standart ile yazılmış bazı örnekler:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">registerUser_nullUsername_throwsException</code></li>
+  <li><code class="language-plaintext highlighter-rouge">reverseString_emptyString_returnsEmptyString</code></li>
+  <li><code class="language-plaintext highlighter-rouge">fireEvent_subscriptionCreatedEvent_writesEventToKafka</code></li>
+</ul>
+
+<p>Bazen test edilecek metod herhangi bir state veya input bağımlılığı olmadan çok basit bir işlem yapıyor olabilir.
+Bu durumda test ismi yazacağız diye bir şeyler uydurmaya çalışmaya gerek yok.
+Bazı kısımları atlayabiliriz.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">getUsername_returnsUsername</code></li>
+  <li><code class="language-plaintext highlighter-rouge">getCurrentTime_returnsCurrentTime</code></li>
+</ul>
+
+<p>vb. örnekler çoğaltılabilir.</p>
+
+<h4 id="i̇stisnaları-exceptions-test-edelim">İstisnaları (Exceptions) Test Edelim</h4>
+
+<p>Test edilen kodun istisna durumları varsa, Java’da buna Exception deniyor, bunlar için de test yazmalıyız.</p>
+
+<blockquote>
+  <h5><a href="https://tr.wikipedia.org/wiki/%C3%87ehov%27un_silah%C4%B1" target="_blank" rel="nofollow">Çehov'un silahı</a></h5>
+  <p>“Eğer birinci perde açıldığında duvarda bir tüfek asılıysa 
+takip eden sahnede tüfek mutlaka patlamalı. 
+Aksi takdirde oraya koymayın.”</p>
+  <footer class="blockquote-footer">
+  <cite title="Bootstrap Grid System">
+    <a href="https://tr.wikipedia.org/wiki/Anton_%C3%87ehov" target="_blank" rel="nofollow">Anton Çehov</a>
+  </cite>
+</footer>
+</blockquote>
+
+<p>Test edilen kodda bir yerde bir Exception fırlatıldığını görüyorsak,
+bu durumun doğru bir şekilde gerçekleştiğinden de emin olmalıyız.</p>
+
+<p>Eğer unit test ile bile o istisna durumunu sağlayamıyorsak 
+o koşulu kodumuzdan silebiliriz, büyük ihtimalle gereksizdir ve canlıda da karşımıza çıkmayacaktır.</p>
+
+<p>Java 8 öncesi biraz daha zahmetli olan Exception testi yazma konusu 
+Java 8 ve Junit 5 kütüphanesinin gelmesiyle aşağıdaki gibi 
+oldukça kolaylaşmış ve yazması keyifli hale gelmiş durumda.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Test edilen kod</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">throwIfUserDoesNotHavePrivilege</span><span class="o">(</span><span class="nc">UserDetails</span> <span class="n">user</span><span class="o">,</span> <span class="nc">String</span> <span class="n">privilege</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">user</span><span class="o">.</span><span class="na">getAuthorities</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">stream</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="nl">GrantedAuthority:</span><span class="o">:</span><span class="n">getAuthority</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="nl">privilege:</span><span class="o">:</span><span class="n">equals</span><span class="o">)</span>
+            <span class="o">.</span><span class="na">findFirst</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">orElseThrow</span><span class="o">(()</span> <span class="o">-&gt;</span> <span class="k">new</span> <span class="nc">AccessDeniedException</span><span class="o">(</span><span class="s">"Privilege: "</span> <span class="o">+</span> <span class="n">privilege</span><span class="o">));</span>
+<span class="o">}</span>
+
+<span class="c1">// Test kodu</span>
+
+<span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">throwIfUserDoesNotHavePrivilege_userDoesNotHavePrivilege_throwsAccessDeniedException</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">privileges</span> <span class="o">=</span> <span class="nc">Set</span><span class="o">.</span><span class="na">of</span><span class="o">(</span>
+            <span class="k">new</span> <span class="nf">SimpleGrantedAuthority</span><span class="o">(</span><span class="s">"PRIV_CHANGE_PASSWORD"</span><span class="o">),</span>
+            <span class="k">new</span> <span class="nf">SimpleGrantedAuthority</span><span class="o">(</span><span class="s">"PRIV_VIEW_PROFILE"</span><span class="o">));</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">user</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">User</span><span class="o">(</span><span class="s">"username"</span><span class="o">,</span> <span class="s">"password"</span><span class="o">,</span> <span class="n">privileges</span><span class="o">);</span>
+
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">exception</span> <span class="o">=</span> <span class="n">assertThrows</span><span class="o">(</span><span class="nc">AccessDeniedException</span><span class="o">.</span><span class="na">class</span><span class="o">,</span>
+            <span class="o">()</span> <span class="o">-&gt;</span> <span class="n">throwIfUserDoesNotHavePrivilege</span><span class="o">(</span><span class="n">user</span><span class="o">,</span> <span class="s">"PRIV_UPDATE_PROFILE"</span><span class="o">));</span>
+
+    <span class="n">assertEquals</span><span class="o">(</span><span class="s">"Privilege: PRIV_UPDATE_PROFILE"</span><span class="o">,</span> <span class="n">exception</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h4 id="testlerimiz-başarısız-olduğunda-sebebi-belli-olsun">Testlerimiz Başarısız Olduğunda Sebebi Belli Olsun</h4>
+
+<p>Bir test hata vermeye başladığında test kodunu okumadan önce 
+hatanın hangi senaryoda ve hangi durumda olduğunu anlayabiliyor olmalıyız.</p>
+
+<p>Bunun için anlamlı test metodu isimleri kullanma başlığında anlattıklarımın dışında 
+bir de doğru assert kullanımı konusu var.</p>
+
+<p>Eğer elimizde karşılaştırabileceğimiz iki değer varsa <code class="language-plaintext highlighter-rouge">assertEquals</code> veya <code class="language-plaintext highlighter-rouge">assertSame</code> kullanmalıyız.
+Böyle durumlarda karşılaştırmayı kendimiz yapıp <code class="language-plaintext highlighter-rouge">assertTrue</code> kullanırsak patlayan testin verdiği hata mesajından
+test ettiğimiz kodun ürettiği sonucu göremeyiz.</p>
+
+<p>Örneğin aşağıda aynı hatalı kontrollerin <code class="language-plaintext highlighter-rouge">assertEquals</code> ve <code class="language-plaintext highlighter-rouge">assertTrue</code> ile verdiği hata mesajlarını okuyalım:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">final</span> <span class="kt">int</span> <span class="n">actualResult</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
+
+<span class="n">assertTrue</span><span class="o">(</span><span class="mi">4</span> <span class="o">==</span> <span class="n">actualResult</span><span class="o">);</span>
+<span class="c1">// Hata mesajı: expected: &lt;true&gt; but was: &lt;false&gt;</span>
+
+<span class="n">assertEquals</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="n">actualResult</span><span class="o">);</span>
+<span class="c1">// Hata mesajı: expected: &lt;4&gt; but was: &lt;5&gt;</span>
+
+
+<span class="kd">final</span> <span class="nc">String</span> <span class="n">actualResult</span> <span class="o">=</span> <span class="s">"Lorem ipsam"</span><span class="o">;</span>
+
+<span class="n">assertTrue</span><span class="o">(</span><span class="s">"Lorem ipsum"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">actualResult</span><span class="o">));</span>
+<span class="c1">// Hata mesajı: expected: &lt;true&gt; but was: &lt;false&gt;</span>
+
+<span class="n">assertEquals</span><span class="o">(</span><span class="s">"Lorem ipsum"</span><span class="o">,</span> <span class="n">actualResult</span><span class="o">);</span>
+<span class="c1">// Hata mesajı: expected: &lt;Lorem ipsum&gt; but was: &lt;Lorem ipsam&gt;</span>
+</code></pre></div></div>
+
+<p>Tabi ki <code class="language-plaintext highlighter-rouge">boolean</code> dönen bir metodun testini yazarken mecburen <code class="language-plaintext highlighter-rouge">assertTrue</code> kullanmamız gerekiyor.
+İki elimiz kanda da olsa <code class="language-plaintext highlighter-rouge">assertTrue</code> kullanmayalım gibi bir durum yok. 
+O assertion’ın da bir varoluş sebebi var kütüphanede.</p>
+
+<p>Ek olarak test yazarken kendimize sık sık bu soruyu da soralım: 
+“Bu test bu assert sebebiyle patladığında hata mesajında ne yazar?”
+Hata mesajındaki bilginin yetersiz olacağını düşündüğümüz noktada, 
+kullandığımız test kütüphanesi izin veriyorsa assert mesajına özel bir de bilgi de ekleyebiliriz.</p>
+
+<p>Örneğin aşağıdaki kodda <code class="language-plaintext highlighter-rouge">assertTrue</code> kullandık fakat hata mesajını özelleştirdik:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">final</span> <span class="kt">boolean</span> <span class="n">startsWithPriv</span> <span class="o">=</span> <span class="n">privilegeName</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="s">"PRIV_"</span><span class="o">);</span>
+<span class="n">assertTrue</span><span class="o">(</span><span class="n">startsWithPriv</span><span class="o">,</span> <span class="s">"Privilege "</span> <span class="o">+</span> <span class="n">privilegeName</span> <span class="o">+</span> <span class="s">" does not start with PRIV_ prefix!"</span><span class="o">);</span>
+
+<span class="c1">// Hata mesajı: Privilege PR_AAA does not start with PRIV_ prefix! ==&gt; expected: &lt;true&gt; but was: &lt;false&gt;</span>
+</code></pre></div></div>
+
+<h4 id="ortam-bağımsız-çalışsın">Ortam Bağımsız Çalışsın</h4>
+
+<p>Unit testler üzerinde çalıştığı ortamdan bağımsız şekilde her yerde çalışabilecek kadar izole geliştirilmeli.
+Yabancı bir blogda unit testler annenizin bilgisayarında bile çalışabilmeli yazmıştı bilgili bir abimiz.</p>
+
+<p>Özellikle platform bağımsız dillerde dil farklı makineleri ve işletim sistemlerini destekliyor olsa bile
+yazılımcılar spesifik ortamlara bağımlı kodlar yazabilmektedir.
+Test edilen kodun ortam bağımsız olması ile ilgili konuları aşağıda 
+test edilebilir kod yazmak ile ilgili kısımda da inceleyeceğiz.</p>
+
+<p>Koddaki veritabanı, disk veya network gibi dış bileşenlerin kullanıldığı kısımları 
+testlerde mock implementasyonlar kullanarak izole ederek ortam bağımsız hale getirebiliriz.</p>
+
+<p>Linux/Windows arası dosya sistemindeki klasör ayracı (<code class="language-plaintext highlighter-rouge">/</code>, <code class="language-plaintext highlighter-rouge">\</code>) değişiyor.
+Bu tür şeylere dikkat ederek işletim sistemi ile ilgili problemlerden kurtulabiliriz.</p>
+
+<p>Tarih/Zaman ile çalışan kodlarda tarih/zaman’ın sistemden okunması ile ilgili kısımları koddan izole ederek
+farklı zaman + timezone problemlerinden kurtulabiliriz.</p>
+
+<p>Benim en çok karşılaştığım problem timezone oldu bugüne kadar.
+CI/CD sunucusu GMT+0 zamanında çalışırken geliştirici ekip olarak biz Türkiye’de GMT+3 zamanında çalışıyoruz.
+Test kodunda bir tarihi elle String olarak yazıp formatladığımızda 
+lokalde çalışan testler CI/CD sunucusunda hata veriyor.
+Bununla ilgili kullandığımız çözümü de ileriki başlıkta paylaşacağım.</p>
+
+<hr />
+
+<p><a id="test-edilebilir-yazilim"></a></p>
+<h2 id="6-unit-test-yazabilmek-i̇çin-nasıl-yazılım-tasarlamalıyız">6. Unit Test Yazabilmek İçin Nasıl Yazılım Tasarlamalıyız?</h2>
+
+<p>Unit test yazmaya başlayıncaya kadar oldukça kaliteli kod yazdığımı zannederdim.
+Artık yazamadığımı biliyorum.</p>
+
+<p>Bir koda unit test yazamama durumu kodun yeteri kadar kaliteli olmadığını adeta bağıran bir durumdur.
+Bu başlıkta yazılımı unit test yazılması zor veya imkansız hale getirebilecek 
+birkaç faktöre ve olası çözümlerine değineceğiz.</p>
+
+<h3 id="sınıfların--fonksiyonların-fazla-sorumluluk-yerine-getirmesi">Sınıfların / Fonksiyonların Fazla Sorumluluk Yerine Getirmesi</h3>
+
+<p>Legacy projelerde bazen yüzden fazla satırdan oluşan metodlar içeren sınıflara test yazmak zorunda kaldığım oluyor.
+Test metodu çoğunlukla test edilen metoddan da uzun oluyor.
+Böyle sınıflara test yazmak hem çok uzun sürüyor hem de çok fazla veri oluşturmak, 
+çok fazla bağımlılığı mock olarak tanımlamak,
+onlarca farklı koşula belki yüzlerce test yazmak gerekiyor.</p>
+
+<p>Bu tür sınıflar genellikle çok da fazla değişim geçirdiklerinden, 
+her bir değişiklikte bir anda yüzlerce testin hata vermeye başlaması ve test bakım maliyeti çıkıyor.</p>
+
+<p>Sınıflarımızı <a href="https://en.wikipedia.org/wiki/SOLID">SOLID</a> 
+prensiplerini göz önünde bulundurarak tasarlamamız gerekiyor.
+Özellikle de <strong>SOLID</strong>‘in <strong>S</strong>‘sine, yani “Single-responsibility” prensibine dikkat etmemiz gerekiyor:</p>
+
+<blockquote>
+  <p>Bir sınıfın sadece bir sorumluluğu olmalı, bir sınıfın değişmek için sadece bir sebebi olmalı.</p>
+</blockquote>
+
+<p>Bunu başarabilmek için de sınıflarımızı tasarlarken tüm kodu bir dosyaya yazmak yerine 
+tekrar kullanılabilir parçalar halinde tasarlamamız gerekiyor.
+Böylece testlerde bazı parçaları test edip bazı parçaları sahte/mock implementasyonlar ile izole edebiliriz.</p>
+
+<p>Tekrar kullanılabilir yazılım bileşenleri üretebilmenin en şık yolu da 
+genellikle doğru tasarım şablonlarını 
+(<a href="https://en.wikipedia.org/wiki/Software_design_pattern#Classification_and_list" target="_blank">Design Patterns</a>) 
+bulup kullanmaktan geçiyor.
+Yazılımcıların tasarım şablonlarına hakim olması kaliteli yazılım geliştirmede önemli bir basamak.</p>
+
+<h3 id="gereğinden-fazla-statik-kod-kullanımı">Gereğinden Fazla Statik Kod Kullanımı</h3>
+
+<p>Statik kod zehirlidir. Birazı kafa yapar, fazlası projeyi öldürür. 
+Pek kıymetli <a href="https://www.linkedin.com/in/akinkaldiroglu/" target="_blank">Akın Kaldıroğlu</a> 
+hocamın da söylediği gibi 
+“<a href="http://www.javaturk.org/statik-metotlu-sinif-mi-yoksa-singleton-mi-ii/" target="_blank">Statik kullanımı bulaşıcıdır</a>”.</p>
+
+<p>Bu statik kodların gereksiz yerlerde kullanılmaya başlanması 
+veya dozunun ayarlanamaması projede
+<a href="https://en.wikipedia.org/wiki/Inversion_of_control" target="_blank">IoC (Inversion of Control)</a>
+prensibi kullanımını minimuma düşürür.</p>
+
+<p>Bir API isteğini aldıktan sonra servis katmanı, iş mantığı, cache yapısı ve DAO (veritabanı) katmanının 
+tamamen statik metodlar üzerinden yapıldığı bir projeye denk geldim yakın zamanda.
+Bu tip bir projede unit test yazmaya kalkarsanız kanser olabilirsiniz.
+Neredeyse hiçbir katman bir diğerini tamamen çalıştırmadan test edilemiyor.</p>
+
+<p>Statik metod kullanımını yukarıda bahsettiğim gibi projede 
+asıl işin yapıldığı sınıflarda tavsiye etmiyorum, kullanmamalıyız.
+Utility fonksiyon dediğimiz apache commons kütüphanelerindeki 
+<code class="language-plaintext highlighter-rouge">StringUtils</code>, <code class="language-plaintext highlighter-rouge">NumberUtils</code>, <code class="language-plaintext highlighter-rouge">CollectionUtils</code>, vb. sınıfların statik metodlarını kullanabiliriz
+veya bunlara benzer metodları kendimiz projelerde statik olarak yazabiliriz.
+Bu tip fonksiyonlara <em>pure</em> (saf) fonksiyon deniyor. 
+Yani herhangi bir çevresel faktöre bağlı olmayan, aynı girdilerle her zaman aynı çıktıyı veren fonksiyonlar.</p>
+
+<p>Ortama bağımlı, kararsız, sağı solu belli olmayan, 
+sistemde global state değişikliği yapan, yan etkileri olan
+statik metodlardan uzak durmalıyız.</p>
+
+<div class="alert alert-secondary pb-0" role="alert">
+  <p><strong>Not:</strong> Statik metodların da mocklanabilmesi için Java’da “Power Mock” isimli bir kütüphane mevcut.
+Fakat bir gün statik bir metodu mocklama ihtiyacı hissedersek projeye “Power Mock” eklemeden önce
+kodu iyileştirerek bu ihtiyacı ortadan kaldırmaya çalışmalıyız.</p>
+</div>
+
+<h3 id="bağımlı-olunan-nesnelerin-sınıf-i̇çinde-oluşturulması">Bağımlı Olunan Nesnelerin Sınıf İçinde Oluşturulması</h3>
+
+<p>Kodda her <code class="language-plaintext highlighter-rouge">new</code> anahtar kelimesi gördüğümüzde <u>ufak</u> bir şüphe duymalıyız.</p>
+
+<p>Her sınıflar arası etkileşimi sahte/mock implementasyon olarak izole etmemeliyiz
+fakat aşağıda birkaç örnek verebileceğim bazı bağımlılıklar sahte/mock şekilde izole edilmelidir.</p>
+
+<p>Öncelikle “unit test” kavramını herkes farklı tanımladığı için burada çok büyük anlaşmazlıklar ortaya çıkıyor.
+Benim görüşümde sadece bir sınıfın/metodun davranışını diğer sınıflardan izole bir şekilde test edebilmek unit testtir.
+Eğer kompleks sınıflar arası etkileşimleri/entegrasyonları test ediyorsam buna entegrasyon testi derim.
+Bu kapsamda unit test yazarken aşağıdaki durumlardaki sınıfları mock olarak kullanmayı tercih ederim:</p>
+
+<ul>
+  <li>Kompleks business logic içeren veya kendisi de başka sınıflara bağımlı olan sınıflar</li>
+  <li>Veritabanı, disk, network, API, vb. ortama ve başka sistemlere bağımlı olan sınıflar</li>
+  <li>Birbirinden farklı mantıksal katmanlardaki sınıflar (Misal Controller -&gt; Servis veya Servis -&gt; DAO etkileşimi)</li>
+  <li>Global state üzerinde değişiklik yapan sınıflar</li>
+  <li>Kararsız, tutarsız veya saf olmayan fonksiyonlar içeren sınıflar</li>
+</ul>
+
+<p>Bunların dışında basit DTO, JPA Entity, String, Calendar, Date, vb. sınıflarda 
+mümkün olduğunca gerçek sınıfları kullanmaya çalışırım.</p>
+
+<p>Gereğinden fazla mock kullanımı testleri hem kırılgan hem okuması zor bir hale getirebilir.
+Burada dengeyi iyi kurmamız gerekiyor. 
+Test yazdıkça bu dengenin yazılımcıda içgüdüsel olarak geliştiğini düşünüyorum.</p>
+
+<p>Bu bağlamda düşündüğümüzde eğer sahte/mock olarak kullanmak istediğimiz bir sınıf varsa 
+ve bu sınıfı test edeceğimiz kod <code class="language-plaintext highlighter-rouge">new</code> anahtar kelimesi ile kendi içerisinde oluşturuyorsa,
+bu bağımlılıkları sahteleri ile değiştirmek oldukça zorlaşır. 
+Daha önce statik metodlarda kullanıldığından bahsettiğim “Power Mock” kütüphanesi gibi bir kütüphane ile
+bu sınıfların constructor’larını mock’lamak gibi saçma işlere girişmemiz gerekir.</p>
+
+<p>Bunun önüne geçebilmek için de testlerde sahtesi ile değiştirilmesi gereken bağımlılıkları
+<code class="language-plaintext highlighter-rouge">constructor</code> ile test edilecek olan sınıfa parametre olarak almamız gerekiyor.
+Eğer OOP yerine fonksiyonel programlama yapıyorsanız da 
+test edilen fonksiyona bu bağımlılıklar parametre olarak geçilebilir.</p>
+
+<p>Örneğin yukarıdaki başlıklarda verdiğim <code class="language-plaintext highlighter-rouge">FrequentlyAskedQuestionServiceImpl</code> ve <code class="language-plaintext highlighter-rouge">PersonServiceImpl</code>
+sınıflarının ikisinde de dışarıdan alınan bağımlılıklar constructor parametresi olarak geçilmiş durumda.
+<code class="language-plaintext highlighter-rouge">PersonServiceImpl</code> sınıfının metod içerisinde oluşturduğu <code class="language-plaintext highlighter-rouge">Person</code> nesnesi ise 
+sahtesi ile değiştirmeye gerek duymadığım basit bir DTO/JPA Entity sınıfı, 
+ya da data sınıfı diyebiliriz bu tür sınıflara.</p>
+
+<p>Eğer <code class="language-plaintext highlighter-rouge">PersonServiceImpl</code> veritabanına erişimde kullandığı <code class="language-plaintext highlighter-rouge">PersonRepository</code> arayüzünün
+bir implementasyonunu aşağıdaki koddaki gibi constructor içerisinde kendisi oluştursaydı, 
+sahtesi ile değiştirmek için test kodunda taklalar atmamız gerekirdi.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PersonServiceImpl</span> <span class="kd">implements</span> <span class="nc">PersonService</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">PersonRepository</span> <span class="n">personRepository</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">PersonServiceImpl</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">mongoClient</span> <span class="o">=</span> <span class="nc">MongoClients</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">personRepository</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PersonRepositoryImpl</span><span class="o">(</span><span class="n">mongoClient</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Person</span> <span class="nf">createPerson</span><span class="o">(</span><span class="nc">CreatePersonRequest</span> <span class="n">createPersonRequest</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">firstName</span> <span class="o">=</span> <span class="nc">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">createPersonRequest</span><span class="o">.</span><span class="na">getFirstName</span><span class="o">(),</span> <span class="s">"firstName cannot be null"</span><span class="o">);</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">lastName</span> <span class="o">=</span> <span class="nc">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">createPersonRequest</span><span class="o">.</span><span class="na">getLastName</span><span class="o">(),</span> <span class="s">"lastName cannot be null"</span><span class="o">);</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">phone</span> <span class="o">=</span> <span class="nc">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">createPersonRequest</span><span class="o">.</span><span class="na">getPhone</span><span class="o">(),</span> <span class="s">"phone cannot be null"</span><span class="o">);</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="n">firstName</span><span class="o">,</span> <span class="n">lastName</span><span class="o">,</span> <span class="n">phone</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">personRepository</span><span class="o">.</span><span class="na">savePerson</span><span class="o">(</span><span class="n">person</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Test yazılamamasının yanında kaliteli kod yazım standartlarına da ters düşen bir yanı var,
+<code class="language-plaintext highlighter-rouge">PersonServiceImpl</code> sınıfı concrete bir <code class="language-plaintext highlighter-rouge">PersonRepository</code> implementasyonuna ihtiyaç duyuyor.
+Interface’ler üzerinden etkileşim kurma özelliğini kaybediyoruz.</p>
+
+<p>Ayrıca <code class="language-plaintext highlighter-rouge">PersonServiceImpl</code> sınıfının <code class="language-plaintext highlighter-rouge">PersonRepositoryImpl</code> sınıfının nasıl 
+oluşturulacağı bilgisine de gereksiz yere sahip olmuş oluyor.</p>
+
+<p>Bu kodun mock olmadan yazılan testinin çalışması için gerçekten bir mongodb veritabanını ayağa kaldırmamız gerekiyor.
+Bu da yazacağımız testi unit değil entegrasyon testi yapar.</p>
+
+<h3 id="saf-olmayan-methodların-kullanılması">Saf Olmayan Methodların Kullanılması</h3>
+
+<p>Eğer saf olmayan veya kararsız da diyebileceğimiz metodlar test etmeye çalıştığımız kod tarafından kullanılıyorsa
+testlerimiz zaman ve ortam bağımlı hale gelebilir.
+Bu tür testler de çoğu zaman çalışırken ara sıra sebebini anlamak için vakit kaybedeceğimiz hatalar verebilirler.</p>
+
+<p>Bu konuda Java’da kullanmayı en sevmediğim metodlar arasında şu tarih/zaman fonksiyonları başı çekiyor:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">new Date()</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Calendar.getInstance()</code></li>
+  <li><code class="language-plaintext highlighter-rouge">System.currentTimeMillis()</code></li>
+</ul>
+
+<p>Bu tip sistemin o anki zamanını dönen metodları kullanan kodların testlerinde yazacağımız assertion’lar,
+genellikle testin hızlı çalışmasına bağlı olarak başarılı bitebilse de, 
+testlerin çalışması sırasındaki birkaç milisaniyelik gecikme ile patlayabilirler.</p>
+
+<p>Örneğin aşağıdaki 1000 iterasyonluk RepeatedTest metodu 1000 iterasyonun 33 defasında hata verdi:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="nc">Date</span> <span class="nf">getCurrentDate</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"getCurrentDate called"</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Date</span><span class="o">();</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"getCurrentDate result="</span> <span class="o">+</span> <span class="n">date</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">date</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="nd">@RepeatedTest</span><span class="o">(</span><span class="mi">1000</span><span class="o">)</span>
+<span class="kt">void</span> <span class="nf">getCurrentDate_returnsCurrentDate</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">actual</span> <span class="o">=</span> <span class="n">getCurrentDate</span><span class="o">();</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">expected</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Date</span><span class="o">();</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="n">expected</span><span class="o">,</span> <span class="n">actual</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Verdiği hatalardan bir tanesi de şu şekilde:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>expected: java.util.Date@96901dd&lt;Tue May 18 00:53:54 EET 2021&gt; but was: java.util.Date@1cccaa86&lt;Tue May 18 00:53:54 EET 2021&gt;
+</code></pre></div></div>
+
+<p>Görüldüğü gibi expected ve actual Date nesneleri logda saniyesine kadar aynı görünüyor, 
+o bir iki milisaniyelik farkı hata mesajından anlayamıyoruz bile.</p>
+
+<p>Bu gibi durumlar için sistem zamanını bize dönen bir sınıf oluşturuyor 
+ve bu sınıfı testlerde sahte bağımlılık olarak kullanıyoruz.
+Biz önceden bu iş için kendi <code class="language-plaintext highlighter-rouge">Clock</code> sınıfımızı yazarken Java 8 sonrası <code class="language-plaintext highlighter-rouge">java.time.Clock</code> sınıfını kullanmaya başladık.</p>
+
+<p>Şimdi aşağıdaki gibi constructor argümanı olarak <code class="language-plaintext highlighter-rouge">Clock</code> alan bir sınıf yazalım:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DateRangeValidator</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Clock</span> <span class="n">clock</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">DateRangeValidator</span><span class="o">(</span><span class="nc">Clock</span> <span class="n">clock</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">clock</span> <span class="o">=</span> <span class="n">clock</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">validateDateRange</span><span class="o">(</span><span class="nc">Date</span> <span class="n">startDate</span><span class="o">,</span> <span class="nc">Date</span> <span class="n">endDate</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">now</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Date</span><span class="o">(</span><span class="n">clock</span><span class="o">.</span><span class="na">millis</span><span class="o">());</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">startDate</span><span class="o">.</span><span class="na">after</span><span class="o">(</span><span class="n">now</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"startDate cannot be after current date"</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">endDate</span><span class="o">.</span><span class="na">before</span><span class="o">(</span><span class="n">now</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"endDate cannot be before current date"</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Bu sınıf için yazdığımız testlerde tarihler arası farkları aşağıdaki gibi birer milisaniye bile yapsak
+1000 iterasyondan hiçbirinde hata vermemekte.
+Hem test ettiğimiz kod, hem de yazdığımız test ortam bağımsız şekilde aynı girdilerde hep aynı sonucu üretmekte.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RepeatedTest</span><span class="o">(</span><span class="mi">1000</span><span class="o">)</span>
+<span class="kt">void</span> <span class="nf">validateDateRange_systemDateIsBetweenStartAndEndDates_doesNotThrowException</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">startDate</span> <span class="o">=</span> <span class="mi">1621289298097L</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">now</span> <span class="o">=</span> <span class="n">startDate</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">endDate</span> <span class="o">=</span> <span class="n">now</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">clock</span> <span class="o">=</span> <span class="nc">Clock</span><span class="o">.</span><span class="na">fixed</span><span class="o">(</span><span class="nc">Instant</span><span class="o">.</span><span class="na">ofEpochMilli</span><span class="o">(</span><span class="n">now</span><span class="o">),</span> <span class="nc">ZoneId</span><span class="o">.</span><span class="na">systemDefault</span><span class="o">());</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">validator</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DateRangeValidator</span><span class="o">(</span><span class="n">clock</span><span class="o">);</span>
+
+    <span class="n">validator</span><span class="o">.</span><span class="na">validateDateRange</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">(</span><span class="n">startDate</span><span class="o">),</span> <span class="k">new</span> <span class="nc">Date</span><span class="o">(</span><span class="n">endDate</span><span class="o">));</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="global-değişiklik-yapan-yöntemlerin-tercih-edilmesi">Global Değişiklik Yapan Yöntemlerin Tercih Edilmesi</h3>
+
+<p>Bu da gereksiz statik metod kullanımına benzer bir kötü pratiktir 
+fakat bu kötü pratiğin sonuçları test edilemez bir kod yazmış olmaktan ziyade şöyle ortaya çıkıyor: 
+Yazılan testler rastgele bir şekilde bazen başarılı olup bazen hata veriyor.</p>
+
+<p>Örneğin kodda global bir değişken (static) tanımladık ve bir metod bu değişkenin değerini değiştiriyor.
+Bu değeri değiştirirken de varolan değer üzerinden bir hesaplama yapıyor.
+Bu metodun 10-12 tane testini yazdık.
+Her test bu global değişkende farklı bir durum değişikliğine neden olursa bir süre sonra işin ucu kaçar.
+Testlerin de hangi sırayla çalışacağının garantisi olmadığından, 
+hangi test çalıştığında global değişken hangi değeri tutuyor gibi bilgileri kontrol etmek oldukça zorlaşır.</p>
+
+<p>Global statik mutable değişken kullanmaktan ve bu değişkenler üzerinde değişiklik yapan metodlar yazmaktan
+mümkün olduğunca uzak durmalıyız.</p>
+
+<p>Bu tip global state üzerinden iş yapan kodlar testleri ayrı thread’ler ile paralel koşmanın da önüne engel koyuyor.
+Aynı anda iki thread global state’e değişiklik yapabilir ve bu sebeple kodda bir hata meydana gelmese bile
+test kodundaki assertion’a yazdığımız expected result tutmayabilir.</p>
+
+<p>Örneğin global bir AtomicInteger tuttuğumuzu ve bu sayıyı arttıran metodları iki farklı testin tetiklediğini düşünelim.
+Birinci test değeri 1 iken bir arttırıp 2 olduğunu assert ediyor fakat testler paralel koştuğu için o sırada
+ikinci test de değeri arttırdığından değer 3 geliyor. 
+Böyle senaryolarda kodun çalışması tamamen doğru olduğu halde testler hata verebilir.</p>
+
+<p>Biz ekipçe genellikle statik global state tutmadığımız için global state konusunda 
+en çok karşılaştığım problemleri genelde <code class="language-plaintext highlighter-rouge">ThreadLocal</code> kullanımı sebebiyle yaşamışızdır.
+<strong><a href="/2020/04/13/thread-local-nedir-java/">Thread Local</a></strong>
+Thread üzerinde global veri tutulması ve farklı thread’lerin bu veriyi görememesi için tasarlanmış bir nesne
+fakat fazla/hatalı kullanımında o da test yazılması zor kodlara sebep olabilmekte.
+Burada da testleri paralel koşmadığımızda hepsinin aynı thread tarafından çalıştırıldığını unutmayalım.
+Yani <code class="language-plaintext highlighter-rouge">ThreadLocal</code> bir nevi tüm test suite için global bir değişken haline geliyor.</p>
+
+<h2 id="bitiş">Bitiş</h2>
+
+<p>Yazı bitti ama ben de bittim :)
+Bu yazıdaki esas amacım unit test yazmak ile kaliteli kod yazmak arasında ne kadar çok bağlantı olduğunu göstermekti.
+Umarım amacına ulaşır.</p>
+
+<p>Bu konular kesin doğrusu olmayan ve tartışmaya çok açık konular olduğu için, ben de tartışma sevdiğim için,
+fikir ayrılıklarına düştüğümüz noktalarda ya da hemfikir olduğumuz noktalarda lütfen yorumlarınızı esirgemeyin.</p>
+
+<h2 id="kaynaklar">Kaynaklar</h2>
+
+<p>Bu tür yazılar yazarken çok fazla başka yazı okurum genellikle.
+Herkesten bir şeyler öğrenmeye çalışan birisiyim.
+Bu sebeple iş yerinde gereksiz görülen konularda tartışmalar çıkartan bir yapım var.
+Farklı görüşlerde olan insanların düşüncelerini dinlemeyi okumayı da severim.</p>
+
+<p>Aşağıda bu yazıyı yazarken okuduğum diğer yazıların da linklerini paylaşıyorum.
+Bizim sektörde bu tür tartışmaya açık, kesin doğrusu ve yanlışı olmayan bilgileri 
+tek bir kaynaktan okuyarak öğrenmek doğru değil.
+Vakit buldukça bu tür yazılar okumanızı tavsiye ederim.</p>
+
+<ol>
+  <li><a href="https://medium.com/@pjbgf/title-testing-code-ocd-and-the-aaa-pattern-df453975ab80">Unit Testing and the Arrange, Act and Assert (AAA) Pattern</a> - Paulo Gomes</li>
+  <li><a href="https://www.hillelwayne.com/unit-tests-are-not-tests/">Unit Tests Aren’t Tests</a> - Hillel Wayne</li>
+  <li><a href="https://www.benimuhendisim.com/smoke-duman-testi-vs-sanity-dogruluk-testi/">Smoke (Duman) Testi vs Sanity (Doğruluk) Testi</a> - benimuhendisim</li>
+  <li><a href="https://en.wikipedia.org/wiki/Software_testing">Software Testing</a> - wikipedia</li>
+  <li><a href="https://www.toptal.com/qa/how-to-write-testable-code-and-why-it-matters">Unit Tests, How to Write Testable Code and Why it Matters</a> - Sergey Kolodiy</li>
+  <li><a href="https://www.innoq.com/en/blog/tests-granularity/">Tests Granularity</a> - Jacek Bilski &amp; Torsten Mandry</li>
+  <li><a href="https://betterprogramming.pub/the-test-pyramid-80d77535573">The Test Pyramid</a> - Jessie Leung</li>
+  <li><a href="https://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing/">Getting Started With Gradle: Integration Testing</a> - Petri Kainulainen</li>
+  <li><a href="https://fortegrp.com/the-importance-of-unit-testing/">The importance of unit testing, or how bugs found in time will save you money</a> - Oksana Mikhalchuk</li>
+  <li><a href="https://dzone.com/articles/top-8-benefits-of-unit-testing">8 Benefits of Unit Testing</a> - Ekaterina Novoseltseva</li>
+  <li><a href="https://www.zealousweb.com/unit-testing-vs-functional-testing-a-guide-on-why-what-how/">Unit Testing Vs Functional Testing: A Guide On Why, What &amp; How</a> - Hiral Jadav</li>
+  <li><a href="https://www.codemag.com/Article/1901071/10-Reasons-Why-Unit-Testing-Matters">10 Reasons Why Unit Testing Matters</a> - John V. Petersen</li>
+  <li><a href="https://betterprogramming.pub/13-tips-for-writing-useful-unit-tests-ca20706b5368">13 Tips for Writing Useful Unit Tests</a> - Nick Hodges</li>
+  <li><a href="https://dzone.com/articles/10-tips-to-writing-good-unit-tests">10 Tips to Writing Good Unit Tests</a> - Grzegorz Ziemoński</li>
+  <li><a href="https://stackify.com/unit-testing-basics-best-practices/">You Still Don’t Know How to Do Unit Testing (and Your Secret is Safe with Me)</a> - Erik Dietrich</li>
+  <li><a href="https://www.petrikainulainen.net/programming/testing/writing-clean-tests-naming-matters/">Writing Clean Tests – Naming Matters</a> - Petri Kainulainen</li>
+  <li><a href="https://dzone.com/articles/7-popular-unit-test-naming">7 Popular Unit Test Naming Conventions</a> - Ajitesh Kumar</li>
+  <li><a href="https://www.martinfowler.com/bliki/TestDouble.html">TestDouble</a> - Martin Fowler</li>
+</ol>
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/2021/01/10/gradle-spring-boot-angular-birlikte-build-etmek/">&laquo; Gradle: Spring Boot & Angular Uygulamalarını Birlikte Build Edelim</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+  </div>
+</div>
+
+
+  
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://serdarkuzucu.com/2021/05/18/unit-test-ve-test-edilebilir-kod-yazmak/';
+        this.page.identifier = 'unit-test-ve-test-edilebilir-kod-yazmak';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+  
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>
