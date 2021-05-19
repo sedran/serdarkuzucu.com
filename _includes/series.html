@@ -1,0 +1,35 @@
+{% if page.series %}
+
+{% assign count = '0' %}
+{% assign idx = '0' %}
+{% for post in site.posts reversed %}
+{% if post.series == page.series %}
+{% capture count %}{{ count | plus: '1' }}{% endcapture %}
+{% if post.url == page.url %}
+{% capture idx %}{{count}}{% endcapture %}
+{% endif %}
+{% endif %}
+{% endfor %}
+
+<div class="card mb-2">
+    <div class="card-header">
+        Bu yazı <b>{{ count }}</b> adet yazıdan oluşan <b>"{{ page.series }}"</b> yazı dizisinin <b>{{ idx }}.</b> yazısıdır.
+    </div>
+    <ul class="list-group list-group-flush">
+        {% assign count = '0' %}
+        {% for post in site.posts reversed %}
+        {% if post.series == page.series %}
+        {% capture count %}{{ count | plus: '1' }}{% endcapture %}
+        <li class="list-group-item">
+            {% if page.url == post.url %}
+            <i>{{ count }} - {{post.title}}</i>
+            {% else %}
+            <a href="{{post.url}}">{{ count }} - {{post.title}}</a>
+            {% endif %}
+        </li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+
+{% endif %}

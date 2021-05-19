@@ -23,7 +23,12 @@ layout: default
   </header>
 
   <div class="post-content" itemprop="articleBody">
+    {% include series.html %}
+
     {{ content }}
+
+    {% include references.html %}
+    {% include series.html %}
   </div>
 </article>
 

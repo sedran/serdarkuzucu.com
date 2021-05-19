@@ -5,6 +5,7 @@ ruby RUBY_VERSION
 gem "rake", "~> 12"
 gem "webrick", "~> 1.7"
 gem "jekyll"
+gem 'html-proofer'
 
 # Optional: Add any custom plugins here.
 # Some useful examples are listed below

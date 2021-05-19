@@ -1,0 +1,13 @@
+{% if page.references %}
+
+<h2>Kaynakça</h2>
+
+<ol>
+    {% for reference in page.references %}
+    <li>
+        <a href="{{reference.url}}" rel="nofollow" target="_blank">{{ reference.title }}</a> - {{reference.author}}
+    </li>
+    {% endfor %}
+</ol>
+
+{% endif %}
