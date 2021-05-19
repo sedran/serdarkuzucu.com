@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Unit Test 01: Unit Test Nedir?</title>
+
+  <meta name="description" content="Yazılımcılar ikiye ayrılır. Unit test yazanlar ve unit test yazmayanlar.Bazen vakit yok deriz, bazen zor gelir, bazen proje/kod test yazmaya uygun değil deri...">
+
+<meta content="Serdar Kuzucu" property="og:site_name">
+
+
+<meta content="Unit Test 01: Unit Test Nedir?" property="og:title">
+
+
+
+<meta content="article" property="og:type">
+
+
+<meta content="Yazılımcılar ikiye ayrılır. Unit test yazanlar ve unit test yazmayanlar.Bazen vakit yok deriz, bazen zor gelir, bazen proje/kod test yazmaya uygun değil deri..." property="og:description">
+
+
+<meta content="https://serdarkuzucu.com/2021/05/18/unit-test-nedir/" property="og:url">
+
+
+
+<meta content="2021-05-17T23:51:25+00:00" property="article:published_time">
+<meta content="https://serdarkuzucu.com/about/" property="article:author">
+
+
+
+<meta content="https://serdarkuzucu.com/assets/category/unit-test.png" property="og:image">
+
+
+
+
+<meta content="Java" property="article:section">
+
+
+
+
+
+
+
+<meta name="twitter:creator" content="@sedran"/>
+<meta name="twitter:site" content="@sedran"/>
+<meta name="twitter:card" content="summary"/>
+
+
+  <link rel="stylesheet" href="/css/main.css?v=201904191944">
+  <link rel="canonical" href="https://serdarkuzucu.com/2021/05/18/unit-test-nedir/">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2260086-7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-2260086-7');
+  </script>
+  
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            
+            <a href="/category/angular" class="dropdown-item">Angular (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (4)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (5)</a>
+            
+            <a href="/category/git" class="dropdown-item">Git (2)</a>
+            
+            <a href="/category/gradle" class="dropdown-item">Gradle (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (27)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (6)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (6)</a>
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (48)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/spring-boot" class="dropdown-item">Spring Boot (1)</a>
+            
+            <a href="/category/unit-test" class="dropdown-item">Unit Test (5)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Unit Test 01: Unit Test Nedir?</h1>
+    <p class="post-meta">
+      <time datetime="2021-05-17T23:51:25+00:00" itemprop="datePublished">May 17, 2021</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/unit-test">Unit Test</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    
+
+
+
+
+
+<div class="card mb-2">
+    <div class="card-header">
+        Bu yazı <b>5</b> adet yazıdan oluşan <b>"Unit Test"</b> yazı dizisinin <b>1.</b> yazısıdır.
+    </div>
+    <ul class="list-group list-group-flush">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <i>1 - Unit Test 01: Unit Test Nedir?</i>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/unit-test-ve-diger-test-cesitlerinin-farklari/">2 - Unit Test 02: Unit Test'in Diğer Test Çeşitlerinden Farkları Nedir?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/neden-unit-test-yazariz/">3 - Unit Test 03: Neden Unit Test Yazarız?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/kaliteli-unit-test-nasil-yazilir/">4 - Unit Test 04: Kaliteli Unit Test Nasıl Yazılır?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/unit-test-edilebilir-yazilim-nasil-gelistirilir/">5 - Unit Test 05: Test Edilebilir Yazılım Nasıl Geliştirilir?</a>
+            
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+
+
+    <p>Yazılımcılar ikiye ayrılır. Unit test yazanlar ve unit test yazmayanlar.
+Bazen vakit yok deriz, bazen zor gelir, bazen proje/kod test yazmaya uygun değil deriz.
+Unit test yazmak istemediğimizde bu saydıklarım gibi çok fazla miktarda bahaneler üretebiliriz
+ve üretebileceğimiz bahanelerin de hemen hemen hepsini daha önce başkalarından da duymuşuzdur.
+Bu yazı dizisinde unit test konusu ile ilgili birçok soruya cevaplar arayarak 
+kaliteli yazılım geliştirme basamaklarından birkaç tanesini hep birlikte tırmanmaya çalışacağız.</p>
+
+<!--more-->
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">add_twoPlusTwo_returnsFour</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">calculator</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Calculator</span><span class="o">();</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">result</span> <span class="o">=</span> <span class="n">calculator</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mi">2</span><span class="o">);</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span> <span class="n">result</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Unit test, dışarıdan bakıldığında yukarıdaki kod örneğinde olduğu gibi basit bir şey
+gibi görünse de, içine girildiğinde derya denizdir.
+Etkili unit test yazmanın çeşitli zorlukları vardır.
+Çoğumuz bu zorlukları aşamayıp test yazmamayı tercih ederiz.
+Kimimiz yazdımız testlerin unit test olduğunu zannederiz fakat aslında bambaşka bir test türüdür.
+Ben bu sınıflandırmaların hepsinin içinde bizzat kendim de bulundum 
+ve bu konuda hala kendimi geliştirebileceğim çok fazla nokta var.
+Zaten kaliteli yazılım geliştirme serüveninde <u>ben artık tamamım</u> 
+diyebileceğimiz bir nokta bulunmuyor.</p>
+
+<p>Unit test yazmak üzerine hazırladığım bu yazı dizisini aslında <em>17 Mayıs 2021</em> tarihinde
+tek bir yazı olarak yayınlamıştım fakat geri bildirim amacıyla ön gösterim olarak paylaştığım 
+birkaç iş arkadaşımdan ve eşimden “çok uzun olmuş kimse sonuna kadar okumaz” 
+geri bildirimini aldığım için parçalara böldüm. 
+Parçalara böldükçe parçalarda girebildiğim detay miktarı da arttı bu sayede.
+Umarım siz de okurken benim yazarken aldığım keyfi alırsınız.</p>
+
+<p>Yazı dizimizin bu ilk yazısında “Unit Test Nedir?” sorusunu cevaplayarak hızlı bir giriş yapacağız.
+Daha detaylı ve daha keyifli konular sonraki yazılarda bizleri bekliyor olacak.</p>
+
+<hr />
+
+<h2 id="unit-test-nedir">Unit Test Nedir?</h2>
+<p><a id="unit-test-nedir"></a></p>
+
+<p>Unit test uygulamamızın küçük bir parçasını 
+uygulamanın geri kalanından bağımsız bir şekilde çalıştırarak
+bu parçanın davranışını doğrulayan bir metoddur.</p>
+
+<p>Unit test yazdığımız kodun davranışını yine kod yazarak doğrulamamızı sağlar.
+Yazılan bu test kodları, canlıya çıkacak olan production kodları ile aynı projede farklı bir klasörde tutulur.
+Örneğin çoğu Java projesinde genellikle <code class="language-plaintext highlighter-rouge">src/main/java</code> klasöründe production kodları bulunurken,
+<code class="language-plaintext highlighter-rouge">src/test/java</code> klasöründe ise unit test kodları bulunur.</p>
+
+<p>Unit testler production build sırasında kullandığımız <strong>maven</strong>, <strong>gradle</strong>, vb. build araçları tarafından
+varsayılan olarak çalıştırılırlar.
+Testlerde oluşacak herhangi bir hatada build işlemi hata verir ve tamamlanmaz.
+Build tamamlandıktan sonra üretilmiş olan son çıktıda ise test kodu bulunmaz.
+Yani canlı ortama (production) test kodu çıkmamış olur.</p>
+
+<p>Test kodları genellikle bir test framework aracılığıyla çalıştırılır.
+Hangi test framework’ünün kullanılacağı projedeki önemli bir karardır.
+Yazılan test kodları bu test framework’ünün sağladığı özelliklere oldukça bağımlıdır.
+Okuduğum çoğu yazıda en popüler unit test framework listesinde 
+<a href="https://junit.org/" target="_blank">JUnit</a> ve <a href="https://testng.org/" target="_blank">TestNG</a> başı çekmekte.
+Ben de bu yazıdaki örneklerde (ve kişisel hayatım ile iş hayatımda) <strong>JUnit</strong> kullanıyor olacağım.</p>
+
+<p>Tipik bir unit test metodu genellikle üç aşamadan oluşur.
+Bu aşamalar yabancı kaynaklarda <u>The AAA(Arrange-Act-Aspect) Pattern</u> olarak geçer.</p>
+
+<ol>
+  <li>
+    <p><b>Arrange:</b> Test edilecek koda verilecek olan input parametrelerinin belirlendiği 
+ve test edilecek olan kodun bağımlı olduğu diğer bileşenlerin 
+test anındaki bulunacakları durumlarının tanımlandığı kısımdır.</p>
+  </li>
+  <li>
+    <p><b>Act:</b> Test edilecek olan kodun çalıştırıldığı aşamadır.
+Bu aşamada test edilecek olan fonksiyonu/metodu tetikleriz.</p>
+  </li>
+  <li>
+    <p><b>Assert:</b> Test sonuçlarının doğrulanması aşamasıdır.
+Tetiklenen fonksiyon doğru sonucu üretiyor mu 
+veya bağımlı olduğu bileşenler üzerinde beklenen aksiyonları tetikliyor mu kontrolünü bu aşamada yaparız.</p>
+  </li>
+</ol>
+
+<p>Bu aşamalar aşağıdaki test kodu üzerinde daha net görebiliriz:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">findByName_exactMatchWithTwoPersons_returnsBothOfThemInInsertionOrder</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// Arrange</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">phoneBook</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PhoneBook</span><span class="o">();</span>
+    <span class="n">phoneBook</span><span class="o">.</span><span class="na">addPerson</span><span class="o">(</span><span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"James"</span><span class="o">,</span> <span class="s">"Malkovic"</span><span class="o">,</span> <span class="s">"+905554443321"</span><span class="o">));</span>
+    <span class="n">phoneBook</span><span class="o">.</span><span class="na">addPerson</span><span class="o">(</span><span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"John"</span><span class="o">,</span> <span class="s">"Doe"</span><span class="o">,</span> <span class="s">"+905554443322"</span><span class="o">));</span>
+    <span class="n">phoneBook</span><span class="o">.</span><span class="na">addPerson</span><span class="o">(</span><span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"Foo"</span><span class="o">,</span> <span class="s">"Bar"</span><span class="o">,</span> <span class="s">"+905554443323"</span><span class="o">));</span>
+    <span class="n">phoneBook</span><span class="o">.</span><span class="na">addPerson</span><span class="o">(</span><span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"John"</span><span class="o">,</span> <span class="s">"Baz"</span><span class="o">,</span> <span class="s">"+905554443324"</span><span class="o">));</span>
+
+    <span class="c1">// Act</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">result</span> <span class="o">=</span> <span class="n">phoneBook</span><span class="o">.</span><span class="na">findByName</span><span class="o">(</span><span class="s">"John"</span><span class="o">);</span>
+
+    <span class="c1">// Assert</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">result</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"John"</span><span class="o">,</span> <span class="s">"Doe"</span><span class="o">,</span> <span class="s">"+905554443322"</span><span class="o">),</span> <span class="n">result</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">));</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"John"</span><span class="o">,</span> <span class="s">"Baz"</span><span class="o">,</span> <span class="s">"+905554443324"</span><span class="o">),</span> <span class="n">result</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">));</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Burada unit testleri “Assert” fazında doğrulayacağı davranışa göre iki kategoriye ayırmışlar bazı kaynaklarda.</p>
+
+<ul>
+  <li>
+    <p><strong>state-based</strong>: Test edilen kodun çıktılarının veya sistemde oluşturduğu durum (state) değişikliğinin
+kontrol edilmesi durumunda “state-based” test yazmış oluyoruz.</p>
+  </li>
+  <li>
+    <p><strong>interaction-based</strong>: Test edilen kodun belirli fonksiyonları doğru şekilde tetiklediğini (doğru etkileşim) 
+doğrulayan bir test yazdığımızda “interaction-based” bir test yazmış oluyoruz.</p>
+  </li>
+</ul>
+
+<p>Ben de yazdığım testlerde bu iki kategori arasındaki ayrıma dikkat etmeye çalışıyorum.
+Eğer bir kod hem bazı başka bileşenlerle etkileşimde bulunuyorsa hem de bir sonuç dönüyorsa,
+ikisini aynı testte yapmak yerine bir tane “state-based” bir tane de “interaction-based” test yazıyorum.</p>
+
+<p>Aşağıdaki gibi pencere ve ışık kaynaklarından oluşan bir oda (Room) sınıfı hayal edelim:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Room</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">Window</span><span class="o">&gt;</span> <span class="n">windows</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">LightSource</span><span class="o">&gt;</span> <span class="n">lightSources</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Room</span><span class="o">(</span><span class="nc">List</span><span class="o">&lt;</span><span class="nc">Window</span><span class="o">&gt;</span> <span class="n">windows</span><span class="o">,</span> <span class="nc">List</span><span class="o">&lt;</span><span class="nc">LightSource</span><span class="o">&gt;</span> <span class="n">lightSources</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">windows</span> <span class="o">=</span> <span class="n">windows</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">lightSources</span> <span class="o">=</span> <span class="n">lightSources</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">toggleLightSource</span><span class="o">(</span><span class="kt">int</span> <span class="n">switchNo</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">switchNo</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="n">switchNo</span> <span class="o">&gt;=</span> <span class="n">lightSources</span><span class="o">.</span><span class="na">size</span><span class="o">())</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"Invalid switch no: "</span> <span class="o">+</span> <span class="n">switchNo</span>
+                    <span class="o">+</span> <span class="s">", number of light sources: "</span> <span class="o">+</span> <span class="n">lightSources</span><span class="o">.</span><span class="na">size</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">lightSource</span> <span class="o">=</span> <span class="n">lightSources</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">switchNo</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">lightSource</span><span class="o">.</span><span class="na">toggle</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getOpenWindowCount</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="n">windows</span><span class="o">.</span><span class="na">stream</span><span class="o">()</span>
+                <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="nl">Window:</span><span class="o">:</span><span class="n">isOpen</span><span class="o">)</span>
+                <span class="o">.</span><span class="na">count</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Bu sınıfın <code class="language-plaintext highlighter-rouge">getOpenWindowCount</code> metodu için basit bir 
+state-based unit test örneği yazmak istersek aşağıdaki gibi bir örnek olabilir:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">getOpenWindowCount_twoWindowsAreOpen_returnsTwo</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">window1</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">Window</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">window2</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">Window</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">window3</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">Window</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">lightSource</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">LightSource</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">doReturn</span><span class="o">(</span><span class="kc">true</span><span class="o">).</span><span class="na">when</span><span class="o">(</span><span class="n">window1</span><span class="o">).</span><span class="na">isOpen</span><span class="o">();</span>
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">doReturn</span><span class="o">(</span><span class="kc">false</span><span class="o">).</span><span class="na">when</span><span class="o">(</span><span class="n">window2</span><span class="o">).</span><span class="na">isOpen</span><span class="o">();</span>
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">doReturn</span><span class="o">(</span><span class="kc">true</span><span class="o">).</span><span class="na">when</span><span class="o">(</span><span class="n">window3</span><span class="o">).</span><span class="na">isOpen</span><span class="o">();</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">room</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Room</span><span class="o">(</span><span class="nc">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">window1</span><span class="o">,</span> <span class="n">window2</span><span class="o">,</span> <span class="n">window3</span><span class="o">),</span> <span class="nc">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">lightSource</span><span class="o">));</span>
+
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">openWindowCount</span> <span class="o">=</span> <span class="n">room</span><span class="o">.</span><span class="na">getOpenWindowCount</span><span class="o">();</span>
+
+    <span class="n">assertEquals</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">openWindowCount</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Bu metodda asıl önemli olan yaptığı hesaplama ve döndüğü değer olduğu için 
+happy-path testinde bu şekilde ilerlemek doğru görünüyor.</p>
+
+<p>Bu sınıftaki <code class="language-plaintext highlighter-rouge">toggleLightSource</code> metodunda ise odadaki spesifik bir ışığı yakmayı hedefliyoruz. 
+Işığın yanmasına dair asıl sorumluluk ise <code class="language-plaintext highlighter-rouge">LightSource</code> sınıfında olduğundan, 
+esas test etmek istediğimiz doğru <code class="language-plaintext highlighter-rouge">LightSource</code> nesnesinin üzerindeki <code class="language-plaintext highlighter-rouge">toggle</code> methodunun tetiklendiğini görmek.
+Burada <code class="language-plaintext highlighter-rouge">Room</code> ile <code class="language-plaintext highlighter-rouge">LightSource</code> sınıfları arasındaki etkileşimi test etmeye çalışıyoruz.
+Bu da bir interaction-based unit test olacaktır ve aşağıdaki gibi bir örnek verebiliriz:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@Test</span>
+<span class="kt">void</span> <span class="nf">toggleLightSource_validSwitchNo_callsToggleMethod</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">window</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">Window</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">firstLightSource</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">LightSource</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">secondLightSource</span> <span class="o">=</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">mock</span><span class="o">(</span><span class="nc">LightSource</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">room</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Room</span><span class="o">(</span><span class="nc">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">window</span><span class="o">),</span> <span class="nc">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">firstLightSource</span><span class="o">,</span> <span class="n">secondLightSource</span><span class="o">));</span>
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">doReturn</span><span class="o">(</span><span class="kc">true</span><span class="o">).</span><span class="na">when</span><span class="o">(</span><span class="n">secondLightSource</span><span class="o">).</span><span class="na">toggle</span><span class="o">();</span>
+
+    <span class="n">room</span><span class="o">.</span><span class="na">toggleLightSource</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+
+    <span class="nc">Mockito</span><span class="o">.</span><span class="na">verify</span><span class="o">(</span><span class="n">secondLightSource</span><span class="o">,</span> <span class="nc">Mockito</span><span class="o">.</span><span class="na">times</span><span class="o">(</span><span class="mi">1</span><span class="o">)).</span><span class="na">toggle</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="sonuç">Sonuç</h2>
+
+<p>Bu yazımızda unit test nedir basit bir giriş yapmış olduk.
+Unit test ile ilgili yazı dizisinin ilerleyen başlıklarında daha konuşacak birçok konumuz olacak.</p>
+
+<p>Bir sonraki yazıda diğer test çeşitlerinden ve unit testi diğerlerinden ayıran özellikleri inceleyeceğiz.</p>
+
+
+
+    
+
+<h2>Kaynakça</h2>
+
+<ol>
+    
+    <li>
+        <a href="https://medium.com/@pjbgf/title-testing-code-ocd-and-the-aaa-pattern-df453975ab80" rel="nofollow" target="_blank">Unit Testing and the Arrange, Act and Assert (AAA) Pattern</a> - Paulo Gomes
+    </li>
+    
+    <li>
+        <a href="https://www.toptal.com/qa/how-to-write-testable-code-and-why-it-matters" rel="nofollow" target="_blank">Unit Tests, How to Write Testable Code and Why it Matters</a> - Sergey Kolodiy
+    </li>
+    
+    <li>
+        <a href="https://en.wikipedia.org/wiki/Software_testing" rel="nofollow" target="_blank">Software Testing</a> - wikipedia
+    </li>
+    
+    <li>
+        <a href="https://dzone.com/articles/best-java-unit-testing-frameworks" rel="nofollow" target="_blank">Best Java Unit Testing Frameworks</a> - Ranga Karanam
+    </li>
+    
+    <li>
+        <a href="https://www.lambdatest.com/blog/top-10-java-testing-frameworks/" rel="nofollow" target="_blank">Top 10 Java Unit Testing Frameworks for 2021</a> - Praveen Mishra
+    </li>
+    
+</ol>
+
+
+
+    
+
+
+
+
+
+<div class="card mb-2">
+    <div class="card-header">
+        Bu yazı <b>5</b> adet yazıdan oluşan <b>"Unit Test"</b> yazı dizisinin <b>1.</b> yazısıdır.
+    </div>
+    <ul class="list-group list-group-flush">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <i>1 - Unit Test 01: Unit Test Nedir?</i>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/unit-test-ve-diger-test-cesitlerinin-farklari/">2 - Unit Test 02: Unit Test'in Diğer Test Çeşitlerinden Farkları Nedir?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/neden-unit-test-yazariz/">3 - Unit Test 03: Neden Unit Test Yazarız?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/kaliteli-unit-test-nasil-yazilir/">4 - Unit Test 04: Kaliteli Unit Test Nasıl Yazılır?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/unit-test-edilebilir-yazilim-nasil-gelistirilir/">5 - Unit Test 05: Test Edilebilir Yazılım Nasıl Geliştirilir?</a>
+            
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/2021/01/10/gradle-spring-boot-angular-birlikte-build-etmek/">&laquo; Gradle: Spring Boot & Angular Uygulamalarını Birlikte Build Edelim</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+    <a class="next" href="/2021/05/18/unit-test-ve-diger-test-cesitlerinin-farklari/">Unit Test 02: Unit Test'in Diğer Test Çeşitlerinden Farkları Nedir? &raquo;</a>
+    
+  </div>
+</div>
+
+
+  
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://serdarkuzucu.com/2021/05/18/unit-test-nedir/';
+        this.page.identifier = 'unit-test-nedir';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+  
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>

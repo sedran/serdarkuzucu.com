@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Unit Test 02: Unit Test&#39;in Diğer Test Çeşitlerinden Farkları Nedir?</title>
+
+  <meta name="description" content="“Unit Test” yazı dizisinin bir önceki yazısında unit test nedir kısaca onu incelemiştik.Şimdi diğer bazı test çeşitleri nelerdir ve unit testleri diğer test ...">
+
+<meta content="Serdar Kuzucu" property="og:site_name">
+
+
+<meta content="Unit Test 02: Unit Test'in Diğer Test Çeşitlerinden Farkları Nedir?" property="og:title">
+
+
+
+<meta content="article" property="og:type">
+
+
+<meta content="“Unit Test” yazı dizisinin bir önceki yazısında unit test nedir kısaca onu incelemiştik.Şimdi diğer bazı test çeşitleri nelerdir ve unit testleri diğer test ..." property="og:description">
+
+
+<meta content="https://serdarkuzucu.com/2021/05/18/unit-test-ve-diger-test-cesitlerinin-farklari/" property="og:url">
+
+
+
+<meta content="2021-05-18T20:00:00+00:00" property="article:published_time">
+<meta content="https://serdarkuzucu.com/about/" property="article:author">
+
+
+
+<meta content="https://serdarkuzucu.com/assets/category/unit-test.png" property="og:image">
+
+
+
+
+<meta content="Java" property="article:section">
+
+
+
+
+
+
+
+<meta name="twitter:creator" content="@sedran"/>
+<meta name="twitter:site" content="@sedran"/>
+<meta name="twitter:card" content="summary"/>
+
+
+  <link rel="stylesheet" href="/css/main.css?v=201904191944">
+  <link rel="canonical" href="https://serdarkuzucu.com/2021/05/18/unit-test-ve-diger-test-cesitlerinin-farklari/">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2260086-7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-2260086-7');
+  </script>
+  
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            
+            <a href="/category/angular" class="dropdown-item">Angular (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (4)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (5)</a>
+            
+            <a href="/category/git" class="dropdown-item">Git (2)</a>
+            
+            <a href="/category/gradle" class="dropdown-item">Gradle (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (27)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (6)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (6)</a>
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (48)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/spring-boot" class="dropdown-item">Spring Boot (1)</a>
+            
+            <a href="/category/unit-test" class="dropdown-item">Unit Test (5)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Unit Test 02: Unit Test'in Diğer Test Çeşitlerinden Farkları Nedir?</h1>
+    <p class="post-meta">
+      <time datetime="2021-05-18T20:00:00+00:00" itemprop="datePublished">May 18, 2021</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/unit-test">Unit Test</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    
+
+
+
+
+
+<div class="card mb-2">
+    <div class="card-header">
+        Bu yazı <b>5</b> adet yazıdan oluşan <b>"Unit Test"</b> yazı dizisinin <b>2.</b> yazısıdır.
+    </div>
+    <ul class="list-group list-group-flush">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/unit-test-nedir/">1 - Unit Test 01: Unit Test Nedir?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <i>2 - Unit Test 02: Unit Test'in Diğer Test Çeşitlerinden Farkları Nedir?</i>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/neden-unit-test-yazariz/">3 - Unit Test 03: Neden Unit Test Yazarız?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/kaliteli-unit-test-nasil-yazilir/">4 - Unit Test 04: Kaliteli Unit Test Nasıl Yazılır?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/unit-test-edilebilir-yazilim-nasil-gelistirilir/">5 - Unit Test 05: Test Edilebilir Yazılım Nasıl Geliştirilir?</a>
+            
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+
+
+    <p>“Unit Test” yazı dizisinin bir önceki yazısında unit test nedir kısaca onu incelemiştik.
+Şimdi diğer bazı test çeşitleri nelerdir ve unit testleri diğer test çeşitlerinden ayıran temel özellikler nelerdir
+bunları inceleyeceğiz.</p>
+
+<!--more-->
+
+<h2 id="diğer-test-çeşitleri-nelerdir">Diğer Test Çeşitleri Nelerdir?</h2>
+
+<p>Kaliteli unit testler yazabilmemiz için unit testin ne olduğunu iyi anlamamız gerekiyor.
+Bunu anlayabilmemiz için de diğer test çeşitlerini bilmemiz ve unit testleri diğer testlerden ayırabilmemiz gerekiyor.</p>
+
+<p>“Types of Software Testing” veya “Yazılım Test Çeşitleri” şeklinde araştırmaya başladığımızda
+her biri ayrı bir makale olabilecek kadar çok sayıda test çeşidi olduğunu görüyoruz.
+Hem iyi hem de kötü haber; bu test çeşitleri hangisi daha iyi
+veya hangisini kullanmalıyım şeklinde karşılaştırabileceğimiz şeyler değil.
+Hepsinin farklı bir amacı ve yazılım geliştirme ve devreye alma yaşam döngüsünde ayrı bir yeri var.</p>
+
+<p>Birçok kaynakta test çeşitlerinin öncelikle iki kümeye ayırıldığını görmekteyiz.
+Ayrıca farklı kaynaklarda test çeşitlerinin ayrıldığı kümeler de değişebilmektedir.</p>
+
+<p>Testleri yapan veya hazırlayan kişinin bakış açısına göre test çeşitleri gruplandığında
+<a href="https://en.wikipedia.org/wiki/White-box_testing" target="_blank">“white-box testing”</a> ve
+<a href="https://en.wikipedia.org/wiki/Black-box_testing" target="_blank">“black-box testing”</a>
+şeklinde ikiye ayrılmaktadır.</p>
+
+<ul>
+  <li>
+    <p><strong>White-box Testing:</strong> Yazılımın iç yapısının nasıl kurgulandığının ve nasıl çalıştığının bilindiği
+test türüdür. Yazılımın bütününü oluşturan parçaların doğru girdiler ile doğru çıktıları, davranışları
+veya değişiklikleri üretebildiği test edilir. Unit testler çoğunlukla bu kategoriye dahildir.
+Test ettiğimiz kod bir işlevi gerçekleştirirken diğer kod bileşenleri ile
+kurduğu etkileşimleri de test etmiş oluruz bu seviyede.
+Örneğin bir methodu birinci tetiklememizde veritabanına sorgu atması, sonucu cache kütüphanesine de kaydetmesi
+ve ikinci tetiklememizde veritabanı yerine cache üzerindeki veriyi getirmesini test etmek istediğimizde
+kodun işlevi kadar kullandığı diğer sınıfları veya fonksiyonları da bilmemiz gerekiyor.</p>
+  </li>
+  <li>
+    <p><strong>Black-box Testing:</strong> Yazılımın nasıl çalıştığı bilinmeden veya önemsenmeden fonksiyonalitesi test edilir.
+Test yapanlar yazılımın iç yapısını bilmeden ve kaynak koda bakmadan,
+son kullanıcıya beklenilen faydayı üretip üretemediğini doğrularlar.
+Genellikle sistem seviyesi testlerdir fakat unit testlerde de bu yaklaşımın kullanıldığı uygulamalar olabilmektedir.
+Örnek bir blackbox testi uygulama arayüzüne girip bir butona tıklamamız
+ve sonrasında arayüzde gerçekleşen davranışı veya sonucu kontrol etmemiz olabilir.
+Böyle bir testi yaparken sistemin hangi bileşenlerden oluştuğunu hatta hangi dil ile yazıldığını dahi
+bilmemize gerek yoktur. Sistem bizim için tamamen bir kara kutudur.</p>
+  </li>
+</ul>
+
+<p>Testin konusuna veya testin amacına göre kategorilere ayırdığımızda
+genellikle şu iki kategorinin kullanıldığını görüyoruz:</p>
+
+<ul>
+  <li>
+    <p><strong><a href="https://en.wikipedia.org/wiki/Functional_testing" target="_blank">Fonksiyonel Testler</a>:</strong>
+Fonksiyonel gereksinimler belirli girdilere veya tetikleyicilere karşılık
+sistemin hangi davranışları veya çıktıları üretmesini beklediğimizi belirler.
+Fonksiyonel testler sistemin veya sistemdeki parçaların fonksiyonel gereksinimleri
+doğru şekilde gerçekleştirdiğinin kontrolünün yapılmasını sağlar.
+Duman Testi, (Smoke Testing), Doğruluk Testi (Sanity Testing), Sistem Testi, Entegrasyon Testi,
+Tekrar veya Regresyon Testi (Regression Testing), vb. birçok test çeşidi bu gruba dahildir.
+Birim test (Unit test) de birçok kaynakta fonksiyonel test olarak kategorilendirilmektedir
+fakat unit testlerin yazılım geliştirme süreçlerindeki konumu konusunda epey tartışma mevcut.
+Bu konuya ileride tekrar geleceğiz.</p>
+  </li>
+  <li>
+    <p><strong><a href="https://en.wikipedia.org/wiki/Non-functional_testing" target="_blank">Fonksiyonel Olmayan Testler</a>:</strong>
+Fonksiyonel olmayan gereksinimlerin sağlanıp sağlanmadığının kontrolünü sağlar.
+Yük testi, performans testi, güvenlik testi, vb. birçok test çeşidi fonksiyonel olmayan gereksinimlerin testleridir.</p>
+  </li>
+</ul>
+
+<p>Aşağıda birkaç farklı test çeşidinin tanımlarını örnek olarak yazacağım fakat burada yazdıklarımdan çok daha fazla
+test çeşidi olduğunu da önceden belirteyim.
+Daha fazla test çeşidini merak edip öğrenmek isterseniz yazının sonundaki kaynakçadaki linkleri takip edebilirsiniz.</p>
+
+<ul>
+  <li>
+    <p><strong>Integration Test (Entegrasyon Testi):</strong> Yazılım bileşenleri arasındaki arayüzlerin (interface)
+ve etkileşimlerin (interaction) test edilmesi amacıyla yapılır.
+Geliştirilen yazılım tarafından kullanılan veritabanı, cache server, entegre olunan başka uygulamalar,
+farklı network bileşenleri, dosya sistemi, vb. sistemler ile geliştirilen yazılımın entegrasyonları test edilir.
+Unit test ile çok karıştırılmaktadır ve bazılarımız unit test yazdığımızı sanarken
+entegrasyon testi yazmışızdır birçok defa.</p>
+  </li>
+  <li>
+    <p><strong>System Test (Sistem Testi):</strong> Tüm sistemin entegre olduğu dış bileşenler ile birlikte
+gereksinimleri yerine getirip getiremediğinin test edilmesidir.
+Elle manuel olarak koşulacak testler olabileceği gibi yazılım ile otomatize edilmiş test senaryoları da olabilir.</p>
+  </li>
+  <li>
+    <p><strong>Regression Test (Regresyon/Tekrar Testi):</strong> Kodda yapılan bir değişiklik sonrası sistemin geri kalanında bir hata
+olup olmadığını anlamak amacıyla yapılır. Bu hatalar varolan bir özelliğin düzgün çalışmamaya başlaması veya
+daha önce çözülmüş bir hatanın tekrar hortlaması şeklinde gerçekleşebilir.
+Kodda yapılan değişikliğin veya yeni geliştirilen özelliğin değil, önceden varolan özelliklerin testidir.
+Genellikle önceden yazılmış ve test edilmiş test senaryolarının tekrar çalıştırılmasıyla bu test yapılır.</p>
+  </li>
+  <li>
+    <p><strong>Acceptance Test (Kabul Testi):</strong> Uygulamayı alacak olan müşterinin kabul testidir.
+Müşteri uygulamayı almak için belirlediği kabul kriterlerinin karşılanıp karşılanmadığını test eder.
+Operasyonel kabul testi (Operational acceptance test, OAT), kullanıcı kabul testi (User acceptance test, UAT),
+son kullanıcı testi (End-user test) gibi birçok çeşidi vardır.</p>
+  </li>
+  <li>
+    <p><strong>Smoke Test (Duman Testi):</strong> Uygulamanın hayati fonksiyonlarının hızlıca test edilerek daha ileri seviye testlere
+hazır olup olmadığını anlamak amacıyla yapılır. Uygulama hatasız şekilde ayağa kalkıyor mu, ana sayfa açılıyor mu,
+login olunabiliyor mu gibi basit senaryolar hızlıca test edilir. Basit senaryolarda hata varsa uygulama teste alınmaz.
+Duman testi isminin elektronik donanım testlerinden geldiği rivayet ediliyor.
+Bir elektronik devreyi elektriğe bağladığınızda duman çıktığını görürseniz
+elektriği kesersiniz ve başka test yapmaya ihtiyaç kalmaz mantığı ile böyle bir isim verilmiş.</p>
+  </li>
+  <li>
+    <p><strong>Sanity Test (Doğruluk Testi):</strong> Bu test duman testine benzerlik gösterse de aynı şey değil.
+Doğruluk testinde, daha kapsamlı testlere geçmeden önce uygulamanın en önemli fonksiyonlarının
+çalışıp çalışmadığı test edilir. Duman testinde uygulamanın kalp atışı gibi hayati fonksiyonlarının testi yapılırken
+doğruluk testinde spesifik özellikler test edilir.
+Bu bakımdan doğruluk testini Inomera’da geliştirdiğimiz uygulamaları müşterinin test ekibine teslim etmeden önce
+test ekibine yaptığımız demoya benzetiyorum. Test ekibinin hazırladığı detaylı test senaryolarının arasından
+önemli özelliklere ait birkaç tane test senaryosu seçiliyor ve uygulama o testlerden başarıyla geçtikten sonra
+test ekibi detaylı testlere başlıyor.</p>
+  </li>
+  <li>
+    <p><strong>Performance Test (Performans Testi):</strong> Belirli bir iş yükünün altında sistemin nasıl performans gösterdiğinin
+ölçülmesi işlemidir. Performans testlerinde sistemin yük altında cevap süresinde uzama oluyor mu,
+bellek, işlemci veya disk gibi kaynak tüketimleri ne seviyelerde artıyor,
+uygulamanın kullanılabilirliği ne derece etkileniyor, uygulama aynı anda kaç kullanıcıya cevap verebiliyor
+gibi birçok metrik ölçümlenir. Yazılım yukarı ve aşağı yönde ölçeklenebilir bir yapıdaysa yük arttığında
+gerçekten instance sayısı artıyor mu veya yük kesildiğinde azalıyor mu kontrolleri yapılır.
+Sık kullanıldığını gördüğüm ve birbirine karıştırılan iki performans testi çeşidi şunlardır:</p>
+
+    <ul>
+      <li>
+        <p><strong>Load Test (Yük Testi):</strong> Belirli bir yükün/trafiğin altında sistemin ölçülmesi.
+Sistemin desteklemek için tasarlandığı ortalama ve/veya maksimum yük miktarı ile yapılmalıdır.</p>
+      </li>
+      <li>
+        <p><strong>Stress Test (Stres Testi):</strong>
+Sistemin taşımak için tasarlandığından daha fazla yük altında nasıl davrandığının ölçülmesidir.</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Security Test (Güvenlik Testi):</strong> En kaba tabiriyle sistemin hacklenmesinin engellenmesi
+ve yetki gerektiren verinin sadece yetkili kullanıcılar tarafından kullanılabildiğinin görülmesi için yapılır.
+Hassas verilerin yetkisiz kullanıcıların eline geçmeyeceğinin kontrolüdür.
+Çalıştığım projelerde müşterilerin güvenlik ekipleri tarafından Fortify gibi programlar ile
+statik kod analizi yapıldığına ve sızma testi (Penetration Test) gibi çeşitli araçlar ile
+çeşitli güvenlik açıkları arandığına şahit oldum.</p>
+  </li>
+</ul>
+
+<p>Yazılımda daha birçok test çeşidi, kategorisi, yöntemi, vb mevcut.
+Bu yazının konusunun dışına fazla çıkmamak için genel kültür amaçlı yazdığım bu başlığı burada kesiyorum.</p>
+
+<hr />
+
+<p><a id="unit-test-vs-diger-testler"></a></p>
+<h2 id="unit-testi-diğer-testlerden-ayıran-özellikler-nelerdir">Unit Testi Diğer Testlerden Ayıran Özellikler Nelerdir?</h2>
+
+<p>Bazı diğer test çeşitlerini yukarıda liste halinde gördükten sonra unit testlerin bu testlerden farkına bakalım.
+Buradaki bazı özellikler aynı zamanda daha sonraki yazılarda ele alacağımız 
+“Nasıl Unit Test Yazmalıyız” gibi başlıklarda da karşımıza gereksinim olarak çıkacak.</p>
+
+<h4 id="unit-testlerin-kapsamı-küçüktür">Unit Testlerin Kapsamı Küçüktür</h4>
+
+<p>Öncelikle unit testlerin en büyük farkı kapsamlarıdır.
+Çok küçük kod parçalarını test ederler.
+Bir araba üreticisi olduğumuzu düşünelim.
+Bu arabada kullanılan vidaların uygun bir delik üzerinde dik konumda doğru yönde çevirildiğinde
+deliğe girip girmediğini arabadaki diğer parçalardan bağımsız şekilde test etmemiz bir unit testtir.
+Bu vidanın ters yönde çevirildiğinde delikten çıktığını doğrulamamız da ikinci bir unit testtir.</p>
+
+<h4 id="unit-testleri-çalıştırmak-hızlıdır">Unit Testleri Çalıştırmak Hızlıdır</h4>
+
+<p>Unit testler, her bir ufak kod değişikliğinde geliştiricilerin çok az vakitlerini harcayarak uygulamadaki
+tüm unit testleri baştan sona çalıştırabileceği kadar hızlıdır. Hızlı olmalıdır.</p>
+
+<p>Bir geliştiriciden yeni bir özellik geliştirdiğinde elle tüm uygulama özelliklerini
+arayüz veya API kullanarak test etmesini bekleyemezsiniz fakat tüm birim testleri çalıştırmasını
+bir kural haline getirebilirsiniz.</p>
+
+<p>Bir şirket sunucusuna Jenkins gibi bir continuous integration ortamı kurup her bir kod değişikliğinde
+tüm testlerin otomatik olarak çalışmasını ve birisi testleri patlattığında
+tüm ekibe e-posta göndermesini sağlayabilirsiniz.</p>
+
+<h4 id="unit-test-kolay-yazılır">Unit Test Kolay Yazılır</h4>
+
+<p>Sistem testi veya entegrasyon testi gibi testleri yazmak çok zaman alır ve daha fazla kod gerektirir.
+Bu tip testlerde sistemin belirli bir durumda olması simüle edilir ve bunun için veritabanına, diske, cache server’a,
+vb. birçok ortama kod ile data üretmek, test sonunda bu datayı temizlemek gibi işlemler yapmak gerekir.</p>
+
+<p>Unit testler ise çok küçük bir kod parçası için yazıldığından çok daha kolay yazılır.
+Unit testlerde bağımlı olunan veritabanı veya network katmanı gibi dış faktörler tamamen ortadan kaldırılır.
+Bu tür bağımlılıkların davranışları da simüle edilerek sadece test edilen sınıf/metod
+ile ilgili senaryolar test edilmiş olur.</p>
+
+<h4 id="unit-test-bir-test-süreci-değildir">Unit Test Bir Test Süreci Değildir</h4>
+
+<p>Hatta bu başlığın daha tartışmaya açık hali “Unit test test değildir” şeklinde ve ben de katılıyorum.
+Unit test, test değil geliştirmedir. Yazılım geliştirme sürecinin ayrılmaz bir parçasıdır.
+Testçi değil geliştirici tarafından yazılır.
+Geliştiricinin “ben bu kodu geliştirdim ve bu kod parçasının çalıştığına kefilim” deme şeklidir.
+Inomera’da çalıştığım ekipte bir süredir geliştiricilerin bir işi bitirebilmesi için
+unit testlerinin yazılmış olması ön koşulunu uyguluyoruz.
+Unit testi yazılmamış geliştirmeyi geliştirilmiş saymıyoruz.</p>
+
+<h4 id="unit-test-sistemin-çalıştığını-göstermez">Unit Test Sistemin Çalıştığını Göstermez</h4>
+
+<p>Tüm unit testler başarıyla çalışsa bile bu bize sistemin doğru şekilde çalışacağını,
+hatta ayağa kalkacağını bile göstermez.
+Unit testler sistem seviyesinde bilgi vermezler.
+Geliştirdiğimiz ürünün fonksiyonel gereksinimlerinin karşılandığını göstermezler.</p>
+
+<p>Unit test sadece geliştirilen kod parçalarının veya fonksiyonların doğru geliştirildiğini gösterir.
+Bu bakımdan her bir satırı unit testler tarafından kapsanmış (coverage) bir kodun
+hala diğer test çeşitlerine ihtiyacı vardır.</p>
+
+<p>Unit testler ile doğruluğu ispatlanmış kod parçaları bir araya geldiğinde entegrasyon sorunları,
+iş akışı hataları veya eksik özellikleri olabilir.
+Bu sebeple entegrasyon testi, duman testi, doğruluk testi, fonksiyonel testler,
+güvenlik testleri, performans testleri, vb. tüm testler gereklidir
+ve unit test yaptık test ekibine ihtiyacımız yok diyemeyiz.</p>
+
+<h4 id="test-piramidi">Test Piramidi</h4>
+
+<p>Hazır bu karşılaştırma işine bulaşmışken test piramidinden de bahsedelim.
+Test piramidi epey farklı çeşitleri olan fakat özünde aynı konuyu açıklayan bir görsel.
+Piramidin amacı test çeşidine göre yazılması gereken test miktarının
+ve bu çeşitlerdeki testlerin özelliklerinin görselleştirilmesi.</p>
+
+<p>Aşağıdaki görseli <em>Jessie Leung</em>
+<a href="https://betterprogramming.pub/the-test-pyramid-80d77535573" target="_blank">The Test Pyramid</a>
+başlıklı blog yazısında paylaşmış.
+Piramidin internetteki birçok çeşidi arasından benim en beğendiğim hali bu oldu.</p>
+
+<p><img src="/assets/posts/test-pyramid.png" alt="Test Piramidi" width="600px" /></p>
+
+<p>Piramidin altına doğru indikçe genişlemesi yazmamız gereken test miktarının artması gerektiğini göstermekte.
+Unit testlerin sayıca diğer testlerden fazla olması gerektiğini buradan anlıyoruz.
+Piramitte aşağı indikçe testlerin daha hızlı ve geliştirme maliyetinin daha düşük olması gerektiğini görüyoruz.
+Yukarı çıkıldığında ise hem testlerin çalışma süresi, hem de testleri geliştirmek için harcanan süre artıyor.
+Bu da testlerin geliştirme maliyetini arttırıyor. Bu aynı zamanda bakım (maintenance) maliyetini de arttırıyor.</p>
+
+<p>Sadece unit test yazmıyorsak, entegrasyon testi ve uçtan uca (end-to-end, e2e) test de yazıyorsak,
+bu piramide uymamızda fayda var. Yoksa geliştirme maliyeti, bakım maliyeti
+ve zaman kaybı işin içinden çıkamayacağımız noktalara gelebilir.</p>
+
+<p>Ek olarak bu konuda en önemli nokta bence unit testler ile diğer test çeşitlerini
+her ne kadar kodlayarak geliştiriyor olsak da ayrı yazmamız gerekiyor.
+Unit testler ile aynı test suite içerisinde geliştirdiğimiz diğer test çeşitleri
+geliştiricilerin unit testleri çalıştırmasını çok uzun süren bir süreç haline getirerek
+bir süre sonra testleri hiç çalıştırmadan kod yazan geliştiricilerin çoğalmasına sebep olacaktır.</p>
+
+<p>Farklı test çeşitleri gradle ile birbirinden nasıl ayrılır konusu
+tamamen başka bir yazıda anlatılabilecek bir konu fakat merak edenler için <em>Petri Kainulainen</em> tarafından yazılmış
+“<a href="https://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing/" target="_blank">Getting Started With Gradle: Integration Testing</a>”
+başlıklı yazıdan bir fikir edinebilirler.</p>
+
+<hr />
+
+<h2 id="sonuç">Sonuç</h2>
+
+<p>Unit test yazı dizisinin bu yazısında diğer test çeşitlerinin bazılarının ne olduğunu
+ve unit testleri diğer test çeşitlerinden ayıran temel özellikleri inceledik.</p>
+
+<p>Bu yazıdaki birçok madde ilerleyen başlıklarda da önümüze tekrar tekrar çıkacaktır.
+Unit testlerin özellikleri bunlardır dediğimizde, 
+her yazdığımız unit test metodu doğuştan bu özelliklere sahiptir demiş olmuyoruz.
+Bizim kendimizin bu özelliklere sahip olacak şekilde unit test yazmamız gerekiyor.</p>
+
+<p>Projelerimizin selameti için, unit test yazmayı kolaylaştırmalıyız, zorlaştırmamalıyız.</p>
+
+<p>Buraya kadar okuduğunuz için teşekkürler, umarım herkese faydalı olmuştur.
+Bir sonraki yazımızda “Neden Unit Test Yazarız?” sorusuna cevaplar arayacağız.</p>
+
+
+    
+
+<h2>Kaynakça</h2>
+
+<ol>
+    
+    <li>
+        <a href="https://en.wikipedia.org/wiki/Software_testing" rel="nofollow" target="_blank">Software Testing</a> - wikipedia
+    </li>
+    
+    <li>
+        <a href="https://www.benimuhendisim.com/smoke-duman-testi-vs-sanity-dogruluk-testi/" rel="nofollow" target="_blank">Smoke (Duman) Testi vs Sanity (Doğruluk) Testi</a> - benimuhendisim
+    </li>
+    
+    <li>
+        <a href="https://www.hillelwayne.com/unit-tests-are-not-tests/" rel="nofollow" target="_blank">Unit Tests Aren't Tests</a> - Hillel Wayne
+    </li>
+    
+    <li>
+        <a href="https://www.innoq.com/en/blog/tests-granularity/" rel="nofollow" target="_blank">Tests Granularity</a> - Jacek Bilski & Torsten Mandry
+    </li>
+    
+    <li>
+        <a href="https://betterprogramming.pub/the-test-pyramid-80d77535573" rel="nofollow" target="_blank">The Test Pyramid</a> - Jessie Leung
+    </li>
+    
+    <li>
+        <a href="https://www.petrikainulainen.net/programming/gradle/getting-started-with-gradle-integration-testing/" rel="nofollow" target="_blank">Getting Started With Gradle: Integration Testing</a> - Petri Kainulainen
+    </li>
+    
+    <li>
+        <a href="https://www.zealousweb.com/unit-testing-vs-functional-testing-a-guide-on-why-what-how/" rel="nofollow" target="_blank">Unit Testing Vs Functional Testing: A Guide On Why, What & How</a> - Hiral Jadav
+    </li>
+    
+</ol>
+
+
+
+    
+
+
+
+
+
+<div class="card mb-2">
+    <div class="card-header">
+        Bu yazı <b>5</b> adet yazıdan oluşan <b>"Unit Test"</b> yazı dizisinin <b>2.</b> yazısıdır.
+    </div>
+    <ul class="list-group list-group-flush">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/unit-test-nedir/">1 - Unit Test 01: Unit Test Nedir?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <i>2 - Unit Test 02: Unit Test'in Diğer Test Çeşitlerinden Farkları Nedir?</i>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/neden-unit-test-yazariz/">3 - Unit Test 03: Neden Unit Test Yazarız?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/kaliteli-unit-test-nasil-yazilir/">4 - Unit Test 04: Kaliteli Unit Test Nasıl Yazılır?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/unit-test-edilebilir-yazilim-nasil-gelistirilir/">5 - Unit Test 05: Test Edilebilir Yazılım Nasıl Geliştirilir?</a>
+            
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/2021/05/18/unit-test-nedir/">&laquo; Unit Test 01: Unit Test Nedir?</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+    <a class="next" href="/2021/05/18/neden-unit-test-yazariz/">Unit Test 03: Neden Unit Test Yazarız? &raquo;</a>
+    
+  </div>
+</div>
+
+
+  
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://serdarkuzucu.com/2021/05/18/unit-test-ve-diger-test-cesitlerinin-farklari/';
+        this.page.identifier = 'unit-test-ve-diger-test-cesitlerinin-farklari';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+  
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>

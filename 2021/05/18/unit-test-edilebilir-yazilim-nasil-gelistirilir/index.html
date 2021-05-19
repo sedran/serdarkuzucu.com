@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Unit Test 05: Test Edilebilir Yazılım Nasıl Geliştirilir?</title>
+
+  <meta name="description" content="“Unit Test” yazı dizisinin bir önceki yazısındakaliteli unit test nasıl yazılır konusunu incelemiştik.Bu yazıda da test edilebilir yazılımlar nasıl tasarlanı...">
+
+<meta content="Serdar Kuzucu" property="og:site_name">
+
+
+<meta content="Unit Test 05: Test Edilebilir Yazılım Nasıl Geliştirilir?" property="og:title">
+
+
+
+<meta content="article" property="og:type">
+
+
+<meta content="“Unit Test” yazı dizisinin bir önceki yazısındakaliteli unit test nasıl yazılır konusunu incelemiştik.Bu yazıda da test edilebilir yazılımlar nasıl tasarlanı..." property="og:description">
+
+
+<meta content="https://serdarkuzucu.com/2021/05/18/unit-test-edilebilir-yazilim-nasil-gelistirilir/" property="og:url">
+
+
+
+<meta content="2021-05-18T20:15:00+00:00" property="article:published_time">
+<meta content="https://serdarkuzucu.com/about/" property="article:author">
+
+
+
+<meta content="https://serdarkuzucu.com/assets/category/unit-test.png" property="og:image">
+
+
+
+
+<meta content="Java" property="article:section">
+
+
+
+
+
+
+
+<meta name="twitter:creator" content="@sedran"/>
+<meta name="twitter:site" content="@sedran"/>
+<meta name="twitter:card" content="summary"/>
+
+
+  <link rel="stylesheet" href="/css/main.css?v=201904191944">
+  <link rel="canonical" href="https://serdarkuzucu.com/2021/05/18/unit-test-edilebilir-yazilim-nasil-gelistirilir/">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-2260086-7"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-2260086-7');
+  </script>
+  
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            
+            <a href="/category/angular" class="dropdown-item">Angular (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (4)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (5)</a>
+            
+            <a href="/category/git" class="dropdown-item">Git (2)</a>
+            
+            <a href="/category/gradle" class="dropdown-item">Gradle (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (27)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (6)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (6)</a>
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (48)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/spring-boot" class="dropdown-item">Spring Boot (1)</a>
+            
+            <a href="/category/unit-test" class="dropdown-item">Unit Test (5)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Unit Test 05: Test Edilebilir Yazılım Nasıl Geliştirilir?</h1>
+    <p class="post-meta">
+      <time datetime="2021-05-18T20:15:00+00:00" itemprop="datePublished">May 18, 2021</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/java">Java</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/unit-test">Unit Test</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    
+
+
+
+
+
+<div class="card mb-2">
+    <div class="card-header">
+        Bu yazı <b>5</b> adet yazıdan oluşan <b>"Unit Test"</b> yazı dizisinin <b>5.</b> yazısıdır.
+    </div>
+    <ul class="list-group list-group-flush">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/unit-test-nedir/">1 - Unit Test 01: Unit Test Nedir?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/unit-test-ve-diger-test-cesitlerinin-farklari/">2 - Unit Test 02: Unit Test'in Diğer Test Çeşitlerinden Farkları Nedir?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/neden-unit-test-yazariz/">3 - Unit Test 03: Neden Unit Test Yazarız?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/kaliteli-unit-test-nasil-yazilir/">4 - Unit Test 04: Kaliteli Unit Test Nasıl Yazılır?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <i>5 - Unit Test 05: Test Edilebilir Yazılım Nasıl Geliştirilir?</i>
+            
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+
+
+    <p>“Unit Test” yazı dizisinin bir önceki yazısında
+kaliteli unit test nasıl yazılır konusunu incelemiştik.
+Bu yazıda da test edilebilir yazılımlar nasıl tasarlanır sorusuna cevap arayacağız.</p>
+
+<!--more-->
+
+<p>Unit test yazmaya başlayıncaya kadar oldukça kaliteli kod yazdığımı zannederdim.
+Artık yazamadığımı biliyorum.</p>
+
+<p>Bir koda unit test yazamama durumu kodun yeteri kadar kaliteli olmadığını adeta bağıran bir durumdur.
+Aşağıda yazılımı unit test yazılması zor veya imkansız hale getirebilecek
+birkaç faktöre ve olası çözümlerine değineceğiz.</p>
+
+<h3 id="sınıfların--fonksiyonların-fazla-sorumluluk-yerine-getirmesi">Sınıfların / Fonksiyonların Fazla Sorumluluk Yerine Getirmesi</h3>
+
+<p>Legacy projelerde bazen yüzden fazla satırdan oluşan metodlar içeren sınıflara test yazmak zorunda kaldığım oluyor.
+Test metodu çoğunlukla test edilen metoddan da uzun oluyor.
+Böyle sınıflara test yazmak hem çok uzun sürüyor hem de çok fazla veri oluşturmak,
+çok fazla bağımlılığı mock olarak tanımlamak,
+onlarca farklı koşula belki yüzlerce test yazmak gerekiyor.</p>
+
+<p>Bu tür sınıflar genellikle çok da fazla değişim geçirdiklerinden,
+her bir değişiklikte bir anda yüzlerce testin hata vermeye başlaması ve test bakım maliyeti çıkıyor.</p>
+
+<p>Sınıflarımızı <a href="https://en.wikipedia.org/wiki/SOLID">SOLID</a>
+prensiplerini göz önünde bulundurarak tasarlamamız gerekiyor.
+Özellikle de <strong>SOLID</strong>‘in <strong>S</strong>‘sine, yani “Single-responsibility” prensibine dikkat etmemiz gerekiyor:</p>
+
+<blockquote>
+  <p>Bir sınıfın sadece bir sorumluluğu olmalı, bir sınıfın değişmek için sadece bir sebebi olmalı.</p>
+</blockquote>
+
+<p>Bunu başarabilmek için de sınıflarımızı tasarlarken tüm kodu bir dosyaya yazmak yerine
+tekrar kullanılabilir parçalar halinde tasarlamamız gerekiyor.
+Böylece testlerde bazı parçaları test edip bazı parçaları sahte/mock implementasyonlar ile izole edebiliriz.</p>
+
+<p>Tekrar kullanılabilir yazılım bileşenleri üretebilmenin en şık yolu da
+genellikle doğru tasarım şablonlarını
+(<a href="https://en.wikipedia.org/wiki/Software_design_pattern#Classification_and_list" target="_blank">Design Patterns</a>)
+bulup kullanmaktan geçiyor.
+Yazılımcıların tasarım şablonlarına hakim olması kaliteli yazılım geliştirmede önemli bir basamak.</p>
+
+<h3 id="gereğinden-fazla-statik-kod-kullanımı">Gereğinden Fazla Statik Kod Kullanımı</h3>
+
+<p>Statik kod zehirlidir. Birazı kafa yapar, fazlası projeyi öldürür.
+Pek kıymetli <a href="https://www.linkedin.com/in/akinkaldiroglu/" target="_blank">Akın Kaldıroğlu</a>
+hocamın da söylediği gibi
+“<a href="http://www.javaturk.org/statik-metotlu-sinif-mi-yoksa-singleton-mi-ii/" target="_blank">Statik kullanımı bulaşıcıdır</a>”.</p>
+
+<p>Bu statik kodların gereksiz yerlerde kullanılmaya başlanması
+veya dozunun ayarlanamaması projede
+<a href="https://en.wikipedia.org/wiki/Inversion_of_control" target="_blank">IoC (Inversion of Control)</a>
+prensibi kullanımını minimuma düşürür.</p>
+
+<p>Bir API isteğini aldıktan sonra servis katmanı, iş mantığı, cache yapısı ve DAO (veritabanı) katmanının
+tamamen statik metodlar üzerinden yapıldığı bir projeye denk geldim yakın zamanda.
+Bu tip bir projede unit test yazmaya kalkarsanız kanser olabilirsiniz.
+Neredeyse hiçbir katman bir diğerini tamamen çalıştırmadan test edilemiyor.</p>
+
+<p>Statik metod kullanımını yukarıda bahsettiğim gibi projede
+asıl işin yapıldığı sınıflarda tavsiye etmiyorum, kullanmamalıyız.
+Utility fonksiyon dediğimiz apache commons kütüphanelerindeki
+<code class="language-plaintext highlighter-rouge">StringUtils</code>, <code class="language-plaintext highlighter-rouge">NumberUtils</code>, <code class="language-plaintext highlighter-rouge">CollectionUtils</code>, vb. sınıfların statik metodlarını kullanabiliriz
+veya bunlara benzer metodları kendimiz projelerde statik olarak yazabiliriz.
+Bu tip fonksiyonlara <em>pure</em> (saf) fonksiyon deniyor.
+Yani herhangi bir çevresel faktöre bağlı olmayan, aynı girdilerle her zaman aynı çıktıyı veren fonksiyonlar.</p>
+
+<p>Ortama bağımlı, kararsız, sağı solu belli olmayan,
+sistemde global state değişikliği yapan, yan etkileri olan
+statik metodlardan uzak durmalıyız.</p>
+
+<div class="alert alert-secondary pb-0" role="alert">
+  <p><strong>Not:</strong> Statik metodların da mocklanabilmesi için Java’da “Power Mock” isimli bir kütüphane mevcut.
+Fakat bir gün statik bir metodu mocklama ihtiyacı hissedersek projeye “Power Mock” eklemeden önce
+kodu iyileştirerek bu ihtiyacı ortadan kaldırmaya çalışmalıyız.</p>
+</div>
+
+<h3 id="bağımlı-olunan-nesnelerin-sınıf-i̇çinde-oluşturulması">Bağımlı Olunan Nesnelerin Sınıf İçinde Oluşturulması</h3>
+
+<p>Kodda her <code class="language-plaintext highlighter-rouge">new</code> anahtar kelimesi gördüğümüzde <u>ufak</u> bir şüphe duymalıyız.</p>
+
+<p>Her sınıflar arası etkileşimi sahte/mock implementasyon olarak izole etmemeliyiz
+fakat aşağıda birkaç örnek verebileceğim bazı bağımlılıklar sahte/mock şekilde izole edilmelidir.</p>
+
+<p>Öncelikle “unit test” kavramını herkes farklı tanımladığı için burada çok büyük anlaşmazlıklar ortaya çıkıyor.
+Benim görüşümde sadece bir sınıfın/metodun davranışını diğer sınıflardan izole bir şekilde test edebilmek unit testtir.
+Eğer kompleks sınıflar arası etkileşimleri/entegrasyonları test ediyorsam buna entegrasyon testi derim.
+Bu kapsamda unit test yazarken aşağıdaki durumlardaki sınıfları mock olarak kullanmayı tercih ederim:</p>
+
+<ul>
+  <li>Kompleks business logic içeren veya kendisi de başka sınıflara bağımlı olan sınıflar</li>
+  <li>Veritabanı, disk, network, API, vb. ortama ve başka sistemlere bağımlı olan sınıflar</li>
+  <li>Birbirinden farklı mantıksal katmanlardaki sınıflar (Misal Controller -&gt; Servis veya Servis -&gt; DAO etkileşimi)</li>
+  <li>Global state üzerinde değişiklik yapan sınıflar</li>
+  <li>Kararsız, tutarsız veya saf olmayan fonksiyonlar içeren sınıflar</li>
+</ul>
+
+<p>Bunların dışında basit DTO, JPA Entity, String, Calendar, Date, vb. sınıflarda
+mümkün olduğunca gerçek sınıfları kullanmaya çalışırım.</p>
+
+<p>Gereğinden fazla mock kullanımı testleri hem kırılgan hem okuması zor bir hale getirebilir.
+Burada dengeyi iyi kurmamız gerekiyor.
+Test yazdıkça bu dengenin yazılımcıda içgüdüsel olarak geliştiğini düşünüyorum.</p>
+
+<p>Bu bağlamda düşündüğümüzde eğer sahte/mock olarak kullanmak istediğimiz bir sınıf varsa
+ve bu sınıfı test edeceğimiz kod <code class="language-plaintext highlighter-rouge">new</code> anahtar kelimesi ile kendi içerisinde oluşturuyorsa,
+bu bağımlılıkları sahteleri ile değiştirmek oldukça zorlaşır.
+Daha önce statik metodlarda kullanıldığından bahsettiğim “Power Mock” kütüphanesi gibi bir kütüphane ile
+bu sınıfların constructor’larını mock’lamak gibi saçma işlere girişmemiz gerekir.</p>
+
+<p>Bunun önüne geçebilmek için de testlerde sahtesi ile değiştirilmesi gereken bağımlılıkları
+<code class="language-plaintext highlighter-rouge">constructor</code> ile test edilecek olan sınıfa parametre olarak almamız gerekiyor.
+Eğer OOP yerine fonksiyonel programlama yapıyorsanız da
+test edilen fonksiyona bu bağımlılıklar parametre olarak geçilebilir.</p>
+
+<p>Örneğin yukarıdaki başlıklarda verdiğim <code class="language-plaintext highlighter-rouge">FrequentlyAskedQuestionServiceImpl</code> ve <code class="language-plaintext highlighter-rouge">PersonServiceImpl</code>
+sınıflarının ikisinde de dışarıdan alınan bağımlılıklar constructor parametresi olarak geçilmiş durumda.
+<code class="language-plaintext highlighter-rouge">PersonServiceImpl</code> sınıfının metod içerisinde oluşturduğu <code class="language-plaintext highlighter-rouge">Person</code> nesnesi ise
+sahtesi ile değiştirmeye gerek duymadığım basit bir DTO/JPA Entity sınıfı,
+ya da data sınıfı diyebiliriz bu tür sınıflara.</p>
+
+<p>Eğer <code class="language-plaintext highlighter-rouge">PersonServiceImpl</code> veritabanına erişimde kullandığı <code class="language-plaintext highlighter-rouge">PersonRepository</code> arayüzünün
+bir implementasyonunu aşağıdaki koddaki gibi constructor içerisinde kendisi oluştursaydı,
+sahtesi ile değiştirmek için test kodunda taklalar atmamız gerekirdi.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">PersonServiceImpl</span> <span class="kd">implements</span> <span class="nc">PersonService</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">PersonRepository</span> <span class="n">personRepository</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">PersonServiceImpl</span><span class="o">()</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">mongoClient</span> <span class="o">=</span> <span class="nc">MongoClients</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">personRepository</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PersonRepositoryImpl</span><span class="o">(</span><span class="n">mongoClient</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="nc">Person</span> <span class="nf">createPerson</span><span class="o">(</span><span class="nc">CreatePersonRequest</span> <span class="n">createPersonRequest</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">firstName</span> <span class="o">=</span> <span class="nc">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">createPersonRequest</span><span class="o">.</span><span class="na">getFirstName</span><span class="o">(),</span> <span class="s">"firstName cannot be null"</span><span class="o">);</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">lastName</span> <span class="o">=</span> <span class="nc">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">createPersonRequest</span><span class="o">.</span><span class="na">getLastName</span><span class="o">(),</span> <span class="s">"lastName cannot be null"</span><span class="o">);</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">phone</span> <span class="o">=</span> <span class="nc">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">createPersonRequest</span><span class="o">.</span><span class="na">getPhone</span><span class="o">(),</span> <span class="s">"phone cannot be null"</span><span class="o">);</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="n">firstName</span><span class="o">,</span> <span class="n">lastName</span><span class="o">,</span> <span class="n">phone</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">personRepository</span><span class="o">.</span><span class="na">savePerson</span><span class="o">(</span><span class="n">person</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Test yazılamamasının yanında kaliteli kod yazım standartlarına da ters düşen bir yanı var,
+<code class="language-plaintext highlighter-rouge">PersonServiceImpl</code> sınıfı concrete bir <code class="language-plaintext highlighter-rouge">PersonRepository</code> implementasyonuna ihtiyaç duyuyor.
+Interface’ler üzerinden etkileşim kurma özelliğini kaybediyoruz.</p>
+
+<p>Ayrıca <code class="language-plaintext highlighter-rouge">PersonServiceImpl</code> sınıfının <code class="language-plaintext highlighter-rouge">PersonRepositoryImpl</code> sınıfının nasıl
+oluşturulacağı bilgisine de gereksiz yere sahip olmuş oluyor.</p>
+
+<p>Bu kodun mock olmadan yazılan testinin çalışması için gerçekten bir mongodb veritabanını ayağa kaldırmamız gerekiyor.
+Bu da yazacağımız testi unit değil entegrasyon testi yapar.</p>
+
+<h3 id="saf-olmayan-methodların-kullanılması">Saf Olmayan Methodların Kullanılması</h3>
+
+<p>Eğer saf olmayan veya kararsız da diyebileceğimiz metodlar test etmeye çalıştığımız kod tarafından kullanılıyorsa
+testlerimiz zaman ve ortam bağımlı hale gelebilir.
+Bu tür testler de çoğu zaman çalışırken ara sıra sebebini anlamak için vakit kaybedeceğimiz hatalar verebilirler.</p>
+
+<p>Bu konuda Java’da kullanmayı en sevmediğim metodlar arasında şu tarih/zaman fonksiyonları başı çekiyor:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">new Date()</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Calendar.getInstance()</code></li>
+  <li><code class="language-plaintext highlighter-rouge">System.currentTimeMillis()</code></li>
+</ul>
+
+<p>Bu tip sistemin o anki zamanını dönen metodları kullanan kodların testlerinde yazacağımız assertion’lar,
+genellikle testin hızlı çalışmasına bağlı olarak başarılı bitebilse de,
+testlerin çalışması sırasındaki birkaç milisaniyelik gecikme ile patlayabilirler.</p>
+
+<p>Örneğin aşağıdaki 1000 iterasyonluk RepeatedTest metodu 1000 iterasyonun 33 defasında hata verdi:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="nc">Date</span> <span class="nf">getCurrentDate</span><span class="o">()</span> <span class="o">{</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"getCurrentDate called"</span><span class="o">);</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Date</span><span class="o">();</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"getCurrentDate result="</span> <span class="o">+</span> <span class="n">date</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">date</span><span class="o">;</span>
+<span class="o">}</span>
+
+<span class="nd">@RepeatedTest</span><span class="o">(</span><span class="mi">1000</span><span class="o">)</span>
+<span class="kt">void</span> <span class="nf">getCurrentDate_returnsCurrentDate</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">actual</span> <span class="o">=</span> <span class="n">getCurrentDate</span><span class="o">();</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">expected</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Date</span><span class="o">();</span>
+    <span class="n">assertEquals</span><span class="o">(</span><span class="n">expected</span><span class="o">,</span> <span class="n">actual</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Verdiği hatalardan bir tanesi de şu şekilde:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>expected: java.util.Date@96901dd&lt;Tue May 18 00:53:54 EET 2021&gt; but was: java.util.Date@1cccaa86&lt;Tue May 18 00:53:54 EET 2021&gt;
+</code></pre></div></div>
+
+<p>Görüldüğü gibi expected ve actual Date nesneleri logda saniyesine kadar aynı görünüyor,
+o bir iki milisaniyelik farkı hata mesajından anlayamıyoruz bile.</p>
+
+<p>Bu gibi durumlar için sistem zamanını bize dönen bir sınıf oluşturuyor
+ve bu sınıfı testlerde sahte bağımlılık olarak kullanıyoruz.
+Biz önceden bu iş için kendi <code class="language-plaintext highlighter-rouge">Clock</code> sınıfımızı yazarken Java 8 sonrası <code class="language-plaintext highlighter-rouge">java.time.Clock</code> sınıfını kullanmaya başladık.</p>
+
+<p>Şimdi aşağıdaki gibi constructor argümanı olarak <code class="language-plaintext highlighter-rouge">Clock</code> alan bir sınıf yazalım:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DateRangeValidator</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="nc">Clock</span> <span class="n">clock</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">DateRangeValidator</span><span class="o">(</span><span class="nc">Clock</span> <span class="n">clock</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">clock</span> <span class="o">=</span> <span class="n">clock</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">validateDateRange</span><span class="o">(</span><span class="nc">Date</span> <span class="n">startDate</span><span class="o">,</span> <span class="nc">Date</span> <span class="n">endDate</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="kt">var</span> <span class="n">now</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Date</span><span class="o">(</span><span class="n">clock</span><span class="o">.</span><span class="na">millis</span><span class="o">());</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">startDate</span><span class="o">.</span><span class="na">after</span><span class="o">(</span><span class="n">now</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"startDate cannot be after current date"</span><span class="o">);</span>
+        <span class="o">}</span>
+
+        <span class="k">if</span> <span class="o">(</span><span class="n">endDate</span><span class="o">.</span><span class="na">before</span><span class="o">(</span><span class="n">now</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">"endDate cannot be before current date"</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Bu sınıf için yazdığımız testlerde tarihler arası farkları aşağıdaki gibi birer milisaniye bile yapsak
+1000 iterasyondan hiçbirinde hata vermemekte.
+Hem test ettiğimiz kod, hem de yazdığımız test ortam bağımsız şekilde aynı girdilerde hep aynı sonucu üretmekte.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@RepeatedTest</span><span class="o">(</span><span class="mi">1000</span><span class="o">)</span>
+<span class="kt">void</span> <span class="nf">validateDateRange_systemDateIsBetweenStartAndEndDates_doesNotThrowException</span><span class="o">()</span> <span class="o">{</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">startDate</span> <span class="o">=</span> <span class="mi">1621289298097L</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">now</span> <span class="o">=</span> <span class="n">startDate</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">endDate</span> <span class="o">=</span> <span class="n">now</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">clock</span> <span class="o">=</span> <span class="nc">Clock</span><span class="o">.</span><span class="na">fixed</span><span class="o">(</span><span class="nc">Instant</span><span class="o">.</span><span class="na">ofEpochMilli</span><span class="o">(</span><span class="n">now</span><span class="o">),</span> <span class="nc">ZoneId</span><span class="o">.</span><span class="na">systemDefault</span><span class="o">());</span>
+    <span class="kd">final</span> <span class="kt">var</span> <span class="n">validator</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">DateRangeValidator</span><span class="o">(</span><span class="n">clock</span><span class="o">);</span>
+
+    <span class="n">validator</span><span class="o">.</span><span class="na">validateDateRange</span><span class="o">(</span><span class="k">new</span> <span class="nc">Date</span><span class="o">(</span><span class="n">startDate</span><span class="o">),</span> <span class="k">new</span> <span class="nc">Date</span><span class="o">(</span><span class="n">endDate</span><span class="o">));</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h3 id="global-değişiklik-yapan-yöntemlerin-tercih-edilmesi">Global Değişiklik Yapan Yöntemlerin Tercih Edilmesi</h3>
+
+<p>Bu da gereksiz statik metod kullanımına benzer bir kötü pratiktir
+fakat bu kötü pratiğin sonuçları test edilemez bir kod yazmış olmaktan ziyade şöyle ortaya çıkıyor:
+Yazılan testler rastgele bir şekilde bazen başarılı olup bazen hata veriyor.</p>
+
+<p>Örneğin kodda global bir değişken (static) tanımladık ve bir metod bu değişkenin değerini değiştiriyor.
+Bu değeri değiştirirken de varolan değer üzerinden bir hesaplama yapıyor.
+Bu metodun 10-12 tane testini yazdık.
+Her test bu global değişkende farklı bir durum değişikliğine neden olursa bir süre sonra işin ucu kaçar.
+Testlerin de hangi sırayla çalışacağının garantisi olmadığından,
+hangi test çalıştığında global değişken hangi değeri tutuyor gibi bilgileri kontrol etmek oldukça zorlaşır.</p>
+
+<p>Global statik mutable değişken kullanmaktan ve bu değişkenler üzerinde değişiklik yapan metodlar yazmaktan
+mümkün olduğunca uzak durmalıyız.</p>
+
+<p>Bu tip global state üzerinden iş yapan kodlar testleri ayrı thread’ler ile paralel koşmanın da önüne engel koyuyor.
+Aynı anda iki thread global state’e değişiklik yapabilir ve bu sebeple kodda bir hata meydana gelmese bile
+test kodundaki assertion’a yazdığımız expected result tutmayabilir.</p>
+
+<p>Örneğin global bir AtomicInteger tuttuğumuzu ve bu sayıyı arttıran metodları iki farklı testin tetiklediğini düşünelim.
+Birinci test değeri 1 iken bir arttırıp 2 olduğunu assert ediyor fakat testler paralel koştuğu için o sırada
+ikinci test de değeri arttırdığından değer 3 geliyor.
+Böyle senaryolarda kodun çalışması tamamen doğru olduğu halde testler hata verebilir.</p>
+
+<p>Biz ekipçe genellikle statik global state tutmadığımız için global state konusunda
+en çok karşılaştığım problemleri genelde <code class="language-plaintext highlighter-rouge">ThreadLocal</code> kullanımı sebebiyle yaşamışızdır.
+<strong><a href="/2020/04/13/thread-local-nedir-java/">Thread Local</a></strong>
+Thread üzerinde global veri tutulması ve farklı thread’lerin bu veriyi görememesi için tasarlanmış bir nesne
+fakat fazla/hatalı kullanımında o da test yazılması zor kodlara sebep olabilmekte.
+Burada da testleri paralel koşmadığımızda hepsinin aynı thread tarafından çalıştırıldığını unutmayalım.
+Yani <code class="language-plaintext highlighter-rouge">ThreadLocal</code> bir nevi tüm test suite için global bir değişken haline geliyor.</p>
+
+<h2 id="bitiş">Bitiş</h2>
+
+<p>Unit test yazı dizimizin bu yazısında test edilebilir yazılım nasıl geliştirilir
+konusunu inceledik.</p>
+
+<p>Yazı dizisinin bu noktaya kadar olan yazılarıyla birlikte düşündüğümüzde,
+etkili unit testler yazdığımızda projenin yazılım kalitesinin nasıl artabileceğini
+artık daha iyi anlıyoruz.
+Kaliteli unit testler yazmaya çabaladığımızda sadece testlerin değil
+production kodunun da kalitesinin artmaya başladığını fark edeceğiz.
+Unit test yazacağını bilerek kod yazan geliştirici ya yazılımı baştan test edilebilir
+şekilde tasarlar ya da test yazamadığı noktada yazılımı test edilebilir hale
+dönüştürmeye çalışır.</p>
+
+<p>Bu konular kesin doğrusu olmayan ve tartışmaya çok açık konular olduğu için, 
+ben de bu konular üzerinde tartışmayı sevdiğim için,
+fikir ayrılıklarına düştüğümüz noktalarda ya da hemfikir olduğumuz noktalarda 
+lütfen yorumlarınızı esirgemeyin.</p>
+
+
+
+    
+
+<h2>Kaynakça</h2>
+
+<ol>
+    
+    <li>
+        <a href="https://www.toptal.com/qa/how-to-write-testable-code-and-why-it-matters" rel="nofollow" target="_blank">Unit Tests, How to Write Testable Code and Why it Matters</a> - Sergey Kolodiy
+    </li>
+    
+    <li>
+        <a href="https://dashdevs.com/blog/writing-testable-code-main-rules/" rel="nofollow" target="_blank">Core Rules And Principles Of Writing Testable Code</a> - Igor Tomych
+    </li>
+    
+</ol>
+
+
+
+    
+
+
+
+
+
+<div class="card mb-2">
+    <div class="card-header">
+        Bu yazı <b>5</b> adet yazıdan oluşan <b>"Unit Test"</b> yazı dizisinin <b>5.</b> yazısıdır.
+    </div>
+    <ul class="list-group list-group-flush">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/unit-test-nedir/">1 - Unit Test 01: Unit Test Nedir?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/unit-test-ve-diger-test-cesitlerinin-farklari/">2 - Unit Test 02: Unit Test'in Diğer Test Çeşitlerinden Farkları Nedir?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/neden-unit-test-yazariz/">3 - Unit Test 03: Neden Unit Test Yazarız?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2021/05/18/kaliteli-unit-test-nasil-yazilir/">4 - Unit Test 04: Kaliteli Unit Test Nasıl Yazılır?</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <i>5 - Unit Test 05: Test Edilebilir Yazılım Nasıl Geliştirilir?</i>
+            
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/2021/05/18/kaliteli-unit-test-nasil-yazilir/">&laquo; Unit Test 04: Kaliteli Unit Test Nasıl Yazılır?</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+  </div>
+</div>
+
+
+  
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://serdarkuzucu.com/2021/05/18/unit-test-edilebilir-yazilim-nasil-gelistirilir/';
+        this.page.identifier = 'unit-test-edilebilir-yazilim-nasil-gelistirilir';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+  
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>
