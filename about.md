@@ -4,7 +4,7 @@ title: Serdar Kuzucu
 permalink: /about/
 ---
 
-###### Senior Software Engineer @ Inomera Research {2012 - ∞}
+###### Yazılım Geliştirme Mühendisi @ Amazon (Londra)
 ###### Boğaziçi Üniversitesi Bilgisayar Mühendisliği {2009-2015}
 
 ### Eğitim
@@ -15,10 +15,12 @@ permalink: /about/
 
 ### Deneyim
 
-* Stajer @ Inomera Research | Temmuz 2012 - Ağustos 2012
-* Yarı Zamanlı Yazılım Mühendisi @ Inomera Research | Eylül 2012 - Haziran 2015
+* Yazılım Geliştirme Mühendisi @ Amazon | Temmuz 2022 - ∞
+* Yazılım Mimarı @ Inomera Research | Eylül 2021 - Haziran 2022
+* Uzman Yazılım Mühendisi @ Inomera Research | Ocak 2017 - Eylül 2021
 * Yazılım Mühendisi @ Inomera Research | Temmuz 2015 - Aralık 2016
-* Uzman Yazılım Mühendisi @ Inomera Research | Ocak 2017 - ∞
+* Yarı Zamanlı Yazılım Mühendisi @ Inomera Research | Eylül 2012 - Haziran 2015
+* Stajer @ Inomera Research | Temmuz 2012 - Ağustos 2012
 
 ### Yetkinlikler
 
