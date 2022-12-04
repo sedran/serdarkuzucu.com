@@ -1,0 +1,28 @@
+# Sample workflow for building and deploying a Jekyll site to GitHub Pages
+name: Build and deploy jekyll
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["master"]
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.5'
+          # runs 'bundle install' and caches installed gems automatically
+          bundler-cache: true
+      - run: |
+          bundle exec jekyll build
+      - name: Deploy
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: gh-pages
+          FOLDER: '_site'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
