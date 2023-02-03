@@ -5,28 +5,49 @@ pagination:
 ---
 
 <div class="home">
-  <div class="post-list">
-    {% for post in paginator.posts %}
-    <div class="media mb-5">
-      <img class="post-featured-image mr-3" src="{{ post.featured_image }}" alt="{{ post.title }}">
-      <div class="media-body">
-        <h5 class="mt-0">
-          <a class="text-dark" href="{{ post.url | prepend: site.baseurl }}" rel="bookmark">
-            <u>{{ post.title }}</u>
-          </a>
-        </h5>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
-        {% if post.categories %}
-        <div>
-          {% for category in post.categories %}
-          <a class="btn btn-outline-dark btn-sm" href="/category/{{ category | slugify }}">{{ category }}</a>
-          {% endfor %}
-        </div>
-        {% endif %}
-        <p>{{ post.excerpt }}</p>
-      </div>
+  <div class="timeline">
+    <div class="timeline-sidebar">
+      <div class="timeline-vertical-line"></div>
     </div>
-    {% endfor %}
+
+    <div class="timeline-main">
+      {% for post in paginator.posts %}
+      <div class="mb-3">
+        <div class="card">
+
+          <div class="timeline-sidebar-handle">
+            <div class="timeline-image-container">
+              <img src="{{ post.featured_image }}" alt="{{ post.title }}">
+            </div>
+
+            <div class="timeline-time">
+              {{ post.date | date: "%b %-d, %Y" }}
+              <br>
+              {{ post.date | date: "%H:%M" }}
+            </div>
+
+            <div class="timeline-horizontal-line"></div>
+          </div>
+
+          <div class="card-body">
+            <h5 class="card-title">
+              <a class="text-dark" href="{{ post.url | prepend: site.baseurl }}" rel="bookmark">
+                <u>{{ post.title }}</u>
+              </a>
+            </h5>
+            <p class="card-text">{{ post.excerpt }}</p>
+            {% if post.categories %}
+            <div>
+              {% for category in post.categories %}
+              <a class="btn btn-outline-dark btn-sm" href="/category/{{ category | slugify }}">{{ category }}</a>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
   </div>
 
   {% if paginator.page_trail %}
