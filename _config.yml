@@ -74,3 +74,7 @@ pagination:
   trail:
     before: 2 # The number of links before the current page
     after: 2  # The number of links after the current page
+
+collections:
+  tools:
+    output: true
