@@ -18,7 +18,7 @@ jobs:
           # runs 'bundle install' and caches installed gems automatically
           bundler-cache: true
       - run: |
-          bundle exec jekyll build
+          JEKYLL_ENV=production bundle exec jekyll build
       - name: Deploy
         uses: s0/git-publish-subdir-action@develop
         env:
@@ -26,4 +26,3 @@ jobs:
           BRANCH: gh-pages
           FOLDER: '_site'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          JEKYLL_ENV: production
