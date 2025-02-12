@@ -6,38 +6,38 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>Linux Shell Script Geliştirmek: Değişkenler</title>
+  <title>Tekrar Merhaba</title>
 
-  <meta name="description" content="Merhaba arkadaşlar.Bir önceki yazımda, shell script geliştirmek konusuna kabaca giriş yapmıştık. Bu yazıda da, değişken tanımlama konusuna değineceğim.">
+  <meta name="description" content="Uzun bir aradan sonra, tekrar merhaba!Bu yazıda merak edenlere hayatımda bu süre içerisinde olup bitenleri kısaca özetliyor ve blogda her an meydana gelebile...">
 
 <meta content="Serdar Kuzucu" property="og:site_name">
 
 
-<meta content="Linux Shell Script Geliştirmek: Değişkenler" property="og:title">
+<meta content="Tekrar Merhaba" property="og:title">
 
 
 
 <meta content="article" property="og:type">
 
 
-<meta content="Merhaba arkadaşlar.Bir önceki yazımda, shell script geliştirmek konusuna kabaca giriş yapmıştık. Bu yazıda da, değişken tanımlama konusuna değineceğim." property="og:description">
+<meta content="Uzun bir aradan sonra, tekrar merhaba!Bu yazıda merak edenlere hayatımda bu süre içerisinde olup bitenleri kısaca özetliyor ve blogda her an meydana gelebile..." property="og:description">
 
 
-<meta content="https://serdarkuzucu.com/linux-shell-script-gelistirmek-degiskenler/" property="og:url">
+<meta content="https://serdarkuzucu.com/2025/02/11/tekrar-merhaba/" property="og:url">
 
 
 
-<meta content="2015-06-24T22:38:00+00:00" property="article:published_time">
+<meta content="2024-02-11T23:11:50+00:00" property="article:published_time">
 <meta content="https://serdarkuzucu.com/about/" property="article:author">
 
 
 
-<meta content="https://serdarkuzucu.com/assets/category/bash.png" property="og:image">
+<meta content="https://serdarkuzucu.com/assets/posts/hello-again/fatherhood.jpg" property="og:image">
 
 
 
 
-<meta content="Bash" property="article:section">
+<meta content="Genel" property="article:section">
 
 
 
@@ -51,7 +51,7 @@
 
 
   <link rel="stylesheet" href="/css/main.css?v=201904191944">
-  <link rel="canonical" href="https://serdarkuzucu.com/linux-shell-script-gelistirmek-degiskenler/">
+  <link rel="canonical" href="https://serdarkuzucu.com/2025/02/11/tekrar-merhaba/">
   <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
   <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
 
@@ -165,9 +165,9 @@
       <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title" itemprop="name headline">Linux Shell Script Geliştirmek: Değişkenler</h1>
+    <h1 class="post-title" itemprop="name headline">Tekrar Merhaba</h1>
     <p class="post-meta">
-      <time datetime="2015-06-24T22:38:00+00:00" itemprop="datePublished">Jun 24, 2015</time>
+      <time datetime="2024-02-11T23:11:50+00:00" itemprop="datePublished">Feb 11, 2024</time>
       
       • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
       <span itemprop="name">Serdar Kuzucu</span></span>
@@ -177,11 +177,7 @@
     
     <p>
       
-         <a class="btn btn-outline-dark btn-sm" href="/category/bash">Bash</a>
-      
-         <a class="btn btn-outline-dark btn-sm" href="/category/programlama">Programlama</a>
-      
-         <a class="btn btn-outline-dark btn-sm" href="/category/linux">Linux</a>
+         <a class="btn btn-outline-dark btn-sm" href="/category/genel">Genel</a>
       
     </p>
     
@@ -191,108 +187,56 @@
     
 
 
-    
-<p>Merhaba arkadaşlar.
-Bir önceki yazımda, <a href="/linux-shell-script-gelistirmek">shell script geliştirmek</a> konusuna kabaca giriş yapmıştık. 
-Bu yazıda da, değişken tanımlama konusuna değineceğim.</p>
+    <p>Uzun bir aradan sonra, tekrar merhaba!
+Bu yazıda merak edenlere hayatımda bu süre içerisinde olup bitenleri kısaca özetliyor ve 
+blogda her an meydana gelebilecek olası bir format değişikliğinden önce sizleri uyarıyorum.</p>
 
 <!--more-->
 
-<p>Birçok programlama dilinin olmazsa olmazı değişkenler, 
-Shell Script geliştirirken de olmazsa olmazımız.
-Değişken tanımlamak için yapacağımız şey oldukça basit. 
-Aşağıdaki kod, önce <code class="language-plaintext highlighter-rouge">BLOG_NAME</code> isminde bir değişken tanımlayıp ona AsosyalBebe değerini veriyor. 
-Daha sonra <code class="language-plaintext highlighter-rouge">CURRENT_DIR</code> ismindeki değişkene, <code class="language-plaintext highlighter-rouge">pwd</code> komutunun sonucunu veriyor. 
-Burada dikkat etmemiz gereken, bir komutun sonucunu bir değişkene vereceğimiz zaman, 
-komutu <code class="language-plaintext highlighter-rouge">$(komut)</code> şeklinde yazıyoruz.</p>
+<hr />
 
-<p>Bir sonraki değişkenimiz de, ilk iki değişkeni birleştirerek başka bir metin oluşturuyor. 
-Değişkenleri kullanırken, başlarına dolar işareti koymamız gerekiyor. 
-Değişkenleri yaratırken koymuyoruz bu işareti. 
-İki değişkeni birbirine eklemek için tırnak içinde yan yana yazmamız yeterli.</p>
+<p>Bu yazıdan önceki son yazımı Mayıs 2021’de <a href="/2021/05/18/unit-test-nedir/">Unit Test serisi</a> altında yazmıştım.
+Henüz Türkiye’de, bir önceki işim <a href="https://inomera.com/">Inomera</a>‘da çalışıyordum ve başka şirketlerle iş görüşmelerine başlamamıştım.
+2021 senesinin sonunda epey yoğun bir şekilde yurt dışı şirketlerle mülakatlara başladım ve 2022 senesinin başlarında Amazon’dan aldığım teklifi kabul ettim.
+Temmuz 2022 senesinde Londra’ya taşındık ve Amazon’da çalışmaya başladım.</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
-<span class="c"># Hello World Application 3</span>
-<span class="c"># Variable definitions</span>
+<p><img src="/assets/posts/hello-again/london.jpg" alt="Banner" width="400px" /></p>
 
-<span class="nv">BLOG_NAME</span><span class="o">=</span><span class="s2">"AsosyalBebe"</span>
-<span class="nv">CURRENT_DIR</span><span class="o">=</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span>
-<span class="nv">CONCAT_VAR</span><span class="o">=</span><span class="s2">"</span><span class="nv">$BLOG_NAME$CURRENT_DIR</span><span class="s2">"</span>
+<p>Londra’yı keşfetme, buradaki arkadaşlarla sosyalleşme, iş yoğunluğu vs derken zaman çok hızlı geçti ve blog’u neredeyse unuttum.
+Blog’u HTML’e çevirip canlıya alan travisci’daki süreci <a href="https://github.com/sedran/serdarkuzucu.com/actions">Github Actions</a>‘a taşınma işini bir ara yapmışım ama mesela yazılara yorum yapma özelliğini unutmuşum.
+Epeydir yazıların altında bir yorum formu bile yok ama ben fark etmemişim :)</p>
 
-<span class="nb">echo</span> <span class="nv">$BLOG_NAME</span>
-<span class="nb">echo</span> <span class="nv">$CURRENT_DIR</span>
-<span class="nb">echo</span> <span class="nv">$CONCAT_VAR</span>
-</code></pre></div></div>
+<p>2022 senesi bu şekilde geçerken 2023 senesi geldi. Bu seneye dair aklımda kalan en önemli şey eşimin hamileliği oldu.
+Oğlumuzun kalp atışını da ilk defa doğum günümde Londra’daki özel bir Türk kliniğinde duyma şansını yakaladım. 
+Londra’ya bir şekilde yolu düşen Türk arkadaşların ihtiyacı olursa diye buraya web adreslerini bırakayım: <a href="https://www.medstar.app/">Medstar</a></p>
 
-<p>Bu işlemlerden benim bilgisayarımda aşağıdaki sonuç çıkmakta:</p>
+<p>2024 senesinin Ocak ayında ise oğlumuz Ege ile sonunda yüz yüze tanışabildik.</p>
 
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AsosyalBebe
-/home/sedrik/lesson
-AsosyalBebe/home/sedrik/lesson
-</code></pre></div></div>
+<p><img src="/assets/posts/hello-again/fatherhood.jpg" alt="Banner" width="400px" /></p>
 
-<h3 id="sabitconstant-tanımlamak">Sabit(Constant) Tanımlamak</h3>
+<p>Bu tarihten itibaren özel hayatımda bırakın blog yazmayı, whatsapp mesajlarına dönmeyi unuttuğum oldu.
+Evlat sahibi olmak nasıl hem dünyanın en güzel hem de en yorucu şeyi ailecek deneyimlemiş olduk.
+Ege’nin varlığıyla dünyadaki geri kalan her şey artık benim için ikinci plandan sekizinci veya dokuzuncu plana düşmüş bulunmaktadır.
+Bir kez daha iyi ki doğdun oğlum.</p>
 
-<p>Bazen değişken tanımlamalarımızın değerinin program içerisinde değişmesini istemeyiz.
-Bu durumlarda o değişkeni <code class="language-plaintext highlighter-rouge">readonly</code> anahtar kelimesi ile tanımayarak, 
-değerinin program boyunca sabit kalmasını sağlayabiliyoruz. 
-Aşağıdaki kodda tanımladığım <code class="language-plaintext highlighter-rouge">MY_VARIABLE</code> isimli değişkenin değerini değiştirmeye çalıştığımda, 
-kodun o satırı hata veriyor ve değişkenin değerini tekrar ekrana yazdırdığımızda, değişmemiş olduğunu görüyoruz.</p>
+<p>Ve gelgelelim sene 2025 olmuş. Artık yavaş yavaş tekrar akşamları bilgisayar başına oturmaya başlıyorum.
+“Uzun zamandır yoktum biri demiş öldü, şimdi de yazsınlar kral geri döndü.” gibi iddialı bir laf edecek kadar bir varlık göstereceğimi sanmıyorum.
+Bir önceki blog yazımı yazdığım zamanlarda insanlar o tür teknik içeriklere çoğunlukla Google’dan ulaşıp okurlardı.
+Şimdilerde ben çoğu sorumu Google yerine LLM’lere soruyorum ve insanların da artık yavaş yavaş buna adapte olduğunu varsayıyorum.
+Bu da uzun uzun teknik yazılar yazma veya giriş seviyesi bilgiler paylaşma hevesimi kırıyor.
+Artık bizim yazdıklarımız son kullanıcıya mı hitap ediyor yoksa yapay zekayı eğiten içeriklerden mi oluyor bilemiyorum.</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
-<span class="c"># Constants</span>
+<p>Velhasıl kelam, önümüzdeki günlerde ara ara tekrar bir şeyler yazmayı deneyebilirim fakat söz veremem.
+Konseptimi de birazcık değiştirip artık uzun teknik yazılar yerine kısa kısa bilgiler paylaşabilirim.
+Bunlar da daha çok tuttuğum notların temize çekilmesi gibi görülebilir.</p>
 
-<span class="nb">readonly </span><span class="nv">MY_VARIABLE</span><span class="o">=</span><span class="s2">"serdar"</span>
-<span class="nb">echo</span> <span class="s2">"MY_VARIABLE=</span><span class="nv">$MY_VARIABLE</span><span class="s2">"</span>
-<span class="nv">MY_VARIABLE</span><span class="o">=</span><span class="s2">"kuzucu"</span>
-<span class="nb">echo</span> <span class="s2">"MY_VARIABLE=</span><span class="nv">$MY_VARIABLE</span><span class="s2">"</span>
-</code></pre></div></div>
+<p>Amazon kariyerimde birçok yeni şey deneyimleme fırsatım oldu.
+Bunlardan en önemlilerinin de AWS’de bulunan birçok servisi bir şekilde kullanma fırsatı bulmam, ucundan kıyısından ML dünyasına giriş yapmam
+ve Python dilini öğrenmem olduğunu düşünyorum. 
+Amazon kültürünü yerinde deneyimlemek ve birçok yetenekli insanla birlikte çalışmak da benim için çok büyük bir artı oldu.
+İlerleyen zamanlarda bu blogda pek aşina olmadığımız Python dilinde kodlara ve AWS terminolojisine denk gelme ihtimalimiz oldukça yüksek!</p>
 
-<p>Programı çalıştırdığımızda, sonuç olarak şunu elde ediyoruz:</p>
-
-<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>MY_VARIABLE=serdar
-./constant: line 6: MY_VARIABLE: readonly variable
-MY_VARIABLE=serdar
-</code></pre></div></div>
-
-<p>Gelelim conventions denen kurallar dizisine. 
-Google’ın “<a href="https://google.github.io/styleguide/shellguide.html">Shell Style Guide</a>” isimli yazısından sizlere değişken tanımlamak ile ilgili kuralları aktaracağım.</p>
-
-<ol>
-  <li>Değişken isimleri küçük harfle yazılır ve tüm kelimeler alt çizgi (_) karakteri ile ayrılır.</li>
-  <li>Sabitler(Constants) tamamen büyük harfle yazılır ve kelimeler alt çizgi ile ayrılır. 
-Ayrıca dosyanın en başında tanımlanmalıdırlar.</li>
-  <li>Sabitleri <code class="language-plaintext highlighter-rouge">readonly</code> anahtar kelimesiyle belirterek program boyunca değerinin değişmeyeceğinden emin olunmalıdır.</li>
-  <li>Fonksiyonların içerisindeki değişkenler <code class="language-plaintext highlighter-rouge">local</code> anahtar kelimesi ile tanımlanmalıdır. 
-Gereksiz değişkenler fonksiyon dışına çıkmamalıdırlar.</li>
-</ol>
-
-<p>Bu kurallara uymazsanız programınız çalışmaz demiyoruz. 
-Bu kurallara convention denir ve her programlama dilinin kendi convention’ı vardır. 
-Kodun güzel ve okunabilir olmasını sağlarlar.</p>
-
-<p>Yukarıdaki kurallar ile ilgili bir örnek verelim ve yazımızı bitirelim.</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
-<span class="c"># Conventions</span>
-<span class="c"># from Google's Shell Style Guide</span>
-
-<span class="c"># All caps, separated with underscores, declared at the top of the file.</span>
-<span class="c"># Use readonly  or declare -r  to ensure they're read only.</span>
-<span class="nb">readonly </span><span class="nv">BLOG_URL</span><span class="o">=</span><span class="s2">"http://blog.asosyalbebe.com"</span>
-
-<span class="k">function </span>my_function<span class="o">()</span> <span class="o">{</span>
-    <span class="c"># Declare function ­specific variables with local .</span>
-    <span class="nb">local </span><span class="nv">local_variable</span><span class="o">=</span>1
-    <span class="nb">echo</span> <span class="nv">$local_variable</span>
-<span class="o">}</span>
-
-<span class="c"># Lower­case, with underscores to separate words.</span>
-<span class="nv">global_variable</span><span class="o">=</span>1
-</code></pre></div></div>
-
-<p>Değişkenler ile ilgili anlatacaklarım da bu kadar efendim. 
-Bir sonraki yazıya kadar esen kalın.</p>
+<p>Daha fazla uzatmadan tekrar merhaba ve görüşmek üzere diyorum ve bu yazıyı kapatıyorum. Sağlıcakla!</p>
 
 
     
@@ -305,13 +249,11 @@ Bir sonraki yazıya kadar esen kalın.</p>
 <div class="row">
   <div class="col text-left">
     
-    <a class="prev" href="/linux-shell-script-gelistirmek/">&laquo; Linux Shell Script Geliştirmek</a>
+    <a class="prev" href="/2021/05/18/unit-test-edilebilir-yazilim-nasil-gelistirilir/">&laquo; Unit Test 05: Test Edilebilir Yazılım Nasıl Geliştirilir?</a>
     
   </div>
 
   <div class="col text-right">
-    
-    <a class="next" href="/shell-scripts-program-argumanlarini-okumak/">Shell Scripts: Program Argümanlarını Okumak &raquo;</a>
     
   </div>
 </div>
@@ -321,8 +263,8 @@ Bir sonraki yazıya kadar esen kalın.</p>
     <div id="disqus_thread"></div>
 <script>
     var disqus_config = function () {
-        this.page.url = 'https://serdarkuzucu.com/linux-shell-script-gelistirmek-degiskenler/';
-        this.page.identifier = 'linux-shell-script-gelistirmek-degiskenler';
+        this.page.url = 'https://serdarkuzucu.com/2025/02/11/tekrar-merhaba/';
+        this.page.identifier = 'tekrar-merhaba';
     };
     (function () {
         var d = document, s = d.createElement('script');
