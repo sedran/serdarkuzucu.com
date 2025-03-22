@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Solving Shortest Path in a Binary Matrix</title>
+
+  <meta name="description" content="Hey all! This is the second post in the “Simulating Shortest Path in a Binary Matrix using Pygame” series.In this post, we will choose an algorithm and expla...">
+
+<meta content="Serdar Kuzucu" property="og:site_name">
+
+
+<meta content="Solving Shortest Path in a Binary Matrix" property="og:title">
+
+
+
+<meta content="article" property="og:type">
+
+
+<meta content="Hey all! This is the second post in the “Simulating Shortest Path in a Binary Matrix using Pygame” series.In this post, we will choose an algorithm and expla..." property="og:description">
+
+
+<meta content="https://serdarkuzucu.com/2025/03/15/simulating-shortest-path-binary-matrix-pygame-2-solution/" property="og:url">
+
+
+
+<meta content="2025-03-22T13:05:00+00:00" property="article:published_time">
+<meta content="https://serdarkuzucu.com/about/" property="article:author">
+
+
+
+<meta content="https://serdarkuzucu.com/assets/category/python.png" property="og:image">
+
+
+
+
+<meta content="Python" property="article:section">
+
+
+
+
+
+
+
+<meta name="twitter:creator" content="@sedran"/>
+<meta name="twitter:site" content="@sedran"/>
+<meta name="twitter:card" content="summary"/>
+
+
+  <link rel="stylesheet" href="/css/main.css?v=201904191944">
+  <link rel="canonical" href="https://serdarkuzucu.com/2025/03/15/simulating-shortest-path-binary-matrix-pygame-2-solution/">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SG38PNN7T1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-SG38PNN7T1');
+  </script>
+  
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            
+            <a href="/category/algorithms" class="dropdown-item">Algorithms (2)</a>
+            
+            <a href="/category/angular" class="dropdown-item">Angular (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (4)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (6)</a>
+            
+            <a href="/category/git" class="dropdown-item">Git (2)</a>
+            
+            <a href="/category/gradle" class="dropdown-item">Gradle (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (27)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (6)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (6)</a>
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (48)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/pygame" class="dropdown-item">Pygame (2)</a>
+            
+            <a href="/category/python" class="dropdown-item">Python (2)</a>
+            
+            <a href="/category/spring-boot" class="dropdown-item">Spring Boot (1)</a>
+            
+            <a href="/category/unit-test" class="dropdown-item">Unit Test (5)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Solving Shortest Path in a Binary Matrix</h1>
+    <p class="post-meta">
+      <time datetime="2025-03-22T13:05:00+00:00" itemprop="datePublished">Mar 22, 2025</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/python">Python</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/algorithms">Algorithms</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/pygame">Pygame</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    
+
+
+
+
+
+<div class="card mb-2">
+    <div class="card-header">
+        Bu yazı <b>2</b> adet yazıdan oluşan <b>"Simulating Shortest Path in a Binary Matrix using Pygame"</b> yazı dizisinin <b>2.</b> yazısıdır.
+    </div>
+    <ul class="list-group list-group-flush">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2025/03/22/simulating-shortest-path-binary-matrix-pygame-1-intro/">1 - Introduction: Shortest Path in a Binary Matrix Problem</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <i>2 - Solving Shortest Path in a Binary Matrix</i>
+            
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+
+
+    <p>Hey all! This is the second post in the “Simulating Shortest Path in a Binary Matrix using Pygame” series.
+In this post, we will choose an algorithm and explain why we selected it as our preferred approach for this problem.
+We’ll also describe a few alternative algorithms commonly used for similar types of problems.
+Then, we’ll analyze the time and space complexity of the algorithm using Big-O notation.
+Finally, we will implement the algorithm in Python.</p>
+
+<!--more-->
+
+<hr />
+
+<h2 id="choosing-the-right-algorithm">Choosing the Right Algorithm</h2>
+
+<p>When choosing an algorithm for finding the shortest path in a binary matrix, we need to consider both correctness and efficiency.
+A brute-force approach, such as trying all possible paths, is infeasible due to its exponential time complexity.
+A depth-first search (DFS) might seem like an option, but since it explores one path fully before backtracking,
+it doesn’t guarantee the shortest path in an unweighted grid.
+A* search is another possibility, as it uses heuristics to optimize the search, 
+but implementing an effective heuristic for this specific problem adds complexity. 
+Given that we are working with an unweighted grid where all movements have the same cost, 
+<a href="https://en.wikipedia.org/wiki/Breadth-first_search">Breadth-First Search (BFS)</a> is the ideal choice—it explores all possible paths level by level, 
+ensuring that the first time we reach the target, we’ve found the shortest path. 
+Therefore, we will use BFS for our implementation.</p>
+
+<p>Here’s why BFS is particularly suited for this problem and how it compares to other algorithms:</p>
+
+<ul>
+  <li><strong>Guaranteed Shortest Path:</strong> Since BFS visits nodes layer by layer, the first time it encounters the target node, 
+it has found the shortest path in terms of the number of moves.</li>
+  <li><strong>Efficiency:</strong> BFS works efficiently in grid-based problems, like the one in this task, where we don’t need to worry about weighted edges or more complex conditions.
+Every move from one cell to another has the same “weight” (cost), which is a key factor in why BFS is optimal.</li>
+</ul>
+
+<h3 id="other-algorithms">Other Algorithms:</h3>
+
+<p>While BFS is ideal for this problem, there are alternative approaches that can be used for pathfinding:</p>
+
+<ul>
+  <li>
+    <p><strong><a href="https://en.wikipedia.org/wiki/Depth-first_search">Depth-First Search (DFS)</a>:</strong> 
+DFS explores deeper into the graph before backtracking, which makes it less suitable for shortest path problems.
+It may explore longer paths before finding the target, which means it could miss the shortest path unless additional logic is used to track distances.</p>
+  </li>
+  <li>
+    <p><strong><a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">Dijkstra’s Algorithm</a>:</strong>
+Dijkstra’s algorithm is used for finding the shortest path in graphs with weighted edges.
+However, in this case, all moves have the same “cost”, making BFS a simpler and more efficient choice.
+Dijkstra’s algorithm is also more computationally expensive due to the priority queue management.</p>
+  </li>
+  <li>
+    <p><strong><a href="https://en.wikipedia.org/wiki/A*_search_algorithm">A* Search Algorithm</a>:</strong>
+A* is an advanced pathfinding algorithm that uses heuristics to guide the search.
+While it can be faster than BFS in certain cases, it requires additional setup with heuristic functions.
+In this problem, a simple BFS is sufficient, and introducing heuristics would be an unnecessary complexity.</p>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="space-and-time-complexity-of-bfs">Space and Time Complexity of BFS</h2>
+
+<h3 id="time-complexity">Time Complexity:</h3>
+
+<p>In BFS, the time complexity is often represented as <code class="language-plaintext highlighter-rouge">O(V + E)</code>, where:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">V</code> is the number of vertices (nodes) in the graph.</li>
+  <li><code class="language-plaintext highlighter-rouge">E</code> is the number of edges (connections between nodes).</li>
+</ul>
+
+<p>For our grid problem, let’s consider:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">V</code> (vertices): In a grid of size <code class="language-plaintext highlighter-rouge">N x N</code>, there are <code class="language-plaintext highlighter-rouge">N²</code> vertices (one for each cell in the grid).</li>
+  <li><code class="language-plaintext highlighter-rouge">E</code> (edges): Each vertex (cell) can have up to 8 neighbors (up, down, left, right, and the 4 diagonal neighbors). 
+So, in the worst case, the number of edges will be 8 times the number of vertices, which gives us a maximum of <code class="language-plaintext highlighter-rouge">8 * N²</code> edges.</li>
+</ul>
+
+<p>Therefore, the time complexity of BFS can be expressed as:</p>
+
+<p><code class="language-plaintext highlighter-rouge">O(V + E) = O(N² + 8 * N²) = O(9 * N²) = O(N²)</code></p>
+
+<p>Since constants are dropped in Big-O notation, it simplifies to <code class="language-plaintext highlighter-rouge">O(N²)</code>.</p>
+
+<h3 id="space-complexity">Space Complexity:</h3>
+
+<ul>
+  <li><strong>Queue:</strong>
+BFS uses a queue to store the vertices that need to be explored.
+In the worst case, the queue could hold all the vertices of the grid, as we could be exploring each one.
+Therefore, the space complexity for the queue is <code class="language-plaintext highlighter-rouge">O(V)</code>.
+Since the grid has <code class="language-plaintext highlighter-rouge">N²</code> vertices, this becomes <code class="language-plaintext highlighter-rouge">O(N²)</code>.</li>
+  <li>
+    <p><strong>Visited List:</strong>
+BFS typically also keeps track of which vertices have been visited to avoid revisiting them.
+This requires storing a boolean value (True/False) for each vertex, which also takes <code class="language-plaintext highlighter-rouge">O(N²)</code> space for the grid, as there are <code class="language-plaintext highlighter-rouge">N²</code> vertices to track.</p>
+  </li>
+  <li>In summary:
+    <ul>
+      <li>The queue will take up <code class="language-plaintext highlighter-rouge">O(N²)</code> space.</li>
+      <li>The visited list will also take up <code class="language-plaintext highlighter-rouge">O(N²)</code> space.</li>
+      <li>So, the total space complexity is <code class="language-plaintext highlighter-rouge">O(N²)</code> + <code class="language-plaintext highlighter-rouge">O(N²)</code> = <code class="language-plaintext highlighter-rouge">O(N²)</code>.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="lets-code-the-algorithm">Let’s Code the Algorithm</h2>
+
+<p>To begin with, it’s worth mentioning that I will implement the function with a different signature than what LeetCode requires for their question.
+I will also use these functions in the simulation code I will implement later.
+Inline comments will be included in the code, and I will minimize explanations outside the code.</p>
+
+<p><strong>Imports and Constants:</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># This is a double-ended queue implementation in python.
+# It is an efficient data structure for our queueing needs.
+</span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
+
+<span class="c1"># The partial() is used for partial function application which “freezes” some portion 
+# of a function’s arguments and/or keywords resulting in a new object with a simplified signature.
+</span><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+
+<span class="c1"># This is to be used as type hints when we take the grid as a parameter to the functions
+</span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="c1"># Values inside the grid 2-D array.
+# Using constants instead of numbers self-documents the code.
+</span><span class="n">WALL</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">NON_WALL</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1"># All directions we can go from any Vertex (cell in grid). Having them in an array reduces the code duplication 
+# when we try finding all neighbors.
+</span><span class="n">DIRECTIONS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>   <span class="c1"># Right
+</span>    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>   <span class="c1"># Bottom-Right
+</span>    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>   <span class="c1"># Bottom
+</span>    <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>  <span class="c1"># Bottom-Left
+</span>    <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>  <span class="c1"># Left
+</span>    <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="c1"># Top-Left
+</span>    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>  <span class="c1"># Top
+</span>    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>  <span class="c1"># Top-Right
+</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p><strong>Is a valid move?</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">grid</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">visited</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="s">"""
+    Given a position (x, y), verifies if it is within the grid's boundaries,
+    if it is not a wall (grid[x][y] == 1), if it is not visited before.
+    Use this function to test if a candidate neighbor can be queued for a visit.
+    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">size</span> <span class="ow">and</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">grid</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="n">WALL</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="n">visited</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">return</span> <span class="bp">True</span>
+</code></pre></div></div>
+
+<p><strong>Visiting Neighbors:</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">visit_neighbors</span><span class="p">(</span>
+    <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">grid</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">visited</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]],</span>
+    <span class="n">queue</span><span class="p">:</span> <span class="n">deque</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="s">"""
+    Given a position (x, y), visit its neighbors and queue them for a visit.
+    Returns the list of neighbors for further processing in the simulation.
+    """</span>
+    <span class="n">is_valid_partial</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">is_valid</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">grid</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">visited</span><span class="o">=</span><span class="n">visited</span><span class="p">)</span>
+    <span class="n">neighbors</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="ow">in</span> <span class="n">DIRECTIONS</span><span class="p">:</span>
+        <span class="n">new_x</span><span class="p">,</span> <span class="n">new_y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">dy</span>
+        <span class="k">if</span> <span class="n">is_valid_partial</span><span class="p">(</span><span class="n">new_x</span><span class="p">,</span> <span class="n">new_y</span><span class="p">):</span>
+            <span class="n">visited</span><span class="p">[</span><span class="n">new_x</span><span class="p">][</span><span class="n">new_y</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">neighbors</span><span class="p">.</span><span class="n">append</span><span class="p">((</span><span class="n">new_x</span><span class="p">,</span> <span class="n">new_y</span><span class="p">))</span>
+
+    <span class="n">queue</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="n">neighbors</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">neighbors</span>
+</code></pre></div></div>
+
+<p><strong>The algorithm:</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">shortest_path</span><span class="p">(</span>
+    <span class="n">grid</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+    <span class="n">start</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">end</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="s">"""
+    Given a square grid, find the shortest path from the start to the end.
+    Returns the number of steps required to reach the end from the start.
+    If no path is found, returns -1.
+    """</span>
+
+    <span class="c1"># Size of the grid; assuming it is a square grid
+</span>    <span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+    <span class="c1"># Initialize the level of the BFS traversal
+</span>    <span class="n">level</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># If end is not provided, set it to the bottom-right corner of the grid
+</span>    <span class="k">if</span> <span class="n">end</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="p">(</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># If start or end is a wall, return -1
+</span>    <span class="n">start_x</span><span class="p">,</span> <span class="n">start_y</span> <span class="o">=</span> <span class="n">start</span>
+    <span class="n">end_x</span><span class="p">,</span> <span class="n">end_y</span> <span class="o">=</span> <span class="n">end</span>
+    <span class="k">if</span> <span class="n">grid</span><span class="p">[</span><span class="n">start_x</span><span class="p">][</span><span class="n">start_y</span><span class="p">]</span> <span class="o">==</span> <span class="n">WALL</span> <span class="ow">or</span> <span class="n">grid</span><span class="p">[</span><span class="n">end_x</span><span class="p">][</span><span class="n">end_y</span><span class="p">]</span> <span class="o">==</span> <span class="n">WALL</span><span class="p">:</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="c1"># Initialize the visited matrix and the queue for BFS traversal
+</span>    <span class="c1"># Both data structures are initialized with the start position
+</span>    <span class="n">visited</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="n">size</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)]</span>
+    <span class="n">visited</span><span class="p">[</span><span class="n">start_x</span><span class="p">][</span><span class="n">start_y</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([</span><span class="n">start</span><span class="p">])</span>
+
+    <span class="c1"># Perform BFS traversal. Loop until the queue is empty.
+</span>    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># At each iteration, we exhaust all elements at the current level.
+</span>        <span class="n">level</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="c1"># Loop through only the number of elements at the current level because the queue
+</span>        <span class="c1"># will be modified during the iteration.
+</span>        <span class="n">elements_at_level</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">elements_at_level</span><span class="p">):</span>
+            <span class="c1"># Pop the element from the queue
+</span>            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">queue</span><span class="p">.</span><span class="n">popleft</span><span class="p">()</span>
+            <span class="c1"># If the end is reached, return the level
+</span>            <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">end_x</span> <span class="ow">and</span> <span class="n">y</span> <span class="o">==</span> <span class="n">end_y</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">level</span>
+            <span class="c1"># Visit the neighbors of the current element. They will be processed in the next level.
+</span>            <span class="n">visit_neighbors</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">visited</span><span class="p">,</span> <span class="n">queue</span><span class="p">)</span>
+
+    <span class="c1"># There are no more elements to visit and the end was not reached
+</span>    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+</code></pre></div></div>
+
+<p>This code defines the algorithm that returns either the length of the shortest path between start and end positions in the given square grid
+or <code class="language-plaintext highlighter-rouge">-1</code> when there is no such path.</p>
+
+<p>That’s it! We can test this function by providing some solvable and non-solvable grid examples.</p>
+
+<p>Let’s test it with the first example we have given in the first post of this series and two examples shared on the original LeetCode question.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">test_shortest_path_2x2_solvable</span><span class="p">():</span>
+    <span class="c1"># The first example on the LeetCode question
+</span>    <span class="n">grid</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">]</span>
+    <span class="k">assert</span> <span class="mi">2</span> <span class="o">==</span> <span class="n">shortest_path</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">test_shortest_path_3x3_solvable</span><span class="p">():</span>
+    <span class="c1"># The second example on the LeetCode question
+</span>    <span class="n">grid</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">]</span>
+    <span class="k">assert</span> <span class="mi">4</span> <span class="o">==</span> <span class="n">shortest_path</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">test_shortest_path_5x5_solvable</span><span class="p">():</span>
+    <span class="c1"># Our randomly generated example we've seen in first post of this series
+</span>    <span class="n">grid</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">]</span>
+    <span class="k">assert</span> <span class="mi">7</span> <span class="o">==</span> <span class="n">shortest_path</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">test_shortest_path_5x5_unsolvable</span><span class="p">():</span>
+    <span class="c1"># Just flipping (x=1, y=2) from 0 to 1, we have made our above example unsolvable
+</span>    <span class="n">grid</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">]</span>
+    <span class="k">assert</span> <span class="o">-</span><span class="mi">1</span> <span class="o">==</span> <span class="n">shortest_path</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>With our BFS implementation in place, we now have a solid foundation for solving the shortest path problem in a binary matrix.
+We’ve chosen BFS for its efficiency in unweighted grids and verified its correctness with test cases.
+This completes the algorithmic part of our journey.
+Now, we’re ready to shift our focus to visualization. 
+In the next posts, we will bring this algorithm to life by simulating its execution step by step using Pygame. Stay tuned!</p>
+
+
+    
+
+    
+
+
+
+
+
+<div class="card mb-2">
+    <div class="card-header">
+        Bu yazı <b>2</b> adet yazıdan oluşan <b>"Simulating Shortest Path in a Binary Matrix using Pygame"</b> yazı dizisinin <b>2.</b> yazısıdır.
+    </div>
+    <ul class="list-group list-group-flush">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2025/03/22/simulating-shortest-path-binary-matrix-pygame-1-intro/">1 - Introduction: Shortest Path in a Binary Matrix Problem</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <i>2 - Solving Shortest Path in a Binary Matrix</i>
+            
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/2025/03/22/simulating-shortest-path-binary-matrix-pygame-1-intro/">&laquo; Introduction: Shortest Path in a Binary Matrix Problem</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+  </div>
+</div>
+
+
+  
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://serdarkuzucu.com/2025/03/15/simulating-shortest-path-binary-matrix-pygame-2-solution/';
+        this.page.identifier = 'simulating-shortest-path-binary-matrix-pygame-2-solution';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+  
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>

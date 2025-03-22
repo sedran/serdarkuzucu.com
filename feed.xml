@@ -6,9 +6,331 @@
 </description>
     <link>https://serdarkuzucu.com/</link>
     <atom:link href="https://serdarkuzucu.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 22 Mar 2025 17:59:09 +0000</pubDate>
-    <lastBuildDate>Sat, 22 Mar 2025 17:59:09 +0000</lastBuildDate>
+    <pubDate>Sat, 22 Mar 2025 18:15:40 +0000</pubDate>
+    <lastBuildDate>Sat, 22 Mar 2025 18:15:40 +0000</lastBuildDate>
     <generator>Jekyll v4.2.0</generator>
+    
+      <item>
+        <title>Solving Shortest Path in a Binary Matrix</title>
+        <description>&lt;p&gt;Hey all! This is the second post in the “Simulating Shortest Path in a Binary Matrix using Pygame” series.
+In this post, we will choose an algorithm and explain why we selected it as our preferred approach for this problem.
+We’ll also describe a few alternative algorithms commonly used for similar types of problems.
+Then, we’ll analyze the time and space complexity of the algorithm using Big-O notation.
+Finally, we will implement the algorithm in Python.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;choosing-the-right-algorithm&quot;&gt;Choosing the Right Algorithm&lt;/h2&gt;
+
+&lt;p&gt;When choosing an algorithm for finding the shortest path in a binary matrix, we need to consider both correctness and efficiency.
+A brute-force approach, such as trying all possible paths, is infeasible due to its exponential time complexity.
+A depth-first search (DFS) might seem like an option, but since it explores one path fully before backtracking,
+it doesn’t guarantee the shortest path in an unweighted grid.
+A* search is another possibility, as it uses heuristics to optimize the search, 
+but implementing an effective heuristic for this specific problem adds complexity. 
+Given that we are working with an unweighted grid where all movements have the same cost, 
+&lt;a href=&quot;https://en.wikipedia.org/wiki/Breadth-first_search&quot;&gt;Breadth-First Search (BFS)&lt;/a&gt; is the ideal choice—it explores all possible paths level by level, 
+ensuring that the first time we reach the target, we’ve found the shortest path. 
+Therefore, we will use BFS for our implementation.&lt;/p&gt;
+
+&lt;p&gt;Here’s why BFS is particularly suited for this problem and how it compares to other algorithms:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Guaranteed Shortest Path:&lt;/strong&gt; Since BFS visits nodes layer by layer, the first time it encounters the target node, 
+it has found the shortest path in terms of the number of moves.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Efficiency:&lt;/strong&gt; BFS works efficiently in grid-based problems, like the one in this task, where we don’t need to worry about weighted edges or more complex conditions.
+Every move from one cell to another has the same “weight” (cost), which is a key factor in why BFS is optimal.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;other-algorithms&quot;&gt;Other Algorithms:&lt;/h3&gt;
+
+&lt;p&gt;While BFS is ideal for this problem, there are alternative approaches that can be used for pathfinding:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Depth-first_search&quot;&gt;Depth-First Search (DFS)&lt;/a&gt;:&lt;/strong&gt; 
+DFS explores deeper into the graph before backtracking, which makes it less suitable for shortest path problems.
+It may explore longer paths before finding the target, which means it could miss the shortest path unless additional logic is used to track distances.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm&quot;&gt;Dijkstra’s Algorithm&lt;/a&gt;:&lt;/strong&gt;
+Dijkstra’s algorithm is used for finding the shortest path in graphs with weighted edges.
+However, in this case, all moves have the same “cost”, making BFS a simpler and more efficient choice.
+Dijkstra’s algorithm is also more computationally expensive due to the priority queue management.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/A*_search_algorithm&quot;&gt;A* Search Algorithm&lt;/a&gt;:&lt;/strong&gt;
+A* is an advanced pathfinding algorithm that uses heuristics to guide the search.
+While it can be faster than BFS in certain cases, it requires additional setup with heuristic functions.
+In this problem, a simple BFS is sufficient, and introducing heuristics would be an unnecessary complexity.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;space-and-time-complexity-of-bfs&quot;&gt;Space and Time Complexity of BFS&lt;/h2&gt;
+
+&lt;h3 id=&quot;time-complexity&quot;&gt;Time Complexity:&lt;/h3&gt;
+
+&lt;p&gt;In BFS, the time complexity is often represented as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(V + E)&lt;/code&gt;, where:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;V&lt;/code&gt; is the number of vertices (nodes) in the graph.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;E&lt;/code&gt; is the number of edges (connections between nodes).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For our grid problem, let’s consider:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;V&lt;/code&gt; (vertices): In a grid of size &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N x N&lt;/code&gt;, there are &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N²&lt;/code&gt; vertices (one for each cell in the grid).&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;E&lt;/code&gt; (edges): Each vertex (cell) can have up to 8 neighbors (up, down, left, right, and the 4 diagonal neighbors). 
+So, in the worst case, the number of edges will be 8 times the number of vertices, which gives us a maximum of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;8 * N²&lt;/code&gt; edges.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Therefore, the time complexity of BFS can be expressed as:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(V + E) = O(N² + 8 * N²) = O(9 * N²) = O(N²)&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Since constants are dropped in Big-O notation, it simplifies to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(N²)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;space-complexity&quot;&gt;Space Complexity:&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Queue:&lt;/strong&gt;
+BFS uses a queue to store the vertices that need to be explored.
+In the worst case, the queue could hold all the vertices of the grid, as we could be exploring each one.
+Therefore, the space complexity for the queue is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(V)&lt;/code&gt;.
+Since the grid has &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N²&lt;/code&gt; vertices, this becomes &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(N²)&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Visited List:&lt;/strong&gt;
+BFS typically also keeps track of which vertices have been visited to avoid revisiting them.
+This requires storing a boolean value (True/False) for each vertex, which also takes &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(N²)&lt;/code&gt; space for the grid, as there are &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;N²&lt;/code&gt; vertices to track.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;In summary:
+    &lt;ul&gt;
+      &lt;li&gt;The queue will take up &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(N²)&lt;/code&gt; space.&lt;/li&gt;
+      &lt;li&gt;The visited list will also take up &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(N²)&lt;/code&gt; space.&lt;/li&gt;
+      &lt;li&gt;So, the total space complexity is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(N²)&lt;/code&gt; + &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(N²)&lt;/code&gt; = &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;O(N²)&lt;/code&gt;.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;lets-code-the-algorithm&quot;&gt;Let’s Code the Algorithm&lt;/h2&gt;
+
+&lt;p&gt;To begin with, it’s worth mentioning that I will implement the function with a different signature than what LeetCode requires for their question.
+I will also use these functions in the simulation code I will implement later.
+Inline comments will be included in the code, and I will minimize explanations outside the code.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Imports and Constants:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# This is a double-ended queue implementation in python.
+# It is an efficient data structure for our queueing needs.
+&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;collections&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deque&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# The partial() is used for partial function application which “freezes” some portion 
+# of a function’s arguments and/or keywords resulting in a new object with a simplified signature.
+&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;functools&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;partial&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# This is to be used as type hints when we take the grid as a parameter to the functions
+&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;typing&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Values inside the grid 2-D array.
+# Using constants instead of numbers self-documents the code.
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;WALL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;NON_WALL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# All directions we can go from any Vertex (cell in grid). Having them in an array reduces the code duplication 
+# when we try finding all neighbors.
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;DIRECTIONS&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;# Right
+&lt;/span&gt;    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;# Bottom-Right
+&lt;/span&gt;    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;   &lt;span class=&quot;c1&quot;&gt;# Bottom
+&lt;/span&gt;    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# Bottom-Left
+&lt;/span&gt;    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# Left
+&lt;/span&gt;    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# Top-Left
+&lt;/span&gt;    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# Top
+&lt;/span&gt;    &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# Top-Right
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Is a valid move?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;is_valid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]],&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]],&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
+    Given a position (x, y), verifies if it is within the grid's boundaries,
+    if it is not a wall (grid[x][y] == 1), if it is not visited before.
+    Use this function to test if a candidate neighbor can be queued for a visit.
+    &quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WALL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Visiting Neighbors:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;visit_neighbors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]],&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;bool&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]],&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;queue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deque&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
+    Given a position (x, y), visit its neighbors and queue them for a visit.
+    Returns the list of neighbors for further processing in the simulation.
+    &quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;is_valid_partial&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;partial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;is_valid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;neighbors&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dy&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DIRECTIONS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;new_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dy&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;is_valid_partial&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;neighbors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;new_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;new_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;queue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;extend&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;neighbors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;neighbors&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;The algorithm:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;shortest_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]],&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;tuple&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;tuple&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;
+    Given a square grid, find the shortest path from the start to the end.
+    Returns the number of steps required to reach the end from the start.
+    If no path is found, returns -1.
+    &quot;&quot;&quot;&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# Size of the grid; assuming it is a square grid
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# Initialize the level of the BFS traversal
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;level&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# If end is not provided, set it to the bottom-right corner of the grid
+&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# If start or end is a wall, return -1
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;start_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start_y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;end_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end_y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WALL&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;end_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;end_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;WALL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# Initialize the visited matrix and the queue for BFS traversal
+&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;# Both data structures are initialized with the start position
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[[&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start_x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;][&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;queue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;deque&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# Perform BFS traversal. Loop until the queue is empty.
+&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;queue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# At each iteration, we exhaust all elements at the current level.
+&lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;level&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+        
+        &lt;span class=&quot;c1&quot;&gt;# Loop through only the number of elements at the current level because the queue
+&lt;/span&gt;        &lt;span class=&quot;c1&quot;&gt;# will be modified during the iteration.
+&lt;/span&gt;        &lt;span class=&quot;n&quot;&gt;elements_at_level&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;queue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elements_at_level&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;# Pop the element from the queue
+&lt;/span&gt;            &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;popleft&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;# If the end is reached, return the level
+&lt;/span&gt;            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end_x&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;end_y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;level&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;# Visit the neighbors of the current element. They will be processed in the next level.
+&lt;/span&gt;            &lt;span class=&quot;n&quot;&gt;visit_neighbors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;visited&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# There are no more elements to visit and the end was not reached
+&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This code defines the algorithm that returns either the length of the shortest path between start and end positions in the given square grid
+or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-1&lt;/code&gt; when there is no such path.&lt;/p&gt;
+
+&lt;p&gt;That’s it! We can test this function by providing some solvable and non-solvable grid examples.&lt;/p&gt;
+
+&lt;p&gt;Let’s test it with the first example we have given in the first post of this series and two examples shared on the original LeetCode question.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;test_shortest_path_2x2_solvable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# The first example on the LeetCode question
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;assert&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shortest_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;test_shortest_path_3x3_solvable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# The second example on the LeetCode question
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;assert&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shortest_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;test_shortest_path_5x5_solvable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Our randomly generated example we've seen in first post of this series
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;assert&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shortest_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;test_shortest_path_5x5_unsolvable&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Just flipping (x=1, y=2) from 0 to 1, we have made our above example unsolvable
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;assert&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shortest_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;grid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;With our BFS implementation in place, we now have a solid foundation for solving the shortest path problem in a binary matrix.
+We’ve chosen BFS for its efficiency in unweighted grids and verified its correctness with test cases.
+This completes the algorithmic part of our journey.
+Now, we’re ready to shift our focus to visualization. 
+In the next posts, we will bring this algorithm to life by simulating its execution step by step using Pygame. Stay tuned!&lt;/p&gt;
+</description>
+        <pubDate>Sat, 22 Mar 2025 13:05:00 +0000</pubDate>
+        <link>https://serdarkuzucu.com/2025/03/15/simulating-shortest-path-binary-matrix-pygame-2-solution/</link>
+        <guid isPermaLink="true">https://serdarkuzucu.com/2025/03/15/simulating-shortest-path-binary-matrix-pygame-2-solution/</guid>
+        
+        
+        <category>Python</category>
+        
+        <category>Algorithms</category>
+        
+        <category>Pygame</category>
+        
+      </item>
     
       <item>
         <title>Introduction: Shortest Path in a Binary Matrix Problem</title>
@@ -2578,199 +2900,6 @@ Anlatımda kopukluklar varsa sebebi budur, hatalarım olduysa affola.&lt;/p&gt;
         <category>Java</category>
         
         <category>Programlama</category>
-        
-      </item>
-    
-      <item>
-        <title>Daha Tatlı Bir Git Log</title>
-        <description>&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git log&lt;/code&gt;, Git versiyon kontrol sisteminde oluşturulmuş
-commit geçmişini tarihsel olarak sondan başa doğru sırasıyla
-konsola yazan bir &lt;strong&gt;Git&lt;/strong&gt; komutudur. 
-Tek başına kullanıldığında oldukça sıkıcı bir görünüme sahip olan
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git log&lt;/code&gt; komutunu birkaç parametre ile daha tatlı bir hale getirebiliyoruz.&lt;/p&gt;
-
-&lt;!--more--&gt;
-
-&lt;h2 id=&quot;varsayılan-git-log&quot;&gt;Varsayılan Git Log&lt;/h2&gt;
-
-&lt;p&gt;En basit hali ile 
-&lt;a href=&quot;https://github.com/spring-projects/spring-boot&quot;&gt;spring-boot&lt;/a&gt; 
-projesinde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git log&lt;/code&gt; komutunu çalıştırdığımızda
-aşağıdaki gibi bir görüntü ile karşılaşırız.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/posts/better-git-log-1.png&quot; alt=&quot;Normal Git Log&quot; width=&quot;600px&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;tek-satır-git-log&quot;&gt;Tek Satır Git Log&lt;/h2&gt;
-
-&lt;p&gt;Yukarıdaki şekilde olduğu gibi uzun uzun açıklamaları okumak istemiyorsak,
-sadece commit başlıklarını listelemek istiyorsak, 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--oneline&lt;/code&gt; parametresini kullanabiliriz.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git log --oneline&lt;/code&gt; komutunu çalıştırdığımızda 
-aşağıdaki çıktıyı elde ederiz.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/posts/better-git-log-2.png&quot; alt=&quot;Git Log --oneline&quot; width=&quot;600px&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;graph-şeklinde&quot;&gt;Graph Şeklinde&lt;/h2&gt;
-
-&lt;p&gt;Graph şeklinde çıktı almak için &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--graph&lt;/code&gt; parametresini kullanabiliriz.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git log --graph&lt;/code&gt; komutunu çalıştırdığımızda aşağıdaki çıktıyı elde ederiz.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/posts/better-git-log-3.png&quot; alt=&quot;Git Log --graph&quot; width=&quot;600px&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Bu şekilde ağaç yapısında hangi commit hangi branch’de oluşturulmuş,
-hangi branch hangi branch’e birleştirilmiş rahatça görebiliriz.&lt;/p&gt;
-
-&lt;p&gt;Eğer commit mesajlarının sadece başlık kısımları görünsün isterseniz
-bu komutta da &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--oneline&lt;/code&gt; parametresini kullanabilirsiniz.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git log --graph --oneline&lt;/code&gt; komutunu kullanarak aşağıdaki
-görüntüyü elde edebiliriz.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/posts/better-git-log-4.png&quot; alt=&quot;Git Log --graph --oneline&quot; width=&quot;600px&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;formatlama&quot;&gt;Formatlama&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git log&lt;/code&gt; komutuna &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--pretty=format:&amp;lt;string&amp;gt;&lt;/code&gt; parametresini geçerek
-kendi istediğimiz bilgiyi istediğimiz şekilde yazmasını sağlayabiliyoruz.&lt;/p&gt;
-
-&lt;p&gt;Bu sayede istersek tek bir satırda veya birden fazla satırda 
-commit’in id’sini, 
-commit’i işaret eden tag ve branch’leri,
-commit yazarını (author),
-commitin oluşturulduğu tarihi,
-commit mesajının başlığını veya tamamını
-ve daha birçok alanını çıktı alabiliriz.&lt;/p&gt;
-
-&lt;p&gt;Formatı girerken tırnak içerisinde belli başlı bazı parametreleri kullanabiliyoruz.&lt;/p&gt;
-
-&lt;p&gt;Aşağıdaki örneğin üzerinden inceleyelim:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git log &lt;span class=&quot;nt&quot;&gt;--pretty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;format:&lt;span class=&quot;s2&quot;&gt;&quot;%h -%d %s (%ar) &amp;lt;%an&amp;gt;&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Bu komuttaki formatın içerisinde bulunan parametreler:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%h&lt;/code&gt;  : Commit ID’sinin 10 karakter uzunluğundaki kısa hali&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%d&lt;/code&gt;  : Commit’e işaret eden branch veya tag’lerin parantez içerisinde virgülle ayrılmış listesi&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%s&lt;/code&gt;  : Commit mesajının başlık satırı (subject)&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%ar&lt;/code&gt; : Commit tarihinin şimdiki zamana göre göreceli formatı. Örneğin “3 gün önce”, “5 dakika önce”, vb.&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%an&lt;/code&gt; : Commit’i oluşturan kişinin (author) ismi&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Bu komutun çıktısı aşağıdaki gibi olacaktır:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/posts/better-git-log-5.png&quot; alt=&quot;Git Log pretty format&quot; width=&quot;600px&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Daha fazla parametreye hakim olmak isteyenlerin 
-&lt;a href=&quot;https://git-scm.com/docs/git-log&quot;&gt;Git Log&lt;/a&gt; dökümantasyonunun
-&lt;a href=&quot;https://git-scm.com/docs/git-log#_pretty_formats&quot;&gt;PRETTY FORMATS&lt;/a&gt;
-başlığını incelemelerini tavsiye ederim.&lt;/p&gt;
-
-&lt;p&gt;Ben “3 gün önce” gibi göreceli tarihleri sevmediğim için
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%cd&lt;/code&gt; format parametresini kullanıyorum.
-Bu parametre ek olarak &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--date=format:&amp;lt;string&amp;gt;&lt;/code&gt; parametresini
-kullanabilmeme olanak tanıyor.
-Böylece istediğim formatta tarih çıktısı da alabiliyorum.&lt;/p&gt;
-
-&lt;p&gt;Aşağıdaki komut tarih formatını istediğimiz gibi ayarlayabilmemizi sağlıyor.
-Yukarıdaki komuttan tek farkı tarihin &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2020-04-25 13:32:43&lt;/code&gt; şeklinde çıkması.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git log &lt;span class=&quot;nt&quot;&gt;--pretty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;format:&lt;span class=&quot;s2&quot;&gt;&quot;%h -%d %s (%cd) &amp;lt;%an&amp;gt;&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;format:&lt;span class=&quot;s1&quot;&gt;'%Y-%m-%d %H:%M:%S'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;renklendirme&quot;&gt;Renklendirme&lt;/h2&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--pretty=format:&amp;lt;string&amp;gt;&lt;/code&gt; parametresi ile formatladığımız log
-tek renk olarak çıktı vereceğinden okuması biraz zor olacaktır.&lt;/p&gt;
-
-&lt;p&gt;Eğer istersek formatın herhangi bir alanını 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%C(&amp;lt;color&amp;gt;)&lt;/code&gt; ve &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%C(reset)&lt;/code&gt; arasına alarak renklendirebiliriz.&lt;/p&gt;
-
-&lt;p&gt;Bazı durumlarda renklendirme git ayarlarında devre dışı bırakılmış olabiliyor.
-Bu sebeple komuta &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--color&lt;/code&gt; parametresini de ekleyelim.&lt;/p&gt;
-
-&lt;p&gt;Yukarıdaki son örnekte verdiğim komutta
-commit id kırmızı,
-branch ve tag isimleri sarı,
-tarih yeşil,
-author koyu mavi olsun istiyorsak 
-aşağıdaki gibi parametrelerin etrafını renklerle sarabiliriz.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git log &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;--color&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;--pretty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;format:&lt;span class=&quot;s2&quot;&gt;&quot;%C(red)%h%C(reset) -%C(yellow)%d%C(reset) %s %C(green)(%cd)%C(reset) %C(bold blue)&amp;lt;%an&amp;gt;%C(reset)&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;--date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;format:&lt;span class=&quot;s1&quot;&gt;'%Y-%m-%d %H:%M:%S'&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Bu komutun çıktısı aşağıdaki gibi olacaktır:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/posts/better-git-log-6.png&quot; alt=&quot;Git Log pretty format renkli&quot; width=&quot;800px&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;renkli-formatlı-graph-olarak&quot;&gt;Renkli, Formatlı, Graph Olarak&lt;/h2&gt;
-
-&lt;p&gt;Yukarıdaki renklendirme başlığında verdiğim örnek komutun sonuna
-bir de &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--graph&lt;/code&gt; parametresini eklersek eğer,
-hem istediğimiz formatta ve renklendirme ile hem de graph halinde
-versiyon geçmişimizi görüntülemiş oluruz.&lt;/p&gt;
-
-&lt;p&gt;Son iyileştirmeyi de yaptığımız durumda komutumuz şu hale gelir:&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git log &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;--color&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;--pretty&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;format:&lt;span class=&quot;s2&quot;&gt;&quot;%C(red)%h%C(reset) -%C(yellow)%d%C(reset) %s %C(green)(%cd)%C(reset) %C(bold blue)&amp;lt;%an&amp;gt;%C(reset)&quot;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;--date&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;format:&lt;span class=&quot;s1&quot;&gt;'%Y-%m-%d %H:%M:%S'&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;--graph&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Bu komutu çalıştırdığımızda çıktı aşağıdaki gibi olacaktır:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/posts/better-git-log-7.png&quot; alt=&quot;Git Log pretty format renkli graph&quot; width=&quot;800px&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;alias-tanımlama&quot;&gt;Alias Tanımlama&lt;/h2&gt;
-
-&lt;p&gt;Yukarıda başlıktan başlığa eklemeler yapıp uzattığımız bu komutu 
-her seferinde tekrar elle yazmayacağız veya kopyala yapıştır yapmayacağız.&lt;/p&gt;
-
-&lt;p&gt;Bu komutu git’in alias özelliğini kullanarak bir kısayola atayacağız.&lt;/p&gt;
-
-&lt;p&gt;Terminalde &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git lg&lt;/code&gt; yazdığımızda yukarıdaki uzun komutun çalışmasını sağlayacağız.&lt;/p&gt;
-
-&lt;p&gt;Aşağıdaki komutu çalıştırdığınız anda git’in global konfigürasyonunda
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;lg&lt;/code&gt; isminde bir alias tanımlanmış oldu.
-Böylece &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git lg&lt;/code&gt; yazdığımız zaman artık o meşhur uzun komutumuz çalışacak.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git config &lt;span class=&quot;nt&quot;&gt;--global&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  alias.lg &lt;span class=&quot;s2&quot;&gt;&quot;log --color --graph --pretty=format:'%C(red)%h%C(reset) -%C(yellow)%d%C(reset) %s %C(green)(%cd)%C(reset) %C(bold blue)&amp;lt;%an&amp;gt;%C(reset)' --date=format:'%Y-%m-%d %H:%M:%S'&quot;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;kapanış&quot;&gt;Kapanış&lt;/h2&gt;
-
-&lt;p&gt;Bu komutu ilk olarak epey vakit önce 
-&lt;a href=&quot;https://coderwall.com/p/euwpig/a-better-git-log&quot;&gt;A better git log&lt;/a&gt;
-isimli yazıda görmüştüm.
-Birkaç yıldır bu yazıda gösterilen alias’ı ben de kullanıyorum ve bağımlılık oldu artık.
-Ekibimde işe başlayan her yeni genç yazılımcı arkadaşıma mutlaka bu alias’ı tanımlattırıyorum.&lt;/p&gt;
-
-&lt;p&gt;Sizin kendi geliştirici ortamlarınızda kullandığınız benzer formatlar varsa
-bu yazının altında yorum olarak paylaşabilirsiniz.&lt;/p&gt;
-
-&lt;h2 id=&quot;kaynaklar&quot;&gt;Kaynaklar&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://git-scm.com/docs/git-log&quot;&gt;https://git-scm.com/docs/git-log&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://coderwall.com/p/euwpig/a-better-git-log&quot;&gt;https://coderwall.com/p/euwpig/a-better-git-log&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://www.atlassian.com/git/tutorials/git-log&quot;&gt;https://www.atlassian.com/git/tutorials/git-log&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Sun, 26 Apr 2020 02:40:00 +0000</pubDate>
-        <link>https://serdarkuzucu.com/2020/04/26/daha-tatli-bir-git-log/</link>
-        <guid isPermaLink="true">https://serdarkuzucu.com/2020/04/26/daha-tatli-bir-git-log/</guid>
-        
-        
-        <category>Git</category>
         
       </item>
     
