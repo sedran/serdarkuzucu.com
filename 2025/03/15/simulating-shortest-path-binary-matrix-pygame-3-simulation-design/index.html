@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Designing a Multi-Stage Simulation with Pygame</title>
+
+  <meta name="description" content="Building a simple shortest path simulation is easy, but where’s the fun in that?In this post, I explore the design of a multi-stage simulation using Pygame, ...">
+
+<meta content="Serdar Kuzucu" property="og:site_name">
+
+
+<meta content="Designing a Multi-Stage Simulation with Pygame" property="og:title">
+
+
+
+<meta content="article" property="og:type">
+
+
+<meta content="Building a simple shortest path simulation is easy, but where’s the fun in that?In this post, I explore the design of a multi-stage simulation using Pygame, ..." property="og:description">
+
+
+<meta content="https://serdarkuzucu.com/2025/03/15/simulating-shortest-path-binary-matrix-pygame-3-simulation-design/" property="og:url">
+
+
+
+<meta content="2025-03-22T13:15:00+00:00" property="article:published_time">
+<meta content="https://serdarkuzucu.com/about/" property="article:author">
+
+
+
+<meta content="https://serdarkuzucu.com/assets/category/python.png" property="og:image">
+
+
+
+
+<meta content="Python" property="article:section">
+
+
+
+
+
+
+
+<meta name="twitter:creator" content="@sedran"/>
+<meta name="twitter:site" content="@sedran"/>
+<meta name="twitter:card" content="summary"/>
+
+
+  <link rel="stylesheet" href="/css/main.css?v=201904191944">
+  <link rel="canonical" href="https://serdarkuzucu.com/2025/03/15/simulating-shortest-path-binary-matrix-pygame-3-simulation-design/">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SG38PNN7T1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-SG38PNN7T1');
+  </script>
+  
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            
+            <a href="/category/algorithms" class="dropdown-item">Algorithms (3)</a>
+            
+            <a href="/category/angular" class="dropdown-item">Angular (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (4)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (6)</a>
+            
+            <a href="/category/git" class="dropdown-item">Git (2)</a>
+            
+            <a href="/category/gradle" class="dropdown-item">Gradle (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (27)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (6)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (6)</a>
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (48)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/pygame" class="dropdown-item">Pygame (3)</a>
+            
+            <a href="/category/python" class="dropdown-item">Python (3)</a>
+            
+            <a href="/category/spring-boot" class="dropdown-item">Spring Boot (1)</a>
+            
+            <a href="/category/unit-test" class="dropdown-item">Unit Test (5)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Designing a Multi-Stage Simulation with Pygame</h1>
+    <p class="post-meta">
+      <time datetime="2025-03-22T13:15:00+00:00" itemprop="datePublished">Mar 22, 2025</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/python">Python</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/algorithms">Algorithms</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/pygame">Pygame</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    
+
+
+
+
+
+<div class="card mb-2">
+    <div class="card-header">
+        Bu yazı <b>3</b> adet yazıdan oluşan <b>"Simulating Shortest Path in a Binary Matrix using Pygame"</b> yazı dizisinin <b>3.</b> yazısıdır.
+    </div>
+    <ul class="list-group list-group-flush">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2025/03/22/simulating-shortest-path-binary-matrix-pygame-1-intro/">1 - Introduction: Shortest Path in a Binary Matrix Problem</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2025/03/15/simulating-shortest-path-binary-matrix-pygame-2-solution/">2 - Solving Shortest Path in a Binary Matrix</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <i>3 - Designing a Multi-Stage Simulation with Pygame</i>
+            
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+
+
+    <p>Building a simple shortest path simulation is easy, but where’s the fun in that?
+In this post, I explore the design of a multi-stage simulation using Pygame, 
+where users interact with different states from setup to visualization and results. 
+While adding complexity isn’t strictly necessary, 
+it provides a great opportunity to learn core game development concepts like game loops, frame rate independence, and scene management. 
+This post outlines the structure and expectations of the simulation before diving into the actual implementation.</p>
+
+<!--more-->
+
+<hr />
+
+<h2 id="simulation">Simulation</h2>
+
+<p>The simulation application will be a multi-stage application.
+This means the user will navigate between stages and experience different user interfaces at different times.
+There will be event handling, and the keyboard will play a role too!
+You might ask, “Was that complexity necessary?” <strong>Not at all!</strong>
+We are adding complexity purely to learn the <a href="https://www.pygame.org/">Pygame</a> library.</p>
+
+<p>There’s no deep reason why I chose <strong>Pygame</strong> as my framework of choice.
+These days, I mostly write Python code, and I don’t want to stop using a language before building a user interface with it.
+This code could be much smaller if I used a different language or framework.
+For example, most of what I’m implementing now is handled automatically by <a href="https://unity.com/">Unity</a>.
+However, I also believe that coding these basics helps me understand Unity and other full-fledged game engines better.</p>
+
+<div class="alert alert-secondary pb-0" role="alert">
+  <p>I am also learning Unity in parallel, and I am quite surprised
+when I saw how this guy called Mark created Flappy Bird in Unity in a 45-minute YouTube video.
+Unity will definitely be my next tool to explore.
+However, I can also go crazy and write Flappy Bird in Pygame although it may kill me.</p>
+
+  <p>Watch here: <a href="https://www.youtube.com/watch?v=XtQMytORBmM">The Unity Tutorial For Complete Beginners</a></p>
+</div>
+
+<h3 id="expectations">Expectations</h3>
+
+<p>Before going into the code, let’s discuss expectations from the simulation application.
+I am sharing the screenshots below to be able to explain it better.</p>
+
+<h4 id="1-startup-screen">1. Startup Screen</h4>
+
+<p>We want to present some alternative scenarios to the user. 
+That’s why I added an empty startup screen to inform the user about how to start a simulation.
+All possible user choices will navigate us to the same simulation screen with different setups:</p>
+
+<ol>
+  <li>Pressing “Space” key will start a random simulation. 
+We will not predetermine if finding a path from start position to end position is possible or not.</li>
+  <li>Pressing “Enter” will start a simulation that ends with a successful path from start to end.
+We will randomly create a grid and test it with our algorithm we implemented previously.
+We will create new grid and discard them until we find a grid with a possible solution.</li>
+  <li>Pressing “ESC” will start a simulation that ends with a failure to find a path.
+We will use the same brute-force grid creation logic as the success scenario.</li>
+</ol>
+
+<p><img src="/assets/posts/shortest-path-simulation/shortest-path-bfs-startup-screen.png" alt="Simulation Startup Screenshot" width="400px" /></p>
+
+<h4 id="2-simulation-screen">2. Simulation Screen</h4>
+
+<p>This screen will take a grid and solve the problem!
+It will refresh the visual elements at every step of the algorithm.
+What we’ll do here is as follows:</p>
+
+<ol>
+  <li>Draw walls as squares and unvisited nodes as gray circles into the grid</li>
+  <li>Periodically process levels in the BFS algorithm – Do not process everything at one go, allow user to see it</li>
+  <li>Paint visited circles in blue color</li>
+  <li>Connect visited circles with a line between them and their parent circle. Parent circle is the circle who adds a child circle to the queue.</li>
+  <li>Repeat until the queue is empty, or we reach the end state.
+    <ul>
+      <li>If we are at the end state, we navigate to the successful simulation screen</li>
+      <li>If queue is empty, we navigate to the failed simulation screen</li>
+    </ul>
+  </li>
+  <li>Current level should be visible to the user as a text at the bottom</li>
+  <li>Pressing ESC during a simulation will navigate us to the initial empty screen immediately</li>
+</ol>
+
+<p><img src="/assets/posts/shortest-path-simulation/shortest-path-bfs-during-simulation.png" alt="During Simulation Screenshot" width="400px" /></p>
+
+<h4 id="3-simulation-end-successfully-screen">3. Simulation End Successfully Screen</h4>
+
+<p>This screen will show the same simulation view we were displaying in the above screen.
+It will also paint the nodes/circles that makes the shortest path in green color.
+Among the shortest path circles, the lines will be thicker than the other lines connecting other circles.
+We will show the current level with a different text.
+It will instruct user to use “Space” key to navigate to the initial empty screen for starting over.</p>
+
+<p><img src="/assets/posts/shortest-path-simulation/shortest-path-bfs-end-simulation.png" alt="Simulation Finished Screenshot" width="400px" /></p>
+
+<h4 id="4-simulation-failed-screen">4. Simulation Failed Screen</h4>
+
+<p>This is a very similar screen to the successful end screen.
+It will have a different text while it displays the current level.
+It will show the same grid, but it will add a semi-transparent overlay on top of it.
+This doesn’t have to be a good user experience. Remember we are doing things for learning.</p>
+
+<p><img src="/assets/posts/shortest-path-simulation/shortest-path-bfs-fail-simulation.png" alt="Simulation Failed Screenshot" width="400px" /></p>
+
+<h3 id="game-development-concepts">Game Development Concepts</h3>
+
+<p>What we’re building in this simulation is simple for a game developer (not me).
+While it could be done without following game development best practices, I’m using this as a learning opportunity.
+Each of these concepts has extensive tutorials online, but here’s a brief (and possibly flawed) summary of them:</p>
+
+<h4 id="1-game-loop">1. Game Loop</h4>
+
+<p>A <a href="https://gameprogrammingpatterns.com/game-loop.html">game loop</a> is what keeps a game running.
+It’s a continuous cycle that handles user input, updates the game state, and redraws everything on the screen.
+In Pygame, this means checking for events like key presses, updating objects, and rendering the latest frame.
+The loop keeps running until the game ends, making everything feel smooth and responsive.</p>
+
+<p>Basically, a game loop is a while loop that runs forever unless user closes the game.</p>
+
+<p>A basic game loop in Pygame looks like this:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pygame</span>
+
+<span class="c1"># Initialize Pygame
+</span><span class="n">pygame</span><span class="p">.</span><span class="n">init</span><span class="p">()</span>
+
+<span class="c1"># Set up screen and clock
+</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="p">.</span><span class="n">display</span><span class="p">.</span><span class="n">set_mode</span><span class="p">((</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
+<span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="p">.</span><span class="n">time</span><span class="p">.</span><span class="n">Clock</span><span class="p">()</span>
+
+<span class="c1"># Game loop
+</span><span class="n">running</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">while</span> <span class="n">running</span><span class="p">:</span>
+    <span class="c1"># Handle events
+</span>    <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pygame</span><span class="p">.</span><span class="n">event</span><span class="p">.</span><span class="n">get</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">event</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="p">.</span><span class="n">QUIT</span><span class="p">:</span>
+            <span class="n">running</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="c1"># Handle other events that are important to your application
+</span>
+    <span class="c1"># Update game state
+</span>    <span class="c1"># (update game objects, logic, etc.)
+</span>    <span class="n">update</span><span class="p">()</span>  <span class="c1"># Implement your update function and call it
+</span>
+    <span class="c1"># Render the screen
+</span>    <span class="n">screen</span><span class="p">.</span><span class="n">fill</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>  <span class="c1"># Clear screen with black
+</span>    <span class="c1"># (draw game objects, etc.)
+</span>    <span class="n">draw</span><span class="p">()</span>  <span class="c1"># Implement your rendering function and call it
+</span>
+    <span class="n">pygame</span><span class="p">.</span><span class="n">display</span><span class="p">.</span><span class="n">flip</span><span class="p">()</span>  <span class="c1"># Update the display
+</span>
+    <span class="c1"># Cap the frame rate to 60 frames per second
+</span>    <span class="n">clock</span><span class="p">.</span><span class="n">tick</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+
+<span class="c1"># Clean up
+</span><span class="n">pygame</span><span class="p">.</span><span class="n">quit</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h4 id="2-frame-rate">2. Frame Rate</h4>
+
+<p>Frame rate is how many frames (or images) your game renders per second.
+It’s usually measured in FPS (frames per second).
+A higher frame rate makes the game look smoother, while a lower frame rate can make it feel choppy.
+But it’s not just about visuals — if your game logic is tied directly to the frame rate, 
+things can speed up or slow down depending on performance, which is why frame rate independence is important.</p>
+
+<p>It is often recommended capping FPS for several reasons.
+While higher frame rates can make the game smoother, they may also lead to excessive CPU or GPU usage, 
+leading to performance issues, overheating, and reduced battery life on portable devices.
+By capping the FPS, we ensure the game runs consistently across different hardware and prevent unnecessary performance spikes.
+A common cap, such as 60 FPS, provides a stable and smooth experience without overloading the system.</p>
+
+<p>In the above code, we have the following code piece in the basic game loop.
+It allows at most 60 frames per second.
+It adds a calculated waiting time between frames.
+Without it, the program doesn’t wait between frames, keeps updating objects and rendering graphics at a very high speed.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Cap the frame rate at 60 FPS
+</span><span class="n">clock</span><span class="p">.</span><span class="n">tick</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="3-frame-rate-independence">3. Frame Rate Independence</h4>
+
+<p>Frame rate independence is the idea that your game’s logic (like movement, animations, and physics) should behave the same way 
+regardless of how fast or slow frames are being rendered. 
+Instead of relying on a fixed number of updates per second, you scale calculations based on elapsed time (delta time). 
+That way, even if the frame rate fluctuates, things move at a consistent speed.</p>
+
+<p>A simple (but not too precise) implementation of frame rate independence can be done as follows.
+It moves <code class="language-plaintext highlighter-rouge">clock.tick</code> to the beginning of the loop, stores the elapsed seconds since the previous frame in a variable,
+and passes that value to our imaginary <code class="language-plaintext highlighter-rouge">update</code> function.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Main game loop
+</span><span class="n">running</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">while</span> <span class="n">running</span><span class="p">:</span>
+    <span class="c1"># Get delta time from clock.tick (in seconds)
+</span>    <span class="n">delta_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">.</span><span class="n">tick</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span>  <span class="c1"># Convert to seconds
+</span>
+    <span class="c1"># Event handling
+</span>    <span class="n">handle_events</span><span class="p">()</span>
+
+    <span class="c1"># Update game state with delta time
+</span>    <span class="c1"># We are passing delta_time to make components do time-based updates
+</span>    <span class="n">update</span><span class="p">(</span><span class="n">delta_time</span><span class="p">)</span>
+
+    <span class="c1"># Render
+</span>    <span class="n">draw</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>All components/sprites/game objects in the game should update their internal state based on the elapsed time.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">speed</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="c1"># Bad: how fast character moves depends on the frame rate
+</span><span class="n">player</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="n">speed</span>
+
+<span class="c1"># Good: character moves with constant speed
+</span><span class="n">player</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="n">speed</span> <span class="o">*</span> <span class="n">delta_time</span>
+</code></pre></div></div>
+
+<h4 id="4-delta-time-δt-elapsed-time">4. Delta Time (Δt, Elapsed Time)</h4>
+
+<p>Delta time (Δt) represents the time difference between the current and the previous frame. 
+Many game engines use this term when updating movement, animations, or physics to make sure things stay consistent, even if the frame rate fluctuates.</p>
+
+<p>To demonstrate how delta time ensures consistent behavior despite varying frame rates, 
+let’s look at a simple example where we increment a counter every second. 
+The key idea here is to track the time between frames and update our game logic based on elapsed time, rather than relying on a fixed frame rate. 
+This way, regardless of how fast or slow the frames are being rendered, the logic will behave consistently, and the counter will increment once every second. Here’s a simple code snippet showing how this works:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Counter</span><span class="p">:</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">elapsed_time</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="n">delta_time</span><span class="p">):</span>
+        <span class="n">elapsed_time</span> <span class="o">+=</span> <span class="n">delta_time</span>
+        <span class="k">if</span> <span class="n">elapsed_time</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">elapsed_time</span> <span class="o">-=</span> <span class="mi">1</span>
+</code></pre></div></div>
+
+<h4 id="5-multiple-scenes">5. Multiple Scenes</h4>
+
+<p>In a game, we rarely have just one screen.
+We usually have a welcome screen, a main menu, a gameplay area, a pause menu, and maybe a game-over screen.
+Each of these different sections of the game is often called a scene.</p>
+
+<p>A scene represents a self-contained part of the game with its own logic, visuals, and interactions.
+When transitioning between different parts of the game, we are essentially switching scenes.
+Some game engines explicitly use the term scene (like Unity and Godot), while others might call them screens, states, or stages.</p>
+
+<p>Managing multiple scenes usually requires a system that can switch between them smoothly.
+Some games simply replace one scene with another, 
+while others keep multiple scenes active at once—like having a gameplay scene running in the background while a pause menu scene is displayed on top.</p>
+
+<p>An oversimplified scene transition might look like this:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Scene</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">Game</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">scenes</span> <span class="o">=</span> <span class="p">{</span><span class="s">"menu"</span><span class="p">:</span> <span class="n">MenuScene</span><span class="p">(),</span> <span class="s">"game"</span><span class="p">:</span> <span class="n">GameScene</span><span class="p">()}</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">current_scene</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">scenes</span><span class="p">[</span><span class="s">"menu"</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">current_scene</span><span class="p">.</span><span class="n">update</span><span class="p">()</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">current_scene</span><span class="p">.</span><span class="n">render</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>  <span class="c1"># Assume screen is initialized
+</span>
+
+<span class="k">class</span> <span class="nc">MenuScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">user_presses_start</span><span class="p">():</span>
+            <span class="n">game</span><span class="p">.</span><span class="n">current_scene</span> <span class="o">=</span> <span class="n">game</span><span class="p">.</span><span class="n">scenes</span><span class="p">[</span><span class="s">"game"</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">GameScene</span><span class="p">(</span><span class="n">Scene</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">user_presses_exit</span><span class="p">():</span>
+            <span class="n">game</span><span class="p">.</span><span class="n">current_scene</span> <span class="o">=</span> <span class="n">game</span><span class="p">.</span><span class="n">scenes</span><span class="p">[</span><span class="s">"menu"</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h4 id="6-sprite">6. Sprite</h4>
+
+<p>A sprite is a 2D image or animation that is used to represent an object in a game.
+It can be a character, an item, or any visual element in the game world.
+Sprites are typically drawn on a 2D canvas or screen, and they can be moved, rotated, and manipulated during the game to give the illusion of interaction or animation.</p>
+
+<p>A simple player sprite that moves right on every frame:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Player</span><span class="p">(</span><span class="n">pygame</span><span class="p">.</span><span class="n">sprite</span><span class="p">.</span><span class="n">Sprite</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">image</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">image</span><span class="p">.</span><span class="n">get_rect</span><span class="p">(</span><span class="n">topleft</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">speed</span> <span class="o">=</span> <span class="mi">5</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta_time</span><span class="p">):</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">rect</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="bp">self</span><span class="p">.</span><span class="n">speed</span> <span class="o">*</span> <span class="n">delta_time</span>  <span class="c1"># Move right
+</span>
+<span class="n">player</span> <span class="o">=</span> <span class="n">Player</span><span class="p">(</span><span class="n">load_image</span><span class="p">(</span><span class="s">"player.png"</span><span class="p">),</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<p>In this post, we explored the design of a multi-stage simulation using Pygame, focusing on creating a user-interactive experience that navigates through different states—startup, simulation, success, and failure screens. By incorporating game development concepts like the game loop, frame rate independence, delta time, and scene management, we’re not just building a simulation but also gaining a deeper understanding of how games and interactive applications are structured. While the added complexity isn’t strictly necessary for solving the shortest path problem, it provides a valuable learning opportunity for those interested in game development and Pygame.</p>
+
+<p>In the next post, we’ll dive into the actual implementation of this simulation. We’ll write the code to bring these stages to life, handle user input, and visualize the shortest path algorithm step by step. Get ready to see how all these concepts come together in a functional Pygame application!</p>
+
+
+    
+
+    
+
+
+
+
+
+<div class="card mb-2">
+    <div class="card-header">
+        Bu yazı <b>3</b> adet yazıdan oluşan <b>"Simulating Shortest Path in a Binary Matrix using Pygame"</b> yazı dizisinin <b>3.</b> yazısıdır.
+    </div>
+    <ul class="list-group list-group-flush">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2025/03/22/simulating-shortest-path-binary-matrix-pygame-1-intro/">1 - Introduction: Shortest Path in a Binary Matrix Problem</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2025/03/15/simulating-shortest-path-binary-matrix-pygame-2-solution/">2 - Solving Shortest Path in a Binary Matrix</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <i>3 - Designing a Multi-Stage Simulation with Pygame</i>
+            
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/2025/03/15/simulating-shortest-path-binary-matrix-pygame-2-solution/">&laquo; Solving Shortest Path in a Binary Matrix</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+  </div>
+</div>
+
+
+  
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://serdarkuzucu.com/2025/03/15/simulating-shortest-path-binary-matrix-pygame-3-simulation-design/';
+        this.page.identifier = 'simulating-shortest-path-binary-matrix-pygame-3-simulation-design';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+  
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>

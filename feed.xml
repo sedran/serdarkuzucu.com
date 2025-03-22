@@ -6,9 +6,333 @@
 </description>
     <link>https://serdarkuzucu.com/</link>
     <atom:link href="https://serdarkuzucu.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 22 Mar 2025 18:15:40 +0000</pubDate>
-    <lastBuildDate>Sat, 22 Mar 2025 18:15:40 +0000</lastBuildDate>
+    <pubDate>Sat, 22 Mar 2025 22:34:55 +0000</pubDate>
+    <lastBuildDate>Sat, 22 Mar 2025 22:34:55 +0000</lastBuildDate>
     <generator>Jekyll v4.2.0</generator>
+    
+      <item>
+        <title>Designing a Multi-Stage Simulation with Pygame</title>
+        <description>&lt;p&gt;Building a simple shortest path simulation is easy, but where’s the fun in that?
+In this post, I explore the design of a multi-stage simulation using Pygame, 
+where users interact with different states from setup to visualization and results. 
+While adding complexity isn’t strictly necessary, 
+it provides a great opportunity to learn core game development concepts like game loops, frame rate independence, and scene management. 
+This post outlines the structure and expectations of the simulation before diving into the actual implementation.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&quot;simulation&quot;&gt;Simulation&lt;/h2&gt;
+
+&lt;p&gt;The simulation application will be a multi-stage application.
+This means the user will navigate between stages and experience different user interfaces at different times.
+There will be event handling, and the keyboard will play a role too!
+You might ask, “Was that complexity necessary?” &lt;strong&gt;Not at all!&lt;/strong&gt;
+We are adding complexity purely to learn the &lt;a href=&quot;https://www.pygame.org/&quot;&gt;Pygame&lt;/a&gt; library.&lt;/p&gt;
+
+&lt;p&gt;There’s no deep reason why I chose &lt;strong&gt;Pygame&lt;/strong&gt; as my framework of choice.
+These days, I mostly write Python code, and I don’t want to stop using a language before building a user interface with it.
+This code could be much smaller if I used a different language or framework.
+For example, most of what I’m implementing now is handled automatically by &lt;a href=&quot;https://unity.com/&quot;&gt;Unity&lt;/a&gt;.
+However, I also believe that coding these basics helps me understand Unity and other full-fledged game engines better.&lt;/p&gt;
+
+&lt;div class=&quot;alert alert-secondary pb-0&quot; role=&quot;alert&quot;&gt;
+  &lt;p&gt;I am also learning Unity in parallel, and I am quite surprised
+when I saw how this guy called Mark created Flappy Bird in Unity in a 45-minute YouTube video.
+Unity will definitely be my next tool to explore.
+However, I can also go crazy and write Flappy Bird in Pygame although it may kill me.&lt;/p&gt;
+
+  &lt;p&gt;Watch here: &lt;a href=&quot;https://www.youtube.com/watch?v=XtQMytORBmM&quot;&gt;The Unity Tutorial For Complete Beginners&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;expectations&quot;&gt;Expectations&lt;/h3&gt;
+
+&lt;p&gt;Before going into the code, let’s discuss expectations from the simulation application.
+I am sharing the screenshots below to be able to explain it better.&lt;/p&gt;
+
+&lt;h4 id=&quot;1-startup-screen&quot;&gt;1. Startup Screen&lt;/h4&gt;
+
+&lt;p&gt;We want to present some alternative scenarios to the user. 
+That’s why I added an empty startup screen to inform the user about how to start a simulation.
+All possible user choices will navigate us to the same simulation screen with different setups:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Pressing “Space” key will start a random simulation. 
+We will not predetermine if finding a path from start position to end position is possible or not.&lt;/li&gt;
+  &lt;li&gt;Pressing “Enter” will start a simulation that ends with a successful path from start to end.
+We will randomly create a grid and test it with our algorithm we implemented previously.
+We will create new grid and discard them until we find a grid with a possible solution.&lt;/li&gt;
+  &lt;li&gt;Pressing “ESC” will start a simulation that ends with a failure to find a path.
+We will use the same brute-force grid creation logic as the success scenario.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/shortest-path-simulation/shortest-path-bfs-startup-screen.png&quot; alt=&quot;Simulation Startup Screenshot&quot; width=&quot;400px&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;2-simulation-screen&quot;&gt;2. Simulation Screen&lt;/h4&gt;
+
+&lt;p&gt;This screen will take a grid and solve the problem!
+It will refresh the visual elements at every step of the algorithm.
+What we’ll do here is as follows:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Draw walls as squares and unvisited nodes as gray circles into the grid&lt;/li&gt;
+  &lt;li&gt;Periodically process levels in the BFS algorithm – Do not process everything at one go, allow user to see it&lt;/li&gt;
+  &lt;li&gt;Paint visited circles in blue color&lt;/li&gt;
+  &lt;li&gt;Connect visited circles with a line between them and their parent circle. Parent circle is the circle who adds a child circle to the queue.&lt;/li&gt;
+  &lt;li&gt;Repeat until the queue is empty, or we reach the end state.
+    &lt;ul&gt;
+      &lt;li&gt;If we are at the end state, we navigate to the successful simulation screen&lt;/li&gt;
+      &lt;li&gt;If queue is empty, we navigate to the failed simulation screen&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Current level should be visible to the user as a text at the bottom&lt;/li&gt;
+  &lt;li&gt;Pressing ESC during a simulation will navigate us to the initial empty screen immediately&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/shortest-path-simulation/shortest-path-bfs-during-simulation.png&quot; alt=&quot;During Simulation Screenshot&quot; width=&quot;400px&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;3-simulation-end-successfully-screen&quot;&gt;3. Simulation End Successfully Screen&lt;/h4&gt;
+
+&lt;p&gt;This screen will show the same simulation view we were displaying in the above screen.
+It will also paint the nodes/circles that makes the shortest path in green color.
+Among the shortest path circles, the lines will be thicker than the other lines connecting other circles.
+We will show the current level with a different text.
+It will instruct user to use “Space” key to navigate to the initial empty screen for starting over.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/shortest-path-simulation/shortest-path-bfs-end-simulation.png&quot; alt=&quot;Simulation Finished Screenshot&quot; width=&quot;400px&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;4-simulation-failed-screen&quot;&gt;4. Simulation Failed Screen&lt;/h4&gt;
+
+&lt;p&gt;This is a very similar screen to the successful end screen.
+It will have a different text while it displays the current level.
+It will show the same grid, but it will add a semi-transparent overlay on top of it.
+This doesn’t have to be a good user experience. Remember we are doing things for learning.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/posts/shortest-path-simulation/shortest-path-bfs-fail-simulation.png&quot; alt=&quot;Simulation Failed Screenshot&quot; width=&quot;400px&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;game-development-concepts&quot;&gt;Game Development Concepts&lt;/h3&gt;
+
+&lt;p&gt;What we’re building in this simulation is simple for a game developer (not me).
+While it could be done without following game development best practices, I’m using this as a learning opportunity.
+Each of these concepts has extensive tutorials online, but here’s a brief (and possibly flawed) summary of them:&lt;/p&gt;
+
+&lt;h4 id=&quot;1-game-loop&quot;&gt;1. Game Loop&lt;/h4&gt;
+
+&lt;p&gt;A &lt;a href=&quot;https://gameprogrammingpatterns.com/game-loop.html&quot;&gt;game loop&lt;/a&gt; is what keeps a game running.
+It’s a continuous cycle that handles user input, updates the game state, and redraws everything on the screen.
+In Pygame, this means checking for events like key presses, updating objects, and rendering the latest frame.
+The loop keeps running until the game ends, making everything feel smooth and responsive.&lt;/p&gt;
+
+&lt;p&gt;Basically, a game loop is a while loop that runs forever unless user closes the game.&lt;/p&gt;
+
+&lt;p&gt;A basic game loop in Pygame looks like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pygame&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Initialize Pygame
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pygame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Set up screen and clock
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;screen&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pygame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;display&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;set_mode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;800&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;600&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;clock&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pygame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Clock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Game loop
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;running&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;running&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Handle events
+&lt;/span&gt;    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pygame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;event&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pygame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;QUIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;running&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;# Handle other events that are important to your application
+&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Update game state
+&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;# (update game objects, logic, etc.)
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# Implement your update function and call it
+&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Render the screen
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;screen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fill&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# Clear screen with black
+&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;# (draw game objects, etc.)
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;draw&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# Implement your rendering function and call it
+&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;pygame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;display&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;flip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# Update the display
+&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Cap the frame rate to 60 frames per second
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;clock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tick&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;60&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Clean up
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pygame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;quit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;2-frame-rate&quot;&gt;2. Frame Rate&lt;/h4&gt;
+
+&lt;p&gt;Frame rate is how many frames (or images) your game renders per second.
+It’s usually measured in FPS (frames per second).
+A higher frame rate makes the game look smoother, while a lower frame rate can make it feel choppy.
+But it’s not just about visuals — if your game logic is tied directly to the frame rate, 
+things can speed up or slow down depending on performance, which is why frame rate independence is important.&lt;/p&gt;
+
+&lt;p&gt;It is often recommended capping FPS for several reasons.
+While higher frame rates can make the game smoother, they may also lead to excessive CPU or GPU usage, 
+leading to performance issues, overheating, and reduced battery life on portable devices.
+By capping the FPS, we ensure the game runs consistently across different hardware and prevent unnecessary performance spikes.
+A common cap, such as 60 FPS, provides a stable and smooth experience without overloading the system.&lt;/p&gt;
+
+&lt;p&gt;In the above code, we have the following code piece in the basic game loop.
+It allows at most 60 frames per second.
+It adds a calculated waiting time between frames.
+Without it, the program doesn’t wait between frames, keeps updating objects and rendering graphics at a very high speed.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Cap the frame rate at 60 FPS
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;clock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tick&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;60&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;3-frame-rate-independence&quot;&gt;3. Frame Rate Independence&lt;/h4&gt;
+
+&lt;p&gt;Frame rate independence is the idea that your game’s logic (like movement, animations, and physics) should behave the same way 
+regardless of how fast or slow frames are being rendered. 
+Instead of relying on a fixed number of updates per second, you scale calculations based on elapsed time (delta time). 
+That way, even if the frame rate fluctuates, things move at a consistent speed.&lt;/p&gt;
+
+&lt;p&gt;A simple (but not too precise) implementation of frame rate independence can be done as follows.
+It moves &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;clock.tick&lt;/code&gt; to the beginning of the loop, stores the elapsed seconds since the previous frame in a variable,
+and passes that value to our imaginary &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;update&lt;/code&gt; function.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Main game loop
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;running&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;running&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Get delta time from clock.tick (in seconds)
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;delta_time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;clock&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tick&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;60&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1000&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# Convert to seconds
+&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# Event handling
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;handle_events&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# Update game state with delta time
+&lt;/span&gt;    &lt;span class=&quot;c1&quot;&gt;# We are passing delta_time to make components do time-based updates
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;delta_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;c1&quot;&gt;# Render
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;draw&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;All components/sprites/game objects in the game should update their internal state based on the elapsed time.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;speed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Bad: how fast character moves depends on the frame rate
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;player&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;speed&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Good: character moves with constant speed
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;player&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;speed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;delta_time&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;4-delta-time-δt-elapsed-time&quot;&gt;4. Delta Time (Δt, Elapsed Time)&lt;/h4&gt;
+
+&lt;p&gt;Delta time (Δt) represents the time difference between the current and the previous frame. 
+Many game engines use this term when updating movement, animations, or physics to make sure things stay consistent, even if the frame rate fluctuates.&lt;/p&gt;
+
+&lt;p&gt;To demonstrate how delta time ensures consistent behavior despite varying frame rates, 
+let’s look at a simple example where we increment a counter every second. 
+The key idea here is to track the time between frames and update our game logic based on elapsed time, rather than relying on a fixed frame rate. 
+This way, regardless of how fast or slow the frames are being rendered, the logic will behave consistently, and the counter will increment once every second. Here’s a simple code snippet showing how this works:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Counter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;elapsed_time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;delta_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;elapsed_time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;delta_time&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;elapsed_time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;counter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;elapsed_time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;5-multiple-scenes&quot;&gt;5. Multiple Scenes&lt;/h4&gt;
+
+&lt;p&gt;In a game, we rarely have just one screen.
+We usually have a welcome screen, a main menu, a gameplay area, a pause menu, and maybe a game-over screen.
+Each of these different sections of the game is often called a scene.&lt;/p&gt;
+
+&lt;p&gt;A scene represents a self-contained part of the game with its own logic, visuals, and interactions.
+When transitioning between different parts of the game, we are essentially switching scenes.
+Some game engines explicitly use the term scene (like Unity and Godot), while others might call them screens, states, or stages.&lt;/p&gt;
+
+&lt;p&gt;Managing multiple scenes usually requires a system that can switch between them smoothly.
+Some games simply replace one scene with another, 
+while others keep multiple scenes active at once—like having a gameplay scene running in the background while a pause menu scene is displayed on top.&lt;/p&gt;
+
+&lt;p&gt;An oversimplified scene transition might look like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Scene&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;pass&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;screen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;pass&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Game&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scenes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;menu&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MenuScene&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;game&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;GameScene&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()}&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;current_scene&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scenes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;menu&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;current_scene&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+            &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;current_scene&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;render&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;screen&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# Assume screen is initialized
+&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MenuScene&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Scene&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_presses_start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;game&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;current_scene&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;game&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scenes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;game&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;GameScene&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Scene&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_presses_exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;game&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;current_scene&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;game&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scenes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;menu&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;6-sprite&quot;&gt;6. Sprite&lt;/h4&gt;
+
+&lt;p&gt;A sprite is a 2D image or animation that is used to represent an object in a game.
+It can be a character, an item, or any visual element in the game world.
+Sprites are typically drawn on a 2D canvas or screen, and they can be moved, rotated, and manipulated during the game to give the illusion of interaction or animation.&lt;/p&gt;
+
+&lt;p&gt;A simple player sprite that moves right on every frame:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Player&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pygame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sprite&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Sprite&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;nb&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;__init__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;image&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;image&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rect&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get_rect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;topleft&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;speed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;update&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;delta_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;self&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;speed&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;delta_time&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# Move right
+&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;player&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Player&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;load_image&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;player.png&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;100&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;In this post, we explored the design of a multi-stage simulation using Pygame, focusing on creating a user-interactive experience that navigates through different states—startup, simulation, success, and failure screens. By incorporating game development concepts like the game loop, frame rate independence, delta time, and scene management, we’re not just building a simulation but also gaining a deeper understanding of how games and interactive applications are structured. While the added complexity isn’t strictly necessary for solving the shortest path problem, it provides a valuable learning opportunity for those interested in game development and Pygame.&lt;/p&gt;
+
+&lt;p&gt;In the next post, we’ll dive into the actual implementation of this simulation. We’ll write the code to bring these stages to life, handle user input, and visualize the shortest path algorithm step by step. Get ready to see how all these concepts come together in a functional Pygame application!&lt;/p&gt;
+</description>
+        <pubDate>Sat, 22 Mar 2025 13:15:00 +0000</pubDate>
+        <link>https://serdarkuzucu.com/2025/03/15/simulating-shortest-path-binary-matrix-pygame-3-simulation-design/</link>
+        <guid isPermaLink="true">https://serdarkuzucu.com/2025/03/15/simulating-shortest-path-binary-matrix-pygame-3-simulation-design/</guid>
+        
+        
+        <category>Python</category>
+        
+        <category>Algorithms</category>
+        
+        <category>Pygame</category>
+        
+      </item>
     
       <item>
         <title>Solving Shortest Path in a Binary Matrix</title>
@@ -2665,241 +2989,6 @@ o da projenin ön yüz kısmı büyüdükçe build sürelerinin aşırı uzamas�
         <category>Angular</category>
         
         <category>Gradle</category>
-        
-      </item>
-    
-      <item>
-        <title>Dağıtık Uygulamada Büyük Veri Okumak</title>
-        <description>&lt;p&gt;2020 senesi içerisinde &lt;a href=&quot;https://inomera.com/&quot;&gt;Inomera&lt;/a&gt;‘da Telekom sektörü için geliştirdiğimiz 
-devasa bir projeyi başarıyla canlıya aldık.
-Oldukça güncel teknolojiler kullandığımız ve mikroservis mimarisi ile
-geliştirdiğimiz bu sistem Kubernetes ortamı üzerinde çalışmakta. 
-Bu yazıda bu sistemde yaklaşık &lt;u&gt;22 milyon&lt;/u&gt; satır 
-kullanıcı verisini veritabanından okuyup dağıtık bir cache Map’ine
-dolduran küçük bir mikroserviste uyguladığımız
-dağıtık veri okuma yöntemini anlatmaya çalışacağım.&lt;/p&gt;
-
-&lt;!--more--&gt;
-
-&lt;h3 id=&quot;önbilgi&quot;&gt;Önbilgi&lt;/h3&gt;
-
-&lt;p&gt;Öncelikle kullandığımız araçlardan ve veri yapısından bahsedelim.&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Belleğe doldurmaya çalıştığımız veri her bir &lt;a href=&quot;https://tr.wikipedia.org/wiki/MSISDN&quot;&gt;msisdn&lt;/a&gt;, 
-yani müşterinin cep telefonu numarası, için müşterinin izin verdiği kategorilerin
-ID’lerinden oluşmakta olup Oracle DB üzerinde başka sistemler tarafından 
-yönetilen bir view’dan bize sağlanmakta. 
-Burada işin içinde çok fazla farklı müşteri sistemi olduğu için daha performanslı
-bir veritabanı veya tablo yapısına geçemiyoruz.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Veriyi belleğe çeken uygulamamız kubernetes üzerinde çalışmakta. 
-Dinamik olarak kaynak ihtiyacına göre Kubernetes tarafından
-instance sayısı arttırılıp azaltılabilmekte bu sebeple herhangi bir
-anda uygulamamızdan kaç adet instance’ın eş zamanlı çalışıyor olabileceği
-bilgisi elimizde yok. 
-Kubernetes API’lerini kullanarak bu bilgiyi elde edebilecek olsak da
-uygulamanın içerisinde Kubernetes bağımlılığı oluşturmak istemedik.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Dağıtık cache olarak Kubernetes dışında kurulmuş bir &lt;a href=&quot;https://hazelcast.org/&quot;&gt;Hazelcast&lt;/a&gt; cluster’ımız var.
-Herhangi bir müşterinin verisine herhangi bir mikroservisten çok hızlı bir şekilde
-ulaşabilmek için Hazelcast üzerindeki bir Map’de tutuyoruz.
-Hazelcast’in ayrıca bu işte Queue ve Lock özelliklerini de kullandık.&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Bu boyutta bir veriyi hızlı bir şekilde az bellek kullanarak sorgulayıp, işleyip, Hazelcast’e
-doldurmak için uygun bir yol ararken bu yazıda anlatacağım yöntemin 
-ihtiyacımızı karşılayacağını öngördük.&lt;/p&gt;
-
-&lt;h3 id=&quot;bellek-kullanımı&quot;&gt;Bellek Kullanımı&lt;/h3&gt;
-
-&lt;p&gt;Bir veritabanına büyük bir veri için sorgu atılacağı zaman düşünülmesi gereken
-en önemli şeylerden birisi veritabanından sonuçlar geldiği zaman uygulamanın bellek
-tüketiminin nasıl artacağıdır.&lt;/p&gt;
-
-&lt;p&gt;Eğer veriyi işlemeye başlamak için verinin tamamına ihtiyacımız yoksa, 
-verileri parça parça alıp, aldıkça işlemeliyiz.&lt;/p&gt;
-
-&lt;p&gt;Bunun için en bilindik yöntemlerden birisi offset/limit sorgusunu offset’i arttırarak tekrar tekrar
-atarak sayfalama (pagination) yapmak fakat bu yöntem her seferinde veritabanına yeniden sorgu atmayı
-gerektirdiği için faydasından çok zararı oluyor.&lt;/p&gt;
-
-&lt;p&gt;Verileri parça parça çekmek ve işledikçe devamını okumak için Hibernate’deki &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scroll&lt;/code&gt; özelliğini kullandık.
-Sorgunun envai çeşit hibernate kontrolünden ve transaction yönetiminden geçmemesi için
-Hibernate’deki &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;StatelessSession&lt;/code&gt; sınıfı üzerinden sorgumuzu &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;read-only&lt;/code&gt; modda attık.&lt;/p&gt;
-
-&lt;p&gt;Ek olarak bir ORM aracı ile sorgu sonuçlarının otomatik olarak entity sınıfına
-çevirilmesi özelliğinden de çok fazla reflection ve nesne kullanımının olmaması için
-feragat ediyoruz. Garbage Collector ve CPU biraz rahatlamış oluyor bu sayede.&lt;/p&gt;
-
-&lt;p&gt;Hibernate’de bu şekilde bir sorgu nasıl atılır aşağıda ufak bir örnek paylaşıyorum.
-Buradaki &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fetchSize&lt;/code&gt; parametresi veritabanından sonuçların kaçar kaçar belleğe alınacağını belirliyor.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;fetchMsisdnCategories&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;QueryState&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queryState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fetchSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Consumer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;MsisdnCategoriesRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;processor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StatelessSession&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;statelessSession&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sessionFactory&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;openStatelessSession&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nativeSql&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buildNativeSql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;queryState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;NativeQuery&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;statelessSession&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;createNativeQuery&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;nativeSql&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setFetchSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fetchSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setReadOnly&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-    
-        &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ScrollableResults&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scrollableResults&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nativeQuery&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;scroll&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ScrollMode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;FORWARD_ONLY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;scrollableResults&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Object&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rawRowData&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;scrollableResults&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-            &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;msisdn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;valueOf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rawRowData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
-            &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categoryIds&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;parseCategoryIdsAsByteArray&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;rawRowData&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
-            &lt;span class=&quot;cm&quot;&gt;/* Caller processes the result in `rawRowData` */&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;processor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;apply&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MsisdnCategoriesRecord&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;msisdn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;categoryIds&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
-        &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Bu method içerisinde çektiğimiz her satırı hemen sonuçları işleyecek olan &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Consumer&lt;/code&gt; sınıfına gönderiyoruz.
-Böylece herhangi bir şekilde uygulamanın belleğinde aşırı birikme yaratmamış oluyoruz.&lt;/p&gt;
-
-&lt;p&gt;Yukarıdaki methodu çağıran sınıf &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Consumer&lt;/code&gt; arayüzünden oluşturulmuş bir sınıfı parametre olarak gönderiyor.
-Yani DAO katmanından çıkacak olan her bir &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MsisdnCategoriesRecord&lt;/code&gt; nesnesinin nasıl işleneceğini DAO katmanına
-yazmamış oluyoruz.&lt;/p&gt;
-
-&lt;p&gt;DAO katmanındaki methodumuzu çağıran servis katmanı ise gelen her bir sonucu doğrudan Hazelcast’e atıyor.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;MsisdnCategoriesDao&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;msisdnCategoriesDao&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;// Hazelcast Map&lt;/span&gt;
-&lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;IMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Long&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;msisdnCategoriesMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;reloadMsisdnCategories&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;QueryState&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;queryState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;msisdnCategoriesDao&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;fetchMsisdnCategories&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;queryState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fetchSize&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;msisdnCategoriesMap&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;put&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getMsisdn&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getCategoryIds&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;sorgunun-dağıtılması&quot;&gt;Sorgunun Dağıtılması&lt;/h3&gt;
-
-&lt;p&gt;Yukarıdaki kod ile bir uygulama instance’ı tek başına DB’deki tüm datayı çekip Hazelcast Map’ine atabilir değil mi?
-Peki birden fazla uygulama instance’ı ayakta olduğu durumda datayı nasıl dağıtıyoruz?&lt;/p&gt;
-
-&lt;p&gt;Açık konuşmam gerekirse çözüm bulmakta en çok zorlandığımız kısım burası oldu.
-Bir öğle yemeğinde tartışırken aklımıza gelen şu çözümü beğendik ve o günden beri kullanıyoruz.&lt;/p&gt;
-
-&lt;p&gt;Öncelikle atılacak sorguları modüler aritmetik kullanarak parçalara bölüyoruz.
-Cep telefon numarası 905XXXXXXXXX formatında 12 adet rakamdan oluşan bir sayı olduğu için 
-modüler aritmetik işlemlerinde msisdn alanını tercih ettik.&lt;/p&gt;
-
-&lt;p&gt;Sorgumuzdaki &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;WHERE&lt;/code&gt; cümleciğinde ise şu şekilde modüler aritmetik koşuluna yer verdik:&lt;/p&gt;
-
-&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt;
-  &lt;span class=&quot;cm&quot;&gt;/*+ parallel(%s) */&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;MSISDN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;listagg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CATEGORY_ID&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;','&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;within&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;group&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;order&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;by&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MSISDN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CATEGORY_IDS&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;VIEW_MSISDN_CATEGORIES&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;where&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;MSISDN&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;CATEGORY_ID&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;and&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;MOD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;MSISDN&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;group&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;by&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;MSISDN&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Yukarıdaki &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;reloadMsisdnCategories&lt;/code&gt; ve &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fetchMsisdnCategories&lt;/code&gt; isimli methodlarda belki dikkatinizi çekmiştir 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;QueryState&lt;/code&gt; isminde bir sınıf kullanıyoruz sorguları oluştururken.
-Bu sınıf atılacak olan sorgunun hangi modda hangi kalana göre atılacağı bilgisini taşıyor.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;QueryState&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Serializable&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;long&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;serialVersionUID&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1L&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;kd&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;final&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;remainder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;QueryState&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;remainder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;mod&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mod&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;remainder&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;remainder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;Böylece mikroservisimizin her bir instance’ının belli bir QueryState için 
-sorgu atmasını sağlayabilirsek problem çözülmüş olacaktı.&lt;/p&gt;
-
-&lt;p&gt;Peki o anda mikroservisimizden kaç instance ayakta bilgisini bilmeden 
-nasıl tüm instance’lara görev dağıtabiliriz? 
-Bu noktada zorlandığımız nokta şuydu, instance sayısı kadar mod almaya çalışıyorduk.
-Hiçbir instance’ın boş yatmaması için tüm instance’ların işin bir ucundan tutması gerekiyordu.
-Çözümü bulduğumuz gün bunun için instance sayısını bilmeye ihtiyacımız olmadığını keşfettik.&lt;/p&gt;
-
-&lt;p&gt;Aşağıdaki diagramda olduğu gibi, tüm DB’yi okuyup veriyi belleğe yükleme görevini alan mikroservis,
-belirli bir mod değerine karar verip, bir hazelcast queue’suna mod sayısı kadar &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;QueryState&lt;/code&gt; nesnesini
-farklı kalan değerleri ile dolduruyor. Tüm mikroservis instance’ları hali hazırda açık duran 
-birer Thread ile bu belirli Queue’dan gelecek olan mesajları dinlemekteler. 
-Her instance Queue’dan kendine düşen &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;QueryState&lt;/code&gt; nesnesindeki mod ve kalan bilgisine göre sorgusunu atıyor
-ve veritabanından gelen sonuçları Hazelcast Map’ine dolduruyor.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/assets/posts/queue-mod-query.png&quot; alt=&quot;hazelcast queue modular_query&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Burada queue’ya attığımız &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;QueryState&lt;/code&gt; nesnelerinin sayısı (ya da mod değerimiz) instance sayısına tam bölünmüyorsa 
-bazı instance’lar diğerlerinden daha fazla sorgu atabilirler veritabanına. 
-Eğer mod değerimiz instance sayısından küçük ise bazı instance’larımız hiç sorgu atmayabilirler.
-Biz mikroservisin instance sayısının alabileceği maksimum değer civarında 
-bir sayıyı mod değeri olarak kullanıyoruz 
-ve bu değeri runtime’da değiştirebileceğimiz konfigüratif bir yapıda tutuyoruz.&lt;/p&gt;
-
-&lt;h3 id=&quot;ufak-i̇yileştirmeler&quot;&gt;Ufak İyileştirmeler&lt;/h3&gt;
-
-&lt;p&gt;Tüm mikroservislerin işi belli ölçülerde paylaşıp üzerlerine düşen görevi yaptıklarından emin olduktan sonra
-artık her bir mikroservisin elindeki işi yaparken daha performanslı çalışması için ne yapabiliriz bunu düşünmenin
-zamanı geldi.&lt;/p&gt;
-
-&lt;p&gt;Bu tip uygulamalarda en büyük zaman kaybı genellikle IO (network veya disk) kaynaklı olur.
-Veritabanından veriyi okuma kısmındaki git-gel işlemlerini sorguları scroll özelliğiyle atarak oldukça azalttık.
-Geriye hazelcast’e verileri gönderdiğimiz yer kalıyor. Hazelcast aracını da uygulamadan ayrı bir cluster şeklinde
-kurduğumuz için hazelcast operasyonları da network işlemlerinin büyük çoğunluğunu oluşturmakta.&lt;/p&gt;
-
-&lt;p&gt;DAO katmanından gelen her bir satır için hazelcast’e bir &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.put&lt;/code&gt; işlemi çağırmak yerine öncelikle
-gelen satırları küçük gruplar halinde (1000 adet gibi) toparlayıp sonrasında &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.putAll&lt;/code&gt; methodunu çağırarak
-tek seferde network’e çıkarak küçük bir iyileştirme sağlayabildik. Burada önemli nokta elimizdeki verinin
-karakteristiğine göre memory üzerinde fazla birikme oluşturmayacak doğru sayıyı seçmek.&lt;/p&gt;
-
-&lt;p&gt;Sonraki aşamada hazelcast dökümantasyonlarını karıştırırken bildiğimiz java Map’lerinde olmayan 
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.set&lt;/code&gt; ve &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.setAll&lt;/code&gt; isimli methodlarının Hazelcast’in IMap arayüzünde bulunduğunu fark ettik.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;put*&lt;/code&gt; türevi methodlar veriyi hazelcast’e koyduktan sonra Map’de ilgili key’e ait varolan eski veriyi dönerken
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;set*&lt;/code&gt; türevi methodlar herhangi bir şey dönmüyorlar. 
-Bu methodları kullandığımız durumda network katmanını kullanmayacağımız bir veri için boşuna meşgul etmemiş oluyoruz.&lt;/p&gt;
-
-&lt;h1 id=&quot;sonuç&quot;&gt;Sonuç&lt;/h1&gt;
-
-&lt;p&gt;Bu yazıda anlattığım yöntemleri kullanarak tek bir instance’da çalışan, 
-tüm veriyi veritabanından hazelcast’e doldurması bir saati bulan bir görevi
-10 dakikanın altında çalışır hale getirdik. Sorgu attığımız veritabanı yapısında
-değişiklik yapma şansımız olsaydı daha iyi süreler de elde edebilirdik 
-fakat o yapıyı bizden başka birçok farklı sistem kullandığından öyle bir şansımız malesef bulunmamakta.&lt;/p&gt;
-
-&lt;p&gt;Özetlemek gerekirse bu tip bir görev için kullanmaktan çok keyif aldığım şu teknikleri uyguladık:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Modüler aritmetik kullanarak sorguları dağıtma&lt;/li&gt;
-  &lt;li&gt;Bilinen ORM yapısından çıkıp daha native tarafa yakın sorgular kullanmak&lt;/li&gt;
-  &lt;li&gt;Veritabanı sorgusunun sonuçlarını scroll ederek okumak&lt;/li&gt;
-  &lt;li&gt;Aynı uygulamanın birbirini görmeyen/bilmeyen instance’ları arasında görev dağılımı&lt;/li&gt;
-  &lt;li&gt;Verinin bellekte minimum yer kaplayacak formatta tutulması&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Bu yöntemlerin bu yazıda gösterdiklerimden çok fazla sayıda farklı implementasyonları vardır
-fakat büyük işlerde önemli olan yöntemlerdir. Araçlar değişir.&lt;/p&gt;
-
-&lt;p&gt;Bu yazı 2020 Ağustos ayında başladığım fakat bir türlü vakit ayırıp bitiremediğim bir yazıydı.
-Anlatımda kopukluklar varsa sebebi budur, hatalarım olduysa affola.&lt;/p&gt;
-</description>
-        <pubDate>Fri, 08 Jan 2021 22:48:20 +0000</pubDate>
-        <link>https://serdarkuzucu.com/2021/01/09/dagitik-uygulamada-buyuk-veri-okumak/</link>
-        <guid isPermaLink="true">https://serdarkuzucu.com/2021/01/09/dagitik-uygulamada-buyuk-veri-okumak/</guid>
-        
-        
-        <category>Java</category>
-        
-        <category>Programlama</category>
         
       </item>
     
