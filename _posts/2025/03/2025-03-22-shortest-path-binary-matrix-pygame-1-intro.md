@@ -56,7 +56,7 @@ grid = [
 
 ![Example](/assets/posts/shortest-path-simulation/example_grid.png){:width="600px"}
 
-Solving the problem for the above grid should give us `8` as the result since we are visiting eight locations to reach our destination.
+Solving the problem for the above grid should give us `7` as the result since we are visiting seven locations to reach our destination.
 This result includes start and end locations as well.
 
 This problem is a good exercise for practicing pathfinding algorithms and understanding how to deal with grid-based problems, 
