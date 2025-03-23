@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Implementing the Simulation with Pygame</title>
+
+  <meta name="description" content="Welcome to the 4th post in the “Simulating Shortest Path in a Binary Matrix using Pygame” series!So far, we’ve explored the problem, implemented BFS, and des...">
+
+<meta content="Serdar Kuzucu" property="og:site_name">
+
+
+<meta content="Implementing the Simulation with Pygame" property="og:title">
+
+
+
+<meta content="article" property="og:type">
+
+
+<meta content="Welcome to the 4th post in the “Simulating Shortest Path in a Binary Matrix using Pygame” series!So far, we’ve explored the problem, implemented BFS, and des..." property="og:description">
+
+
+<meta content="https://serdarkuzucu.com/2025/03/15/simulating-shortest-path-binary-matrix-pygame-4-implementation/" property="og:url">
+
+
+
+<meta content="2025-03-22T13:20:00+00:00" property="article:published_time">
+<meta content="https://serdarkuzucu.com/about/" property="article:author">
+
+
+
+<meta content="https://serdarkuzucu.com/assets/category/python.png" property="og:image">
+
+
+
+
+<meta content="Python" property="article:section">
+
+
+
+
+
+
+
+<meta name="twitter:creator" content="@sedran"/>
+<meta name="twitter:site" content="@sedran"/>
+<meta name="twitter:card" content="summary"/>
+
+
+  <link rel="stylesheet" href="/css/main.css?v=201904191944">
+  <link rel="canonical" href="https://serdarkuzucu.com/2025/03/15/simulating-shortest-path-binary-matrix-pygame-4-implementation/">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SG38PNN7T1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-SG38PNN7T1');
+  </script>
+  
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            
+            <a href="/category/algorithms" class="dropdown-item">Algorithms (4)</a>
+            
+            <a href="/category/angular" class="dropdown-item">Angular (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (4)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (6)</a>
+            
+            <a href="/category/git" class="dropdown-item">Git (2)</a>
+            
+            <a href="/category/gradle" class="dropdown-item">Gradle (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (27)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (6)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (6)</a>
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (48)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/pygame" class="dropdown-item">Pygame (4)</a>
+            
+            <a href="/category/python" class="dropdown-item">Python (4)</a>
+            
+            <a href="/category/spring-boot" class="dropdown-item">Spring Boot (1)</a>
+            
+            <a href="/category/unit-test" class="dropdown-item">Unit Test (5)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Implementing the Simulation with Pygame</h1>
+    <p class="post-meta">
+      <time datetime="2025-03-22T13:20:00+00:00" itemprop="datePublished">Mar 22, 2025</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/python">Python</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/algorithms">Algorithms</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/pygame">Pygame</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    
+
+
+
+
+
+<div class="card mb-2">
+    <div class="card-header">
+        Bu yazı <b>4</b> adet yazıdan oluşan <b>"Simulating Shortest Path in a Binary Matrix using Pygame"</b> yazı dizisinin <b>4.</b> yazısıdır.
+    </div>
+    <ul class="list-group list-group-flush">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2025/03/22/simulating-shortest-path-binary-matrix-pygame-1-intro/">1 - Introduction: Shortest Path in a Binary Matrix Problem</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2025/03/15/simulating-shortest-path-binary-matrix-pygame-2-solution/">2 - Solving Shortest Path in a Binary Matrix</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2025/03/15/simulating-shortest-path-binary-matrix-pygame-3-simulation-design/">3 - Designing a Multi-Stage Simulation with Pygame</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <i>4 - Implementing the Simulation with Pygame</i>
+            
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+
+
+    <p>Welcome to the 4th post in the “Simulating Shortest Path in a Binary Matrix using Pygame” series!
+So far, we’ve explored the problem, implemented BFS, and designed a multi-stage simulation.
+Now, it’s time to bring it all to life!
+In this post, we’ll dive into the Pygame implementation and create an interactive visualization of the algorithm.
+You’ll see walls, paths, and visited nodes animate on screen, watch BFS explore the grid step by step, and even handle success or failure scenarios.
+Whether you’re here for the algorithms, the visuals, or just the fun of coding, this post will turn our simulation into a reality.
+Let’s get started!</p>
+
+<!--more-->
+
+<hr />
+
+<h2 id="lets-code-it">Let’s Code It!</h2>
+
+<p>Sections below will show the classes and functions, but skip imports.
+I will post the complete code to GitHub and share links to the actual code under each section.</p>
+
+<h3 id="spritespy"><code class="language-plaintext highlighter-rouge">sprites.py</code></h3>
+
+<p>The <code class="language-plaintext highlighter-rouge">sprites.py</code> file defines various Pygame sprite classes and helper functions for rendering different elements in the simulation.
+Let’s go one by one.</p>
+
+<p><strong>Helper Functions:</strong></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">create_wall</span><span class="p">(</span><span class="n">cell_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">CELL_SIZE</span><span class="p">,</span> <span class="n">padding</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="p">.</span><span class="n">Surface</span><span class="p">:</span>
+    <span class="s">"""Creates a surface representing a wall cell.
+
+    Args:
+        cell_size (int): The size of the cell in pixels.
+        padding (int): The padding inside the cell to adjust the wall appearance.
+
+    Returns:
+        pygame.Surface: A surface with a dark red rectangle representing a wall.
+    """</span>
+    <span class="c1"># Create a transparent surface of the given cell size
+</span>    <span class="n">surface</span> <span class="o">=</span> <span class="n">pygame</span><span class="p">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">cell_size</span><span class="p">,</span> <span class="n">cell_size</span><span class="p">),</span> <span class="n">pygame</span><span class="p">.</span><span class="n">SRCALPHA</span><span class="p">).</span><span class="n">convert_alpha</span><span class="p">()</span>
+    
+    <span class="c1"># Draw a dark red rectangle with padding to make the wall visually distinct
+</span>    <span class="n">pygame</span><span class="p">.</span><span class="n">draw</span><span class="p">.</span><span class="n">rect</span><span class="p">(</span>
+        <span class="n">surface</span><span class="p">,</span>
+        <span class="n">DARK_RED</span><span class="p">,</span>  <span class="c1"># Fill color
+</span>        <span class="p">(</span>
+            <span class="n">padding</span><span class="p">,</span>  <span class="c1"># X position of the rectangle within the `surface`
+</span>            <span class="n">padding</span><span class="p">,</span>  <span class="c1"># Y position of the rectangle within the `surface`
+</span>            <span class="n">cell_size</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">padding</span><span class="p">,</span>  <span class="c1"># Width of the rectangle
+</span>            <span class="n">cell_size</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">padding</span><span class="p">,</span>  <span class="c1"># Height of the rectangle
+</span>        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">surface</span>
+
+
+<span class="k">def</span> <span class="nf">create_circle</span><span class="p">(</span>
+    <span class="n">fill_color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+    <span class="n">border_color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">BLACK</span><span class="p">,</span>
+    <span class="n">cell_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">CELL_SIZE</span><span class="p">,</span>
+    <span class="n">padding</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">border_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="s">"""Creates a circular surface with a border.
+
+    Args:
+        fill_color (tuple[int, int, int]): RGB color of the inner circle.
+        border_color (tuple[int, int, int]): RGB color of the outer border.
+        cell_size (int): The size of the cell in pixels.
+        padding (int): Space between the circle and the edge of the surface.
+        border_width (int): Thickness of the border.
+
+    Returns:
+        pygame.Surface: A surface containing a circle with the given properties.
+    """</span>
+    <span class="c1"># Create a transparent surface of the given cell size
+</span>    <span class="n">surface</span> <span class="o">=</span> <span class="n">pygame</span><span class="p">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">cell_size</span><span class="p">,</span> <span class="n">cell_size</span><span class="p">),</span> <span class="n">pygame</span><span class="p">.</span><span class="n">SRCALPHA</span><span class="p">).</span><span class="n">convert_alpha</span><span class="p">()</span>
+    
+    <span class="c1"># Calculate center coordinates
+</span>    <span class="n">center_x</span> <span class="o">=</span> <span class="n">cell_size</span> <span class="o">//</span> <span class="mi">2</span>
+    <span class="n">center_y</span> <span class="o">=</span> <span class="n">cell_size</span> <span class="o">//</span> <span class="mi">2</span>
+    
+    <span class="c1"># Calculate the outer and inner radii
+</span>    <span class="n">outer_radius</span> <span class="o">=</span> <span class="n">cell_size</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">padding</span>
+    <span class="n">inner_radius</span> <span class="o">=</span> <span class="n">outer_radius</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">border_width</span>
+    
+    <span class="c1"># Draw the outer circle (border)
+</span>    <span class="n">pygame</span><span class="p">.</span><span class="n">draw</span><span class="p">.</span><span class="n">circle</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">border_color</span><span class="p">,</span> <span class="p">(</span><span class="n">center_x</span><span class="p">,</span> <span class="n">center_y</span><span class="p">),</span> <span class="n">outer_radius</span><span class="p">)</span>
+    
+    <span class="c1"># Draw the inner circle (fill)
+</span>    <span class="n">pygame</span><span class="p">.</span><span class="n">draw</span><span class="p">.</span><span class="n">circle</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">fill_color</span><span class="p">,</span> <span class="p">(</span><span class="n">center_x</span><span class="p">,</span> <span class="n">center_y</span><span class="p">),</span> <span class="n">inner_radius</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">surface</span>
+
+
+<span class="o">@</span><span class="n">cache</span>
+<span class="k">def</span> <span class="nf">get_cell_surfaces</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="n">CellType</span><span class="p">,</span> <span class="n">pygame</span><span class="p">.</span><span class="n">Surface</span><span class="p">]:</span>
+    <span class="s">"""Pre-renders and caches surfaces for different cell types.
+
+    Returns:
+        dict[CellType, pygame.Surface]: A dictionary mapping cell types to 
+        their corresponding pre-rendered surfaces.
+    """</span>
+    <span class="n">surfaces</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">"wall"</span><span class="p">:</span> <span class="n">create_wall</span><span class="p">(),</span>  <span class="c1"># Surface for wall cells
+</span>        <span class="s">"unvisited"</span><span class="p">:</span> <span class="n">create_circle</span><span class="p">(</span><span class="n">GRAY</span><span class="p">),</span>  <span class="c1"># Surface for unvisited cells
+</span>        <span class="s">"visited"</span><span class="p">:</span> <span class="n">create_circle</span><span class="p">(</span><span class="n">BLUE</span><span class="p">),</span>  <span class="c1"># Surface for visited cells
+</span>        <span class="s">"final_path"</span><span class="p">:</span> <span class="n">create_circle</span><span class="p">(</span><span class="n">GREEN</span><span class="p">),</span>  <span class="c1"># Surface for the shortest path
+</span>    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">surfaces</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">CellSprite</code> represents a single cell in the grid-based simulation, extending <code class="language-plaintext highlighter-rouge">pygame.sprite.Sprite</code> to integrate with Pygame’s rendering and update system.
+Each cell has an <code class="language-plaintext highlighter-rouge">(x, y)</code> position in the grid and a <code class="language-plaintext highlighter-rouge">cell_type</code> that determines its appearance, such as “wall,” “visited,” or “final_path.”
+The class preloads surfaces for different cell types using <code class="language-plaintext highlighter-rouge">get_cell_surfaces()</code> to optimize rendering.
+It also includes a method, <code class="language-plaintext highlighter-rouge">update_type()</code>, which allows the cell’s appearance to be updated dynamically based on state changes during the simulation.
+By managing its own graphical representation and position, <code class="language-plaintext highlighter-rouge">CellSprite</code> enables efficient visual updates in the Pygame environment.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CellSprite</span><span class="p">(</span><span class="n">pygame</span><span class="p">.</span><span class="n">sprite</span><span class="p">.</span><span class="n">Sprite</span><span class="p">):</span>
+    <span class="s">"""Represents a grid cell in the simulation as a Pygame sprite.
+
+    Attributes:
+        x (int): The x-coordinate of the cell in the grid.
+        y (int): The y-coordinate of the cell in the grid.
+        cell_type (CellType): The type of the cell (e.g., wall, visited, etc.).
+        image (pygame.Surface): The visual representation of the cell.
+        rect (pygame.Rect): The rectangle defining the cell's position.
+    """</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">cell_type</span><span class="p">:</span> <span class="n">CellType</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="s">"""Initializes a CellSprite with position and type.
+
+        Args:
+            x (int): The x-coordinate of the cell in the grid.
+            y (int): The y-coordinate of the cell in the grid.
+            cell_type (CellType): The type of the cell (determines appearance).
+        """</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">cell_type</span> <span class="o">=</span> <span class="n">cell_type</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">get_cell_surfaces</span><span class="p">()[</span><span class="bp">self</span><span class="p">.</span><span class="n">cell_type</span><span class="p">]</span>  <span class="c1"># Assign the corresponding surface
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">image</span><span class="p">.</span><span class="n">get_rect</span><span class="p">(</span><span class="n">topleft</span><span class="o">=</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">CELL_SIZE</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="n">CELL_SIZE</span><span class="p">))</span>  <span class="c1"># Position in grid
+</span>
+    <span class="k">def</span> <span class="nf">update_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell_type</span><span class="p">:</span> <span class="n">CellType</span><span class="p">):</span>
+        <span class="s">"""Updates the cell's type and refreshes its appearance.
+
+        Args:
+            cell_type (CellType): The new type of the cell.
+        """</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">cell_type</span> <span class="o">=</span> <span class="n">cell_type</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">get_cell_surfaces</span><span class="p">()[</span><span class="bp">self</span><span class="p">.</span><span class="n">cell_type</span><span class="p">]</span>  <span class="c1"># Update surface based on new type
+</span></code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">LineSprite</code> class represents a visual line connecting two points on a grid, typically used for illustrating paths or connections between cells.
+It inherits from <code class="language-plaintext highlighter-rouge">pygame.sprite.Sprite</code>, allowing it to be part of Pygame’s sprite system.
+The sprite is initialized with two grid coordinates, a customizable line width, and a color.
+The line is drawn on a surface, with its dimensions calculated based on the distance between the two points.
+Special handling is applied to diagonal lines, increasing their width for better visibility.
+The sprite’s <code class="language-plaintext highlighter-rouge">rect</code> is adjusted to position the line properly within the grid, ensuring it aligns with the grid’s structure.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">LineSprite</span><span class="p">(</span><span class="n">pygame</span><span class="p">.</span><span class="n">sprite</span><span class="p">.</span><span class="n">Sprite</span><span class="p">):</span>
+    <span class="s">"""Represents a line connecting two points in the grid.
+
+    This sprite is used to visually represent paths or connections between cells
+    in the grid-based simulation. It supports drawing both straight and diagonal
+    lines with configurable width and color.
+
+    Attributes:
+        image (pygame.Surface): The surface containing the drawn line.
+        rect (pygame.Rect): The rectangular area occupied by the line.
+    """</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">from_point</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+        <span class="n">to_point</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+        <span class="n">line_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">THIN_LINE_WIDTH</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">RED</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="s">"""Initializes a LineSprite connecting two grid points.
+
+        Args:
+            from_point (tuple[int, int]): The starting point (grid coordinates).
+            to_point (tuple[int, int]): The ending point (grid coordinates).
+            line_width (int, optional): The width of the line. Defaults to THIN_LINE_WIDTH.
+            color (tuple[int, int, int], optional): The color of the line. Defaults to RED.
+        """</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Convert grid coordinates to pixel coordinates.
+</span>        <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="p">(</span><span class="n">p</span> <span class="o">*</span> <span class="n">CELL_SIZE</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">(</span><span class="o">*</span><span class="n">from_point</span><span class="p">,</span> <span class="o">*</span><span class="n">to_point</span><span class="p">))</span>
+        
+        <span class="c1"># Calculate the required surface dimensions to fit the line.
+</span>        <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">x2</span><span class="p">)</span> <span class="o">+</span> <span class="n">CELL_SIZE</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y2</span><span class="p">)</span> <span class="o">+</span> <span class="n">CELL_SIZE</span>
+
+        <span class="c1"># Create a transparent surface to draw the line on.
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="p">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">),</span> <span class="n">pygame</span><span class="p">.</span><span class="n">SRCALPHA</span><span class="p">).</span><span class="n">convert_alpha</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">image</span><span class="p">.</span><span class="n">get_rect</span><span class="p">(</span><span class="n">topleft</span><span class="o">=</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">)))</span>
+
+        <span class="c1"># Adjust line width for diagonal lines to make them more visible.
+</span>        <span class="k">if</span> <span class="n">x1</span> <span class="o">!=</span> <span class="n">x2</span> <span class="ow">and</span> <span class="n">y1</span> <span class="o">!=</span> <span class="n">y2</span><span class="p">:</span>
+            <span class="n">line_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line_width</span> <span class="o">*</span> <span class="mf">1.5</span><span class="p">)</span>
+
+        <span class="c1"># Center the line within the grid cell.
+</span>        <span class="n">shift_by_x</span> <span class="o">=</span> <span class="n">CELL_SIZE</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="bp">self</span><span class="p">.</span><span class="n">rect</span><span class="p">.</span><span class="n">left</span>
+        <span class="n">shift_by_y</span> <span class="o">=</span> <span class="n">CELL_SIZE</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">-</span> <span class="bp">self</span><span class="p">.</span><span class="n">rect</span><span class="p">.</span><span class="n">top</span>
+
+        <span class="c1"># Draw the line from the starting point to the ending point.
+</span>        <span class="n">pygame</span><span class="p">.</span><span class="n">draw</span><span class="p">.</span><span class="n">line</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">image</span><span class="p">,</span>
+            <span class="n">color</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">x1</span> <span class="o">+</span> <span class="n">shift_by_x</span><span class="p">,</span> <span class="n">y1</span> <span class="o">+</span> <span class="n">shift_by_y</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">x2</span> <span class="o">+</span> <span class="n">shift_by_x</span><span class="p">,</span> <span class="n">y2</span> <span class="o">+</span> <span class="n">shift_by_y</span><span class="p">),</span>
+            <span class="n">line_width</span><span class="p">,</span>
+        <span class="p">)</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">TextSprite</code> class is a simple way to display text in a game.
+The class renders a given text string in a specified font size and color.
+It creates a surface and pre-renders the text during initialization.
+This makes it efficient to repeatedly redraw at each frame.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">TextSprite</span><span class="p">(</span><span class="n">pygame</span><span class="p">.</span><span class="n">sprite</span><span class="p">.</span><span class="n">Sprite</span><span class="p">):</span>
+    <span class="s">"""
+    A sprite class for rendering and displaying text in a Pygame game.
+
+    This class is used to create a text element that can be added to the 
+    Pygame sprite system for rendering.
+
+    Attributes:
+        image (pygame.Surface): The surface containing the rendered text.
+        rect (pygame.Rect): The rectangle that defines the boundaries of the text.
+    """</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">font_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]):</span>
+        <span class="s">"""
+        Initialize the TextSprite object.
+
+        Args:
+            text (str): The text string to display in the sprite.
+            font_size (int): The font size for rendering the text.
+            color (tuple[int, int, int]): The color of the text in RGB format.
+        """</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Create a font object with the specified font size.
+</span>        <span class="n">font</span> <span class="o">=</span> <span class="n">pygame</span><span class="p">.</span><span class="n">font</span><span class="p">.</span><span class="n">Font</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">font_size</span><span class="p">)</span>
+
+        <span class="c1"># Render the text with the specified color and store it in the 'image' attribute.
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">font</span><span class="p">.</span><span class="n">render</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="n">color</span><span class="p">)</span>
+
+        <span class="c1"># Get the rectangle for the rendered text to define its position and size.
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">image</span><span class="p">.</span><span class="n">get_rect</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">OverlaySprite</code> class is used to create semi-transparent overlays on the game screen.
+It allows setting a custom width, height, color, and transparency level (alpha).
+The overlay is drawn as a surface with the given dimensions and then filled with the specified color and transparency.
+This class is useful for adding visual effects or background elements without obscuring the content behind it.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">OverlaySprite</span><span class="p">(</span><span class="n">pygame</span><span class="p">.</span><span class="n">sprite</span><span class="p">.</span><span class="n">Sprite</span><span class="p">):</span>
+    <span class="s">"""
+    A sprite that creates a semi-transparent overlay for the game screen.
+    
+    This class creates an overlay that can be used for effects such as modal dialogs,
+    backgrounds for text, or to create visual focus. The overlay is customizable in terms of size, 
+    color, and transparency (alpha value).
+
+    Attributes:
+        image (pygame.Surface): The surface representing the overlay sprite.
+        rect (pygame.Rect): The rectangle used for positioning the overlay sprite.
+    """</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">200</span><span class="p">):</span>
+        <span class="s">"""
+        Initialize the OverlaySprite with the given width, height, color, and alpha.
+        
+        Args:
+            width (int): The width of the overlay.
+            height (int): The height of the overlay.
+            color (tuple[int, int, int]): The RGB color of the overlay (default is gray).
+            alpha (int): The transparency of the overlay (default is 200).
+        """</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Create a new surface with the given width and height and transparent background
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">pygame</span><span class="p">.</span><span class="n">Surface</span><span class="p">((</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">),</span> <span class="n">pygame</span><span class="p">.</span><span class="n">SRCALPHA</span><span class="p">)</span>
+        
+        <span class="c1"># Fill the surface with the specified color and alpha (transparency)
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">image</span><span class="p">.</span><span class="n">fill</span><span class="p">((</span><span class="o">*</span><span class="n">color</span><span class="p">,</span> <span class="n">alpha</span><span class="p">))</span>
+        
+        <span class="c1"># Set the rect attribute for positioning the sprite
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">rect</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">image</span><span class="p">.</span><span class="n">get_rect</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h3 id="gamepy"><code class="language-plaintext highlighter-rouge">game.py</code></h3>
+
+<p>The <code class="language-plaintext highlighter-rouge">game.py</code> file is responsible for managing the core structure and flow of the game.
+It defines the main game loop, handles user input through event handling, updates the game state, and renders the game scene to the screen.
+This file also handles transitions between different game states (e.g., welcome screen, gameplay, game over), ensuring smooth navigation and gameplay experience. 
+Essentially, it serves as the backbone of the game’s execution, coordinating all aspects of the game’s lifecycle.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Game</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Currently active state
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">state</span> <span class="o">=</span> <span class="bp">None</span>
+        
+        <span class="c1"># Next state to activate at the end of the game loop iteration
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">next_state</span> <span class="o">=</span> <span class="bp">None</span>
+        
+        <span class="c1"># Is the game running?
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">running</span> <span class="o">=</span> <span class="bp">False</span>
+        
+        <span class="c1"># Game's main screen; main surface to draw our game into
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">screen</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Before doing anything else with pygame, it must be initialized
+</span>        <span class="n">pygame</span><span class="p">.</span><span class="n">init</span><span class="p">()</span>
+        
+        <span class="c1"># Define the screen and its size
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="p">.</span><span class="n">display</span><span class="p">.</span><span class="n">set_mode</span><span class="p">(</span><span class="n">SCREEN_SIZE</span><span class="p">)</span>
+        
+        <span class="c1"># This sets the text on the title bar of the window
+</span>        <span class="n">pygame</span><span class="p">.</span><span class="n">display</span><span class="p">.</span><span class="n">set_caption</span><span class="p">(</span><span class="s">"Shortest Path in Binary Matrix"</span><span class="p">)</span>
+        
+        <span class="c1"># Update the contents of the entire display
+</span>        <span class="n">pygame</span><span class="p">.</span><span class="n">display</span><span class="p">.</span><span class="n">flip</span><span class="p">()</span>
+
+        <span class="c1"># Clock will help us keep track of time and handle frame rate
+</span>        <span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="p">.</span><span class="n">time</span><span class="p">.</span><span class="n">Clock</span><span class="p">()</span>
+        
+        <span class="c1"># Set running to True to go into the infinite gaming loop until running is False
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">running</span> <span class="o">=</span> <span class="bp">True</span>
+        
+        <span class="c1"># Initialise the InitState: entrance scene for the game
+</span>        <span class="kn">from</span> <span class="nn">leetcode.bfs_shortest_path.states</span> <span class="kn">import</span> <span class="n">InitState</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">InitState</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># Start the gaming loop; run the code until running=False
+</span>        <span class="k">while</span> <span class="bp">self</span><span class="p">.</span><span class="n">running</span><span class="p">:</span>
+            <span class="c1"># We do two things here: first, ask clock to update and regulate the frame rate,
+</span>            <span class="c1"># then we calculate the deltaTime (elapsed time) in seconds.
+</span>            <span class="c1">#
+</span>            <span class="c1"># clock.tick(FPS) ensures that the game runs at the specified FPS (frames per second),
+</span>            <span class="c1"># by limiting the number of frames that can be drawn within a given time.
+</span>            <span class="c1">#
+</span>            <span class="c1"># The resulting delta_time is the time in seconds between the current frame and the previous frame.
+</span>            <span class="c1"># This value can be used for frame rate-independent movement or other time-dependent operations.
+</span>            <span class="c1"># Dividing by 1000 converts the result from milliseconds to seconds, 
+</span>            <span class="c1"># which is a standard unit of time for physics simulations.
+</span>            <span class="c1">#
+</span>            <span class="c1"># The value of delta_time can be used for smooth animations, physics calculations, or any other task
+</span>            <span class="c1"># that requires time-based adjustments that are not dependent on the actual frame rate.
+</span>            <span class="n">delta_time</span> <span class="o">=</span> <span class="n">clock</span><span class="p">.</span><span class="n">tick</span><span class="p">(</span><span class="n">FPS</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000</span>  <span class="c1"># deltaTime in seconds
+</span>            <span class="k">print</span><span class="p">(</span><span class="s">"FPS: "</span><span class="p">,</span> <span class="n">clock</span><span class="p">.</span><span class="n">get_fps</span><span class="p">(),</span> <span class="s">"Delta time: "</span><span class="p">,</span> <span class="n">delta_time</span><span class="p">)</span>
+
+            <span class="c1"># Game loops typically have 3 main actions: handling events, updating game state, and rendering.
+</span>            <span class="c1"># Handle input events (e.g., keyboard, mouse) and game logic changes.
+</span>            <span class="bp">self</span><span class="p">.</span><span class="n">handle_events</span><span class="p">()</span>
+            
+            <span class="c1"># Update the current game state based on the elapsed time (delta_time),
+</span>            <span class="c1"># ensuring frame rate independence for physics, movements, or logic.
+</span>            <span class="bp">self</span><span class="p">.</span><span class="n">state</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="n">delta_time</span><span class="p">)</span>
+            
+            <span class="c1"># Render the updated state to the screen (draw the updated visuals or objects).
+</span>            <span class="bp">self</span><span class="p">.</span><span class="n">state</span><span class="p">.</span><span class="n">render</span><span class="p">()</span>
+
+            <span class="c1"># Flip the display buffers to update the screen with the new frame.
+</span>            <span class="c1"># This is typically used in double-buffered rendering to prevent flickering.
+</span>            <span class="n">pygame</span><span class="p">.</span><span class="n">display</span><span class="p">.</span><span class="n">flip</span><span class="p">()</span>
+
+            <span class="c1"># Check if there is a state change request pending.
+</span>            <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">next_state</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="c1"># Transition to the new state by updating the current state.
+</span>                <span class="bp">self</span><span class="p">.</span><span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">next_state</span>
+                
+                <span class="c1"># Reset the next_state to None, clearing the transition request.
+</span>                <span class="bp">self</span><span class="p">.</span><span class="n">next_state</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1"># Quit the game, terminates the window. We need to call this when the game loop ends.
+</span>        <span class="c1"># Otherwise, the window stays open.
+</span>        <span class="n">pygame</span><span class="p">.</span><span class="n">quit</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Initialize an empty list to store the events to be processed.
+</span>        <span class="n">events</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="c1"># Loop through all events in the event queue.
+</span>        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pygame</span><span class="p">.</span><span class="n">event</span><span class="p">.</span><span class="n">get</span><span class="p">():</span>
+            <span class="c1"># If the event is a quit event (e.g., closing the window).
+</span>            <span class="k">if</span> <span class="n">event</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="p">.</span><span class="n">QUIT</span><span class="p">:</span>
+                <span class="c1"># Set the running flag to False to stop the game loop.
+</span>                <span class="bp">self</span><span class="p">.</span><span class="n">running</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="c1"># Exit the method immediately to stop handling further events.
+</span>                <span class="k">return</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Add all other events to the events list for further processing.
+</span>                <span class="n">events</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        
+        <span class="c1"># Pass the collected events to the current game state's handle_events method for processing.
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">state</span><span class="p">.</span><span class="n">handle_events</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">"__main__"</span><span class="p">:</span>
+    <span class="c1"># Create an instance of the Game class, initializing the game object.
+</span>    <span class="n">game</span> <span class="o">=</span> <span class="n">Game</span><span class="p">()</span>
+    
+    <span class="c1"># Call the run method to start the game loop and begin game execution.
+</span>    <span class="n">game</span><span class="p">.</span><span class="n">run</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h3 id="statespy"><code class="language-plaintext highlighter-rouge">states.py</code></h3>
+
+<p><code class="language-plaintext highlighter-rouge">GameState</code> is an abstract base class (ABC) that defines the structure for different game states in the simulation.
+It provides three methods — <code class="language-plaintext highlighter-rouge">handle_events</code>, <code class="language-plaintext highlighter-rouge">update</code>, and <code class="language-plaintext highlighter-rouge">render</code> — which are meant to be overridden by subclasses.
+These methods define how the state handles user input, updates game logic, and renders visuals.
+By using this base class, the game can manage different states (e.g., initialization, simulation, completion) in a structured and consistent way.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">GameState</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="s">"""
+    Abstract base class representing the general state of the game.
+
+    This class defines the essential methods that each game state must implement:
+    - handle_events: Handles any input events (like keyboard or mouse actions).
+    - update: Updates the state of the game, usually for animation or logic progression.
+    - render: Renders the current state of the game on the screen.
+
+    Inherits from ABC (Abstract Base Class) to ensure that any subclass must implement the abstract methods.
+    However there are no abstract methods as of now.
+    """</span>
+
+    <span class="k">def</span> <span class="nf">handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">pygame</span><span class="p">.</span><span class="n">event</span><span class="p">.</span><span class="n">Event</span><span class="p">]):</span>
+        <span class="s">"""
+        Handles input events for the current game state.
+
+        Args:
+            events (List[pygame.event.Event]): A list of events to process.
+        """</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="s">"""
+        Updates the game state, usually for animation or logic progression.
+
+        Args:
+            delta_time (float): The time elapsed since the last frame (in seconds).
+        """</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""
+        Renders the current state of the game to the screen.
+        """</span>
+        <span class="k">pass</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">TimelyUpdateGameState</code> is a subclass of <code class="language-plaintext highlighter-rouge">GameState</code> that ensures updates occur at a fixed rate, defined by <code class="language-plaintext highlighter-rouge">updates_per_second</code>.
+Instead of updating continuously every frame, it accumulates elapsed time (<code class="language-plaintext highlighter-rouge">delta_time</code>) and only triggers an update when enough time has passed.
+The actual update logic is delegated to the <code class="language-plaintext highlighter-rouge">perform_update</code> method, which must be implemented by <strong>subclasses</strong>.</p>
+
+<p>This is useful for managing time-sensitive logic, such as animations or physics updates, without being tied to the frame rate.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">TimelyUpdateGameState</span><span class="p">(</span><span class="n">GameState</span><span class="p">,</span> <span class="n">ABC</span><span class="p">):</span>
+    <span class="s">"""
+    A subclass of GameState that handles time-based updates.
+
+    This class adds functionality to ensure that updates to the game state 
+    occur at a consistent rate, based on the specified updates per second 
+    (FPS). It ensures that updates are triggered only after the specified 
+    amount of time has passed.
+
+    Args:
+        game (Game): The game instance to which the state belongs.
+        updates_per_second (float | int): The number of updates to be performed per second.
+    """</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">:</span> <span class="n">Game</span><span class="p">,</span> <span class="n">updates_per_second</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="s">"""
+        Initializes the state with the game instance and updates per second.
+
+        Args:
+            game (Game): The game instance to which the state belongs.
+            updates_per_second (float | int): The number of updates per second for the game state.
+        """</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">game</span> <span class="o">=</span> <span class="n">game</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">time_lapsed_since_last_update</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">updates_per_second</span> <span class="o">=</span> <span class="n">updates_per_second</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">update_interval</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">updates_per_second</span>
+
+    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delta_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="s">"""
+        Updates the game state based on the elapsed time, ensuring that updates 
+        occur at the specified rate.
+
+        Args:
+            delta_time (float): The time elapsed since the last frame (in seconds).
+        """</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">time_lapsed_since_last_update</span> <span class="o">+=</span> <span class="n">delta_time</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">time_lapsed_since_last_update</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="p">.</span><span class="n">update_interval</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">time_lapsed_since_last_update</span> <span class="o">-=</span> <span class="bp">self</span><span class="p">.</span><span class="n">update_interval</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">perform_update</span><span class="p">()</span>
+
+    <span class="o">@</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">perform_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""
+        Performs the actual update logic for the game state. This method must 
+        be implemented by any subclass.
+
+        This method is called when the time threshold is reached for an update.
+        """</span>
+        <span class="k">pass</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">InitState</code> class is responsible for initializing the starting screen of the game, where the user can choose how to generate the grid for the BFS simulation.
+It presents three options to the user: 
+pressing the SPACE key for a random grid, 
+ENTER for a successful path, 
+and ESC for a failure path. 
+The class organizes the display of these options using <code class="language-plaintext highlighter-rouge">TextSprite</code> objects and handles key events to transition to the next state based on the user’s input.
+Once an option is selected, it generates the corresponding grid and passes it to the <code class="language-plaintext highlighter-rouge">SimulationState</code> class to begin the BFS simulation.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">InitState</span><span class="p">(</span><span class="n">GameState</span><span class="p">):</span>
+    <span class="s">"""
+    Represents the initial state of the game, where the user can choose to start
+    a random, successful, or failure path.
+
+    In this state, the user is presented with instructions on how to proceed, 
+    and their input determines the grid that will be generated for the next state.
+    """</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">:</span> <span class="n">Game</span><span class="p">):</span>
+        <span class="s">"""
+        Initializes the InitState, which displays the initial instructions to the user.
+
+        Args:
+            game (Game): The game instance to which this state belongs.
+        """</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">game</span> <span class="o">=</span> <span class="n">game</span>
+
+        <span class="c1"># Create text sprites to display on the screen with different instructions
+</span>        <span class="n">text_1</span> <span class="o">=</span> <span class="n">TextSprite</span><span class="p">(</span><span class="s">"Press SPACE to start randomly"</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="n">BLACK</span><span class="p">)</span>
+        <span class="n">text_2</span> <span class="o">=</span> <span class="n">TextSprite</span><span class="p">(</span><span class="s">"Press ENTER to start a successful path"</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="n">GREEN</span><span class="p">)</span>
+        <span class="n">text_3</span> <span class="o">=</span> <span class="n">TextSprite</span><span class="p">(</span><span class="s">"Press ESC to start a failure path"</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="n">RED</span><span class="p">)</span>
+
+        <span class="c1"># Position the text sprites on the screen
+</span>        <span class="n">text_2</span><span class="p">.</span><span class="n">rect</span><span class="p">.</span><span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="n">SCREEN_SIZE_X</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">SCREEN_SIZE_Y</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">text_1</span><span class="p">.</span><span class="n">rect</span><span class="p">.</span><span class="n">bottomleft</span> <span class="o">=</span> <span class="n">text_2</span><span class="p">.</span><span class="n">rect</span><span class="p">.</span><span class="n">topleft</span>
+        <span class="n">text_3</span><span class="p">.</span><span class="n">rect</span><span class="p">.</span><span class="n">topleft</span> <span class="o">=</span> <span class="n">text_2</span><span class="p">.</span><span class="n">rect</span><span class="p">.</span><span class="n">bottomleft</span>
+
+        <span class="c1"># Add text sprites to the sprite group for rendering
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">objects</span> <span class="o">=</span> <span class="n">pygame</span><span class="p">.</span><span class="n">sprite</span><span class="p">.</span><span class="n">Group</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">text_1</span><span class="p">,</span> <span class="n">text_2</span><span class="p">,</span> <span class="n">text_3</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">pygame</span><span class="p">.</span><span class="n">event</span><span class="p">.</span><span class="n">Event</span><span class="p">]):</span>
+        <span class="s">"""
+        Handles input events for the InitState, where the user chooses how to proceed.
+
+        Args:
+            events (List[pygame.event.Event]): A list of events to process.
+        """</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">event</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="p">.</span><span class="n">KEYUP</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">event</span><span class="p">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="p">.</span><span class="n">K_SPACE</span><span class="p">:</span>
+                    <span class="c1"># Start with a randomly generated grid
+</span>                    <span class="bp">self</span><span class="p">.</span><span class="n">_create_grid_and_navigate</span><span class="p">(</span><span class="n">GRID_SIZE</span><span class="p">,</span> <span class="n">is_good</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">event</span><span class="p">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="p">.</span><span class="n">K_KP_ENTER</span> <span class="ow">or</span> <span class="n">event</span><span class="p">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="p">.</span><span class="n">K_RETURN</span><span class="p">:</span>
+                    <span class="c1"># Start with a successful path grid
+</span>                    <span class="bp">self</span><span class="p">.</span><span class="n">_create_grid_and_navigate</span><span class="p">(</span><span class="n">GRID_SIZE</span><span class="p">,</span> <span class="n">is_good</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">event</span><span class="p">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="p">.</span><span class="n">K_ESCAPE</span><span class="p">:</span>
+                    <span class="c1"># Start with a failure path grid
+</span>                    <span class="bp">self</span><span class="p">.</span><span class="n">_create_grid_and_navigate</span><span class="p">(</span><span class="n">GRID_SIZE</span><span class="p">,</span> <span class="n">is_good</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_create_grid_and_navigate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">is_good</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+        <span class="s">"""
+        Creates a grid based on the chosen type (good or bad) and transitions to
+        the simulation state.
+
+        Args:
+            size (int): The size of the grid.
+            is_good (bool | None): Whether to create a good or bad grid. If None, 
+                                   a random choice is made.
+
+        Returns:
+            List[List[int]]: The generated grid.
+        """</span>
+        <span class="k">if</span> <span class="n">is_good</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">is_good</span> <span class="o">=</span> <span class="n">random</span><span class="p">.</span><span class="n">choice</span><span class="p">([</span><span class="bp">True</span><span class="p">,</span> <span class="bp">False</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">is_good</span><span class="p">:</span>
+            <span class="c1"># Generate a good grid
+</span>            <span class="n">grid</span> <span class="o">=</span> <span class="n">create_good_grid</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Generate a bad grid
+</span>            <span class="n">grid</span> <span class="o">=</span> <span class="n">create_bad_grid</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+
+        <span class="c1"># Transition to the simulation state with the generated grid
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">game</span><span class="p">.</span><span class="n">next_state</span> <span class="o">=</span> <span class="n">SimulationState</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">game</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">grid</span><span class="p">,</span> <span class="n">start_pos</span><span class="o">=</span><span class="n">START_POS</span><span class="p">,</span> <span class="n">end_pos</span><span class="o">=</span><span class="n">END_POS</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""
+        Renders the initial state to the screen, displaying the instructions.
+
+        This method fills the screen with a white background and draws the text
+        sprites for user instructions.
+        """</span>
+        <span class="n">screen</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">game</span><span class="p">.</span><span class="n">screen</span>
+        <span class="n">screen</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">WHITE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">objects</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">SimulationState</code> class represents the BFS pathfinding simulation in the game.
+It manages the grid and its cells, keeping track of visited cells and updating the state of the game as the algorithm progresses.
+It initializes the grid, sets the start and end positions, and visualizes the pathfinding process with the help of sprites for cells and lines.
+The class is responsible for handling the BFS logic, updating the level, visiting neighboring cells, and drawing the path on the screen.
+If a path to the destination is found, the class reconstructs the final path with thicker lines, and transitions to a success state;
+otherwise, it transitions to a state indicating no path exists.
+Additionally, it handles user input, allowing the player to escape back to the initial state.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">SimulationState</span><span class="p">(</span><span class="n">TimelyUpdateGameState</span><span class="p">):</span>
+    <span class="s">"""
+    A game state representing the simulation of BFS pathfinding on a grid.
+    """</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">game</span><span class="p">:</span> <span class="n">Game</span><span class="p">,</span>
+        <span class="n">grid</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span>
+        <span class="n">start_pos</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+        <span class="n">end_pos</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+    <span class="p">):</span>
+        <span class="s">"""
+        Initializes the simulation state with the given parameters.
+        
+        Args:
+            game (Game): The current game instance.
+            grid (List[List[int]]): A 2D grid representing the game environment.
+            start_pos (tuple[int, int]): The starting position for the pathfinding.
+            end_pos (tuple[int, int]): The destination position for the pathfinding.
+        """</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="n">UPDATES_PER_SECOND</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="p">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">grid</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">grid_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>  <span class="c1"># Only works for square grids
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">visited</span> <span class="o">=</span> <span class="p">[[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="p">.</span><span class="n">grid_size</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">grid_size</span><span class="p">)]</span>  <span class="c1"># Track visited cells
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([</span><span class="n">start_pos</span><span class="p">])</span>  <span class="c1"># Queue for BFS
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">parents</span> <span class="o">=</span> <span class="p">{</span><span class="n">start_pos</span><span class="p">:</span> <span class="bp">None</span><span class="p">}</span>  <span class="c1"># Store parent of each cell for path reconstruction
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">start_pos</span> <span class="o">=</span> <span class="n">start_pos</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">end_pos</span> <span class="o">=</span> <span class="n">end_pos</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">visited</span><span class="p">[</span><span class="n">start_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">start_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c1"># Mark start position as visited
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">cell_sprites</span> <span class="o">=</span> <span class="n">pygame</span><span class="p">.</span><span class="n">sprite</span><span class="p">.</span><span class="n">Group</span><span class="p">()</span>  <span class="c1"># Group for cell sprites
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">line_sprites</span> <span class="o">=</span> <span class="n">pygame</span><span class="p">.</span><span class="n">sprite</span><span class="p">.</span><span class="n">Group</span><span class="p">()</span>  <span class="c1"># Group for lines representing the BFS path
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">text_sprites</span> <span class="o">=</span> <span class="n">pygame</span><span class="p">.</span><span class="n">sprite</span><span class="p">.</span><span class="n">GroupSingle</span><span class="p">()</span>  <span class="c1"># Single group for text (level display)
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">level</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># BFS level counter
+</span>
+        <span class="c1"># Initialize cell sprites for the grid based on the type of each cell
+</span>        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">grid</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">grid</span><span class="p">[</span><span class="n">x</span><span class="p">])):</span>
+                <span class="n">cell_type</span> <span class="o">=</span> <span class="s">"wall"</span> <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">grid</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]</span> <span class="o">==</span> <span class="n">WALL</span> <span class="k">else</span> <span class="s">"unvisited"</span>
+                <span class="n">cell_sprite</span> <span class="o">=</span> <span class="n">CellSprite</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cell_type</span><span class="p">)</span>
+                <span class="bp">self</span><span class="p">.</span><span class="n">cell_sprites</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">cell_sprite</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="p">.</span><span class="n">update_cell_type</span><span class="p">(</span><span class="n">start_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">start_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">"visited"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">perform_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""
+        Perform one update step for the BFS pathfinding algorithm.
+        If the queue is empty, it transitions to the next state.
+        """</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">queue</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># If the queue is empty, no path is found; transition to NoPathState
+</span>            <span class="n">entities</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">get_all_sprites_as_group</span><span class="p">()</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">game</span><span class="p">.</span><span class="n">next_state</span> <span class="o">=</span> <span class="n">NoPathState</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">game</span><span class="p">,</span> <span class="n">entities</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">level</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">elements_at_level</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">queue</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">level</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># Increase the level (depth) of BFS
+</span>
+        <span class="c1"># Process each element at the current BFS level
+</span>        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">elements_at_level</span><span class="p">):</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">queue</span><span class="p">.</span><span class="n">popleft</span><span class="p">()</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="p">.</span><span class="n">end_pos</span><span class="p">:</span>
+                <span class="c1"># If the end position is reached, build the final path
+</span>                <span class="bp">self</span><span class="p">.</span><span class="n">build_final_path</span><span class="p">()</span>
+                <span class="n">entities</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">get_all_sprites_as_group</span><span class="p">()</span>
+                <span class="c1"># Navigate to CompletionState to display the result
+</span>                <span class="bp">self</span><span class="p">.</span><span class="n">game</span><span class="p">.</span><span class="n">next_state</span> <span class="o">=</span> <span class="n">CompletionState</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">game</span><span class="p">,</span> <span class="n">entities</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">level</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="c1"># Visit neighboring cells of the current position
+</span>            <span class="bp">self</span><span class="p">.</span><span class="n">visit_neighbors</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">visit_neighbors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="s">"""
+        Visit all valid neighboring cells and update their state.
+        
+        Args:
+            x (int): The x-coordinate of the current cell.
+            y (int): The y-coordinate of the current cell.
+        """</span>
+        <span class="c1"># This function alters visited and queue
+</span>        <span class="n">neighbors</span> <span class="o">=</span> <span class="n">visit_neighbors</span><span class="p">(</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">grid</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">grid_size</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">visited</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">queue</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="p">:</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">parents</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>  <span class="c1"># Set parent for path reconstruction
+</span>            <span class="bp">self</span><span class="p">.</span><span class="n">update_cell_type</span><span class="p">(</span><span class="n">neighbor</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">neighbor</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">"visited"</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">add_line</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">neighbor</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">pygame</span><span class="p">.</span><span class="n">event</span><span class="p">.</span><span class="n">Event</span><span class="p">]):</span>
+        <span class="s">"""
+        Handle user input events, such as pressing the escape key to return to the initial state.
+        
+        Args:
+            events (List[pygame.event.Event]): List of pygame events to handle.
+        """</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">event</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="p">.</span><span class="n">KEYUP</span> <span class="ow">and</span> <span class="n">event</span><span class="p">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="p">.</span><span class="n">K_ESCAPE</span><span class="p">:</span>
+                <span class="c1"># Escape key pressed, go back to initial state
+</span>                <span class="bp">self</span><span class="p">.</span><span class="n">game</span><span class="p">.</span><span class="n">next_state</span> <span class="o">=</span> <span class="n">InitState</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">game</span><span class="p">)</span>
+                <span class="k">return</span>
+
+    <span class="o">@</span><span class="nb">property</span>
+    <span class="k">def</span> <span class="nf">level</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="s">"""
+        The current BFS level (depth).
+
+        Returns:
+            int: The current level.
+        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">_level</span>
+
+    <span class="o">@</span><span class="n">level</span><span class="p">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="s">"""
+        Set the level and update the displayed level text sprite.
+
+        Args:
+            value (int): The new level value.
+        """</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">_level</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">sprite</span> <span class="o">=</span> <span class="n">TextSprite</span><span class="p">(</span><span class="sa">f</span><span class="s">"Current Level: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s">"</span><span class="p">,</span> <span class="mi">36</span><span class="p">,</span> <span class="n">BLACK</span><span class="p">)</span>
+        <span class="n">sprite</span><span class="p">.</span><span class="n">rect</span><span class="p">.</span><span class="n">topleft</span> <span class="o">=</span> <span class="p">(</span><span class="n">THIN_LINE_WIDTH</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">grid_size</span> <span class="o">*</span> <span class="n">CELL_SIZE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">text_sprites</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">sprite</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">update_cell_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">cell_type</span><span class="p">:</span> <span class="n">CellType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="s">"""
+        Update the cell sprite type for the given position.
+        
+        Args:
+            x (int): The x-coordinate of the cell.
+            y (int): The y-coordinate of the cell.
+            cell_type (CellType): The new cell type.
+        """</span>
+        <span class="k">for</span> <span class="n">sprite</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">cell_sprites</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sprite</span><span class="p">.</span><span class="n">x</span> <span class="o">==</span> <span class="n">x</span> <span class="ow">and</span> <span class="n">sprite</span><span class="p">.</span><span class="n">y</span> <span class="o">==</span> <span class="n">y</span><span class="p">:</span>
+                <span class="n">sprite</span><span class="p">.</span><span class="n">update_type</span><span class="p">(</span><span class="n">cell_type</span><span class="p">)</span>
+                <span class="k">break</span>
+
+    <span class="k">def</span> <span class="nf">get_all_sprites_as_group</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pygame</span><span class="p">.</span><span class="n">sprite</span><span class="p">.</span><span class="n">Group</span><span class="p">:</span>
+        <span class="s">"""
+        Get all sprites (cells, lines, text) as a pygame sprite group.
+
+        Returns:
+            pygame.sprite.Group: The group containing all sprites for rendering.
+        """</span>
+        <span class="n">entities</span> <span class="o">=</span> <span class="n">pygame</span><span class="p">.</span><span class="n">sprite</span><span class="p">.</span><span class="n">Group</span><span class="p">()</span>
+        <span class="n">entities</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">cell_sprites</span><span class="p">)</span>
+        <span class="n">entities</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">line_sprites</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">entities</span>
+
+    <span class="k">def</span> <span class="nf">add_line</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">from_point</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+        <span class="n">to_point</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+        <span class="n">line_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">THIN_LINE_WIDTH</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="s">"""
+        Add a line sprite between two points to represent the BFS path.
+
+        Args:
+            from_point (tuple[int, int]): The starting point of the line.
+            to_point (tuple[int, int]): The ending point of the line.
+            line_width (int, optional): The width of the line. Defaults to THIN_LINE_WIDTH.
+        """</span>
+        <span class="n">line_sprite</span> <span class="o">=</span> <span class="n">LineSprite</span><span class="p">(</span><span class="n">from_point</span><span class="p">,</span> <span class="n">to_point</span><span class="p">,</span> <span class="n">line_width</span><span class="p">,</span> <span class="n">RED</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">line_sprites</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">line_sprite</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">build_final_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="s">"""
+        Reconstruct and display the final path from the end position to the start position.
+        """</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">end_pos</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">update_cell_type</span><span class="p">(</span><span class="n">current</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">current</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">"final_path"</span><span class="p">)</span>
+
+        <span class="c1"># Reconstruct the path by tracing the parents
+</span>        <span class="k">while</span> <span class="n">current</span> <span class="o">!=</span> <span class="bp">self</span><span class="p">.</span><span class="n">start_pos</span><span class="p">:</span>
+            <span class="n">previous</span> <span class="o">=</span> <span class="n">current</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">parents</span><span class="p">[</span><span class="n">current</span><span class="p">]</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">update_cell_type</span><span class="p">(</span><span class="n">current</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">current</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">"final_path"</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">add_line</span><span class="p">(</span><span class="n">current</span><span class="p">,</span> <span class="n">previous</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="n">THICK_LINE_WIDTH</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""
+        Render all sprites (cells, lines, and text) to the screen.
+        """</span>
+        <span class="n">screen</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">game</span><span class="p">.</span><span class="n">screen</span>
+        <span class="n">screen</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">WHITE</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="p">.</span><span class="n">cell_sprites</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">line_sprites</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">text_sprites</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">CompletionState</code> represents the final state in the pathfinding simulation, indicating that a valid path has been found.
+It displays a message to the user showing the shortest path found and the level where it was discovered.
+The state also provides instructions to the player, allowing them to press the space bar to restart the simulation.
+This state helps conclude the simulation and provides the user with feedback on the success of the pathfinding process, 
+offering a smooth transition to the next step in the simulation.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">CompletionState</span><span class="p">(</span><span class="n">GameState</span><span class="p">):</span>
+    <span class="s">"""
+    A game state that represents the completion of the BFS pathfinding simulation.
+
+    This state is shown when the algorithm successfully finds a path to the destination.
+    It displays the shortest path length and offers the player an option to restart the simulation.
+
+    Attributes:
+        game (Game): The game instance, used to transition between states.
+        entities (pygame.sprite.Group): A group containing the text and sprite entities to be rendered.
+        shortest_path (int): The length of the shortest path found during the simulation.
+    """</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">:</span> <span class="n">Game</span><span class="p">,</span> <span class="n">entities</span><span class="p">:</span> <span class="n">pygame</span><span class="p">.</span><span class="n">sprite</span><span class="p">.</span><span class="n">Group</span><span class="p">,</span> <span class="n">shortest_path</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="s">"""
+        Initializes the completion state with the game, entities, and shortest path length.
+
+        Args:
+            game (Game): The game instance, which handles the state transitions.
+            entities (pygame.sprite.Group): The group of entities (sprites, text) to be displayed.
+            shortest_path (int): The length of the shortest path found in the simulation.
+        """</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">game</span> <span class="o">=</span> <span class="n">game</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">entities</span> <span class="o">=</span> <span class="n">pygame</span><span class="p">.</span><span class="n">sprite</span><span class="p">.</span><span class="n">Group</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">entities</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">entities</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">shortest_path</span> <span class="o">=</span> <span class="n">shortest_path</span>
+
+        <span class="n">text_1</span> <span class="o">=</span> <span class="n">TextSprite</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s">"Shortest path found at level </span><span class="si">{</span><span class="bp">self</span><span class="p">.</span><span class="n">shortest_path</span><span class="si">}</span><span class="s">"</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">GREEN</span>
+        <span class="p">)</span>
+        <span class="n">text_2</span> <span class="o">=</span> <span class="n">TextSprite</span><span class="p">(</span><span class="s">"Press space to go to the beginning"</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">BLACK</span><span class="p">)</span>
+        <span class="n">text_1</span><span class="p">.</span><span class="n">rect</span><span class="p">.</span><span class="n">topleft</span> <span class="o">=</span> <span class="p">(</span><span class="n">THIN_LINE_WIDTH</span><span class="p">,</span> <span class="n">GRID_SIZE</span> <span class="o">*</span> <span class="n">CELL_SIZE</span><span class="p">)</span>
+        <span class="n">text_2</span><span class="p">.</span><span class="n">rect</span><span class="p">.</span><span class="n">topleft</span> <span class="o">=</span> <span class="n">text_1</span><span class="p">.</span><span class="n">rect</span><span class="p">.</span><span class="n">bottomleft</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">entities</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">text_1</span><span class="p">,</span> <span class="n">text_2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">pygame</span><span class="p">.</span><span class="n">event</span><span class="p">.</span><span class="n">Event</span><span class="p">]):</span>
+        <span class="s">"""
+        Handles the user input events during the completion state.
+
+        Specifically, listens for the spacebar key press to transition to the initial state.
+
+        Args:
+            events (List[pygame.event.Event]): A list of events that are checked for input.
+        """</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">event</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="p">.</span><span class="n">KEYUP</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">event</span><span class="p">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="p">.</span><span class="n">K_SPACE</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="p">.</span><span class="n">game</span><span class="p">.</span><span class="n">next_state</span> <span class="o">=</span> <span class="n">InitState</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">game</span><span class="p">)</span>
+                    <span class="k">return</span>
+
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""
+        Renders the completion state to the screen, displaying the entities.
+
+        Clears the screen and draws all entities (text and sprites) to indicate the completion
+        of the pathfinding simulation.
+        """</span>
+        <span class="n">screen</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">game</span><span class="p">.</span><span class="n">screen</span>
+        <span class="n">screen</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">WHITE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">entities</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">NoPathState</code> is displayed when the pathfinding simulation reaches a point where no valid path is found after exploring all possible levels.
+It informs the user that the algorithm could not find a solution, showing the number of levels visited during the search.
+Similar to the <code class="language-plaintext highlighter-rouge">CompletionState</code>, the user can press the space bar to restart the simulation and attempt finding a path again.
+This state provides feedback on the failure of the algorithm and allows for a fresh start, ensuring that the user can continue experimenting with different scenarios.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">NoPathState</span><span class="p">(</span><span class="n">GameState</span><span class="p">):</span>
+    <span class="s">"""
+    A game state that represents the scenario where no path was found in the BFS pathfinding simulation.
+
+    This state is shown when the algorithm fails to find a path after visiting a certain number of levels.
+    It informs the user that no path was found and provides an option to restart the simulation.
+
+    Attributes:
+        game (Game): The game instance, used to transition between states.
+        entities (pygame.sprite.OrderedUpdates): A group containing the text and sprite entities to be rendered.
+        final_level (int): The number of levels visited before determining that no path was found.
+    """</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">:</span> <span class="n">Game</span><span class="p">,</span> <span class="n">entities</span><span class="p">:</span> <span class="n">pygame</span><span class="p">.</span><span class="n">sprite</span><span class="p">.</span><span class="n">Group</span><span class="p">,</span> <span class="n">final_level</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="s">"""
+        Initializes the no-path state with the game, entities, and the number of levels visited.
+
+        Args:
+            game (Game): The game instance, which handles the state transitions.
+            entities (pygame.sprite.Group): The group of entities (sprites, text) to be displayed.
+            final_level (int): The number of levels that were visited without finding a path.
+        """</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">game</span> <span class="o">=</span> <span class="n">game</span>  <span class="c1"># Store the game instance to facilitate state transitions
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">entities</span> <span class="o">=</span> <span class="n">pygame</span><span class="p">.</span><span class="n">sprite</span><span class="p">.</span><span class="n">OrderedUpdates</span><span class="p">()</span>  <span class="c1"># Create an ordered sprite group for entities
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">entities</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">entities</span><span class="p">)</span>  <span class="c1"># Add the provided entities (sprites, text) to the group
+</span>
+        <span class="c1"># Create a text sprite to display the message about the path not being found
+</span>        <span class="n">text_1</span> <span class="o">=</span> <span class="n">TextSprite</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s">"Shortest path not found after visiting </span><span class="si">{</span><span class="n">final_level</span><span class="si">}</span><span class="s"> levels!"</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">RED</span>
+        <span class="p">)</span>
+        <span class="n">text_1</span><span class="p">.</span><span class="n">rect</span><span class="p">.</span><span class="n">topleft</span> <span class="o">=</span> <span class="p">(</span><span class="n">THIN_LINE_WIDTH</span><span class="p">,</span> <span class="n">GRID_SIZE</span> <span class="o">*</span> <span class="n">CELL_SIZE</span><span class="p">)</span>  <span class="c1"># Position the text at the top left of the screen
+</span>
+        <span class="c1"># Create another text sprite to instruct the player to press space to restart
+</span>        <span class="n">text_2</span> <span class="o">=</span> <span class="n">TextSprite</span><span class="p">(</span><span class="sa">f</span><span class="s">"Press space to go to the beginning"</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="n">BLACK</span><span class="p">)</span>
+        <span class="n">text_2</span><span class="p">.</span><span class="n">rect</span><span class="p">.</span><span class="n">topleft</span> <span class="o">=</span> <span class="n">text_1</span><span class="p">.</span><span class="n">rect</span><span class="p">.</span><span class="n">bottomleft</span>  <span class="c1"># Position this text below the first one
+</span>
+        <span class="c1"># Create an overlay sprite that covers the grid area (used for background or effects)
+</span>        <span class="n">overlay</span> <span class="o">=</span> <span class="n">OverlaySprite</span><span class="p">(</span><span class="n">GRID_SIZE</span> <span class="o">*</span> <span class="n">CELL_SIZE</span><span class="p">,</span> <span class="n">GRID_SIZE</span> <span class="o">*</span> <span class="n">CELL_SIZE</span><span class="p">)</span>
+        <span class="c1"># Add the text and overlay sprites to the group of entities
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">entities</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">text_1</span><span class="p">,</span> <span class="n">text_2</span><span class="p">,</span> <span class="n">overlay</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">pygame</span><span class="p">.</span><span class="n">event</span><span class="p">.</span><span class="n">Event</span><span class="p">]):</span>
+        <span class="s">"""
+        Handles the user input events during the no-path state.
+
+        Specifically, listens for the spacebar key press to transition to the initial state.
+
+        Args:
+            events (List[pygame.event.Event]): A list of events that are checked for input.
+        """</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>  <span class="c1"># Loop through all the events to check for key presses
+</span>            <span class="k">if</span> <span class="n">event</span><span class="p">.</span><span class="nb">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="p">.</span><span class="n">KEYUP</span><span class="p">:</span>  <span class="c1"># Check if a key has been released
+</span>                <span class="k">if</span> <span class="n">event</span><span class="p">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="p">.</span><span class="n">K_SPACE</span><span class="p">:</span>  <span class="c1"># Check if the space key was pressed
+</span>                    <span class="bp">self</span><span class="p">.</span><span class="n">game</span><span class="p">.</span><span class="n">next_state</span> <span class="o">=</span> <span class="n">InitState</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">game</span><span class="p">)</span>  <span class="c1"># Transition to the initial state
+</span>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""
+        Renders the no-path state to the screen, displaying the entities.
+
+        Clears the screen and draws all entities (text and sprites) to indicate that no path was found
+        in the pathfinding simulation.
+        """</span>
+        <span class="n">screen</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">game</span><span class="p">.</span><span class="n">screen</span>  <span class="c1"># Get the game screen to render the state
+</span>        <span class="n">screen</span><span class="p">.</span><span class="n">fill</span><span class="p">(</span><span class="n">WHITE</span><span class="p">)</span>  <span class="c1"># Fill the screen with a white background
+</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">entities</span><span class="p">.</span><span class="n">draw</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>  <span class="c1"># Draw all the entities (text, overlay, etc.) to the screen
+</span></code></pre></div></div>
+
+<h3 id="algorithmpy"><code class="language-plaintext highlighter-rouge">algorithm.py</code></h3>
+
+<p>We have already seen some functions from this file in the 2nd post of this series:
+<a href="/2025/03/15/simulating-shortest-path-binary-matrix-pygame-2-solution/">Solving Shortest Path in a Binary Matrix</a>.
+We will add other helper functions to help our simulation create random grids.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">create_good_grid</span><span class="p">(</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">start_position</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">end_position</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+    <span class="s">"""
+    Creates a grid where a valid path exists from the start to the end position.
+
+    Args:
+        size (int): The size of the grid (default is 10).
+        start_position (tuple[int, int]): The starting position in the grid (default is (0, 0)).
+        end_position (Optional[tuple[int, int]]): The end position in the grid. If None, defaults to (size-1, size-1).
+
+    Returns:
+        List[List[int]]: A grid where the shortest path length is greater than 0 (i.e., a valid path exists).
+    """</span>
+    <span class="k">return</span> <span class="n">create_grid</span><span class="p">(</span>
+        <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
+        <span class="n">start_position</span><span class="o">=</span><span class="n">start_position</span><span class="p">,</span>
+        <span class="n">end_position</span><span class="o">=</span><span class="n">end_position</span><span class="p">,</span>
+        <span class="n">predicate</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">,</span>  <span class="c1"># Ensures a valid path exists
+</span>    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">create_bad_grid</span><span class="p">(</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">start_position</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">end_position</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+    <span class="s">"""
+    Creates a grid where no valid path exists from the start to the end position.
+
+    Args:
+        size (int): The size of the grid (default is 10).
+        start_position (tuple[int, int]): The starting position in the grid (default is (0, 0)).
+        end_position (Optional[tuple[int, int]]): The end position in the grid. If None, defaults to (size-1, size-1).
+
+    Returns:
+        List[List[int]]: A grid where the shortest path length is -1 (i.e., no valid path exists).
+    """</span>
+    <span class="k">return</span> <span class="n">create_grid</span><span class="p">(</span>
+        <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
+        <span class="n">start_position</span><span class="o">=</span><span class="n">start_position</span><span class="p">,</span>
+        <span class="n">end_position</span><span class="o">=</span><span class="n">end_position</span><span class="p">,</span>
+        <span class="n">predicate</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># Ensures no valid path exists
+</span>    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">create_grid</span><span class="p">(</span>
+    <span class="n">size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">start_position</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">end_position</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+    <span class="n">predicate</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
+    <span class="s">"""
+    Generates a grid based on the given size, start/end positions, and a predicate function.
+
+    Args:
+        size (int): The size of the grid (default is 10).
+        start_position (tuple[int, int]): The starting position in the grid (default is (0, 0)).
+        end_position (Optional[tuple[int, int]]): The end position in the grid. If None, defaults to (size-1, size-1).
+        predicate (Callable[[int], bool]): A function that determines if the generated grid meets the desired condition.
+
+    Returns:
+        List[List[int]]: A grid that satisfies the predicate condition.
+
+    Raises:
+        ValueError: If the grid size is less than 3.
+    """</span>
+    <span class="c1"># Ensure the grid size is at least 3 to allow for meaningful simulation
+</span>    <span class="k">if</span> <span class="n">size</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="nb">ValueError</span><span class="p">(</span><span class="s">"Size must be at least 3"</span><span class="p">)</span>
+
+    <span class="c1"># Default end position to the bottom-right corner if not provided
+</span>    <span class="k">if</span> <span class="n">end_position</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">end_position</span> <span class="o">=</span> <span class="p">(</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Continuously generate grids until one satisfies the predicate condition
+</span>    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="c1"># Create a random grid with walls (1) and open cells (0)
+</span>        <span class="n">grid</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="n">random</span><span class="p">.</span><span class="n">choice</span><span class="p">([</span><span class="n">NON_WALL</span><span class="p">,</span> <span class="n">WALL</span><span class="p">])</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Ensure the start and end positions are open cells
+</span>        <span class="n">grid</span><span class="p">[</span><span class="n">start_position</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">start_position</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">NON_WALL</span>
+        <span class="n">grid</span><span class="p">[</span><span class="n">end_position</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">end_position</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">NON_WALL</span>
+
+        <span class="c1"># Calculate the shortest path length using the BFS algorithm
+</span>        <span class="n">shortest_path_length</span> <span class="o">=</span> <span class="n">shortest_path</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">start_position</span><span class="p">,</span> <span class="n">end_position</span><span class="p">)</span>
+
+        <span class="c1"># Return the grid if it satisfies the predicate condition
+</span>        <span class="k">if</span> <span class="n">predicate</span><span class="p">(</span><span class="n">shortest_path_length</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">grid</span>
+</code></pre></div></div>
+
+<p>And there we have it — a fully functional BFS pathfinding simulation brought to life with Pygame!
+From designing sprites and managing game states to visualizing the algorithm step by step,
+we’ve covered the essentials of building an interactive simulation.
+This project not only solves the “Shortest Path in a Binary Matrix” problem 
+but also provides a hands-on way to understand core game development concepts like game loops, frame rate independence, and scene management.</p>
+
+<p>Here’s how it looks.
+Below, I’m sharing a GIF I created from the frames I stored during the simulation.
+I’ll dive into the full details of storing the frames and creating the GIF in Python in a future blog post.</p>
+
+<p><img src="/assets/posts/shortest-path-simulation/simulation.gif" alt="Simulation Gif" width="400px" /></p>
+
+<p>Feel free to experiment with the code — try tweaking the grid size, colors, or even the algorithm itself.
+If you’re feeling adventurous, why not add new features like changing the grid size from initial screen 
+or setting start/end coordinates dynamically or randomly?
+The possibilities are endless!</p>
+
+<p>I haven’t shown all the code in this blog to keep it shorter, but you can always read it on GitHub.
+Here is the link: <a href="https://github.com/sedran/leetcode-pygame/tree/main/src/leetcode_pygame/bfs_shortest_path">💻 sedran/leetcode-pygame</a>.</p>
+
+<p>Whether this is the end of the series or just the beginning of another coding journey, 
+I hope this post has inspired you to explore the intersection of algorithms and game development further.
+Happy coding, and may your paths always be the shortest! 🚀</p>
+
+
+    
+
+    
+
+
+
+
+
+<div class="card mb-2">
+    <div class="card-header">
+        Bu yazı <b>4</b> adet yazıdan oluşan <b>"Simulating Shortest Path in a Binary Matrix using Pygame"</b> yazı dizisinin <b>4.</b> yazısıdır.
+    </div>
+    <ul class="list-group list-group-flush">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2025/03/22/simulating-shortest-path-binary-matrix-pygame-1-intro/">1 - Introduction: Shortest Path in a Binary Matrix Problem</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2025/03/15/simulating-shortest-path-binary-matrix-pygame-2-solution/">2 - Solving Shortest Path in a Binary Matrix</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <a href="/2025/03/15/simulating-shortest-path-binary-matrix-pygame-3-simulation-design/">3 - Designing a Multi-Stage Simulation with Pygame</a>
+            
+        </li>
+        
+        
+        
+        
+        <li class="list-group-item">
+            
+            <i>4 - Implementing the Simulation with Pygame</i>
+            
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/2025/03/15/simulating-shortest-path-binary-matrix-pygame-3-simulation-design/">&laquo; Designing a Multi-Stage Simulation with Pygame</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+  </div>
+</div>
+
+
+  
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://serdarkuzucu.com/2025/03/15/simulating-shortest-path-binary-matrix-pygame-4-implementation/';
+        this.page.identifier = 'simulating-shortest-path-binary-matrix-pygame-4-implementation';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+  
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>
