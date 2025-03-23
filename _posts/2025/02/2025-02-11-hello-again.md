@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Tekrar Merhaba"
-date:   2024-02-11 23:11:50 +0000
+date:   2025-02-11 23:11:50 +0000
 categories: [Genel]
 author: Serdar Kuzucu
 permalink: /2025/02/11/tekrar-merhaba/
