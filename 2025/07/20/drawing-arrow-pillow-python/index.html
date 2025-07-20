@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Drawing an Arrow with Pillow</title>
+
+  <meta name="description" content="While writing my previous blog post, I created the visuals I needed using the Pillow library inside a Jupyter notebook. The hardest part was drawing an arrow...">
+
+<meta content="Serdar Kuzucu" property="og:site_name">
+
+
+<meta content="Drawing an Arrow with Pillow" property="og:title">
+
+
+
+<meta content="article" property="og:type">
+
+
+<meta content="While writing my previous blog post, I created the visuals I needed using the Pillow library inside a Jupyter notebook. The hardest part was drawing an arrow..." property="og:description">
+
+
+<meta content="https://serdarkuzucu.com/2025/07/20/drawing-arrow-pillow-python/" property="og:url">
+
+
+
+<meta content="2025-07-20T12:00:00+00:00" property="article:published_time">
+<meta content="https://serdarkuzucu.com/about/" property="article:author">
+
+
+
+<meta content="https://serdarkuzucu.com/assets/posts/drawing-arrow-pillow-python/arrow-logo.png" property="og:image">
+
+
+
+
+<meta content="Python" property="article:section">
+
+
+
+
+
+
+
+<meta name="twitter:creator" content="@sedran"/>
+<meta name="twitter:site" content="@sedran"/>
+<meta name="twitter:card" content="summary"/>
+
+
+  <link rel="stylesheet" href="/css/main.css?v=201904191944">
+  <link rel="canonical" href="https://serdarkuzucu.com/2025/07/20/drawing-arrow-pillow-python/">
+  <link rel="alternate" type="application/rss+xml" title="Serdar Kuzucu" href="https://serdarkuzucu.com/feed.xml">
+  <link rel="shortcut icon" type="image/png" href="/assets/main/favicon.png">
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-SG38PNN7T1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-SG38PNN7T1');
+  </script>
+  
+</head>
+
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-top mb-2">
+  <div class="container">
+    <a class="navbar-brand sk-logo" href="/">
+      <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar" aria-controls="topNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="topNavbar">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-tags"></i> Kategoriler
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            
+            
+            <a href="/category/algorithms" class="dropdown-item">Algorithms (5)</a>
+            
+            <a href="/category/angular" class="dropdown-item">Angular (1)</a>
+            
+            <a href="/category/bash" class="dropdown-item">Bash (8)</a>
+            
+            <a href="/category/bilgisayar-i̇puçları" class="dropdown-item">Bilgisayar İpuçları (4)</a>
+            
+            <a href="/category/bootstrap" class="dropdown-item">Bootstrap (1)</a>
+            
+            <a href="/category/c" class="dropdown-item">C++ (1)</a>
+            
+            <a href="/category/chrome-eklentileri" class="dropdown-item">Chrome Eklentileri (1)</a>
+            
+            <a href="/category/docker" class="dropdown-item">Docker (1)</a>
+            
+            <a href="/category/frontend" class="dropdown-item">Frontend (1)</a>
+            
+            <a href="/category/genel" class="dropdown-item">Genel (6)</a>
+            
+            <a href="/category/git" class="dropdown-item">Git (2)</a>
+            
+            <a href="/category/gradle" class="dropdown-item">Gradle (1)</a>
+            
+            <a href="/category/html" class="dropdown-item">HTML (1)</a>
+            
+            <a href="/category/java" class="dropdown-item">Java (27)</a>
+            
+            <a href="/category/javascript" class="dropdown-item">Javascript (6)</a>
+            
+            <a href="/category/jquery" class="dropdown-item">jQuery (2)</a>
+            
+            <a href="/category/linux" class="dropdown-item">Linux (9)</a>
+            
+            <a href="/category/mysql" class="dropdown-item">MySQL (1)</a>
+            
+            <a href="/category/nginx" class="dropdown-item">nginx (1)</a>
+            
+            <a href="/category/php" class="dropdown-item">PHP (6)</a>
+            
+            <a href="/category/pillow" class="dropdown-item">Pillow (1)</a>
+            
+            <a href="/category/programlama" class="dropdown-item">Programlama (48)</a>
+            
+            <a href="/category/programlarım" class="dropdown-item">Programlarım (3)</a>
+            
+            <a href="/category/pygame" class="dropdown-item">Pygame (4)</a>
+            
+            <a href="/category/python" class="dropdown-item">Python (5)</a>
+            
+            <a href="/category/spring-boot" class="dropdown-item">Spring Boot (1)</a>
+            
+            <a href="/category/unit-test" class="dropdown-item">Unit Test (5)</a>
+            
+            <a href="/category/windows-8" class="dropdown-item">Windows 8 (1)</a>
+            
+            <a href="/category/wordpress" class="dropdown-item">Wordpress (1)</a>
+            
+          </div>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/about"><i class="fa fa-user"></i> Hakkımda</a>
+        </li>
+      </ul>
+
+      <form class="form-inline my-2 my-lg-0" method="GET" action="http://www.google.com/search">
+        <input type="hidden" name="sitesearch" value="serdarkuzucu.com" />
+        <div class="input-group">
+          <input type="text" class="form-control border-primary" name="q" value="" placeholder="Ne aradınız?" aria-label="Ne aradınız?" aria-describedby="searchBtn">
+          <div class="input-group-append">
+            <button class="btn btn-outline-primary btn-light" type="submit" id="searchBtn" value="Ara"><i class="fa fa-search"></i></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container blog-content">
+      <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Drawing an Arrow with Pillow</h1>
+    <p class="post-meta">
+      <time datetime="2025-07-20T12:00:00+00:00" itemprop="datePublished">Jul 20, 2025</time>
+      
+      • <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">Serdar Kuzucu</span></span>
+      
+    </p>
+
+    
+    <p>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/python">Python</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/algorithms">Algorithms</a>
+      
+         <a class="btn btn-outline-dark btn-sm" href="/category/pillow">Pillow</a>
+      
+    </p>
+    
+  </header>
+
+  <div class="post-content" itemprop="articleBody">
+    
+
+
+    <p>While writing my previous blog post, I created the visuals I needed using the <a href="https://pypi.org/project/pillow/">Pillow library</a> inside a <a href="https://jupyter.org/">Jupyter notebook</a>. The hardest part was drawing an arrow between two points with a fixed thickness, different colors for its fill and outline, and a triangle tip whose size I could control. Because of that, I wanted to share the math behind this in a separate post, along with the Python code.</p>
+
+<!--more-->
+
+<hr />
+
+<p><img src="/assets/posts/drawing-arrow-pillow-python/arrow-final.png" alt="Arrow" width="300px" /></p>
+
+<p>First, let’s write a function that calculates the math behind this arrow independently from the Pillow library. As shown in the image below, the arrow we’ll draw consists of 7 points. In most drawing libraries, a polygon is simply defined by a list of points in the right order. Each point is represented by an (x, y) coordinate pair. So, in the end, our function should return 7 such points, each containing two numbers: x and y.</p>
+
+<p><img src="/assets/posts/drawing-arrow-pillow-python/arrow-with-numbered-points.jpg" alt="Arrow with dots" width="300px" /></p>
+
+<p>In the image above, I marked these points with red circles and numbered them. The numbers follow the order in which the points will appear in the polygon list, to avoid any confusion.</p>
+
+<p>You’ve probably noticed that the polygon is made up of a rectangle and a triangle. Not every arrow has to be like this, but to keep things simple, we’ll stick to this structure for now. Later, we can extend the function to support different inner angles if needed.</p>
+
+<p>Let’s define our function with the following signature:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">calculate_arrow_polygon</span><span class="p">(</span>
+    <span class="n">x1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">y1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">x2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">y2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">arrowhead_height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">tail_thickness</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="p">...]:</span>
+    <span class="s">"""
+    Calculates the 7-point polygon representing an arrow with a rectangular tail
+    and equilateral triangle head.
+
+    Args:
+        x1: Tail center x-coordinate.
+        y1: Tail center y-coordinate.
+        x2: Arrow tip x-coordinate.
+        y2: Arrow tip y-coordinate.
+        arrowhead_height: Height of the equilateral triangle arrowhead.
+        tail_thickness: Width of the rectangular tail.
+
+    Returns:
+        A tuple of 7 (x, y) points forming the arrow polygon.
+    """</span>
+</code></pre></div></div>
+
+<p>Points 1, 2, 3, and 7 in the image belong to the rectangle.
+Points 4, 5, and 6 belong to the triangle.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">x1</code>, <code class="language-plaintext highlighter-rouge">y1</code> parameters given to the function by the user will correspond to the center point of the tail end of the arrow i.e., the midpoint between points 1 and 2.
+Therefore, we can calculate points 1 and 2 using a bit of trigonometry, centered around the point <code class="language-plaintext highlighter-rouge">(x1, y1)</code>.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">(x2, y2)</code> point directly corresponds to point 5 in the image, which is the tip of the arrow.</p>
+
+<p>Let’s begin the calculations. To do that, we first need to understand what a unit vector is and why it’s essential in our case.</p>
+
+<h3 id="unit-vector">Unit Vector</h3>
+
+<p>A <strong><a href="https://en.wikipedia.org/wiki/Unit_vector">unit vector</a></strong> is a vector with a length (or magnitude) of exactly 1. It represents only a direction, without any scaling. In our scenario, we use a unit vector to describe the direction from the tail of the arrow (centered at point (x1, y1)) toward the arrowhead (point (x2, y2)). By converting this direction into a unit vector, we ensure that any further operations like scaling or rotation are based solely on direction and not on distance.</p>
+
+<p>We also calculate a <strong>perpendicular unit vector</strong>; a unit vector that is rotated 90 degrees from the original direction vector. This perpendicular vector is essential because we use it to shift points left and right from the center line of the arrow to define the rectangle’s width (i.e., to find points 1, 2, 3, and 7). Without the perpendicular direction, we wouldn’t be able to define the sides of the arrow shaft.</p>
+
+<p>In summary:</p>
+
+<ul>
+  <li>The unit vector gives us the direction <strong>along</strong> the arrow.</li>
+  <li>The perpendicular unit vector gives us the direction <strong>across</strong> the arrow (left/right).
+Both are crucial to accurately position the corners of the rectangle and the triangle using trigonometric offsets.</li>
+</ul>
+
+<p>Here is the Python code to compute both the <strong>unit vector</strong> (direction of the arrow) and the <strong>perpendicular unit vector</strong> (used to offset left/right), with explanations in the comments:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">math</span>
+
+<span class="k">def</span> <span class="nf">unit_vector</span><span class="p">(</span><span class="n">x1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">y1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">x2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">y2</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="s">"""Compute the unit vector from point (x1, y1) to point (x2, y2).
+
+    Args:
+        x1 (float): X-coordinate of the starting point.
+        y1 (float): Y-coordinate of the starting point.
+        x2 (float): X-coordinate of the ending point.
+        y2 (float): Y-coordinate of the ending point.
+
+    Returns:
+        tuple[float, float]: Unit vector (ux, uy) in the direction from (x1, y1) to (x2, y2).
+    """</span>
+    <span class="c1"># Step 1: Compute the direction vector from tail (x1, y1) to tip (x2, y2)
+</span>    <span class="n">dx</span> <span class="o">=</span> <span class="n">x2</span> <span class="o">-</span> <span class="n">x1</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="n">y2</span> <span class="o">-</span> <span class="n">y1</span>
+
+    <span class="c1"># Step 2: Compute the length (magnitude) of this vector
+</span>    <span class="n">length</span> <span class="o">=</span> <span class="n">math</span><span class="p">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">)</span>  <span class="c1"># Equivalent to sqrt(dx**2 + dy**2)
+</span>
+    <span class="c1"># Step 3: Normalize the direction vector to get the unit vector
+</span>    <span class="n">ux</span> <span class="o">=</span> <span class="n">dx</span> <span class="o">/</span> <span class="n">length</span>
+    <span class="n">uy</span> <span class="o">=</span> <span class="n">dy</span> <span class="o">/</span> <span class="n">length</span>
+
+    <span class="c1"># Step 4: Return the unit vector as a tuple
+</span>    <span class="k">return</span> <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span>
+
+<span class="k">def</span> <span class="nf">perpendicular_vector</span><span class="p">(</span><span class="n">ux</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">uy</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+    <span class="s">"""Compute the vector perpendicular to a given unit vector, rotated 90 degrees counterclockwise.
+
+    Args:
+        ux (float): X-component of the unit vector.
+        uy (float): Y-component of the unit vector.
+
+    Returns:
+        tuple[float, float]: Perpendicular unit vector (-uy, ux).
+    """</span>
+
+    <span class="c1"># Rotating the direction vector 90 degrees counterclockwise:
+</span>    <span class="c1"># (ux, uy) --&gt; (-uy, ux)
+</span>    <span class="k">return</span> <span class="o">-</span><span class="n">uy</span><span class="p">,</span> <span class="n">ux</span>
+</code></pre></div></div>
+
+<h3 id="from-vectors-to-arrow-geometry">From Vectors to Arrow Geometry</h3>
+
+<p>Now that we have both the <strong>direction unit vector</strong> (which we’ll call <code class="language-plaintext highlighter-rouge">ux</code>, <code class="language-plaintext highlighter-rouge">uy</code>) and the <strong>perpendicular unit vector</strong> (<code class="language-plaintext highlighter-rouge">px</code>, <code class="language-plaintext highlighter-rouge">py</code>), we can begin to calculate the seven points that form our arrow. Every point will be derived by starting from a <strong>center position</strong> (like the midpoint of the tail or the base of the arrowhead), and then moving either <strong>along</strong> the arrow direction (using <code class="language-plaintext highlighter-rouge">ux</code>, <code class="language-plaintext highlighter-rouge">uy</code>) or <strong>across</strong> the arrow (using <code class="language-plaintext highlighter-rouge">px</code>, <code class="language-plaintext highlighter-rouge">py</code>).</p>
+
+<p>Let’s break it down:</p>
+
+<ul>
+  <li>The <strong>tail rectangle</strong> has two long sides. We find these by shifting the tail midpoint <code class="language-plaintext highlighter-rouge">(x1, y1)</code> <em>left and right</em> using the perpendicular vector (<code class="language-plaintext highlighter-rouge">px</code>, <code class="language-plaintext highlighter-rouge">py</code>) scaled by half the tail thickness.</li>
+  <li>The <strong>base of the arrowhead</strong> is placed <code class="language-plaintext highlighter-rouge">arrowhead_height</code> units <em>behind</em> the arrow tip, by moving backwards along (<code class="language-plaintext highlighter-rouge">ux</code>, <code class="language-plaintext highlighter-rouge">uy</code>).</li>
+  <li>The <strong>triangle head</strong> is an equilateral triangle, so we can compute its width based on its height using the formula for an equilateral triangle: <code class="language-plaintext highlighter-rouge">half_base = height / sqrt(3)</code></li>
+  <li>The <strong>triangle base corners</strong> (points 4 and 6) are computed by shifting left and right from the arrowhead base center using <code class="language-plaintext highlighter-rouge">px</code>, <code class="language-plaintext highlighter-rouge">py</code>.</li>
+</ul>
+
+<p>By combining these geometric translations, we can locate all seven points of the arrow.</p>
+
+<h3 id="final-code">Final Code</h3>
+
+<p>Now that we’ve explored the vector math, understood how to shift points along and across the arrow, and seen how to compute the tail and arrowhead dimensions, it’s time to assemble everything into two functions.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span>
+
+
+<span class="k">def</span> <span class="nf">calculate_arrow_polygon</span><span class="p">(</span>
+    <span class="n">x1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">y1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">x2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">y2</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">arrowhead_height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">tail_thickness</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="p">...]:</span>
+    <span class="s">"""
+    Calculates the 7-point polygon representing an arrow with a rectangular tail
+    and equilateral triangle head.
+
+    Args:
+        x1: Tail center x-coordinate.
+        y1: Tail center y-coordinate.
+        x2: Arrow tip x-coordinate.
+        y2: Arrow tip y-coordinate.
+        arrowhead_height: Height of the equilateral triangle arrowhead.
+        tail_thickness: Width of the rectangular tail.
+
+    Returns:
+        A tuple of 7 (x, y) points forming the arrow polygon.
+    """</span>
+    <span class="c1"># Step 1: Get unit direction vector and perpendicular vector
+</span>    <span class="n">ux</span><span class="p">,</span> <span class="n">uy</span> <span class="o">=</span> <span class="n">unit_vector</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span>
+    <span class="n">px</span><span class="p">,</span> <span class="n">py</span> <span class="o">=</span> <span class="n">perpendicular_vector</span><span class="p">(</span><span class="n">ux</span><span class="p">,</span> <span class="n">uy</span><span class="p">)</span>
+
+    <span class="c1"># Step 2: Base of the triangle is arrowhead_height units back from tip
+</span>    <span class="c1"># This is also the middle point of rectangle's side touching the triangle
+</span>    <span class="n">base_cx</span> <span class="o">=</span> <span class="n">x2</span> <span class="o">-</span> <span class="n">arrowhead_height</span> <span class="o">*</span> <span class="n">ux</span>
+    <span class="n">base_cy</span> <span class="o">=</span> <span class="n">y2</span> <span class="o">-</span> <span class="n">arrowhead_height</span> <span class="o">*</span> <span class="n">uy</span>
+
+    <span class="c1"># Step 3: Calculate Triangle base width
+</span>    <span class="c1"># h = √3/2 * a --&gt; a = 2*h/√3 --&gt; a/2 = h/√3
+</span>    <span class="n">tri_base_half_width</span> <span class="o">=</span> <span class="n">arrowhead_height</span> <span class="o">/</span> <span class="n">math</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="c1"># Step 4: Tail rectangle corners: points 1 and 2
+</span>    <span class="n">tail_half</span> <span class="o">=</span> <span class="n">tail_thickness</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="n">p1</span> <span class="o">=</span> <span class="p">(</span><span class="n">x1</span> <span class="o">+</span> <span class="n">px</span> <span class="o">*</span> <span class="n">tail_half</span><span class="p">,</span> <span class="n">y1</span> <span class="o">+</span> <span class="n">py</span> <span class="o">*</span> <span class="n">tail_half</span><span class="p">)</span>
+    <span class="n">p2</span> <span class="o">=</span> <span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">px</span> <span class="o">*</span> <span class="n">tail_half</span><span class="p">,</span> <span class="n">y1</span> <span class="o">-</span> <span class="n">py</span> <span class="o">*</span> <span class="n">tail_half</span><span class="p">)</span>
+
+    <span class="c1"># Step 5: Tail rectangle corners: points 3 and 7
+</span>    <span class="c1"># We calculate them from the middle point between those two points that is also
+</span>    <span class="c1"># the mid-point of the triangle's base.
+</span>    <span class="n">p3</span> <span class="o">=</span> <span class="p">(</span><span class="n">base_cx</span> <span class="o">-</span> <span class="n">px</span> <span class="o">*</span> <span class="n">tail_half</span><span class="p">,</span> <span class="n">base_cy</span> <span class="o">-</span> <span class="n">py</span> <span class="o">*</span> <span class="n">tail_half</span><span class="p">)</span>
+    <span class="n">p7</span> <span class="o">=</span> <span class="p">(</span><span class="n">base_cx</span> <span class="o">+</span> <span class="n">px</span> <span class="o">*</span> <span class="n">tail_half</span><span class="p">,</span> <span class="n">base_cy</span> <span class="o">+</span> <span class="n">py</span> <span class="o">*</span> <span class="n">tail_half</span><span class="p">)</span>
+
+    <span class="c1"># Step 6: Triangle base points
+</span>    <span class="n">p4</span> <span class="o">=</span> <span class="p">(</span><span class="n">base_cx</span> <span class="o">-</span> <span class="n">px</span> <span class="o">*</span> <span class="n">tri_base_half_width</span><span class="p">,</span> <span class="n">base_cy</span> <span class="o">-</span> <span class="n">py</span> <span class="o">*</span> <span class="n">tri_base_half_width</span><span class="p">)</span>
+    <span class="n">p6</span> <span class="o">=</span> <span class="p">(</span><span class="n">base_cx</span> <span class="o">+</span> <span class="n">px</span> <span class="o">*</span> <span class="n">tri_base_half_width</span><span class="p">,</span> <span class="n">base_cy</span> <span class="o">+</span> <span class="n">py</span> <span class="o">*</span> <span class="n">tri_base_half_width</span><span class="p">)</span>
+
+    <span class="c1"># Point 5 is just the user input
+</span>    <span class="n">p5</span> <span class="o">=</span> <span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span>
+
+    <span class="c1"># Step 7: Convert points from float to int and return the polygon
+</span>    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]))),</span>
+        <span class="p">[</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">,</span> <span class="n">p4</span><span class="p">,</span> <span class="n">p5</span><span class="p">,</span> <span class="n">p6</span><span class="p">,</span> <span class="n">p7</span><span class="p">],</span>
+    <span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">draw_arrow</span><span class="p">(</span>
+    <span class="n">canvas</span><span class="p">:</span> <span class="n">Image</span><span class="p">.</span><span class="n">Image</span><span class="p">,</span>
+    <span class="n">x1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> 
+    <span class="n">y1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> 
+    <span class="n">x2</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> 
+    <span class="n">y2</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> 
+    <span class="n">outline_thickness</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> 
+    <span class="n">arrowhead_height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> 
+    <span class="n">tail_thickness</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="n">outline_color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+    <span class="n">fill_color</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="s">"""
+    Draws a filled, outlined arrow from (x1, y1) to (x2, y2) on the given image.
+
+    Args:
+        canvas: The target PIL image to draw on.
+        x1, y1: Tail center coordinates.
+        x2, y2: Arrow tip coordinates.
+        outline_thickness: Outline width in pixels.
+        arrowhead_height: Height of the equilateral triangle head.
+        tail_thickness: Width of the tail rectangle.
+        outline_color: RGB color of the outline.
+        fill_color: RGB color of the inside fill.
+    """</span>
+    <span class="n">polygon</span> <span class="o">=</span> <span class="n">calculate_arrow_polygon</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">arrowhead_height</span><span class="p">,</span> <span class="n">tail_thickness</span><span class="p">)</span>
+    <span class="n">draw</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="p">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">canvas</span><span class="p">)</span>
+    <span class="n">draw</span><span class="p">.</span><span class="n">polygon</span><span class="p">(</span><span class="n">polygon</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">fill_color</span><span class="p">,</span> <span class="n">outline</span><span class="o">=</span><span class="n">outline_color</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">outline_thickness</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Here is a quick and dirty code showing how we can test the above functions in a jupyter notebook using matplotlib:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+
+<span class="c1"># Create a blank white image
+</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">300</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="n">new</span><span class="p">(</span><span class="s">"RGB"</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">),</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">))</span>
+
+<span class="c1"># Example arrow parameters
+</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">190</span>   <span class="c1"># Tail center
+</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">150</span>  <span class="c1"># Arrow tip
+</span><span class="n">arrowhead_height</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">tail_thickness</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">outline_thickness</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">outline_color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">fill_color</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+
+<span class="c1"># Draw the arrow
+</span><span class="n">draw_arrow</span><span class="p">(</span>
+    <span class="n">canvas</span><span class="o">=</span><span class="n">img</span><span class="p">,</span>
+    <span class="n">x1</span><span class="o">=</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="o">=</span><span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="o">=</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="o">=</span><span class="n">y2</span><span class="p">,</span>
+    <span class="n">outline_thickness</span><span class="o">=</span><span class="n">outline_thickness</span><span class="p">,</span>
+    <span class="n">arrowhead_height</span><span class="o">=</span><span class="n">arrowhead_height</span><span class="p">,</span>
+    <span class="n">tail_thickness</span><span class="o">=</span><span class="n">tail_thickness</span><span class="p">,</span>
+    <span class="n">outline_color</span><span class="o">=</span><span class="n">outline_color</span><span class="p">,</span>
+    <span class="n">fill_color</span><span class="o">=</span><span class="n">fill_color</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Display using matplotlib inline
+</span><span class="n">plt</span><span class="p">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">axis</span><span class="p">(</span><span class="s">'off'</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">title</span><span class="p">(</span><span class="s">"Test Arrow"</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h2 id="closing-words">Closing Words</h2>
+
+<p>I’ll admit, this isn’t exactly groundbreaking stuff. But for some reason, not sharing it was bothering me enough to keep me up at night. I went down quite the rabbit hole trying to get a clean arrow shape using vector math and ChatGPT. After spending that much time, it felt like a waste not to write it up and share it.</p>
+
+<p>If you’ve made it all the way here, thanks for reading. Hope it was at least a little useful or at the very least, entertaining. Take care and see you in the next weirdly specific problem.</p>
+
+
+    
+
+    
+
+  </div>
+</article>
+
+<div class="row">
+  <div class="col text-left">
+    
+    <a class="prev" href="/2025/03/15/simulating-shortest-path-binary-matrix-pygame-4-implementation/">&laquo; Implementing the Simulation with Pygame</a>
+    
+  </div>
+
+  <div class="col text-right">
+    
+  </div>
+</div>
+
+
+  
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://serdarkuzucu.com/2025/07/20/drawing-arrow-pillow-python/';
+        this.page.identifier = 'drawing-arrow-pillow-python';
+    };
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = '//serdarkuzucu.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by
+    Disqus.</a></noscript>
+
+  
+
+
+    </div>
+
+    <footer class="blog-footer bg-dark text-light">
+  <div class="container blog-footer-inner">
+    <div class="row">
+      <div class="col-auto p-2">
+        <a class="sk-logo" href="">
+          <img src="/assets/main/logo-white.png" alt="Serdar Kuzucu">
+        </a>
+      </div>
+
+      <div class="col text-right p-1">
+        <a class="about-social about-social-rss" href="/feed.xml" target="_blank" title="RSS Feed"><i class="fa fa-rss"></i></a>
+        <a class="about-social about-social-in" href="http://tr.linkedin.com/in/serdarkuzucu" target="_blank" title="Linkedin" rel="nofollow"><i class="fab fa-linkedin-in"></i></a>
+        <a class="about-social about-social-so" href="http://stackoverflow.com/users/618279/sedran" target="_blank" title="Stackoverflow" rel="nofollow"><i class="fab fa-stack-overflow"></i></a>
+        <a class="about-social about-social-tw" href="https://twitter.com/sedran" target="_blank" title="Twitter"><i class="fab fa-twitter" rel="nofollow"></i></a>
+        <a class="about-social about-social-fb" href="https://www.facebook.com/srdrkzc" target="_blank" title="Facebook" rel="nofollow"><i class="fab fa-facebook-f"></i></a>
+        <a class="about-social about-social-gh" href="https://github.com/sedran" target="_blank" title="Github" rel="nofollow"><i class="fab fa-github-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script id="dsq-count-scr" src="//serdarkuzucu.disqus.com/count.js" async></script>
+  </body>
+</html>
